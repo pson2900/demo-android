@@ -30,7 +30,7 @@ fun ProductXSurface(
     modifier: Modifier = Modifier,
     shape: Shape = RectangleShape,
     color: Color = ProductXTheme.colors.background,
-    contentColor: Color = ProductXTheme.colors.secondary,
+    contentColor: Color = ProductXTheme.colors.textSecondary,
     border: BorderStroke? = null,
     elevation: Dp = 0.dp,
     content: @Composable () -> Unit

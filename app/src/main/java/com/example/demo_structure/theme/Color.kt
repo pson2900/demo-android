@@ -16,37 +16,36 @@
 
 package com.example.demo_structure.theme
 
-import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 @Immutable
 data class ColorTheme(
-    val brand: Color,
-    val brandSecondary: Color,
-    val uiBackground: Color,
-    val uiBorder: Color,
-    val uiFloated: Color,
-    val textPrimary: Color = brand,
-    val textSecondary: Color,
-    val textHelp: Color,
-    val textInteractive: Color,
-    val textLink: Color,
-    val tornado1: List<Color>,
-    val iconPrimary: Color = brand,
-    val iconSecondary: Color,
-    val iconInteractive: Color,
-    val iconInteractiveInactive: Color,
-    val error: Color,
-    val notificationBadge: Color = error,
-    val isDark: Boolean
+    val primary: Color, // The primary brand color of your application. Use this for main actions, highlights, or logo elements. For example: Primary button backgrounds, selected states.
+    val secondary: Color, // A secondary brand color, used to provide visual variety and hierarchy to the user interface. For example: Secondary buttons or a secondary element highlight.
+    val background: Color, // The background color for the main UI. Use it for the root container, activity background, etc. This color should make the other elements readable.
+    val border: Color, // Color for borders, outlines, dividers, and separators in the UI. Use it to define boundaries and add structure. For example: Card borders or dividers in a list.
+    val floated: Color, // The background color for elements that float above the main UI, like cards, modals, and dialogs. It should be visually distinct but also cohesive with the background.
+    val textPrimary: Color = primary, // The primary color for important text and titles. It should have sufficient contrast with the background for good readability. If the value is not provided, it defaults to the brand color.
+    val textSecondary: Color, // The color for less important text, such as subtitles, captions, or descriptions. Should have less contrast than the primary text, usually a lighter color.
+    val textSurfaceVariant: Color, // Color for help text or hints that guide the user. This is usually less contrasting to be less prominent.
+    val textInteractive: Color, // Color for text elements that users can interact with, like buttons, links, or text fields, to give them a visual cue.
+    val textLink: Color, // Color for standalone links. In some UI designs is common to use a different color for links.
+    val tornado1: List<Color>, // List of colors to be used in a gradient or multi-color effect. For example, you can use this list to create a gradient with `Brush.horizontalGradient`.
+    val iconPrimary: Color = primary, // The primary color for icons, often used for key or most used icons in the UI. If the value is not provided, it defaults to the brand color.
+    val iconSecondary: Color, // Secondary color for icons, often used for decorative or less important icons.
+    val iconInteractive: Color, // Color for icons that respond to interactions, this color indicates the user the icon is interactive.
+    val iconInteractiveInactive: Color, // Color for interactive icons when they are in an inactive state, this color indicates to the user that the icon is not actionable at the moment.
+    val error: Color, // Color to represent error states or warnings, should have strong visual weight and be clearly noticeable, usually in red tones.
+    val notificationBadge: Color = error, // Color for notification badges or indicators, to call the user's attention.  If the value is not provided, it defaults to the error color.
+    val isDark: Boolean // Flag to determine the application is using a Dark or Light Theme, you can use this flag to create different styles based on the active theme.
 )
 
 /**
  * A composition local for [BackgroundTheme].
  */
-val LocalColorTheme = staticCompositionLocalOf<ColorScheme> {
+val LocalColorTheme = staticCompositionLocalOf<ColorTheme> {
     error("No ColorPalette provided")
 }
 

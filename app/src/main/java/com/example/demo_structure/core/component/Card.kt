@@ -24,7 +24,8 @@ fun JobDetailCard(
     modifier: Modifier,
     shape: Shape = MaterialTheme.shapes.medium,
     color: Color = ProductXTheme.colors.background,
-    contentColor: Color = ProductXTheme.colors.primary,
+//    contentColor: Color = ProductXTheme.colors.textSecondary,
+    contentColor: Color = ProductXTheme.colors.textSecondary,
     border: BorderStroke? = null,
     elevation: Dp = 4.dp,
     content: @Composable () -> Unit

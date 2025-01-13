@@ -61,8 +61,8 @@ fun NavGraphBuilder.composableWith(
 fun BottomNavigationBar(
     modifier: Modifier,
     appState: AppState,
-    containerColor: Color = ProductXTheme.colors.surface,
-    contentColor: Color = ProductXTheme.colors.onSurface,
+    containerColor: Color = ProductXTheme.colors.background,
+    contentColor: Color = ProductXTheme.colors.secondary,
     tonalElevation: Dp = 0.dp,
     windowInsets: WindowInsets = WindowInsets.navigationBars
 ) {

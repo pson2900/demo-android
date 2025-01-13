@@ -130,7 +130,7 @@ fun ProductXPreviewWrapper(content: @Composable (Modifier) -> Unit) {
                         modifier = modifier,
                         shape = MaterialTheme.shapes.medium,
                         color = ProductXTheme.colors.background,
-                        contentColor = ProductXTheme.colors.primary,
+                        contentColor = ProductXTheme.colors.secondary,
                         content = {
                             content(modifier.fillMaxSize())
                         }
