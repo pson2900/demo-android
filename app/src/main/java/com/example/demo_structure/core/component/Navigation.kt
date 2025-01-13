@@ -1,5 +1,6 @@
 package com.example.demo_structure.core.component
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NamedNavArgument
@@ -27,7 +29,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.demo_structure.theme.ProductXTheme
 import com.example.demo_structure.theme.toIcon
 import com.example.demo_structure.core.navigation.AppState
+import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.screen.main.MainDestination
+import com.example.demo_structure.util.AlwaysOnlineNetworkMonitor
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 /**
  * Created by Phạm Sơn at 16:24/10/1/25
@@ -103,5 +108,18 @@ fun BottomNavigationBar(
                 )
             )
         }
+    }
+}
+
+@Preview("Light Mode")
+@Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun BottomNavigationViewPreview() {
+    ProductXPreviewWrapper {
+        var appState = rememberAppState(networkMonitor =  AlwaysOnlineNetworkMonitor())
+        BottomNavigationBar(
+            modifier = Modifier,
+            appState = appState
+        )
     }
 }

@@ -140,6 +140,7 @@ fun OverlayLoadingWheel(
 }
 
 @ThemePreviews
+
 @Composable
 fun LoadingWheelPreview() {
     ProductXApplicationTheme {

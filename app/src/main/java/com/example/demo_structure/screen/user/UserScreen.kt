@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -43,10 +44,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.R
-import com.example.demo_structure.theme.ProductXApplicationTheme
 import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.core.component.ProductXScaffold
+import com.example.demo_structure.theme.ProductXApplicationTheme
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -76,12 +77,10 @@ internal fun UserRoute(
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
 internal fun UserScreen(
-
     state: UserState,
     onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     clearUndoState: () -> Unit = {},
-
     userViewModel: UserViewModel
 ) {
 
@@ -115,13 +114,31 @@ internal fun UserScreen(
 
 @Composable
 fun UserContent(modifier: Modifier) {
-    ConstraintLayout(modifier = modifier.background(Color.Blue)) {
-
+    ConstraintLayout(modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Blue)
+    ) {
         val (borderUser, cardUser, progress) = createRefs()
+
+
+        Box(
+            modifier = Modifier
+                .border(25.dp, Color.White, shape = CircleShape)
+                .background(Color.White)
+                .fillMaxSize()
+                .constrainAs(cardUser) {
+                    top.linkTo(borderUser.top, margin = 50.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    verticalBias = 0.5f
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            Text("hello world")
+        }
         Box(
             modifier = Modifier
                 .size(100.dp)
-//                .border(0.dp, Color.White, CircleShape)
                 .padding(1.dp)
                 .clip(CircleShape)
                 .background(Color.DarkGray)
@@ -141,21 +158,6 @@ fun UserContent(modifier: Modifier) {
                     .padding(20.dp),
                 contentDescription = null
             )
-        }
-
-        Box(
-            modifier = Modifier
-                .border(25.dp, Color.White, shape = CircleShape)
-                .background(Color.White)
-                .constrainAs(cardUser) {
-                    top.linkTo(borderUser.baseline)
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    verticalBias = 0.5f
-                }
-        ) {
-
         }
 
     }

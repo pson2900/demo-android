@@ -1,5 +1,6 @@
 package com.example.demo_structure.core.component
 
+import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -114,7 +115,7 @@ fun TopSearchAppBar(
                     .padding(10.dp)
                     .clickable {
                         // Hành động khi Text được nhấn
-                        Log.d("QQQ","Text Content clicked!")
+                        Log.d("QQQ", "Text Content clicked!")
                     },
                 text = content,
                 color = Color.Black, textAlign = TextAlign.Start
@@ -126,7 +127,7 @@ fun TopSearchAppBar(
                     .padding(10.dp)
                     .clickable {
                         // Hành động khi Text được nhấn
-                        Log.d("QQQ","Text Cancel clicked!")
+                        Log.d("QQQ", "Text Cancel clicked!")
                     },
 
                 text = "Cancel",
@@ -162,10 +163,12 @@ fun AppBarPreview() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
+@Preview("Light Mode")
+@Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview("large font", fontScale = 2f)
 @Composable
 fun AppBarPreviewDark() {
-    ProductXApplicationTheme(darkTheme = true) {
+    ProductXPreviewWrapper {
         Column {
             TopAppBar(title = { Text("Preview!") },
                 navigationIcon = {

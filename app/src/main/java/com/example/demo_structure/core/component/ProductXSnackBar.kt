@@ -1,5 +1,6 @@
 package com.example.demo_structure.core.component
 
+import android.content.res.Configuration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarData
@@ -7,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.demo_structure.theme.ProductXTheme
 
 /**
@@ -14,6 +16,7 @@ import com.example.demo_structure.theme.ProductXTheme
  * Copyright (c) 2025 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
+
 @Composable
 fun ProductXSnackBar(
     snackbarData: SnackbarData,

@@ -41,8 +41,8 @@ fun JobDetailCard(
     )
 }
 
-@Preview("default")
-@Preview("dark theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview("Light Mode")
+@Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview("large font", fontScale = 2f)
 @Composable
 private fun CardPreview() {
