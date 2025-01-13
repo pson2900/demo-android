@@ -4,12 +4,11 @@ import com.example.demo_structure.app.di.dataModule
 import com.example.demo_structure.app.di.domainModule
 import com.example.demo_structure.app.di.networkModule
 import com.example.demo_structure.app.di.presentationModule
-import com.example.demo_structure.ui.home.HomeViewModel
+import com.example.demo_structure.screen.home.HomeViewModel
 import org.junit.Test
 
 import org.junit.Assert.*
 import org.koin.core.context.startKoin
-import org.koin.dsl.module
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 /**

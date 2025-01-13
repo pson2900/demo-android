@@ -1,8 +1,9 @@
 package com.example.demo_structure.app.di
 
-import com.example.demo_structure.ui.dashboard.DashboardViewModel
-import com.example.demo_structure.ui.home.HomeViewModel
-import com.example.demo_structure.ui.notification.NotificationsViewModel
+import com.example.demo_structure.screen.home.HomeViewModel
+import com.example.demo_structure.screen.job_detail.JobDetailViewModel
+import com.example.demo_structure.screen.search_result.SearchResultViewModel
+import com.example.demo_structure.screen.user.UserViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -12,7 +13,8 @@ import org.koin.dsl.module
  * Email: son.pham@navigosgroup.com
  */
 val presentationModule = module {
-    viewModel { HomeViewModel(get(), get()) }
-    viewModel { DashboardViewModel(get()) }
-    viewModel { NotificationsViewModel(get()) }
+    viewModel { HomeViewModel() }
+    viewModel { JobDetailViewModel() }
+    viewModel { UserViewModel() }
+    viewModel { SearchResultViewModel() }
 }

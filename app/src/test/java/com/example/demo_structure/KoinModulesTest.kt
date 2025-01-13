@@ -8,9 +8,9 @@ package com.example.demo_structure
 import com.example.data.remote.network.ApiService
 import com.example.data.remote.network.RetrofitClient
 import com.example.data.repository.HomeRepositoryImpl
-import com.example.demo_structure.ui.dashboard.DashboardViewModel
-import com.example.demo_structure.ui.home.HomeViewModel
-import com.example.demo_structure.ui.notification.NotificationsViewModel
+import com.example.demo_structure.screen.dashboard.DashboardViewModel
+import com.example.demo_structure.screen.home.HomeViewModel
+import com.example.demo_structure.screen.notification.NotificationsViewModel
 import com.example.domain.HomeRepository
 import com.example.domain.usecase.GetClientUseCase
 import com.example.domain.usecase.HomeUseCase

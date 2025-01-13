@@ -1,16 +1,18 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.compose.compiler)
+    id("kotlinx-serialization")
 }
 
 android {
     namespace = "com.example.demo_structure"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.demo_structure"
         minSdk = 26
-        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -24,48 +26,100 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
+//        freeCompilerArgs += listOf(
+//            "-Xcontext-receivers",
+//            "-P",
+//            "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
+//        )
     }
+
+//    composeOptions {
+//        kotlinCompilerExtensionVersion = "1.5.3"
+//    }
+
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 }
 
 dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
+//    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.20")
     implementation(libs.com.google.material)
+    implementation(libs.kotlinx.serialization.json)
     // Mark: Koin
-    implementation(project.dependencies.platform(libs.koin.bom))
+    implementation(platform(libs.koin.bom)) // Use BOM for consistent versions
     implementation(libs.koin.core)
     implementation(libs.koin.android)
-//    implementation(libs.koin.android.compat)
-//    implementation(libs.koin.androidx.workmanager)
-//    implementation(libs.koin.androidx.navigation)
-//    implementation(libs.koin.androidx.startup)
-//    implementation(libs.koin.compose)
-//    implementation(libs.koin.compose.viewmodel)
-//    implementation(libs.koin.compose.viewmodel.navigation)
+    implementation(libs.koin.compose)
+    implementation(libs.koin.androidx.compose)
     // Mark: Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit.logging.interceptor)
     implementation(libs.retrofit.kotlin.coroutines.adapter)
     testImplementation(libs.retrofit.mockwebserver)
+    // Mark: Compose
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.animation)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.constraintlayout.compose)
+    debugImplementation(libs.androidx.ui.tooling)
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
+    // Other dependencies
+    implementation(libs.androidx.core.splash)
+    implementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    implementation(libs.com.squareup.retrofit)
+    implementation(libs.androidx.lifecycle.viewmodel.compose.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.adaptive)
+    implementation(libs.androidx.adaptive.layout.android)
+    implementation(libs.androidx.appcompat.resources)
+
+    // Serialization library
+    implementation(libs.kotlinx.serialization.json)
+    //// ------
+
+
+//    implementation(platform(libs.androidx.compose.bom))
+//    implementation(libs.androidx.ui)
+//    implementation(libs.androidx.ui.graphics)
+//    implementation(libs.androidx.ui.tooling.preview)
+//    implementation(libs.androidx.material3)
+//    implementation(libs.androidx.adaptive)
+////    implementation(libs.androidx.adaptive.navigation.android)
+//    implementation(libs.androidx.adaptive.layout.android)
+//    implementation(libs.androidx.animation)
+//    implementation(libs.androidx.core.splash)
+//    implementation(libs.coil.compose)
+////    implementation(libs.androidx.paging.compose)
+////    implementation(libs.androidx.fragment.ktx)
+////    implementation(libs.androidx.fragment.compose)
+//    implementation(libs.androidx.navigation.compose)
+////    implementation(libs.androidx.adaptive.android)
+//    implementation(libs.androidx.appcompat.resources)
+//    implementation(libs.androidx.core.ktx)
+//    implementation(libs.androidx.constraintlayout.compose)
+//    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+//    testImplementation(libs.junit)
+//    androidTestImplementation(libs.androidx.junit)
+//    androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.accompanist.drawablepainter)
+    implementation(libs.accompanist.navigation.animation)
+    implementation(libs.androidx.adaptive.navigation.suite)
 }
