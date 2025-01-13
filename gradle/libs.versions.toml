@@ -29,49 +29,54 @@ adaptiveAndroid = "1.0.0"
 appcompatResources = "1.6.1"
 androidxConstraintlayout = "1.1.0"
 material3AdaptiveNavigationSuiteAndroid = "1.3.1"
+
 [libraries]
-#Mark: AndroidX
-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+# Mark: AndroidX
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
+# Mark: Testing Libraries
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-#Mark: Google
+
+# Mark: Google Libraries
 com-google-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-#Mark: Dependency Injection - Koin
+
+# Mark: Dependency Injection - Koin
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koinBom" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose" }
 koin-compose = { module = "io.insert-koin:koin-compose" }
 koin-core = { module = "io.insert-koin:koin-core" }
 koin-android = { module = "io.insert-koin:koin-android" }
 koin-androidx-navigation = { module = "io.insert-koin:koin-androidx-navigation" }
-#Mark: ACCOMPANIST
+
+# Mark: ACCOMPANIST Libraries
 accompanist-drawablepainter = { module = "com.google.accompanist:accompanist-drawablepainter", version.ref = "accompanistDrawablepainter" }
 accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanistNavigationAnimation" }
-#Mark: IO.COIL
+
+# Mark: IO.COIL Libraries
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
-#Mark: Retrofit
+
+# Mark: Retrofit Libraries
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "mockwebserver" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converterGson" }
 retrofit-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
 retrofit-kotlin-coroutines-adapter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlin-coroutines-adapter", version.ref = "retrofitKotlinCoroutinesAdapter" }
-#Mark: Compose
+
+# Mark: Compose Libraries (Managed by BOM)
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 
-# Compose dependencies (version managed by BOM)
+# Compose Dependencies (Version managed by BOM)
 androidx-ui = { module = "androidx.compose.ui:ui" }
 androidx-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
 androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-androidx-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
-androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 androidx-material3 = { module = "androidx.compose.material3:material3" }
 androidx-animation = { module = "androidx.compose.animation:animation" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose" }
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "androidxConstraintlayout" }
 
-# Other libraries not managed by BOM
+# Mark: Other Libraries
 androidx-core-splash = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
@@ -84,44 +89,12 @@ androidx-appcompat-resources = { module = "androidx.appcompat:appcompat-resource
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 androidx-adaptive-navigation-suite = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite-android", version.ref = "material3AdaptiveNavigationSuiteAndroid" }
 
-
-#--------
-#androidx-core-splash = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }
-#androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-#androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
-#androidx-lifecycle-viewmodel-android-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-android", version.ref = "viewModelAndroidKtx" }
-#androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "viewModelKtx" }
-#androidx-lifecycle-viewmodel-compose-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "viewModelComposeKtx" }
-#androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-#androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-#androidx-ui = { group = "androidx.compose.ui", name = "ui" }
-#androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-#androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-#androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-#androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-#androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-#androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
-#androidx-paging-common-android = { group = "androidx.paging", name = "paging-common-android", version.ref = "pagingCommonAndroid" }
-#androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "pagingCompose" }
-#androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
-#androidx-fragment-compose = { group = "androidx.fragment", name = "fragment-compose", version.ref = "fragmentCompose" }
-#androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
-#androidx-adaptive = { module = "androidx.compose.material3.adaptive:adaptive", version.ref = "adaptiveAndroid" }
-#androidx-adaptive-layout-android = { module = "androidx.compose.material3.adaptive:adaptive-layout-android", version.ref = "adaptiveAndroid" }
-#androidx-adaptive-navigation-android = { module = "androidx.compose.material3.adaptive:adaptive-navigation-android", version.ref = "adaptiveAndroid" }
-#androidx-adaptive-android = { group = "androidx.compose.material3.adaptive", name = "adaptive-android", version.ref = "adaptiveAndroid" }
-#androidx-animation = { module = "androidx.compose.animation:animation", version.ref = "animation" }
-#
-#androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "androidx-constraintlayout" }
-##androidx-appcompat
-#kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
-#androidx-appcompat-resources = { group = "androidx.appcompat", name = "appcompat-resources", version.ref = "appcompatResources" }
-
 [plugins]
+# Mark: Android Plugins
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+
+# Mark: Kotlin Plugins
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
-
-

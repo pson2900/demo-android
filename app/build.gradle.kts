@@ -25,6 +25,7 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -32,17 +33,9 @@ android {
 
     kotlinOptions {
         jvmTarget = "17"
-//        freeCompilerArgs += listOf(
-//            "-Xcontext-receivers",
-//            "-P",
-//            "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
-//        )
     }
 
-//    composeOptions {
-//        kotlinCompilerExtensionVersion = "1.5.3"
-//    }
-
+    // Enable ViewBinding and Jetpack Compose
     buildFeatures {
         viewBinding = true
         compose = true
@@ -50,76 +43,62 @@ android {
 }
 
 dependencies {
+    // Project dependencies
     implementation(project(":data"))
     implementation(project(":domain"))
-//    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.20")
-    implementation(libs.com.google.material)
-    implementation(libs.kotlinx.serialization.json)
-    // Mark: Koin
-    implementation(platform(libs.koin.bom)) // Use BOM for consistent versions
-    implementation(libs.koin.core)
-    implementation(libs.koin.android)
-    implementation(libs.koin.compose)
-    implementation(libs.koin.androidx.compose)
+
+    // Mark: Google
+    implementation(libs.com.google.material) // Material Components for UI elements
+
+    // Mark: Serialization
+    implementation(libs.kotlinx.serialization.json) // Kotlin Serialization for JSON parsing
+
+    // Mark: Dependency Injection - Koin
+    implementation(platform(libs.koin.bom)) // Use Koin BOM for consistent versions
+    implementation(libs.koin.core) // Koin Core for DI
+    implementation(libs.koin.android) // Koin for Android DI
+    implementation(libs.koin.compose) // Koin integration with Compose
+    implementation(libs.koin.androidx.compose) // Koin for AndroidX Compose
+
     // Mark: Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
-    implementation(libs.retrofit.logging.interceptor)
-    implementation(libs.retrofit.kotlin.coroutines.adapter)
-    testImplementation(libs.retrofit.mockwebserver)
+    implementation(libs.retrofit) // Retrofit for network requests
+    implementation(libs.retrofit.converter.gson) // Retrofit Gson converter
+    implementation(libs.retrofit.logging.interceptor) // Retrofit logging interceptor
+    implementation(libs.retrofit.kotlin.coroutines.adapter) // Retrofit Kotlin coroutines adapter
+    testImplementation(libs.retrofit.mockwebserver) // MockWebServer for testing Retrofit
+
     // Mark: Compose
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.animation)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.constraintlayout.compose)
-    debugImplementation(libs.androidx.ui.tooling)
+    implementation(platform(libs.androidx.compose.bom)) // Use Compose BOM for consistent versions
+    implementation(libs.androidx.ui) // Compose UI library
+    implementation(libs.androidx.material3) // Material3 for Compose
+    implementation(libs.androidx.ui.graphics) // Compose UI graphics
+    implementation(libs.androidx.ui.tooling) // Tooling support for Compose
+    implementation(libs.androidx.ui.tooling.preview) // Preview support for Compose
+    implementation(libs.androidx.animation) // Compose animation library
+    implementation(libs.androidx.navigation.compose) // Compose Navigation for screen transitions
+    implementation(libs.androidx.constraintlayout.compose) // Compose ConstraintLayout
 
-    // Other dependencies
-    implementation(libs.androidx.core.splash)
-    implementation(libs.androidx.espresso.core)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.compose.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.adaptive)
-    implementation(libs.androidx.adaptive.layout.android)
-    implementation(libs.androidx.appcompat.resources)
+    // Debug dependencies
+    debugImplementation(libs.androidx.ui.tooling) // Compose tooling for debugging
 
-    // Serialization library
-    implementation(libs.kotlinx.serialization.json)
-    //// ------
+    // Mark: Other dependencies
+    implementation(libs.androidx.core.splash) // SplashScreen API support
+    implementation(libs.androidx.espresso.core) // Espresso for UI testing
+    implementation(libs.androidx.lifecycle.runtime.ktx) // Lifecycle runtime for ViewModel and LiveData
+    implementation(libs.androidx.lifecycle.viewmodel.ktx) // ViewModel KTX extensions
+    implementation(libs.androidx.lifecycle.viewmodel.compose.ktx) // ViewModel Compose KTX extensions
+    implementation(libs.androidx.activity.compose) // Compose support for activities
+    implementation(libs.androidx.adaptive) // Adaptive UI for Compose
+    implementation(libs.androidx.adaptive.layout.android) // Adaptive layout for Android
+    implementation(libs.androidx.appcompat.resources) // AppCompat resources
 
+    // Mark: Serialization library
+    implementation(libs.kotlinx.serialization.json) // Kotlin Serialization for JSON parsing
 
-//    implementation(platform(libs.androidx.compose.bom))
-//    implementation(libs.androidx.ui)
-//    implementation(libs.androidx.ui.graphics)
-//    implementation(libs.androidx.ui.tooling.preview)
-//    implementation(libs.androidx.material3)
-//    implementation(libs.androidx.adaptive)
-////    implementation(libs.androidx.adaptive.navigation.android)
-//    implementation(libs.androidx.adaptive.layout.android)
-//    implementation(libs.androidx.animation)
-//    implementation(libs.androidx.core.splash)
-//    implementation(libs.coil.compose)
-////    implementation(libs.androidx.paging.compose)
-////    implementation(libs.androidx.fragment.ktx)
-////    implementation(libs.androidx.fragment.compose)
-//    implementation(libs.androidx.navigation.compose)
-////    implementation(libs.androidx.adaptive.android)
-//    implementation(libs.androidx.appcompat.resources)
-//    implementation(libs.androidx.core.ktx)
-//    implementation(libs.androidx.constraintlayout.compose)
-//    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-//    testImplementation(libs.junit)
-//    androidTestImplementation(libs.androidx.junit)
-//    androidTestImplementation(libs.androidx.espresso.core)
+    // Mark: Accompanist for additional Compose functionality
+    implementation(libs.accompanist.drawablepainter) // Drawable painter for Compose
+    implementation(libs.accompanist.navigation.animation) // Navigation with animations for Compose
 
-    implementation(libs.accompanist.drawablepainter)
-    implementation(libs.accompanist.navigation.animation)
-    implementation(libs.androidx.adaptive.navigation.suite)
+    // Mark: AndroidX Material3 Adaptive Navigation Suite for Compose
+    implementation(libs.androidx.adaptive.navigation.suite) // Adaptive Navigation Suite for Compose
 }

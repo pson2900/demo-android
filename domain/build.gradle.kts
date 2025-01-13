@@ -26,21 +26,14 @@ android {
 
     kotlinOptions {
         jvmTarget = "17"
-        freeCompilerArgs += listOf(
-            "-Xcontext-receivers",
-            "-P",
-            "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
-        )
     }
 }
 
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(libs.androidx.core.ktx)
-//    implementation(libs.androidx.appcompat)
     implementation(libs.com.google.material)
     testImplementation(libs.junit)
-//    implementation(project(":data"))
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
