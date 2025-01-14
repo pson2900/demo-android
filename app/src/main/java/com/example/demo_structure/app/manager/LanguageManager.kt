@@ -9,7 +9,7 @@ import java.util.Locale
  * Copyright (c) 2024 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-class LanguageManager {
+object LanguageManager {
 
     fun setLocale(context: Context, languageCode: String) {
         val locale = Locale(languageCode)

@@ -15,6 +15,10 @@ sealed class ErrorType {
     object DatabaseError : ErrorType()
     object UnknownError : ErrorType()
     data class CustomError(val message: String) : ErrorType()
+
+    fun showMessage(): String {
+        return ""
+    }
 }
 
 

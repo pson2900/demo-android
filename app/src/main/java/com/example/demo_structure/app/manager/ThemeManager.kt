@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatDelegate
  * Copyright (c) 2024 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-class ThemeManager {
+object ThemeManager {
 
     fun setNightMode(isNightMode: Boolean) {
         if (isNightMode) {
