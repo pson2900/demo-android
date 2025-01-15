@@ -2,9 +2,11 @@ package com.example.demo_structure.screen.main
 
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
-import com.example.demo_structure.screen.home.HomeRoute
-import com.example.demo_structure.screen.search_result.SearchResultRoute
-import com.example.demo_structure.screen.user.UserRoute
+import com.example.demo_structure.core.navigation.AppState
+import com.example.demo_structure.core.navigation.Destinations
+import com.example.demo_structure.screen.home.toHomeScreen
+import com.example.demo_structure.screen.search_result.toSearchResultScreen
+import com.example.demo_structure.screen.user.toUserScreen
 import com.example.demo_structure.theme.AppIcons
 
 /**
@@ -25,7 +27,7 @@ enum class MainDestination(
         unselectedIcon = AppIcons.IconHomeUnSelect,
         iconTextId = "HOME",
         titleTextId = "HOME",
-        route = "main/home",
+        route = Destinations.HOME_ROUTE
     ),
 
     SEARCH(
@@ -33,7 +35,8 @@ enum class MainDestination(
         unselectedIcon = AppIcons.IconSearchUnSelect,
         iconTextId = "SEARCH",
         titleTextId = "SEARCH",
-        route = "main/search"
+//        route = "${Destinations.MAIN}/${Destinations.SEARCH_ROUTE}"
+        route = Destinations.SEARCH_ROUTE
     ),
 
     USER(
@@ -41,35 +44,42 @@ enum class MainDestination(
         unselectedIcon = AppIcons.IconUserUnSelect,
         iconTextId = "USER",
         titleTextId = "USER",
-        route = "main/user",
+        route = Destinations.USER_ROUTE
     ),
 }
 
-fun NavGraphBuilder.addHomeGraph(
-    onSnackSelected: (Int, String) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    HomeRoute.toScreen(
-        navGraphBuilder = this,
+//fun mainAppHost(appState: AppState){
+//        startDestination = Routes.APP_GRAPH) {
+//
+//    NavHost(navController = appState.navController,
+//    }
+//}
+
+fun NavGraphBuilder.mainNavGraph(
+    modifier: Modifier = Modifier,
+    nestedAppState: AppState,
+    onNavigateToJobDetail: (Int, String) -> Unit,
+    onNavigateToLogin: () -> Unit,
+
+    ) {
+    toHomeScreen(
+        nestedAppState,
+        onNavigateToJobDetail = { jobId, str ->
+
+        },
+    )
+    toSearchResultScreen(
+        nestedNavigation = nestedAppState,
         modifier = modifier,
         onTopicClick = {
 
         },
-        onSnackSelected = onSnackSelected,
     )
-    SearchResultRoute.toScreen(
-        navGraphBuilder = this,
+    toUserScreen(
+        nestedNavigation = nestedAppState,
         modifier = modifier,
-        onTopicClick = {
+        onNavigateToLogin = {
 
         },
     )
-    UserRoute.toScreen(
-        navGraphBuilder = this,
-        modifier = modifier,
-        onTopicClick = {
-
-        },
-    )
-
 }

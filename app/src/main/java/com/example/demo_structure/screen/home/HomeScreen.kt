@@ -49,6 +49,7 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavOptions
 import com.example.demo_structure.JobDetail
 import com.example.demo_structure.R
 import com.example.demo_structure.app.LocalNavAnimatedVisibilityScope
@@ -59,10 +60,14 @@ import com.example.demo_structure.core.component.JobDetailCard
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.core.component.ProductXScaffold
 import com.example.demo_structure.core.component.ProductXSurface
+import com.example.demo_structure.core.navigation.AppState
+import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.jobResult
+import com.example.demo_structure.screen.job_detail.navigateToJobDetail
 import com.example.demo_structure.screen.job_detail.nonSpatialExpressiveSpring
 import com.example.demo_structure.screen.job_detail.spatialExpressiveSpring
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 /**
  * Created by Phạm Sơn at 23:32/8/1/25
@@ -79,17 +84,16 @@ private val Density.cardWidthWithPaddingPx
 
 @Composable
 internal fun HomeRoute(
-    onTopicClick: (String) -> Unit,
-    onSnackSelected: (Int, String) -> Unit,
-    modifier: Modifier,
+    nestedAppState: AppState,
+    onItemSelected: (Int, String) -> Unit
 ) {
     val viewModel: HomeViewModel = koinViewModel()
     val state by viewModel.homeUiState.collectAsStateWithLifecycle()
     HomeScreen(
         state = state,
-        modifier = modifier,
         viewModel = viewModel,
-        onSnackSelected = onSnackSelected
+        onItemSelected = onItemSelected,
+        nestedAppState = nestedAppState
     )
 }
 
@@ -110,10 +114,10 @@ internal fun LoadingState(modifier: Modifier = Modifier) {
 @Composable
 internal fun HomeScreen(
     state: HomeState,
-    modifier: Modifier = Modifier,
     clearUndoState: () -> Unit = {},
     viewModel: HomeViewModel,
-    onSnackSelected: (Int, String) -> Unit,
+    onItemSelected: (Int, String) -> Unit,
+    nestedAppState: AppState
 ) {
 
     LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
@@ -130,11 +134,11 @@ internal fun HomeScreen(
         }
 
         is HomeState.Loading -> {
-            LoadingState(modifier)
+//            LoadingState(modifier)
         }
     }
-    HomeContent(modifier) { jobId, str ->
-        onSnackSelected(jobId, str)
+    HomeContent (nestedAppState){ jobId, str ->
+        onItemSelected(jobId, str)
     }
 
 
@@ -142,14 +146,14 @@ internal fun HomeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeContent(modifier: Modifier = Modifier, onSnackSelected: (Int, String) -> Unit) {
+fun HomeContent(nestedAppState: AppState, onItemSelected: (Int, String) -> Unit) {
     val rememberSnackbarHostState = remember { SnackbarHostState() }
     val columState = rememberLazyListState()
     val itemAnimationSpecFade = nonSpatialExpressiveSpring<Float>()
     val itemPlacementSpec = spatialExpressiveSpring<IntOffset>()
     ProductXScaffold(
         contentWindowInsets = WindowInsets.systemBars,
-        modifier = modifier,
+        modifier = Modifier,
         snackBarHostState = rememberSnackbarHostState,
         topBar = {
             TopAppBar(
@@ -163,10 +167,13 @@ fun HomeContent(modifier: Modifier = Modifier, onSnackSelected: (Int, String) ->
                 })
         }
     ) {
-        ProductXSurface(Modifier.fillMaxSize().padding(it)) {
+        ProductXSurface(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
             LazyColumn(
                 state = columState,
-                modifier = modifier,
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 contentPadding = PaddingValues(start = 24.dp, end = 24.dp)
             ) {
@@ -179,7 +186,9 @@ fun HomeContent(modifier: Modifier = Modifier, onSnackSelected: (Int, String) ->
                                 fadeOutSpec = itemAnimationSpecFade,
                                 placementSpec = itemPlacementSpec
                             ), jobDetail = item,
-                        onSnackSelected = onSnackSelected
+                        onItemSelected = { jobId, str ->
+                            onItemSelected.invoke(jobId,str)
+                        }
                     )
 //            Text(item.jobTitle)
                 }
@@ -195,7 +204,7 @@ fun HomeContent(modifier: Modifier = Modifier, onSnackSelected: (Int, String) ->
 @Composable
 fun ItemResultPreview() {
     ProductXPreviewWrapper {
-        ItemResult(Modifier, jobResult[0], onSnackSelected = { jobId, str ->
+        ItemResult(Modifier, jobResult[0], onItemSelected = { jobId, str ->
 
         })
     }
@@ -205,7 +214,7 @@ fun ItemResultPreview() {
 @Composable
 fun HomeScreenPreview() {
     ProductXPreviewWrapper {
-        HomeContent(Modifier) { jobId, str ->
+        HomeContent(rememberAppState(koinInject())) { jobId, str ->
 
         }
     }
@@ -213,7 +222,7 @@ fun HomeScreenPreview() {
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun ItemResult(modifier: Modifier = Modifier, jobDetail: JobDetail, onSnackSelected: (Int, String) -> Unit) {
+fun ItemResult(modifier: Modifier = Modifier, jobDetail: JobDetail, onItemSelected: (Int, String) -> Unit) {
     val sharedTransitionScope = LocalSharedTransitionScope.current
         ?: throw IllegalStateException("No Scope found")
     val animatedVisibilityScope = LocalNavAnimatedVisibilityScope.current
@@ -235,7 +244,7 @@ fun ItemResult(modifier: Modifier = Modifier, jobDetail: JobDetail, onSnackSelec
                 .padding(bottom = 16.dp)
                 .border(1.dp, color = Color.Black, shape = RoundedCornerShape(roundedCornerAnimation)) // Đặt border
                 .clickable {
-                    onSnackSelected(jobDetail.jobId, "origin")
+                    onItemSelected(jobDetail.jobId, "origin")
                 }
                 /* .sharedBounds(
                      sharedContentState = rememberSharedContentState(

@@ -341,6 +341,7 @@ fun ProductXApplicationTheme(
         bottom = colorScheme.primaryContainer,
         container = colorScheme.surface,
     )
+
     val gradientColors = when {
         androidTheme -> if (darkTheme) DarkAndroidGradientColors else LightAndroidGradientColors
         !disableDynamicTheming && supportsDynamicTheming() -> emptyGradientColors
@@ -361,7 +362,6 @@ fun ProductXApplicationTheme(
         else -> TintTheme()
     }
     // Composition locals
-
     CompositionLocalProvider(
         LocalColorTheme provides colorTheme,
         LocalGradientColors provides gradientColors,

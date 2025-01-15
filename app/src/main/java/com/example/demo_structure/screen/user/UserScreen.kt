@@ -1,5 +1,7 @@
 package com.example.demo_structure.screen.user
 
+import android.content.res.Configuration
+import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.animateFloatAsState
@@ -7,8 +9,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,7 +50,10 @@ import com.example.demo_structure.R
 import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.core.component.ProductXScaffold
+import com.example.demo_structure.core.navigation.AppState
+import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.theme.ProductXApplicationTheme
+import com.example.demo_structure.util.AlwaysOnlineNetworkMonitor
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -57,15 +63,17 @@ import org.koin.androidx.compose.koinViewModel
  */
 @Composable
 internal fun UserRoute(
+    nestedNavigation: AppState,
     modifier: Modifier = Modifier,
-    onTopicClick: (String) -> Unit,
+    onLogin: () -> Unit,
 ) {
     val userViewModel: UserViewModel = koinViewModel()
     val userState by userViewModel.menuUiState.collectAsStateWithLifecycle()
     UserScreen(
+        nestedNavigation = nestedNavigation,
         modifier = modifier,
         state = userState,
-        onTopicClick = onTopicClick,
+        onNavigateToLogin = onLogin,
         userViewModel = userViewModel
     )
 }
@@ -77,9 +85,10 @@ internal fun UserRoute(
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
 internal fun UserScreen(
+    nestedNavigation: AppState,
     state: UserState,
-    onTopicClick: (String) -> Unit,
-    modifier: Modifier = Modifier,
+    onNavigateToLogin: () -> Unit,
+    modifier: Modifier = Modifier.fillMaxSize(),
     clearUndoState: () -> Unit = {},
     userViewModel: UserViewModel
 ) {
@@ -102,30 +111,26 @@ internal fun UserScreen(
             snackBarHostState = rememberHostState
         ) {
             UserContent(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(it)
+                modifier = modifier,
+                onNavigateToLogin = onNavigateToLogin,
+                nestedNavigation
             )
         }
     }
-
-
 }
 
 @Composable
-fun UserContent(modifier: Modifier) {
-    ConstraintLayout(modifier = Modifier
-            .fillMaxSize()
+fun UserContent(modifier: Modifier, onNavigateToLogin: () -> Unit, appState: AppState) {
+    ConstraintLayout(
+        modifier = modifier
             .background(Color.Blue)
     ) {
         val (borderUser, cardUser, progress) = createRefs()
-
-
         Box(
-            modifier = Modifier
-                .border(25.dp, Color.White, shape = CircleShape)
+            modifier = modifier
+//                .border(25.dp, Color.White, shape = CircleShape)
                 .background(Color.White)
-                .fillMaxSize()
+                .fillMaxHeight()
                 .constrainAs(cardUser) {
                     top.linkTo(borderUser.top, margin = 50.dp)
                     start.linkTo(parent.start)
@@ -134,7 +139,18 @@ fun UserContent(modifier: Modifier) {
                 },
             contentAlignment = Alignment.Center
         ) {
-            Text("hello world")
+            /* LazyColumn(modifier) {
+                 item { HeaderSection(modifier = modifier, title = "Nguyen Minh Hieu") }
+                 item { ProfileStatusSection(modifier = modifier) }
+             }*/
+            Button(onClick = {
+                Log.d("QQQ", "Login enter")
+                onNavigateToLogin.invoke()
+//                appState.navigateToLogin()
+//                onLogin()
+            }) {
+                Text("Login")
+            }
         }
         Box(
             modifier = Modifier
@@ -159,7 +175,6 @@ fun UserContent(modifier: Modifier) {
                 contentDescription = null
             )
         }
-
     }
 }
 
@@ -196,11 +211,15 @@ fun CircularProgressBar(
     }
 }
 
-@Preview
+@Preview("Light Mode")
+@Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun UserContentPreview() {
     ProductXPreviewWrapper { modifier ->
-        UserContent(modifier)
+        val appState = rememberAppState(AlwaysOnlineNetworkMonitor())
+        UserContent(modifier, onNavigateToLogin = {
+
+        }, appState)
     }
 }
 

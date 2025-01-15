@@ -1,9 +1,12 @@
 package com.example.demo_structure.screen.home
 
-import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
+import com.example.demo_structure.core.navigation.AppState
+import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.screen.main.MainDestination
 import kotlinx.serialization.Serializable
 
@@ -14,30 +17,30 @@ import kotlinx.serialization.Serializable
  */
 
 @Serializable
-object HomeRoute {
+object HomeRoute
 
-    fun toScreen(
-        navGraphBuilder: NavGraphBuilder,
-        onTopicClick: (String) -> Unit,
-        modifier: Modifier,
-        onSnackSelected: (Int, String) -> Unit,
-    ) {
-        navGraphBuilder.apply {
-            composable(
-                route = MainDestination.HOME.route,
-                deepLinks = listOf(
-                    navDeepLink {
-                        uriPattern = "Google.com"
-                    }
-                ),
-                content = { navBackStackEntry ->
-                    HomeRoute(onTopicClick, onSnackSelected, modifier)
+fun NavController.navigateToHome(navOptions: NavOptions) =
+    navigate(route = Destinations.HOME_ROUTE, navOptions)
+
+fun NavGraphBuilder.toHomeScreen(
+    nestedAppState: AppState,
+    onNavigateToJobDetail: (Int, String) -> Unit,
+) {
+    this.apply {
+        composable(
+            route = Destinations.HOME_ROUTE,
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "Google.com"
                 }
-            )
-        }
+            ),
+            content = { navBackStackEntry ->
+
+                HomeRoute(nestedAppState,onNavigateToJobDetail)
+            }
+        )
     }
 }
-
 
 
 

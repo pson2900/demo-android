@@ -19,8 +19,7 @@ import com.example.demo_structure.app.di.presentationModule
 import com.example.demo_structure.theme.ProductXApplicationTheme
 import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.screen.main.ThemeSettings
-import com.example.demo_structure.screen.main.Destinations
-import com.example.demo_structure.screen.main.MainNavigationActions.AppNavNavigate
+import com.example.demo_structure.core.navigation.ProductXNavGraph
 import org.koin.compose.KoinApplication
 
 /**
@@ -71,8 +70,8 @@ fun InitializeApp(
                     LocalSharedTransitionScope provides this@SharedTransitionLayout,
                     LocalNavAnimatedVisibilityScope provides this
                 ) {
-                    AppNavNavigate(
-                        modifier = modifier, appState = appState, startDestination = Destinations.HOME_ROUTE,
+                    ProductXNavGraph(
+                        modifier = modifier, appState = appState,
                     )
                 }
             }

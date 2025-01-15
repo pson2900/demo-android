@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,7 +33,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.R
-import com.example.demo_structure.theme.ProductXApplicationTheme
 
 /**
  * Created by Phạm Sơn at 11:11/4/1/25
@@ -97,12 +95,10 @@ fun TopSearchAppBar(
                 painterResource(id = R.drawable.vnw_gradient_status_bar),
                 contentScale = ContentScale.FillBounds
             )
-            .wrapContentHeight()
+            .statusBarsPadding()
     ) {
         Row(
             modifier = modifier
-                .padding(10.dp)
-                .statusBarsPadding()
                 .align(Alignment.Center)
         ) {
             Text(
@@ -140,32 +136,8 @@ fun TopSearchAppBar(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
-@Composable
-fun AppBarPreview() {
-    ProductXApplicationTheme(darkTheme = false) {
-        Column {
-            TopAppBar(title = { Text("Preview!") },
-                navigationIcon = {
-                    AppBarIcon(
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp),
-                        imageResource = R.drawable.ic_back_arrow
-                    )
-                })
-            TopSearchAppBar(
-                modifier = Modifier.fillMaxWidth(),
-                actions = {},
-                content = "Hello World Light"
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview("Light Mode")
-@Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview("large font", fontScale = 2f)
+@Preview("Light Mode", showBackground = true,)
+@Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 fun AppBarPreviewDark() {
     ProductXPreviewWrapper {

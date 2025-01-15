@@ -6,6 +6,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
+import com.example.demo_structure.core.navigation.AppState
+import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.screen.main.MainDestination
 import kotlinx.serialization.Serializable
 
@@ -15,25 +17,28 @@ import kotlinx.serialization.Serializable
  * Email: son.pham@navigosgroup.com
  */
 @Serializable
-object SearchResultRoute {
-    fun toScreen(
-        navGraphBuilder: NavGraphBuilder,
-        onTopicClick: (String) -> Unit,
-        modifier: Modifier,
-    ) {
-        navGraphBuilder.apply {
-            composable(
-                route = MainDestination.SEARCH.route,
-                deepLinks = listOf(
-                    navDeepLink {
-                        uriPattern = "Google.com"
-                    }
-                ),
-                content = {
-                    SearchResultScreen(onTopicClick, modifier = modifier)
+object SearchResultRoute
+
+fun NavController.navigateToSearchResult(navOptions: NavOptions) =
+    navigate(route = Destinations.SEARCH_ROUTE, navOptions)
+
+fun NavGraphBuilder.toSearchResultScreen(
+    nestedNavigation: AppState,
+    onTopicClick: (String) -> Unit,
+    modifier: Modifier,
+) {
+    this.apply {
+        composable(
+            route = Destinations.SEARCH_ROUTE,
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "Google.com"
                 }
-            )
-        }
+            ),
+            content = {
+                SearchResultScreen(nestedNavigation,onTopicClick, modifier = modifier)
+            }
+        )
     }
 }
 

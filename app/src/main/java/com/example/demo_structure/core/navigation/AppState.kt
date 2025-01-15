@@ -11,12 +11,14 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
+import com.example.demo_structure.screen.login.navigateToLogin
 import com.example.demo_structure.util.NetworkMonitor
-import com.example.demo_structure.screen.main.Destinations
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.serialization.Serializable
 
 /**
  * Created by Phạm Sơn at 10:55/10/1/25
@@ -87,8 +89,39 @@ class AppState(
                 navController.navigate(route = route)
             }
         }
-
     }
+
+    fun navigateToJobDetail(jobId: Int, origin: String) {
+        // In order to discard duplicated navigation events, we check the Lifecycle
+        val route = "${Destinations.JOB_DETAIL_ROUTE}/$jobId?origin=$origin"
+        trace("Navigation : ${route}") {
+//            if (from.lifecycleIsResumed()) {
+            navController.navigate(route = route)
+//            }
+        }
+    }
+
+    fun navigateToLogin(from: NavBackStackEntry) {
+        // In order to discard duplicated navigation events, we check the Lifecycle
+        val route = Destinations.LOGIN_ROUTE
+        trace("Navigation : ${route}") {
+            if (from.lifecycleIsResumed()) {
+                navController.navigateToLogin(navOptions { })
+            }
+        }
+    }
+
+    fun navigateToLogin() {
+        // In order to discard duplicated navigation events, we check the Lifecycle
+        val route = Destinations.LOGIN_ROUTE
+        trace("Navigation : ${route}") {
+//            if (from.lifecycleIsResumed()) {
+            navController.navigateToLogin(navOptions { })
+//            }
+        }
+    }
+
+
 }
 
 /**
@@ -108,4 +141,32 @@ private val NavGraph.startDestination: NavDestination?
  */
 private tailrec fun findStartDestination(graph: NavDestination): NavDestination {
     return if (graph is NavGraph) findStartDestination(graph.startDestination!!) else graph
+}
+
+@Serializable
+data object MainRoute
+
+@Serializable
+data object BaseRoute
+
+object Destinations {
+    const val APP = "app"
+    const val MAIN = "main"
+    const val HOME_ROUTE = "home"
+    const val SEARCH_ROUTE = "search"
+    const val USER_ROUTE = "user"
+    const val JOB_DETAIL_ROUTE = "job_detail"
+    const val LOGIN_ROUTE = "login"
+    const val JOB_DETAIL_ID_KEY = "jobId"
+    const val ORIGIN = "origin"
+}
+
+object Routes {
+    const val APP_GRAPH = "app_graph"
+    const val MAIN_GRAPH = "main_graph"
+    const val HOME_GRAPH = "home_graph"
+    const val SEARCH_GRAPH = "search_graph"
+    const val USER_GRAPH = "user_graph"
+    const val JOB_GRAPH = "job_graph"
+    const val JOB_DETAIL_GRAPH = "job_detail/{jobId}"
 }
