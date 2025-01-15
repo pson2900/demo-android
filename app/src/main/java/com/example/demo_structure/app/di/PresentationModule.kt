@@ -2,6 +2,7 @@ package com.example.demo_structure.app.di
 
 import com.example.demo_structure.screen.home.HomeViewModel
 import com.example.demo_structure.screen.job_detail.JobDetailViewModel
+import com.example.demo_structure.screen.login.LoginViewModel
 import com.example.demo_structure.screen.search_result.SearchResultViewModel
 import com.example.demo_structure.screen.user.UserViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -17,4 +18,5 @@ val presentationModule = module {
     viewModel { JobDetailViewModel() }
     viewModel { UserViewModel() }
     viewModel { SearchResultViewModel() }
+    viewModel { LoginViewModel() }
 }

@@ -29,6 +29,7 @@ class SearchResultViewModel : ViewModel() {
             searchResultState.value.toUiState()
         )
 
-
+    init {
+    }
 }
 

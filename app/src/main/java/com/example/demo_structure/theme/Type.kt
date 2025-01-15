@@ -53,9 +53,9 @@ internal val Typography = Typography(
         letterSpacing = 0.sp,
     ),
     headlineMedium = TextStyle(
-        fontWeight = FontWeight.Normal,
+        fontWeight = FontWeight.W600,
         fontSize = 28.sp,
-        lineHeight = 36.sp,
+        lineHeight = 28.sp,
         letterSpacing = 0.sp,
     ),
     headlineSmall = TextStyle(
@@ -116,25 +116,27 @@ internal val Typography = Typography(
     // Used for Button
     labelLarge = TextStyle(
         fontWeight = FontWeight.Medium,
-        fontSize = 14.sp,
-        lineHeight = 20.sp,
+        fontSize = 16.sp,
+        lineHeight = 16.sp,
         letterSpacing = 0.1.sp,
         lineHeightStyle = LineHeightStyle(
             alignment = Alignment.Center,
             trim = Trim.LastLineBottom,
         ),
     ),
+
     // Used for Navigation items
     labelMedium = TextStyle(
-        fontWeight = FontWeight.Medium,
-        fontSize = 12.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        lineHeight = 14.sp,
+        letterSpacing = 0.1.sp,
         lineHeightStyle = LineHeightStyle(
             alignment = Alignment.Center,
             trim = Trim.LastLineBottom,
         ),
     ),
+
     // Used for Tag
     labelSmall = TextStyle(
         fontWeight = FontWeight.Medium,

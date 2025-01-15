@@ -42,7 +42,6 @@ fun JobDetailScreen(
     jobId: Int,
     origin: String,
     onBackClick: () -> Unit,
-    onTopicClick: (String) -> Unit,
 
     ) {
     val viewModel: JobDetailViewModel = koinViewModel()

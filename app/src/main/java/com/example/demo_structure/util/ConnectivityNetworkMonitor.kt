@@ -23,8 +23,6 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.net.NetworkRequest.Builder
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
 import androidx.compose.ui.util.trace
 import androidx.core.content.getSystemService
 import kotlinx.coroutines.CoroutineDispatcher
@@ -35,7 +33,7 @@ import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 
-class AlwaysOnlineNetworkMonitor  constructor() : NetworkMonitor {
+class AlwaysOnlineNetworkMonitor constructor() : NetworkMonitor {
     override val isOnline: Flow<Boolean> = flowOf(true)
 }
 
@@ -94,7 +92,7 @@ internal class ConnectivityManagerNetworkMonitor constructor(
 
     @Suppress("DEPRECATION")
     private fun ConnectivityManager.isCurrentlyConnected() = when {
-        VERSION.SDK_INT >= VERSION_CODES.M ->
+        true ->
             activeNetwork
                 ?.let(::getNetworkCapabilities)
                 ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)

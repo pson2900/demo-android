@@ -1,7 +1,6 @@
-package com.example.demo_structure.screen.user
+package com.example.demo_structure.screen.login
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.animateFloatAsState
@@ -43,17 +42,12 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.R
 import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.core.component.ProductXScaffold
-import com.example.demo_structure.core.navigation.AppState
-import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.theme.ProductXApplicationTheme
-import com.example.demo_structure.util.AlwaysOnlineNetworkMonitor
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -62,19 +56,14 @@ import org.koin.androidx.compose.koinViewModel
  * Email: son.pham@navigosgroup.com
  */
 @Composable
-internal fun UserRoute(
-    nestedNavigation: AppState,
-    modifier: Modifier = Modifier,
-    onLogin: () -> Unit,
+internal fun LoginRoute(
+    onNavigateLogin: (String) -> Unit,
 ) {
-    val userViewModel: UserViewModel = koinViewModel()
-    val userState by userViewModel.menuUiState.collectAsStateWithLifecycle()
-    UserScreen(
-        nestedNavigation = nestedNavigation,
-        modifier = modifier,
-        state = userState,
-        onNavigateToLogin = onLogin,
-        userViewModel = userViewModel
+    val loginViewModel: LoginViewModel = koinViewModel()
+    val loginState by loginViewModel.menuUiState.collectAsStateWithLifecycle()
+    LoginScreen(
+        modifier = Modifier.fillMaxSize(),
+        state = loginState
     )
 }
 
@@ -84,23 +73,16 @@ internal fun UserRoute(
 @OptIn(ExperimentalSharedTransitionApi::class)
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
-internal fun UserScreen(
-    nestedNavigation: AppState,
-    state: UserState,
-    onNavigateToLogin: () -> Unit,
-    modifier: Modifier = Modifier.fillMaxSize(),
-    clearUndoState: () -> Unit = {},
-    userViewModel: UserViewModel
+internal fun LoginScreen(
+    state: LoginState,
+    modifier: Modifier = Modifier,
 ) {
 
     val rememberHostState = remember { SnackbarHostState() }
-    LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
-        clearUndoState()
-    }
 
     when (state) {
-        UserState.Loading -> LoadingState(modifier)
-        UserState.Success -> {
+        LoginState.Loading -> LoadingState(modifier)
+        LoginState.Success -> {
 
         }
     }
@@ -110,17 +92,19 @@ internal fun UserScreen(
             modifier = modifier,
             snackBarHostState = rememberHostState
         ) {
-            UserContent(
-                modifier = modifier,
-                onNavigateToLogin = onNavigateToLogin,
-                nestedNavigation
+            LoginContent(
+                modifier = modifier
+//                    .fillMaxSize()
+//                    .padding(it)
             )
         }
     }
+
+
 }
 
 @Composable
-fun UserContent(modifier: Modifier, onNavigateToLogin: () -> Unit, appState: AppState) {
+fun LoginContent(modifier: Modifier) {
     ConstraintLayout(
         modifier = modifier
             .background(Color.Blue)
@@ -143,11 +127,8 @@ fun UserContent(modifier: Modifier, onNavigateToLogin: () -> Unit, appState: App
                  item { HeaderSection(modifier = modifier, title = "Nguyen Minh Hieu") }
                  item { ProfileStatusSection(modifier = modifier) }
              }*/
-            Button(onClick = {
-                Log.d("QQQ", "Login enter")
-                onNavigateToLogin.invoke()
-//                appState.navigateToLogin()
-//                onLogin()
+            Button({
+
             }) {
                 Text("Login")
             }
@@ -175,8 +156,10 @@ fun UserContent(modifier: Modifier, onNavigateToLogin: () -> Unit, appState: App
                 contentDescription = null
             )
         }
+
     }
 }
+
 
 @Composable
 fun CircularProgressBar(
@@ -216,10 +199,7 @@ fun CircularProgressBar(
 @Composable
 fun UserContentPreview() {
     ProductXPreviewWrapper { modifier ->
-        val appState = rememberAppState(AlwaysOnlineNetworkMonitor())
-        UserContent(modifier, onNavigateToLogin = {
-
-        }, appState)
+        LoginContent(modifier)
     }
 }
 

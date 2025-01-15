@@ -1,46 +1,42 @@
-package com.example.demo_structure.screen.home
+package com.example.demo_structure.screen.login
 
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
-import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.Destinations
-import com.example.demo_structure.screen.main.MainDestination
 import kotlinx.serialization.Serializable
 
 /**
- * Created by Phạm Sơn at 15:17/3/1/25
+ * Created by Phạm Sơn at 23:24/8/1/25
  * Copyright (c) 2025 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-
 @Serializable
-object HomeRoute
+object LoginRoute
 
-fun NavController.navigateToHome(navOptions: NavOptions) =
-    navigate(route = Destinations.HOME_ROUTE, navOptions)
+fun NavController.navigateToLogin(navOptions: NavOptions) =
+    navigate(route = Destinations.LOGIN_ROUTE, navOptions)
 
-fun NavGraphBuilder.toHomeScreen(
-    nestedAppState: AppState,
-    onNavigateToJobDetail: (Int, String) -> Unit,
-) {
+fun NavGraphBuilder.toLoginScreen(modifier: Modifier) {
     this.apply {
         composable(
-            route = Destinations.HOME_ROUTE,
+            route = Destinations.LOGIN_ROUTE,
             deepLinks = listOf(
                 navDeepLink {
                     uriPattern = "Google.com"
                 }
             ),
             content = { navBackStackEntry ->
+                LoginRoute {
 
-                HomeRoute(nestedAppState,onNavigateToJobDetail)
+                }
             }
         )
     }
-}
 
+}
 
 

@@ -26,41 +26,20 @@ import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.demo_structure.theme.ProductXTheme
-import com.example.demo_structure.theme.toIcon
+import com.example.demo_structure.app.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.screen.main.MainDestination
+import com.example.demo_structure.theme.ProductXTheme
+import com.example.demo_structure.theme.toIcon
 import com.example.demo_structure.util.AlwaysOnlineNetworkMonitor
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 /**
  * Created by Phạm Sơn at 16:24/10/1/25
  * Copyright (c) 2025 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-fun NavGraphBuilder.composableWith(
-    route: String,
-    arguments: List<NamedNavArgument> = emptyList(),
-    deepLinks: List<NavDeepLink> = emptyList(),
-    enterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = {
-        fadeIn()
-    },
-    exitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = {
-        fadeOut()
-    },
-    popEnterTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?)? = enterTransition,
-    popExitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = exitTransition,
-    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
-) {
-    composable(route, arguments, deepLinks, enterTransition, exitTransition, popEnterTransition, popExitTransition) {
-        CompositionLocalProvider(
-//            LocalNavAnimatedVisibilityScope provides this@composable
-        ) {
-            content(it)
-        }
-    }
-}
+
 
 @Composable
 fun BottomNavigationBar(
@@ -93,7 +72,7 @@ fun BottomNavigationBar(
                     )
                 },
                 icon = {
-                    val icon = if (currentRoute == item.route) {
+                    if (currentRoute == item.route) {
                         item.selectedIcon.toIcon()
                     } else {
                         item.unselectedIcon.toIcon()
@@ -101,8 +80,8 @@ fun BottomNavigationBar(
                 },
                 alwaysShowLabel = false, // Consider showing labels only on selected items for better UX
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = Color.Blue,
-                    selectedTextColor = Color.Blue,
+                    selectedIconColor = ProductXTheme.colors.iconSecondary,
+                    selectedTextColor = ProductXTheme.colors.iconSecondary,
                     unselectedIconColor = Color.Gray,
                     unselectedTextColor = Color.Gray
                 )
@@ -116,7 +95,7 @@ fun BottomNavigationBar(
 @Composable
 fun BottomNavigationViewPreview() {
     ProductXPreviewWrapper {
-        var appState = rememberAppState(networkMonitor =  AlwaysOnlineNetworkMonitor())
+        var appState = rememberAppState(networkMonitor = AlwaysOnlineNetworkMonitor())
         BottomNavigationBar(
             modifier = Modifier,
             appState = appState
