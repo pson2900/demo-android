@@ -40,7 +40,12 @@ dependencies {
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit.logging.interceptor)
     implementation(libs.retrofit.kotlin.coroutines.adapter)
+    implementation(libs.core.ktx)
+    implementation(libs.core.ktx)
+    implementation(libs.core.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.gson)
 }
