@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,7 +48,21 @@ fun HeaderSection(title: String) {
             .fillMaxWidth()
             .wrapContentHeight()
     ) {
-        val (BorderLayout, AvataLayout) = createRefs()
+        val (BorderLayout, AvataLayout, Setting) = createRefs()
+        Box(
+            Modifier
+                .clickable {  }
+                .size(48.dp)
+                .clip(CircleShape) // Clip to circle
+                .background(Color.Black.copy(alpha = 0.2f))
+                .constrainAs(Setting) {
+                    top.linkTo(parent.top, 40.dp)
+                    end.linkTo(parent.end, margin = 8.dp)
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            Image(ImageVector.vectorResource(R.drawable.ic_setting), contentDescription = null)
+        }
         ProductXSurface(
             shape = RoundedCornerShape(30.dp, 30.dp, 0.dp, 0.dp),
             modifier = Modifier
