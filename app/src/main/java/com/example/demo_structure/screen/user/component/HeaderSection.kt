@@ -27,70 +27,23 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.demo_structure.R
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.core.component.ProductXSurface
-import com.example.demo_structure.screen.user.CircularProgressBar
 import com.example.demo_structure.theme.AppIcons.IconAdvancement
 import com.example.demo_structure.theme.AppIcons.IconArrowRight
 import com.example.demo_structure.theme.IconImage
 
-/**
- * Created by Phạm Sơn at 13:20/14/1/25
- * Copyright (c) 2025 Navigos Group. All rights reserved.
- * Email: son.pham@navigosgroup.com
- */
-@Composable
-fun ProfileHeader() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Box(
-            modifier = Modifier
-                .size(120.dp)
-                .clip(CircleShape)
-                .background(Color.LightGray),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressBar(percentage = 0.8f, number = 100)
-            Image(
-                painter = painterResource(id = R.drawable.ic_urgent),
-                contentDescription = "Profile Image",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(CircleShape),
-            )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text = "Hiếu Minh Nguyễn", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(4.dp))
-        Row {
-            Text(text = "Bạn đang theo đuổi", fontSize = 12.sp, color = Color.Gray)
-            Spacer(modifier = Modifier.width(4.dp))
-        }
-        Text(text = "Product Designer, Ux research", fontSize = 14.sp)
-    }
-
-}
-
 @Composable
 fun HeaderSection(title: String) {
-
     ConstraintLayout(
         Modifier
-            .background(Color.Blue)
+            .background(colorResource(R.color.pale_violet))
             .fillMaxWidth()
             .wrapContentHeight()
     ) {
@@ -107,7 +60,6 @@ fun HeaderSection(title: String) {
                 }
         ) {
             Column(modifier = Modifier
-
                 .background(color = colorResource(R.color.anti_flash_white)),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top,
@@ -115,9 +67,11 @@ fun HeaderSection(title: String) {
                     Spacer(
                         Modifier
                             .size(60.dp)
-                            .background(color = colorResource(R.color.anti_flash_white)))
+                            .background(color = colorResource(R.color.anti_flash_white))
+                    )
 
-                                Text (modifier = Modifier, text = title, style = MaterialTheme.typography.headlineMedium, color = Color.Black
+                    Text(
+                        modifier = Modifier, text = title, style = MaterialTheme.typography.headlineMedium, color = Color.Black
                     )
 
                     Surface(
@@ -149,8 +103,6 @@ fun HeaderSection(title: String) {
                     }
 
                 })
-
-
         }
 
         Box(

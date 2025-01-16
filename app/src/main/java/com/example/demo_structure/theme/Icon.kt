@@ -1,10 +1,11 @@
 package com.example.demo_structure.theme
 
 import androidx.compose.foundation.Image
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
@@ -18,9 +19,9 @@ import com.example.demo_structure.R
 @Composable
 fun IconImage(
     modifier: Modifier = Modifier,
-    imageResource : Int,
+    imageResource: Int,
     contentDescription: String?,
-    color: Color = Color.Unspecified,
+    color: Color = Color.Transparent,
     contentScale: ContentScale = ContentScale.Fit
 ) {
     /*val tintColorFilter = if (color != Color.Unspecified) ColorFilter.tint(color) else null
@@ -50,10 +51,17 @@ fun IconImage(
             contentScale = contentScale
         )
     }*/
+    if (color != null) {
+//        colorFilter = ColorFilter.tint(color = color, BlendMode.SrcIn)
+    } else {
+
+    }
     Image(
         modifier = modifier,
         imageVector = ImageVector.vectorResource(imageResource),
         contentDescription = contentDescription,
+//        colorFilter = ColorFilter.tint(color = color, BlendMode.SrcIn)
+
 //        tint = color // Apply the custom color
     )
 }

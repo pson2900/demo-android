@@ -13,11 +13,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,8 +37,7 @@ fun SkillSection(skills: List<String>) {
     ) {
         Text(
             text = "Kỹ năng",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.titleLarge,
             color = Color.Black
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -83,7 +82,7 @@ fun SkillChip(skill: String) {
         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
         elevation = ButtonDefaults.buttonElevation(0.dp)
     ) {
-        Text(text = skill, color = Color.Black, fontSize = 12.sp)
+        Text(text = skill, color = Color.Black, style = MaterialTheme.typography.labelSmall)
     }
 }
 
@@ -92,6 +91,6 @@ fun SkillChip(skill: String) {
 @Composable
 fun SkillSectionPreview() {
     ProductXPreviewWrapper {
-        SkillSection(listOf("Design Systems", "Typography", "Typography","Typography"))
+        SkillSection(listOf("Design Systems", "Typography", "Typography", "Typography"))
     }
 }

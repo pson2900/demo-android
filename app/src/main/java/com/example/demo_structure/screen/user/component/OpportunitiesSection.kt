@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -85,12 +86,12 @@ fun OpportunitiesItem(modifier: Modifier = Modifier, icon: Int, colorBorder: Int
             top.linkTo(iconRef.bottom)
             start.linkTo(parent.start)
             bottom.linkTo(subtitleRef.top)
-        }, text = title, color = colorResource(R.color.slate_gray))
+        }, text = title, color = colorResource(R.color.slate_gray), style = MaterialTheme.typography.labelLarge)
 
         Text(modifier = Modifier.constrainAs(subtitleRef) {
             bottom.linkTo(parent.bottom)
             start.linkTo(parent.start)
-        }, text = subtitle, color = colorResource(R.color.black))
+        }, text = subtitle, color = colorResource(R.color.black),style = MaterialTheme.typography.headlineSmall)
     }
 }
 

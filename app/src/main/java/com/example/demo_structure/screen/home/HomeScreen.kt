@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
@@ -59,13 +58,10 @@ import com.example.demo_structure.core.component.JobDetailCard
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.core.component.ProductXScaffold
 import com.example.demo_structure.core.component.ProductXSurface
-import com.example.demo_structure.core.navigation.AppState
-import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.jobResult
 import com.example.demo_structure.screen.job_detail.nonSpatialExpressiveSpring
 import com.example.demo_structure.screen.job_detail.spatialExpressiveSpring
 import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.koinInject
 
 /**
  * Created by Phạm Sơn at 23:32/8/1/25
@@ -79,14 +75,6 @@ private val HighlightCardWidth = 250.dp
 private val HighlightCardPadding = 16.dp
 private val Density.cardWidthWithPaddingPx
     get() = (HighlightCardWidth + HighlightCardPadding).toPx()
-
-@Composable
-internal fun HomeRoute(
-    nestedAppState: AppState,
-    onItemSelected: (Int, String) -> Unit
-) {
-
-}
 
 
 @Composable
@@ -142,8 +130,7 @@ fun HomeContent(onItemSelected: (Int, String) -> Unit) {
     ProductXScaffold(
         contentWindowInsets = WindowInsets.systemBars,
         modifier = Modifier
-            .fillMaxSize()
-            .navigationBarsPadding(),
+            .fillMaxSize(),
         snackBarHostState = rememberSnackbarHostState,
         topBar = {
             TopAppBar(
@@ -158,9 +145,7 @@ fun HomeContent(onItemSelected: (Int, String) -> Unit) {
         }
     ) {
         ProductXSurface(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
+            modifier = Modifier.fillMaxSize()
         ) {
             LazyColumn(
                 state = columState,
@@ -170,7 +155,6 @@ fun HomeContent(onItemSelected: (Int, String) -> Unit) {
                 itemsIndexed(jobResult) { index, item ->
                     ItemResult(
                         modifier = Modifier
-
                             .fillMaxWidth()
                             .animateItem(
                                 fadeInSpec = itemAnimationSpecFade,
@@ -181,7 +165,6 @@ fun HomeContent(onItemSelected: (Int, String) -> Unit) {
                             onItemSelected.invoke(jobId, str)
                         }
                     )
-//            Text(item.jobTitle)
                 }
             }
         }
