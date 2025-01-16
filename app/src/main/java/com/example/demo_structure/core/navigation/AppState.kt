@@ -12,7 +12,7 @@ import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.example.demo_structure.screen.login.navigateToLogin
+import com.example.demo_structure.screen.login.toLogin
 import com.example.demo_structure.util.NetworkMonitor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -106,7 +106,7 @@ class AppState(
         val route = Destinations.LOGIN_ROUTE
         trace("Navigation : ${route}") {
             if (from.lifecycleIsResumed()) {
-                navController.navigateToLogin(navOptions { })
+                navController.toLogin()
             }
         }
     }
@@ -116,7 +116,7 @@ class AppState(
         val route = Destinations.LOGIN_ROUTE
         trace("Navigation : ${route}") {
 //            if (from.lifecycleIsResumed()) {
-            navController.navigateToLogin(navOptions { })
+            navController.toLogin(navOptions { })
 //            }
         }
     }

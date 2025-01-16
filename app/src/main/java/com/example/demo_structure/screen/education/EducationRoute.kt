@@ -8,7 +8,7 @@ import androidx.navigation.navDeepLink
 import com.example.demo_structure.core.navigation.Destinations
 import org.koin.androidx.compose.koinViewModel
 
-fun NavController.navigateToEducation(navOptions: NavOptions) =
+fun NavController.toEducation(navOptions: NavOptions) =
     navigate(route = Destinations.EDUCATION_ROUTE, navOptions)
 
 fun NavGraphBuilder.EducationNavGraph(

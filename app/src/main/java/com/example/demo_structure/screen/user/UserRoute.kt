@@ -6,20 +6,10 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import com.example.demo_structure.core.navigation.Destinations
-import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
 
-/**
- * Created by Phạm Sơn at 23:24/8/1/25
- * Copyright (c) 2025 Navigos Group. All rights reserved.
- * Email: son.pham@navigosgroup.com
- */
-@Serializable
-object UserRoute
-
-fun NavController.navigateToUser(navOptions: NavOptions) =
+fun NavController.toUser(navOptions: NavOptions) =
     navigate(route = Destinations.USER_ROUTE, navOptions)
-
 
 fun NavGraphBuilder.UserNavGraph(onNavigateToLogin: () -> Unit) {
     this.apply {

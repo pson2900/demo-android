@@ -2,8 +2,7 @@ package com.example.data.repository
 
 import com.example.data.remote.ErrorMapper
 import com.example.data.remote.network.ApiService
-import com.example.data.remote.response.UserProfileResponse
-import com.example.domain.HomeRepository
+import com.example.domain.repository.HomeRepository
 import com.example.domain.model.UserProfile
 
 

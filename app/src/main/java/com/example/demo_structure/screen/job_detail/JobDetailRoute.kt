@@ -9,23 +9,25 @@ import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.core.navigation.composableWith
 import org.koin.androidx.compose.koinViewModel
 
-fun NavController.navigateToJobDetail(navOptions: NavOptions) =
+fun NavController.toJobDetail(jobId: Int, origin: String, navOptions: NavOptions = androidx.navigation.navOptions { }) =
     navigate(
         route = "${Destinations.JOB_DETAIL_ROUTE}/" +
-                "{${Destinations.JOB_DETAIL_ID_KEY}}" +
-                "?origin={${Destinations.ORIGIN}}", navOptions
+                "$jobId" +
+                "?origin=${origin}", navOptions
     )
 
 fun NavGraphBuilder.JobDetailNavGraph(onBackClick: () -> Unit) {
     composableWith(
-
         route = "${Destinations.JOB_DETAIL_ROUTE}/" +
                 "{${Destinations.JOB_DETAIL_ID_KEY}}" +
                 "?origin={${Destinations.ORIGIN}}",
-//            route = Destinations.JOB_DETAIL_ROUTE,
         arguments = listOf(
             navArgument(Destinations.JOB_DETAIL_ID_KEY) {
                 type = NavType.IntType
+            },
+            navArgument(Destinations.ORIGIN) {
+                type = NavType.StringType
+                nullable = true
             }
         ),
         content = { navBackStackEntry ->
@@ -33,13 +35,11 @@ fun NavGraphBuilder.JobDetailNavGraph(onBackClick: () -> Unit) {
             val jobId = arguments.getInt(Destinations.JOB_DETAIL_ID_KEY)
             val origin = arguments.getString(Destinations.ORIGIN)
             JobDetailScreen(
-                jobId = 10,
-                origin = "origin",
+                jobId = jobId,
+                origin = origin ?: "",
                 onBackClick = onBackClick,
                 viewModel = koinViewModel()
             )
         }
     )
-//    }
-
 }

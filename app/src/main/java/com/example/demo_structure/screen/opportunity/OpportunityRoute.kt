@@ -8,7 +8,7 @@ import androidx.navigation.navDeepLink
 import com.example.demo_structure.core.navigation.Destinations
 import org.koin.androidx.compose.koinViewModel
 
-fun NavController.navigateToOpportunity(navOptions: NavOptions) =
+fun NavController.toOpportunity(navOptions: NavOptions) =
     navigate(route = Destinations.OPPORTUNITY_ROUTE, navOptions)
 
 fun NavGraphBuilder.OpportunityNavGraph(

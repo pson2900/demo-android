@@ -1,6 +1,6 @@
 package com.example.domain.usecase
 
-import com.example.domain.HomeRepository
+import com.example.domain.repository.HomeRepository
 
 
 /**
