@@ -16,6 +16,7 @@ import org.koin.androidx.compose.koinViewModel
  */
 @Serializable
 object UserRoute
+
 fun NavController.navigateToUser(navOptions: NavOptions) =
     navigate(route = Destinations.USER_ROUTE, navOptions)
 
@@ -30,10 +31,9 @@ fun NavGraphBuilder.UserNavGraph(onNavigateToLogin: () -> Unit) {
                 }
             ),
             content = { navBackStackEntry ->
-
                 UserScreen(
                     onNavigateToLogin = onNavigateToLogin,
-                    userViewModel =  koinViewModel()
+                    userViewModel = koinViewModel()
                 )
             }
         )

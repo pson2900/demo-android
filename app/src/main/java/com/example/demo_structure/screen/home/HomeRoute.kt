@@ -6,17 +6,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import com.example.demo_structure.core.navigation.Destinations
-import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
-
-/**
- * Created by Phạm Sơn at 15:17/3/1/25
- * Copyright (c) 2025 Navigos Group. All rights reserved.
- * Email: son.pham@navigosgroup.com
- */
-
-@Serializable
-object HomeRoute
 
 fun NavController.navigateToHome(navOptions: NavOptions) =
     navigate(route = Destinations.HOME_ROUTE, navOptions)

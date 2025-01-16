@@ -29,7 +29,6 @@ enum class MainDestination(
         unselectedIcon = AppIcons.IconSearchUnSelect,
         iconTextId = "SEARCH",
         titleTextId = "SEARCH",
-//        route = "${Destinations.MAIN}/${Destinations.SEARCH_ROUTE}"
         route = Destinations.EDUCATION_ROUTE
     ),
 
