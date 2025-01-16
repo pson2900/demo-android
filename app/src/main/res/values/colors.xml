@@ -10,4 +10,10 @@
     <color name="persian_green">#00B487</color>
     <color name="pale_violet">#BCADFF</color>
     <color name="violets_are_blue">#775AFF</color>
+    <color name="cosmic_latte">#FFF8EB</color>
+    <color name="slate_gray">#64748B</color>
+    <color name="lavender_blush">#FEF2F2</color>
+    <color name="nyanza">#EDFBDF</color>
+    <color name="anti_flash_white">#F1F5F9</color>
+    <color name="alice_blue">#F3F5FC</color>
 </resources>

@@ -16,9 +16,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.demo_structure.app.LocalNavAnimatedVisibilityScope
+import com.example.demo_structure.screen.education.EducationNavGraph
+import com.example.demo_structure.screen.home.HomeNavGraph
 import com.example.demo_structure.screen.job_detail.JobDetailNavGraph
 import com.example.demo_structure.screen.login.toLoginScreen
-import com.example.demo_structure.screen.main.MainNavGraph
+import com.example.demo_structure.screen.main.AppNavGraph
+import com.example.demo_structure.screen.user.UserNavGraph
+import com.example.demo_structure.util.logNavigation
 
 /**
  * Created by Phạm Sơn at 14:59/3/1/25
@@ -48,17 +52,18 @@ fun NavGraphBuilder.composableWith(
 }
 
 @Composable
-fun ProductXNavGraph(
+fun AppNavHost(
     modifier: Modifier,
     appState: AppState,
 ) {
     val navController = appState.navController
+    logNavigation(navController)
     NavHost(
         navController = navController,
         startDestination = Destinations.APP,
         modifier = modifier,
         builder = {
-            MainNavGraph(
+            AppNavGraph(
                 appState = appState
             ) {
             }
@@ -68,5 +73,33 @@ fun ProductXNavGraph(
 
             toLoginScreen(modifier = modifier)
         })
+}
+
+@Composable
+fun MainNavHost(
+    modifier: Modifier,
+    appState: AppState,
+    onNavigateToJobDetail: (Int, String) -> Unit,
+    onNavigateToLogin: () -> Unit,
+) {
+    val navController = appState.navController
+    NavHost(
+        navController = navController,
+        startDestination = Destinations.HOME_ROUTE,
+        modifier = modifier
+    ) {
+        HomeNavGraph(
+            onNavigateToJobDetail = onNavigateToJobDetail,
+        )
+        EducationNavGraph(
+            onTopicClick = {
+
+            },
+        )
+        UserNavGraph(
+            onNavigateToLogin = onNavigateToLogin,
+        )
+
+    }
 }
 

@@ -1,4 +1,4 @@
-package com.example.demo_structure.screen.search_result
+package com.example.demo_structure.screen.education
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

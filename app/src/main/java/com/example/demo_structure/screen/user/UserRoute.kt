@@ -1,14 +1,10 @@
 package com.example.demo_structure.screen.user
 
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
-import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.Destinations
 import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
@@ -24,7 +20,7 @@ fun NavController.navigateToUser(navOptions: NavOptions) =
     navigate(route = Destinations.USER_ROUTE, navOptions)
 
 
-fun NavGraphBuilder.toUserScreen(nestedNavigation: AppState, onNavigateToLogin: () -> Unit, modifier: Modifier) {
+fun NavGraphBuilder.UserNavGraph(onNavigateToLogin: () -> Unit) {
     this.apply {
         composable(
             route = Destinations.USER_ROUTE,
@@ -34,14 +30,10 @@ fun NavGraphBuilder.toUserScreen(nestedNavigation: AppState, onNavigateToLogin: 
                 }
             ),
             content = { navBackStackEntry ->
-                val userViewModel: UserViewModel = koinViewModel()
-                val userState by userViewModel.menuUiState.collectAsStateWithLifecycle()
-//                UserRoute(nestedNavigation,onLogin = onLogin, modifier = modifier)
+
                 UserScreen(
-                    nestedNavigation = nestedNavigation,
-                    state = userState,
                     onNavigateToLogin = onNavigateToLogin,
-                    userViewModel = userViewModel
+                    userViewModel =  koinViewModel()
                 )
             }
         )

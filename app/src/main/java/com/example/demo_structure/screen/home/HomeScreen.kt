@@ -1,6 +1,5 @@
 package com.example.demo_structure.screen.home
 
-import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.animateDp
@@ -49,7 +48,6 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavOptions
 import com.example.demo_structure.JobDetail
 import com.example.demo_structure.R
 import com.example.demo_structure.app.LocalNavAnimatedVisibilityScope
@@ -60,14 +58,10 @@ import com.example.demo_structure.core.component.JobDetailCard
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.core.component.ProductXScaffold
 import com.example.demo_structure.core.component.ProductXSurface
-import com.example.demo_structure.core.navigation.AppState
-import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.jobResult
-import com.example.demo_structure.screen.job_detail.navigateToJobDetail
 import com.example.demo_structure.screen.job_detail.nonSpatialExpressiveSpring
 import com.example.demo_structure.screen.job_detail.spatialExpressiveSpring
 import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.koinInject
 
 /**
  * Created by Phạm Sơn at 23:32/8/1/25
@@ -82,21 +76,6 @@ private val HighlightCardPadding = 16.dp
 private val Density.cardWidthWithPaddingPx
     get() = (HighlightCardWidth + HighlightCardPadding).toPx()
 
-@Composable
-internal fun HomeRoute(
-    nestedAppState: AppState,
-    onItemSelected: (Int, String) -> Unit
-) {
-    val viewModel: HomeViewModel = koinViewModel()
-    val state by viewModel.homeUiState.collectAsStateWithLifecycle()
-    HomeScreen(
-        state = state,
-        viewModel = viewModel,
-        onItemSelected = onItemSelected,
-        nestedAppState = nestedAppState
-    )
-}
-
 
 @Composable
 internal fun LoadingState(modifier: Modifier = Modifier) {
@@ -110,16 +89,13 @@ internal fun LoadingState(modifier: Modifier = Modifier) {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
 internal fun HomeScreen(
-    state: HomeState,
     clearUndoState: () -> Unit = {},
-    viewModel: HomeViewModel,
-    onItemSelected: (Int, String) -> Unit,
-    nestedAppState: AppState
+    viewModel: HomeViewModel = koinViewModel(),
+    onNavigateToJobDetail: (Int, String) -> Unit,
 ) {
-
+    val state by viewModel.homeUiState.collectAsStateWithLifecycle()
     LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
         clearUndoState()
     }
@@ -137,8 +113,8 @@ internal fun HomeScreen(
 //            LoadingState(modifier)
         }
     }
-    HomeContent (nestedAppState){ jobId, str ->
-        onItemSelected(jobId, str)
+    HomeContent { jobId, str ->
+        onNavigateToJobDetail(jobId, str)
     }
 
 
@@ -146,14 +122,15 @@ internal fun HomeScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeContent(nestedAppState: AppState, onItemSelected: (Int, String) -> Unit) {
+fun HomeContent(onItemSelected: (Int, String) -> Unit) {
     val rememberSnackbarHostState = remember { SnackbarHostState() }
     val columState = rememberLazyListState()
     val itemAnimationSpecFade = nonSpatialExpressiveSpring<Float>()
     val itemPlacementSpec = spatialExpressiveSpring<IntOffset>()
     ProductXScaffold(
         contentWindowInsets = WindowInsets.systemBars,
-        modifier = Modifier,
+        modifier = Modifier
+            .fillMaxSize(),
         snackBarHostState = rememberSnackbarHostState,
         topBar = {
             TopAppBar(
@@ -168,9 +145,7 @@ fun HomeContent(nestedAppState: AppState, onItemSelected: (Int, String) -> Unit)
         }
     ) {
         ProductXSurface(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
+            modifier = Modifier.fillMaxSize()
         ) {
             LazyColumn(
                 state = columState,
@@ -187,10 +162,9 @@ fun HomeContent(nestedAppState: AppState, onItemSelected: (Int, String) -> Unit)
                                 placementSpec = itemPlacementSpec
                             ), jobDetail = item,
                         onItemSelected = { jobId, str ->
-                            onItemSelected.invoke(jobId,str)
+                            onItemSelected.invoke(jobId, str)
                         }
                     )
-//            Text(item.jobTitle)
                 }
             }
         }
@@ -214,7 +188,7 @@ fun ItemResultPreview() {
 @Composable
 fun HomeScreenPreview() {
     ProductXPreviewWrapper {
-        HomeContent(rememberAppState(koinInject())) { jobId, str ->
+        HomeContent() { jobId, str ->
 
         }
     }
@@ -240,6 +214,7 @@ fun ItemResult(modifier: Modifier = Modifier, jobDetail: JobDetail, onItemSelect
             elevation = 0.dp,
             shape = RoundedCornerShape(roundedCornerAnimation),
             modifier = Modifier
+                .testTag("Tag: ${jobDetail.jobTitle}")
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
                 .border(1.dp, color = Color.Black, shape = RoundedCornerShape(roundedCornerAnimation)) // Đặt border
@@ -274,7 +249,7 @@ fun ItemResult(modifier: Modifier = Modifier, jobDetail: JobDetail, onItemSelect
                     RoundedCornerShape(roundedCornerAnimation)
                 )
         ) {
-            BoxWithConstraints(modifier = modifier) {
+            BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
                 val constraints = if (minWidth < 600.dp) {
                     dynamicConstraints(margin = 10.dp) // Portrait constraints
                 } else {
@@ -290,12 +265,15 @@ fun ItemResult(modifier: Modifier = Modifier, jobDetail: JobDetail, onItemSelect
                         painter = painterResource(R.drawable.company_logo),
                         contentDescription = null,
                         modifier = Modifier
+                            .testTag("logoCompany")
                             .layoutId("image")
                             .size(24.dp)
                     )
                     Text(
                         text = jobDetail.jobTitle,
-                        modifier = Modifier.layoutId("title")
+                        modifier = Modifier
+                            .layoutId("title")
+                            .testTag("jobTitle")
                     )
                     Image(
                         painter = painterResource(R.drawable.ic_urgent),
