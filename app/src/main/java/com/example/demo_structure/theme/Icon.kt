@@ -1,5 +1,6 @@
 package com.example.demo_structure.theme
 
+import androidx.compose.foundation.Image
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -49,11 +50,11 @@ fun IconImage(
             contentScale = contentScale
         )
     }*/
-    Icon(
+    Image(
         modifier = modifier,
         imageVector = ImageVector.vectorResource(imageResource),
         contentDescription = contentDescription,
-        tint = color // Apply the custom color
+//        tint = color // Apply the custom color
     )
 }
 

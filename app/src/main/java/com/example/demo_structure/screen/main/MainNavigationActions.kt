@@ -1,13 +1,9 @@
 package com.example.demo_structure.screen.main
 
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.navigation
 import androidx.navigation.navDeepLink
 import com.example.demo_structure.core.navigation.AppState
-import com.example.demo_structure.core.navigation.BaseRoute
 import com.example.demo_structure.core.navigation.Destinations
-import com.example.demo_structure.core.navigation.Routes
 import com.example.demo_structure.core.navigation.composableWith
 
 /**
@@ -17,14 +13,10 @@ import com.example.demo_structure.core.navigation.composableWith
  */
 
 
-fun NavGraphBuilder.MainNavGraph(
+fun NavGraphBuilder.AppNavGraph(
     appState: AppState,
     topicDestination: NavGraphBuilder.() -> Unit,
 ) {
-//    navigation(
-//        startDestination = Destinations.MAIN,
-//        route = Destinations.APP
-//    ) {
         composableWith(
             route = Destinations.APP,
             deepLinks = listOf(
@@ -48,8 +40,6 @@ fun NavGraphBuilder.MainNavGraph(
             ),
         ) {backStackEntry ->
             MainContent(
-
-                modifier = Modifier,
                 onNavigateToJobDetail = { jobId, origin ->
                     appState.navigateToJobDetail(jobId, origin, backStackEntry)
                 },

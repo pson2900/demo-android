@@ -17,8 +17,11 @@
 package com.example.demo_structure.util
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.core.util.Consumer
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.conflate
@@ -47,3 +50,13 @@ fun ComponentActivity.isSystemInDarkTheme() = callbackFlow {
 }
     .distinctUntilChanged()
     .conflate()
+private const val TAG = "NavigationLog"
+fun logNavigation(navController: NavHostController) {
+    navController.addOnDestinationChangedListener { controller, destination, arguments ->
+        val startRoute = controller.graph.findStartDestination().route
+        if(startRoute != destination.route ) {
+            Log.d(TAG, "Navigated to: ${destination.route} - NavController ${controller}")
+        }
+
+    }
+}

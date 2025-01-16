@@ -1,25 +1,20 @@
 package com.example.demo_structure.screen.user
 
 import android.content.res.Configuration
-import android.util.Log
-import androidx.annotation.VisibleForTesting
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,19 +25,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -50,49 +42,26 @@ import com.example.demo_structure.R
 import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.core.component.ProductXScaffold
-import com.example.demo_structure.core.navigation.AppState
-import com.example.demo_structure.core.navigation.rememberAppState
+import com.example.demo_structure.screen.user.component.BasicInformationItem
+import com.example.demo_structure.screen.user.component.HeaderSection
+import com.example.demo_structure.screen.user.component.OpportunitiesSection
+import com.example.demo_structure.screen.user.component.ProfileStatusSection
+import com.example.demo_structure.screen.user.component.SkillSection
 import com.example.demo_structure.theme.ProductXApplicationTheme
-import com.example.demo_structure.util.AlwaysOnlineNetworkMonitor
+import com.example.domain.model.BasicInformation
 import org.koin.androidx.compose.koinViewModel
-
-/**
- * Created by Phạm Sơn at 15:17/3/1/25
- * Copyright (c) 2025 Navigos Group. All rights reserved.
- * Email: son.pham@navigosgroup.com
- */
-@Composable
-internal fun UserRoute(
-    nestedNavigation: AppState,
-    modifier: Modifier = Modifier,
-    onLogin: () -> Unit,
-) {
-    val userViewModel: UserViewModel = koinViewModel()
-    val userState by userViewModel.menuUiState.collectAsStateWithLifecycle()
-    UserScreen(
-        nestedNavigation = nestedNavigation,
-        modifier = modifier,
-        state = userState,
-        onNavigateToLogin = onLogin,
-        userViewModel = userViewModel
-    )
-}
 
 /**
  * Displays the user's bookmarked articles. Includes support for loading and empty states.
  */
-@OptIn(ExperimentalSharedTransitionApi::class)
-@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
 internal fun UserScreen(
-    nestedNavigation: AppState,
-    state: UserState,
+    modifier: Modifier = Modifier,
     onNavigateToLogin: () -> Unit,
-    modifier: Modifier = Modifier.fillMaxSize(),
     clearUndoState: () -> Unit = {},
-    userViewModel: UserViewModel
+    userViewModel: UserViewModel = koinViewModel()
 ) {
-
+    val state by userViewModel.menuUiState.collectAsStateWithLifecycle()
     val rememberHostState = remember { SnackbarHostState() }
     LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
         clearUndoState()
@@ -104,76 +73,50 @@ internal fun UserScreen(
 
         }
     }
+    UserContent(
+        modifier = modifier.fillMaxSize(),
+        onNavigateToLogin = onNavigateToLogin,
+        rememberHostState
+    )
 
+
+}
+
+@Composable
+fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: () -> Unit, rememberHostState: SnackbarHostState) {
     ProductXApplicationTheme {
         ProductXScaffold(
             modifier = modifier,
             snackBarHostState = rememberHostState
-        ) {
-            UserContent(
-                modifier = modifier,
-                onNavigateToLogin = onNavigateToLogin,
-                nestedNavigation
-            )
-        }
-    }
-}
-
-@Composable
-fun UserContent(modifier: Modifier, onNavigateToLogin: () -> Unit, appState: AppState) {
-    ConstraintLayout(
-        modifier = modifier
-            .background(Color.Blue)
-    ) {
-        val (borderUser, cardUser, progress) = createRefs()
-        Box(
-            modifier = modifier
-//                .border(25.dp, Color.White, shape = CircleShape)
-                .background(Color.White)
-                .fillMaxHeight()
-                .constrainAs(cardUser) {
-                    top.linkTo(borderUser.top, margin = 50.dp)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    verticalBias = 0.5f
-                },
-            contentAlignment = Alignment.Center
-        ) {
-            /* LazyColumn(modifier) {
-                 item { HeaderSection(modifier = modifier, title = "Nguyen Minh Hieu") }
-                 item { ProfileStatusSection(modifier = modifier) }
-             }*/
-            Button(onClick = {
-                Log.d("QQQ", "Login enter")
-                onNavigateToLogin.invoke()
-//                appState.navigateToLogin()
-//                onLogin()
-            }) {
-                Text("Login")
-            }
-        }
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .padding(1.dp)
-                .clip(CircleShape)
-                .background(Color.DarkGray)
-                .constrainAs(borderUser) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                },
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressBar(percentage = 0.8f, number = 100)
-            Image(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_urgent),
+        ) { paddingValue ->
+            Column(
                 modifier = Modifier
-                    .width(100.dp)
-                    .height(100.dp)
-                    .padding(20.dp),
-                contentDescription = null
-            )
+                    .fillMaxSize()
+                    .background(color = colorResource(R.color.anti_flash_white))
+            ) {
+                val result = listOf(
+                    BasicInformation(R.drawable.ic_my_profile_opprotunities_crow, "Kinh nghiệm làm việc", 0),
+                    BasicInformation(R.drawable.ic_my_profile_opprotunities_crow, "Kinh nghiệm làm việc", 0),
+                    BasicInformation(R.drawable.ic_my_profile_opprotunities_crow, "Kinh nghiệm làm việc", 0),
+                    BasicInformation(R.drawable.ic_my_profile_opprotunities_crow, "Kinh nghiệm làm việc", 0),
+                    BasicInformation(R.drawable.ic_my_profile_opprotunities_crow, "Kinh nghiệm làm việc", 0)
+                )
+                LazyColumn(Modifier) {
+                    item { HeaderSection(title = "Nguyen Minh Hieu") }
+                    item { Spacer(Modifier.size(24.dp)) }
+                    item { ProfileStatusSection() }
+                    item { Spacer(Modifier.height(24.dp)) }
+                    item { OpportunitiesSection() }
+                    item { Spacer(Modifier.height(24.dp)) }
+                    item { SkillSection(listOf("Design Systems", "Typography", "Typography", "Typography")) }
+                    item { Spacer(Modifier.height(24.dp)) }
+                    item { Text("Thông tin hồ sơ", Modifier.padding(10.dp, 0.dp, 10.dp, 0.dp)) }
+                    items(result.size) {
+                        BasicInformationItem(result[it])
+                    }
+                    item { Spacer(Modifier.height(12.dp)) }
+                }
+            }
         }
     }
 }
@@ -216,10 +159,10 @@ fun CircularProgressBar(
 @Composable
 fun UserContentPreview() {
     ProductXPreviewWrapper { modifier ->
-        val appState = rememberAppState(AlwaysOnlineNetworkMonitor())
-        UserContent(modifier, onNavigateToLogin = {
+        val hostState = remember { SnackbarHostState() }
+        UserContent(onNavigateToLogin = {
 
-        }, appState)
+        }, modifier = modifier, rememberHostState = hostState)
     }
 }
 

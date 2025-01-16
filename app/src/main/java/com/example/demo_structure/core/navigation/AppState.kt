@@ -147,13 +147,15 @@ private tailrec fun findStartDestination(graph: NavDestination): NavDestination 
 data object MainRoute
 
 @Serializable
-data object BaseRoute
+data object AppRoute
 
 object Destinations {
     const val APP = "app"
     const val MAIN = "main"
     const val HOME_ROUTE = "home"
-    const val SEARCH_ROUTE = "search"
+    const val EDUCATION_ROUTE = "education"
+    const val OPPORTUNITY_ROUTE = "opportunity"
+    const val COMMUNITY_ROUTE = "community"
     const val USER_ROUTE = "user"
     const val JOB_DETAIL_ROUTE = "job_detail"
     const val LOGIN_ROUTE = "login"
@@ -161,12 +163,3 @@ object Destinations {
     const val ORIGIN = "origin"
 }
 
-object Routes {
-    const val APP_GRAPH = "app_graph"
-    const val MAIN_GRAPH = "main_graph"
-    const val HOME_GRAPH = "home_graph"
-    const val SEARCH_GRAPH = "search_graph"
-    const val USER_GRAPH = "user_graph"
-    const val JOB_GRAPH = "job_graph"
-    const val JOB_DETAIL_GRAPH = "job_detail/{jobId}"
-}

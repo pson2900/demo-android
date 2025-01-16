@@ -1,15 +1,13 @@
-package com.example.demo_structure.screen.search_result
+package com.example.demo_structure.screen.education
 
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
-import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.Destinations
-import com.example.demo_structure.screen.main.MainDestination
 import kotlinx.serialization.Serializable
+import org.koin.androidx.compose.koinViewModel
 
 /**
  * Created by Phạm Sơn at 20:36/1/1/25
@@ -19,24 +17,22 @@ import kotlinx.serialization.Serializable
 @Serializable
 object SearchResultRoute
 
-fun NavController.navigateToSearchResult(navOptions: NavOptions) =
-    navigate(route = Destinations.SEARCH_ROUTE, navOptions)
+fun NavController.navigateToEducation(navOptions: NavOptions) =
+    navigate(route = Destinations.EDUCATION_ROUTE, navOptions)
 
-fun NavGraphBuilder.toSearchResultScreen(
-    nestedNavigation: AppState,
+fun NavGraphBuilder.EducationNavGraph(
     onTopicClick: (String) -> Unit,
-    modifier: Modifier,
 ) {
     this.apply {
         composable(
-            route = Destinations.SEARCH_ROUTE,
+            route = Destinations.EDUCATION_ROUTE,
             deepLinks = listOf(
                 navDeepLink {
                     uriPattern = "Google.com"
                 }
             ),
             content = {
-                SearchResultScreen(nestedNavigation,onTopicClick, modifier = modifier)
+                EducationScreen(viewModel = koinViewModel(), onTopicClick)
             }
         )
     }

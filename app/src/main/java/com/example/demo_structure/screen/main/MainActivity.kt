@@ -45,7 +45,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.demo_structure.app.InitializeApp
 import com.example.demo_structure.app.LocalNavAnimatedVisibilityScope
@@ -58,14 +57,12 @@ import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.core.component.ProductXScaffold
 import com.example.demo_structure.core.component.ProductXSnackBar
 import com.example.demo_structure.core.component.rememberScaffoldState
-import com.example.demo_structure.core.navigation.Destinations
+import com.example.demo_structure.core.navigation.MainNavHost
 import com.example.demo_structure.core.navigation.rememberAppState
-import com.example.demo_structure.screen.home.toHomeScreen
-import com.example.demo_structure.screen.search_result.toSearchResultScreen
-import com.example.demo_structure.screen.user.toUserScreen
 import com.example.demo_structure.theme.LocalGradientColors
 import com.example.demo_structure.util.NetworkMonitor
 import com.example.demo_structure.util.isSystemInDarkTheme
+import com.example.demo_structure.util.logNavigation
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -206,9 +203,10 @@ fun MainContent(
         ?: throw IllegalStateException("No SharedElementScope found")
 
     ProductXScaffold(
-        modifier = modifier.semantics {
-            testTagsAsResourceId = true
-        },
+        modifier = modifier
+            .semantics {
+                testTagsAsResourceId = true
+            },
         contentWindowInsets = ScaffoldDefaults
             .contentWindowInsets
             .exclude(WindowInsets.navigationBars)
@@ -226,42 +224,13 @@ fun MainContent(
             BottomNavigationBar(modifier = modifier, appState = nestedNavigation)
         },
         content = { padding ->
-            NavHost(
-                navController = nestedNavigation.navController,
-                startDestination = Destinations.HOME_ROUTE,
-                modifier = Modifier.padding(padding)
-            ) {
-                /*  mainNavGraph(
-                      nestedAppState = nestedNavigation,
-                      onNavigateToJobDetail = onNavigateToJobDetail,
-                      onNavigateToLogin = onNavigateToLogin,
-                      modifier = modifier
-                          .fillMaxSize()
-                          .padding(
-                              top = padding.calculateTopPadding(), start = 0.dp, end = 0.dp,
-                              bottom = 0.dp
-                          )
-                          .consumeWindowInsets(padding)
-                  )*/
-
-                toHomeScreen(
-                    nestedNavigation,
-                    onNavigateToJobDetail = onNavigateToJobDetail,
-                )
-                toSearchResultScreen(
-                    nestedNavigation,
-                    modifier = modifier,
-                    onTopicClick = {
-
-                    },
-                )
-                toUserScreen(
-                    nestedNavigation,
-                    modifier = modifier,
-                    onNavigateToLogin = onNavigateToLogin,
-                )
-
-            }
+            logNavigation(nestedNavigation.navController)
+            MainNavHost(
+                modifier = modifier.padding(paddingValues = padding),
+                appState = nestedNavigation,
+                onNavigateToJobDetail = onNavigateToJobDetail,
+                onNavigateToLogin = onNavigateToLogin
+            )
         }
 
     )

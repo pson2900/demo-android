@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,19 +37,20 @@ import com.example.demo_structure.theme.IconImage
  */
 @Composable
 fun ProfileStatusSection(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .background(Color.White)
-//            .border(
-//                border = BorderStroke(2.dp, colorResource(R.color.pale_violet)),
-//                shape = RoundedCornerShape(10.dp)
-//            ),
+    Surface(
+        modifier = modifier.padding(10.dp, 0.dp, 10.dp, 0.dp),
+        border = BorderStroke(2.dp, colorResource(R.color.pale_violet)),
+        shape = RoundedCornerShape(10.dp),
+        /*.background(Color.White)
+        .border(
+            border = BorderStroke(2.dp, colorResource(R.color.pale_violet)),
+            shape = RoundedCornerShape(10.dp)
+        ),*/
     ) {
-        Column(modifier = modifier) {
-            ProfileProgressContent(modifier, 5, 30)
-            ProfileProgressAction(modifier)
+        Column(modifier = Modifier) {
+            ProfileProgressContent(Modifier, 5, 30)
+            ProfileProgressAction(Modifier)
         }
-
     }
 }
 
@@ -126,6 +127,5 @@ fun ProfileProgressBar(progress: Int, max: Int) {
 fun StatusSectionPreview() {
     ProductXPreviewWrapper {
         ProfileStatusSection(Modifier.wrapContentHeight())
-//        ProfileProgressBar(5, 30)
     }
 }

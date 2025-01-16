@@ -5,10 +5,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
-import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.Destinations
-import com.example.demo_structure.screen.main.MainDestination
 import kotlinx.serialization.Serializable
+import org.koin.androidx.compose.koinViewModel
 
 /**
  * Created by Phạm Sơn at 15:17/3/1/25
@@ -22,8 +21,7 @@ object HomeRoute
 fun NavController.navigateToHome(navOptions: NavOptions) =
     navigate(route = Destinations.HOME_ROUTE, navOptions)
 
-fun NavGraphBuilder.toHomeScreen(
-    nestedAppState: AppState,
+fun NavGraphBuilder.HomeNavGraph(
     onNavigateToJobDetail: (Int, String) -> Unit,
 ) {
     this.apply {
@@ -35,8 +33,10 @@ fun NavGraphBuilder.toHomeScreen(
                 }
             ),
             content = { navBackStackEntry ->
-
-                HomeRoute(nestedAppState,onNavigateToJobDetail)
+                HomeScreen(
+                    viewModel = koinViewModel(),
+                    onNavigateToJobDetail = onNavigateToJobDetail,
+                )
             }
         )
     }

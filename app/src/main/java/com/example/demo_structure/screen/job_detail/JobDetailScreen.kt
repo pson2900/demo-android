@@ -23,9 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.app.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.app.LocalSharedTransitionScope
+import com.example.demo_structure.core.component.ProductXScaffold
 import com.example.demo_structure.theme.ProductXApplicationTheme
 import com.example.demo_structure.theme.ProductXTheme
-import com.example.demo_structure.core.component.ProductXScaffold
 import com.example.demo_structure.util.SharedElementKey
 import com.example.demo_structure.util.SharedElementType
 import org.koin.androidx.compose.koinViewModel
@@ -41,9 +41,7 @@ fun JobDetailScreen(
     modifier: Modifier = Modifier,
     jobId: Int,
     origin: String,
-    onBackClick: () -> Unit,
-
-    ) {
+    onBackClick: () -> Unit, ) {
     val viewModel: JobDetailViewModel = koinViewModel()
     val rememberHostState = remember { SnackbarHostState() }
     val sharedTransitionScope = LocalSharedTransitionScope.current
@@ -64,7 +62,8 @@ fun JobDetailScreen(
                 snackBarHostState = rememberHostState,
                 content = { padding ->
                     Box(
-                        Modifier.padding(padding)
+                        Modifier
+                            .padding(padding)
                             .clip(RoundedCornerShape(roundedCornerAnim))
                             .sharedBounds(
                                 rememberSharedContentState(

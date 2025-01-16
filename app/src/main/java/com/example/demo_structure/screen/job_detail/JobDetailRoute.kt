@@ -26,11 +26,6 @@ fun NavController.navigateToJobDetail(navOptions: NavOptions) =
     )
 
 fun NavGraphBuilder.JobDetailNavGraph(onBackClick: () -> Unit) {
-//    navigation(
-//        startDestination = Routes.MAIN_GRAPH,
-//        route = Routes.APP_GRAPH
-//    ) {
-
     composableWith(
 
         route = "${Destinations.JOB_DETAIL_ROUTE}/" +

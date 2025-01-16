@@ -24,7 +24,6 @@ fun JobDetailCard(
     modifier: Modifier,
     shape: Shape = MaterialTheme.shapes.medium,
     color: Color = ProductXTheme.colors.background,
-//    contentColor: Color = ProductXTheme.colors.textSecondary,
     contentColor: Color = ProductXTheme.colors.textSecondary,
     border: BorderStroke? = null,
     elevation: Dp = 4.dp,
@@ -43,7 +42,6 @@ fun JobDetailCard(
 
 @Preview("Light Mode")
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview("large font", fontScale = 2f)
 @Composable
 private fun CardPreview() {
     ProductXPreviewWrapper {

@@ -1,4 +1,4 @@
-package com.example.demo_structure.screen.search_result
+package com.example.demo_structure.screen.education
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.SnackbarHost
@@ -19,16 +21,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.core.component.ProductXScaffold
 import com.example.demo_structure.core.component.ProductXSnackBar
 import com.example.demo_structure.core.component.TopSearchAppBar
-import com.example.demo_structure.core.navigation.AppState
-import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.theme.ProductXApplicationTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.koinInject
 
 /**
  * Created by Phạm Sơn at 23:25/8/1/25
@@ -37,12 +37,12 @@ import org.koin.compose.koinInject
  */
 
 @Composable
-fun SearchResultScreen(
-    nestedNavigation: AppState,
-    onTopicClick: (String) -> Unit,
-    modifier: Modifier
-) {
-    val viewModel: SearchResultViewModel = koinViewModel()
+fun EducationScreen(viewModel: SearchResultViewModel, onTopicClick: (String) -> Unit) {
+    val modifier: Modifier = Modifier
+        .fillMaxSize()
+        .navigationBarsPadding()
+        .statusBarsPadding()
+    val state = viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     ProductXApplicationTheme {
@@ -105,7 +105,7 @@ fun SearchResultScreen(
 fun SearchResultScreenPreview() {
     ProductXPreviewWrapper {
 
-        SearchResultScreen(nestedNavigation = rememberAppState(koinInject()),onTopicClick = { _ -> }, it)
+        EducationScreen(viewModel = koinViewModel(), onTopicClick = { _ -> })
     }
 }
 
