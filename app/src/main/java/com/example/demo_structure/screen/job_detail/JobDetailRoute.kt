@@ -7,16 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.core.navigation.composableWith
-import kotlinx.serialization.Serializable
-
-/**
- * Created by Phạm Sơn at 23:47/8/1/25
- * Copyright (c) 2025 Navigos Group. All rights reserved.
- * Email: son.pham@navigosgroup.com
- */
-
-@Serializable
-object JobDetailRoute
+import org.koin.androidx.compose.koinViewModel
 
 fun NavController.navigateToJobDetail(navOptions: NavOptions) =
     navigate(
@@ -45,6 +36,7 @@ fun NavGraphBuilder.JobDetailNavGraph(onBackClick: () -> Unit) {
                 jobId = 10,
                 origin = "origin",
                 onBackClick = onBackClick,
+                viewModel = koinViewModel()
             )
         }
     )

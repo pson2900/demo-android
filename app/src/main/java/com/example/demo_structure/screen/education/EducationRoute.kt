@@ -6,16 +6,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import com.example.demo_structure.core.navigation.Destinations
-import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.koinViewModel
-
-/**
- * Created by Phạm Sơn at 20:36/1/1/25
- * Copyright (c) 2025 Navigos Group. All rights reserved.
- * Email: son.pham@navigosgroup.com
- */
-@Serializable
-object SearchResultRoute
 
 fun NavController.navigateToEducation(navOptions: NavOptions) =
     navigate(route = Destinations.EDUCATION_ROUTE, navOptions)

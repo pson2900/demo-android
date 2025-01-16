@@ -71,7 +71,7 @@ fun AppNavHost(
 
             }
 
-            toLoginScreen(modifier = modifier)
+            toLoginScreen()
         })
 }
 

@@ -38,11 +38,11 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun JobDetailScreen(
-    modifier: Modifier = Modifier,
     jobId: Int,
     origin: String,
-    onBackClick: () -> Unit, ) {
-    val viewModel: JobDetailViewModel = koinViewModel()
+    onBackClick: () -> Unit,
+    viewModel: JobDetailViewModel) {
+
     val rememberHostState = remember { SnackbarHostState() }
     val sharedTransitionScope = LocalSharedTransitionScope.current
         ?: throw IllegalStateException("No Scope found")
