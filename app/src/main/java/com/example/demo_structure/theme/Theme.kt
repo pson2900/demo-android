@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -19,9 +20,10 @@ import androidx.compose.ui.unit.dp
 /**
  * Light default theme color scheme
  */
+
 @VisibleForTesting
 val LightDefaultColorScheme = lightColorScheme(
-    primary = Purple40, // The primary color of the app, e.g., for main buttons
+    primary = hexToColor("#775AFF"), // The primary color of the app, e.g., for main buttons
     onPrimary = Color.Black, // Color for text/icons on the primary color
     primaryContainer = Purple90, // Background color for containers based on primary
     onPrimaryContainer = Purple10, // Color for text/icons on the primaryContainer
@@ -29,18 +31,18 @@ val LightDefaultColorScheme = lightColorScheme(
     onSecondary = Color.Black, // Color for text/icons on the secondary color
     secondaryContainer = Orange90, // Background color for containers based on secondary
     onSecondaryContainer = Orange10, // Color for text/icons on the secondaryContainer
-    tertiary = Blue40, // Tertiary color, used for accents or small details
-    onTertiary = Color.Blue, // Color for text/icons on the tertiary color
+    tertiary = hexToColor("#775AFF"), // Tertiary color, used for accents or small details
+    onTertiary = hexToColor("#94A3B8"), // Color for text/icons on the tertiary color
     tertiaryContainer = Blue90, // Background color for containers based on tertiary
     onTertiaryContainer = Blue10, // Color for text/icons on the tertiaryContainer
     error = Red40, // Color for errors, e.g., error messages
     onError = Color.Red, // Color for text/icons on the error color
     errorContainer = Red90, // Background color for containers containing errors
     onErrorContainer = Red10, // Color for text/icons on the errorContainer
-    background = DarkPurpleGray99, // Background color of the entire app
-    onBackground = DarkPurpleGray10, // Color for text/icons on the background
-    surface = DarkPurpleGray99, // Color for surfaces like cards or bottom sheets
-    onSurface = DarkPurpleGray10, // Color for text/icons on the surface
+    background = hexToColor("#F1F5F9"), // Background color of the entire app
+    onBackground = hexToColor("#000000"), // Color for text/icons on the background
+    surface = hexToColor("#FFFFFF"), // Color for surfaces like cards or bottom sheets
+    onSurface = hexToColor("#000000"), // Color for text/icons on the surface
     surfaceVariant = PurpleGray90, // Variation of the surface color, for subparts
     onSurfaceVariant = PurpleGray30, // Color for text/icons on the surfaceVariant
     inverseSurface = DarkPurpleGray20, // Color for inverted elements (light text on dark backgrounds)
@@ -69,10 +71,10 @@ val DarkDefaultColorScheme = darkColorScheme(
     onError = Red20, // Color for text/icons on the error color (dark theme)
     errorContainer = Red30, // Background color for containers containing errors (dark theme)
     onErrorContainer = Red90, // Color for text/icons on the errorContainer (dark theme)
-    background = DarkPurpleGray10, // Background color of the entire app (dark theme)
-    onBackground = DarkPurpleGray90, // Color for text/icons on the background (dark theme)
-    surface = DarkPurpleGray10, // Color for surfaces (dark theme)
-    onSurface = DarkPurpleGray90, // Color for text/icons on the surface (dark theme)
+    background = hexToColor("#000000"), // Background color of the entire app
+    onBackground = hexToColor("#FFFFFF"), // Color for text/icons on the background
+    surface = hexToColor("#000000"), // Color for surfaces like cards or bottom sheets
+    onSurface = hexToColor("#FFFFFF"), // Color for text/icons on the surface
     surfaceVariant = PurpleGray30, // Variation of the surface color (dark theme)
     onSurfaceVariant = PurpleGray80, // Color for text/icons on the surfaceVariant (dark theme)
     inverseSurface = DarkPurpleGray90, // Color for inverted elements (light text on dark backgrounds) (dark theme)
@@ -101,10 +103,10 @@ val LightAndroidColorScheme = lightColorScheme(
     onError = Color.Red, // Color for text/icons on the error color (Android theme)
     errorContainer = Red90, // Background color for containers containing errors (Android theme)
     onErrorContainer = Red10, // Color for text/icons on the errorContainer (Android theme)
-    background = DarkGreenGray99, // Background color of the entire app (Android theme)
-    onBackground = DarkGreenGray10, // Color for text/icons on the background (Android theme)
-    surface = DarkGreenGray99, // Color for surfaces (Android theme)
-    onSurface = DarkGreenGray10, // Color for text/icons on the surface (Android theme)
+    background = hexToColor("#F1F5F9"), // Background color of the entire app
+    onBackground = hexToColor("#000000"), // Color for text/icons on the background
+    surface = hexToColor("#FFFFFF"), // Color for surfaces like cards or bottom sheets
+    onSurface = hexToColor("#000000"), // Color for text/icons on the surface
     surfaceVariant = GreenGray90, // Variation of the surface color (Android theme)
     onSurfaceVariant = GreenGray30, // Color for text/icons on the surfaceVariant (Android theme)
     inverseSurface = DarkGreenGray20, // Color for inverted elements (light text on dark backgrounds) (Android theme)
@@ -179,11 +181,11 @@ object ProductXTheme {
         @Composable
         get() = LocalBackgroundTheme.current
 
-    val tintTheme: TintTheme
+    val cardTheme: CardTheme
         @Composable
-        get() = LocalTintTheme.current
+        get() = LocalCardTheme.current
 
-    val colors: ColorTheme
+    val colors: ColorScheme
         @Composable
         get() = LocalColorTheme.current
 
@@ -202,137 +204,20 @@ fun ProductXApplicationTheme(
 ) {
     // Color scheme
     val colorScheme = when {
-        androidTheme -> if (darkTheme) DarkAndroidColorScheme else LightAndroidColorScheme
+        /*androidTheme -> if (darkTheme) DarkAndroidColorScheme else LightAndroidColorScheme
         !disableDynamicTheming && supportsDynamicTheming() -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
+        else -> if (darkTheme) DarkDefaultColorScheme else LightDefaultColorScheme*/
+        !disableDynamicTheming && supportsDynamicTheming() -> {
+            if (darkTheme) dynamicDarkColorScheme(LocalContext.current) else dynamicLightColorScheme(LocalContext.current)
+        }
+
         else -> if (darkTheme) DarkDefaultColorScheme else LightDefaultColorScheme
     }
 
-    // Create ColorTheme object
-    val colorTheme = when (colorScheme) {
-        LightDefaultColorScheme -> ColorTheme(
-            primary = LightDefaultColorScheme.primary,
-            secondary = LightDefaultColorScheme.secondary,
-            background = LightDefaultColorScheme.background,
-            border = LightDefaultColorScheme.outline,
-            floated = LightDefaultColorScheme.surface,
-            textPrimary = LightDefaultColorScheme.onPrimary,
-            textSecondary = LightDefaultColorScheme.onSecondary,
-            textSurfaceVariant = LightDefaultColorScheme.onSurfaceVariant,
-            textInteractive = LightDefaultColorScheme.onSurface,
-            textLink = LightDefaultColorScheme.secondary,
-            tornado1 = listOf(
-                LightDefaultColorScheme.primary,
-                LightDefaultColorScheme.secondary
-            ),
-            iconPrimary = LightDefaultColorScheme.primary,
-            iconSecondary = LightDefaultColorScheme.secondary,
-            iconInteractive = LightDefaultColorScheme.onSurface,
-            iconInteractiveInactive = LightDefaultColorScheme.onSurfaceVariant,
-            error = LightDefaultColorScheme.error,
-            notificationBadge = LightDefaultColorScheme.error,
-            isDark = false
-        )
-
-        DarkDefaultColorScheme -> ColorTheme(
-            primary = DarkDefaultColorScheme.primary,
-            secondary = DarkDefaultColorScheme.secondary,
-            background = DarkDefaultColorScheme.background,
-            border = DarkDefaultColorScheme.outline,
-            floated = DarkDefaultColorScheme.surface,
-            textPrimary = DarkDefaultColorScheme.onPrimary,
-            textSecondary = DarkDefaultColorScheme.onSecondary,
-            textSurfaceVariant = DarkDefaultColorScheme.onSurfaceVariant,
-            textInteractive = DarkDefaultColorScheme.onSurface,
-            textLink = DarkDefaultColorScheme.secondary,
-            tornado1 = listOf(
-                DarkDefaultColorScheme.primary,
-                DarkDefaultColorScheme.secondary
-            ),
-            iconPrimary = DarkDefaultColorScheme.primary,
-            iconSecondary = DarkDefaultColorScheme.secondary,
-            iconInteractive = DarkDefaultColorScheme.onSurface,
-            iconInteractiveInactive = DarkDefaultColorScheme.onSurfaceVariant,
-            error = DarkDefaultColorScheme.error,
-            notificationBadge = DarkDefaultColorScheme.error,
-            isDark = true
-        )
-
-        LightAndroidColorScheme -> ColorTheme(
-            primary = LightAndroidColorScheme.primary,
-            secondary = LightAndroidColorScheme.secondary,
-            background = LightAndroidColorScheme.background,
-            border = LightAndroidColorScheme.outline,
-            floated = LightAndroidColorScheme.surface,
-            textPrimary = LightAndroidColorScheme.onPrimary,
-            textSecondary = LightAndroidColorScheme.onSecondary,
-            textSurfaceVariant = LightAndroidColorScheme.onSurfaceVariant,
-            textInteractive = LightAndroidColorScheme.onSurface,
-            textLink = LightAndroidColorScheme.secondary,
-            tornado1 = listOf(
-                LightAndroidColorScheme.primary,
-                LightAndroidColorScheme.secondary
-            ),
-            iconPrimary = LightAndroidColorScheme.primary,
-            iconSecondary = LightAndroidColorScheme.secondary,
-            iconInteractive = LightAndroidColorScheme.onSurface,
-            iconInteractiveInactive = LightAndroidColorScheme.onSurfaceVariant,
-            error = LightAndroidColorScheme.error,
-            notificationBadge = LightAndroidColorScheme.error,
-            isDark = false
-        )
-
-        DarkAndroidColorScheme -> ColorTheme(
-            primary = DarkAndroidColorScheme.primary,
-            secondary = DarkAndroidColorScheme.secondary,
-            background = DarkAndroidColorScheme.background,
-            border = DarkAndroidColorScheme.outline,
-            floated = DarkAndroidColorScheme.surface,
-            textPrimary = DarkAndroidColorScheme.onPrimary,
-            textSecondary = DarkAndroidColorScheme.onSecondary,
-            textSurfaceVariant = DarkAndroidColorScheme.onSurfaceVariant,
-            textInteractive = DarkAndroidColorScheme.onSurface,
-            textLink = DarkAndroidColorScheme.secondary,
-            tornado1 = listOf(
-                DarkAndroidColorScheme.primary,
-                DarkAndroidColorScheme.secondary
-            ),
-            iconPrimary = DarkAndroidColorScheme.primary,
-            iconSecondary = DarkAndroidColorScheme.secondary,
-            iconInteractive = DarkAndroidColorScheme.onSurface,
-            iconInteractiveInactive = DarkAndroidColorScheme.onSurfaceVariant,
-            error = DarkAndroidColorScheme.error,
-            notificationBadge = DarkAndroidColorScheme.error,
-            isDark = true
-        )
-
-        else -> ColorTheme(
-            primary = colorScheme.primary,
-            secondary = colorScheme.secondary,
-            background = colorScheme.background,
-            border = colorScheme.outline,
-            floated = colorScheme.surface,
-            textPrimary = colorScheme.onPrimary,
-            textSecondary = colorScheme.onSecondary,
-            textSurfaceVariant = colorScheme.onSurfaceVariant,
-            textInteractive = colorScheme.onSurface,
-            textLink = colorScheme.secondary,
-            tornado1 = listOf(
-                colorScheme.primary,
-                colorScheme.secondary
-            ),
-            iconPrimary = colorScheme.primary,
-            iconSecondary = colorScheme.secondary,
-            iconInteractive = colorScheme.onSurface,
-            iconInteractiveInactive = colorScheme.onSurfaceVariant,
-            error = colorScheme.error,
-            notificationBadge = colorScheme.error,
-            isDark = darkTheme
-        )
-    }
 
     // Gradient colors
     val emptyGradientColors = GradientColors(container = colorScheme.surfaceColorAtElevation(2.dp))
@@ -343,30 +228,36 @@ fun ProductXApplicationTheme(
     )
 
     val gradientColors = when {
-        androidTheme -> if (darkTheme) DarkAndroidGradientColors else LightAndroidGradientColors
+//        androidTheme -> if (darkTheme) DarkAndroidGradientColors else LightAndroidGradientColors
         !disableDynamicTheming && supportsDynamicTheming() -> emptyGradientColors
         else -> defaultGradientColors
     }
     // Background theme
     val defaultBackgroundTheme = BackgroundTheme(
-        color = colorScheme.surface,
+        color = colorScheme.background,
         tonalElevation = 2.dp,
     )
     val backgroundTheme = when {
-        androidTheme -> if (darkTheme) DarkAndroidBackgroundTheme else LightAndroidBackgroundTheme
+//        androidTheme -> if (darkTheme) DarkAndroidBackgroundTheme else LightAndroidBackgroundTheme
         else -> defaultBackgroundTheme
     }
-    val tintTheme = when {
-        androidTheme -> TintTheme()
-        !disableDynamicTheming && supportsDynamicTheming() -> TintTheme(colorScheme.primary)
-        else -> TintTheme()
+    val cardTheme = when {
+//        androidTheme -> TintTheme()
+        !disableDynamicTheming && supportsDynamicTheming() -> CardTheme(colorScheme.primary)
+        else -> CardTheme(
+            colorBackground = colorScheme.surface,
+            colorText = colorScheme.onSurface,
+            colorBackgroundHeader = colorScheme.surfaceVariant,
+            colorTextHeader = colorScheme.onSurfaceVariant,
+            colorOutline = colorScheme.outline
+        )
     }
     // Composition locals
     CompositionLocalProvider(
-        LocalColorTheme provides colorTheme,
+        LocalColorTheme provides colorScheme,
         LocalGradientColors provides gradientColors,
         LocalBackgroundTheme provides backgroundTheme,
-        LocalTintTheme provides tintTheme,
+        LocalCardTheme provides cardTheme,
         content = {
             MaterialTheme(
                 colorScheme = colorScheme,
@@ -385,3 +276,102 @@ enum class DarkThemeConfig {
     DARK,
 }
 
+
+/**
+ * --- Tổng quan về các nhóm option màu ---
+ *
+ *  * `primary`, `secondary`, `tertiary`: Màu sắc chính của ứng dụng, được dùng cho các element có ý nghĩa quan trọng và cần sự nổi bật
+ *    * `on...`: Màu sắc của chữ hoặc icon trên các element có màu tương ứng
+ *    * `...Container`: Màu nền của các container có liên quan đến màu tương ứng
+ *    *  `on...Container`: Màu sắc của chữ hoặc icon trên các container có màu nền tương ứng
+ *  * `surface`, `inverseSurface`: Màu sắc cho các vùng hiển thị thông tin, nội dung trên UI.
+ *    * `on...`: Màu sắc của chữ hoặc icon trên các surface
+ *   `background`: Màu nền của ứng dụng, các màn hình,...
+ *   * `onBackground`: Màu sắc của chữ hoặc icon trên các background
+ *   * `outline`: Màu của đường viền hoặc các element không được chọn
+ *   * `scrim`: Màu của lớp phủ khi một element được hiển thị phía trên một layer khác.
+ *  * `error`: Màu sắc để hiển thị lỗi.
+ *     * `on...` Màu sắc của chữ hoặc icon khi hiển thị trên màu error
+ *     * `...Container`: Màu nền của container khi có liên quan đến lỗi
+ *      * `on...Container`: Màu sắc của chữ hoặc icon trên container có màu lỗi.
+ * --- Các option màu cho từng View ---
+ *
+ * Button:
+ *  primary: Màu nền chính của nút (khi ở trạng thái bình thường).
+ *  onPrimary: Màu chữ hoặc icon trên nút.
+ *  primaryContainer: Màu nền khi nút nằm trong vùng chứa có màu nền riêng.
+ *
+ * Text:
+ *  onBackground: Màu chữ cho nội dung hiển thị trên nền ứng dụng chính.
+ *  onSurface: Màu chữ cho nội dung hiển thị trên bề mặt (card, bottom sheet,...).
+ *  onError: Màu chữ cho các thông báo lỗi.
+ *
+ * TextField:
+ *  background: Màu nền của vùng nhập liệu.
+ *  onSurface: Màu chữ nhập vào.
+ *  outline: Màu đường viền.
+ *
+ * Card:
+ *  surface: Màu nền chính của card.
+ *  onSurface: Màu chữ hoặc icon trên card.
+ *  surfaceVariant: Màu nền header hoặc phần phụ của card.
+ *  onSurfaceVariant: Màu chữ/icon trên header của card.
+ *  outline: Màu đường viền của card.
+ *
+ * AlertDialog:
+ *  surface: Màu nền của dialog.
+ *  onSurface: Màu chữ hoặc icon trong dialog.
+ *  inverseSurface: Màu nền "đảo ngược" của dialog, dùng khi nổi bật.
+ *  inverseOnSurface : Màu chữ/icon trên nền "đảo ngược" của dialog.
+ *
+ * NavigationBar / BottomNavigationBar:
+ *  background: Màu nền của thanh điều hướng.
+ *  onBackground: Màu chữ/icon hiển thị trên thanh điều hướng
+ *  primary: Màu cho icon/label khi item được chọn.
+ *  onPrimary: Màu chữ/icon khi item không được chọn (trạng thái bình thường).
+ *  tertiary: Màu cho icon/label khi có sự nổi bật.
+ *  onTertiary: Màu cho các icon/label khi không được chọn.
+ *  surface: Màu nền khi thanh điều hướng được tint.
+ *
+ * Snackbar:
+ *  surface: Màu nền của snackbar.
+ *  onSurface: Màu chữ/icon trong snackbar.
+ *  inverseSurface: Màu nền "đảo ngược" của snackbar (ví dụ khi quan trọng).
+ *  inverseOnSurface : Màu chữ/icon trên nền "đảo ngược" của snackbar.
+ *
+ * Drawer:
+ *  surface: Màu nền chính của drawer.
+ *  onSurface: Màu chữ/icon trong drawer.
+ *  background: Màu nền của background drawer.
+ *  onBackground: Màu chữ/icon trên background drawer.
+ *  scrim: Màu lớp phủ (overlay) khi drawer mở.
+ *
+ * Checkbox:
+ *  primary: Màu nền của checkbox khi được chọn.
+ *  onPrimary: Màu của icon check trong checkbox khi được chọn.
+ *  surface: Màu nền của checkbox khi không được chọn.
+ *  outline: Màu của đường viền checkbox khi không được chọn.
+ *
+ * TabBar (TabRow / Tab):
+ *  background: Màu nền của toàn bộ tab bar.
+ *  primary: Màu nền của tab khi được chọn.
+ *  onPrimary: Màu chữ/icon trong tab được chọn.
+ *  surface: Màu nền của tab khi không được chọn.
+ *  onSurface: Màu chữ/icon trong tab không được chọn.
+ *  surfaceVariant: Màu của indicator (ví dụ: gạch chân) khi tab được chọn.
+ *
+ * NavigationBarItem:
+ *  primary: Màu cho icon/label của item khi được chọn.
+ *  onPrimary: Màu chữ/icon của item khi không được chọn.
+ *  background: Màu nền của NavigationBarItem khi được chọn
+ *  tertiary: Màu cho icon/label của item khi có độ nổi bật.
+ *  onTertiary: Màu chữ/icon của item khi không được chọn.
+ *
+ * Surface:
+ *   surface: Màu nền cho các bề mặt (card, panel, bottom sheet).
+ *   onSurface: Màu chữ/icon trên surface.
+ *
+ * Background:
+ *  background: Màu nền chính của ứng dụng/khu vực UI.
+ *  onBackground: Màu chữ/icon trên nền ứng dụng chính.
+ * */

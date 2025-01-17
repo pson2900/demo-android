@@ -50,9 +50,6 @@ dependencies {
     // Mark: Google
     implementation(libs.com.google.material) // Material Components for UI elements
 
-    // Mark: Serialization
-    implementation(libs.kotlinx.serialization.json) // Kotlin Serialization for JSON parsing
-
     // Mark: Dependency Injection - Koin
     implementation(platform(libs.koin.bom)) // Use Koin BOM for consistent versions
     implementation(libs.koin.core) // Koin Core for DI

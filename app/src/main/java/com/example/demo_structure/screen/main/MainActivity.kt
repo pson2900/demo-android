@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SnackbarDuration.Indefinite
 import androidx.compose.material3.SnackbarHost
@@ -56,6 +58,7 @@ import com.example.demo_structure.core.component.BottomNavigationBar
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.core.component.ProductXScaffold
 import com.example.demo_structure.core.component.ProductXSnackBar
+import com.example.demo_structure.core.component.initBottomMainScreen
 import com.example.demo_structure.core.component.rememberScaffoldState
 import com.example.demo_structure.core.navigation.MainNavHost
 import com.example.demo_structure.core.navigation.rememberAppState
@@ -221,7 +224,9 @@ fun MainContent(
         },
         snackBarHostState = scaffoldState.snackBarHostState,
         bottomBar = {
-            BottomNavigationBar(modifier = modifier, appState = nestedNavigation)
+            BottomNavigationBar(modifier = modifier){
+                initBottomMainScreen(appState = nestedNavigation)
+            }
         },
         content = { padding ->
             logNavigation(nestedNavigation.navController)
@@ -245,10 +250,18 @@ fun MainContentPreview() {
         val snackbarHostState = SnackbarHostState()
         ProductXScaffold(
             modifier = Modifier,
-
-            snackBarHostState = SnackbarHostState(),
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = it,
+                    modifier = Modifier.systemBarsPadding(),
+                    snackbar = { snackbarData -> ProductXSnackBar(snackbarData) }
+                )
+            },
+            snackBarHostState = snackbarHostState,
             bottomBar = {
-                BottomNavigationBar(Modifier, appState)
+                BottomNavigationBar(Modifier){
+                    initBottomMainScreen(appState)
+                }
             }
         ) { padding ->
             Box(modifier = Modifier.padding(padding)) {

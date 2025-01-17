@@ -1,7 +1,8 @@
 package com.example.demo_structure.screen.education
 
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.example.demo_structure.core.base.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -12,9 +13,9 @@ import kotlinx.coroutines.flow.stateIn
  * Copyright (c) 2025 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-class SearchResultViewModel : ViewModel() {
+class EducationResultViewModel(savedStateHandle: SavedStateHandle) : BaseViewModel(savedStateHandle) {
     private val searchResultState = MutableStateFlow(
-        SearchResultViewModelState(
+        EducationResultViewModelState(
             isLoading = true,
             searchJobs = mutableListOf(),
             searchInput = ""
@@ -22,14 +23,11 @@ class SearchResultViewModel : ViewModel() {
     )
 
     val uiState = searchResultState
-        .map(SearchResultViewModelState::toUiState)
+        .map(EducationResultViewModelState::toUiState)
         .stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
             searchResultState.value.toUiState()
         )
-
-    init {
-    }
 }
 

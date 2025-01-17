@@ -1,9 +1,9 @@
 package com.example.demo_structure.core.base
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,10 +14,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.remote.UiState
 import com.example.demo_structure.JobDetail
+import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.theme.ProductXTheme
+import com.google.gson.Gson
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 /**
@@ -27,40 +31,58 @@ import kotlinx.coroutines.launch
  */
 abstract class BaseViewModel constructor(val savedStateHandle: SavedStateHandle) : ViewModel() {
     private val _errorMessage = MutableStateFlow("")
-    val errorMessage: StateFlow<String> get() = _errorMessage
+    val errorMessage: Flow<String> get() = _errorMessage
 
     protected fun handleError(error: Throwable) {
         _errorMessage.value = error.message ?: "Unknown error"
     }
 
-    fun <T> saveToSavedState(key: String, value: T) {
-        savedStateHandle[key] = value
+    inline fun <reified T> saveToSavedState(key: String, value: T) {
+        savedStateHandle[key] = Gson().toJson(value)
     }
 
-    fun <T> loadFromSavedState(key: String): T? {
-        return savedStateHandle.get<T>(key)
+    inline fun <reified T> loadFromSavedState(key: String): T? {
+        try {
+            val json: String? = savedStateHandle.get<String>(key)
+            return Gson().fromJson(json, T::class.java)
+        } catch (e: Exception) {
+            return null
+        }
     }
 
-    fun <T> getInitialData(key: String): T? {
-        return savedStateHandle.get<T>(key)
-    }
-
-    protected fun <T> handleApiCall(
-        call: suspend () -> T,
+    protected inline fun <reified T> wrapperApiCall(
+        crossinline call: suspend () -> Flow<T>,
         stateFlow: MutableStateFlow<UiState<T>>,
         dataKey: String? = null
     ) {
         viewModelScope.launch {
-            stateFlow.value = UiState.Loading
+            val tag = "wrapperApiCall"
+            Log.d(tag, "Starting API call for dataKey: $dataKey")
+            val savedData = dataKey?.let { loadFromSavedState<T>(it) }
+            if (savedData == null) {
+                Log.d(tag, "No saved data found for dataKey: $dataKey, emitting loading state")
+                stateFlow.value = UiState.Loading
+                delay(3000L)
+            } else {
+                Log.d(tag, "Loaded data from saved state: $savedData for dataKey: $dataKey, emitting success")
+                stateFlow.value = UiState.Success<T>(savedData)
+            }
             try {
-                val savedData = dataKey?.let { loadFromSavedState<T>(it) }
-                val data = savedData ?: call()
-                if (dataKey != null) {
-                    saveToSavedState(dataKey, data)
-                }
-                stateFlow.value = UiState.Success(data)
+                call()
+                    .catch { error ->
+                        Log.e(tag, "API call failed with catch for dataKey: $dataKey", error)
+                        stateFlow.value = UiState.Error(error)
+                    }
+                    .collect { data ->
+                        Log.d(tag, "API call success with collect: $data for dataKey: $dataKey")
+                        if (dataKey != null) {
+                            Log.d(tag, "Saving the data using the dataKey: $dataKey")
+                            saveToSavedState(dataKey, data)
+                        }
+                        stateFlow.value = UiState.Success(data)
+                    }
             } catch (e: Exception) {
-                stateFlow.value = UiState.Error(e.localizedMessage ?: "An error has occurred")
+                stateFlow.value = UiState.Error(e)
             }
         }
     }
@@ -69,22 +91,24 @@ abstract class BaseViewModel constructor(val savedStateHandle: SavedStateHandle)
 @Composable
 fun <T> DataStateWrapper(
     modifier: Modifier = Modifier,
-    uiState: UiState<T>,
+    state: UiState<T>,
     onLoadingContent: @Composable () -> Unit = {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
+            AppLoadingWheel(contentDesc = "LoadingWheel")
         }
+        Log.d("QQQ", "onLoadingContent")
     },
     onErrorContent: @Composable (message: String) -> Unit = { message ->
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(text = "Error: $message", color = ProductXTheme.colors.error)
         }
+        Log.d("QQQ", "onErrorContent")
     },
     onSuccessContent: @Composable (data: T) -> Unit
 ) {
-    when (uiState) {
+    when (state) {
         is UiState.Loading -> onLoadingContent()
-        is UiState.Success -> onSuccessContent(uiState.data)
+        is UiState.Success -> onSuccessContent(state.data)
         is UiState.Error -> onErrorContent("")
     }
 }
@@ -95,7 +119,7 @@ fun <T> DataStateWrapper(
 fun DataStateWrapperPreview() {
     ProductXPreviewWrapper {
         DataStateWrapper<JobDetail>(
-            uiState = UiState.Error("Error"),
+            state = UiState.Loading,
             onSuccessContent = {}
         )
     }

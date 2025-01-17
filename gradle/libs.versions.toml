@@ -23,6 +23,7 @@ accompanistNavigationAnimation = "0.32.0"
 #------
 kotlinxSerializationJson = "1.6.0"
 activityCompose = "1.8.0"
+roomKtx = "2.6.1"
 viewModelKtx = "2.6.1"
 viewModelComposeKtx = "2.6.1"
 lifecycleRuntimeKtx = "2.6.1"
@@ -38,10 +39,15 @@ coreKtxVersion = "1.9.0"
 # Mark: AndroidX
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
+# Mark: Room
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomKtx" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
+
 # Mark: Testing Libraries
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 compose = { module = "com.github.bumptech.glide:compose", version.ref = "compose" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 

@@ -135,7 +135,7 @@ fun ProfileProgressBar(progress: Int, max: Int) {
         modifier = Modifier
             .fillMaxWidth()
             .height(24.dp)
-            .background(color = Color.LightGray, shape = RoundedCornerShape(10.dp))
+            .background(color = Color.White, shape = RoundedCornerShape(10.dp))
     ) {
         Box(
             modifier = Modifier

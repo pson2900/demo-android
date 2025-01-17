@@ -56,7 +56,7 @@ sealed interface SearchResultState {
     ) : SearchResultState
 }
 
-data class SearchResultViewModelState(
+data class EducationResultViewModelState(
     val searchJobs: MutableList<SearchJob>? = null,
     val isLoadMore: Boolean = false,
     val isLoading: Boolean = false,

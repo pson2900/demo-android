@@ -65,7 +65,6 @@ fun SkillList(skills: List<String>) {
                 SkillChip(skill = skill)
             }
         }
-
     }
 }
 
@@ -77,7 +76,9 @@ fun SkillChip(skill: String) {
             .padding(end = 4.dp, bottom = 4.dp),
         shape = RoundedCornerShape(20.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color.LightGray,
+            containerColor = Color.White,
+            contentColor = Color.LightGray,
+
         ),
         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp),
         elevation = ButtonDefaults.buttonElevation(0.dp)

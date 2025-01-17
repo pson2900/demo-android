@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
 
-    private const val BASE_URL = "https://api.example.com/"
+    private const val BASE_URL = "https://api.xstaging.navigosgroup.site/jobseeker"
 
     private val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
