@@ -24,11 +24,15 @@ import androidx.compose.ui.graphics.Color
  * A class to model background color and tonal elevation values for Now in Android.
  */
 @Immutable
-data class TintTheme(
-    val iconTint: Color = Color.Unspecified,
+data class CardTheme(
+    val colorBackground: Color = Color.Unspecified,
+    val colorText: Color = Color.Unspecified,
+    val colorBackgroundHeader: Color = Color.Unspecified,
+    val colorTextHeader: Color = Color.Unspecified,
+    val colorOutline: Color = Color.Unspecified,
 )
 
 /**
- * A composition local for [TintTheme].
+ * A composition local for [CardTheme].
  */
-val LocalTintTheme = staticCompositionLocalOf { TintTheme() }
+val LocalCardTheme = staticCompositionLocalOf { CardTheme() }

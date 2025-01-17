@@ -50,9 +50,6 @@ dependencies {
     // Mark: Google
     implementation(libs.com.google.material) // Material Components for UI elements
 
-    // Mark: Serialization
-    implementation(libs.kotlinx.serialization.json) // Kotlin Serialization for JSON parsing
-
     // Mark: Dependency Injection - Koin
     implementation(platform(libs.koin.bom)) // Use Koin BOM for consistent versions
     implementation(libs.koin.core) // Koin Core for DI
@@ -101,4 +98,10 @@ dependencies {
 
     // Mark: AndroidX Material3 Adaptive Navigation Suite for Compose
     implementation(libs.androidx.adaptive.navigation.suite) // Adaptive Navigation Suite for Compose
+
+    // Mark: Room
+//    implementation(libs.androidx.room.runtime)
+//    annotationProcessor(libs.androidx.room.compiler)
+//    ksp(libs.androidx.room.compiler)
+//    implementation(libs.androidx.room.ktx)
 }

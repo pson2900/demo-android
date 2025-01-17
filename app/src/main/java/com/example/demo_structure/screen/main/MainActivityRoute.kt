@@ -12,31 +12,45 @@ import com.example.demo_structure.theme.AppIcons
 enum class MainDestination(
     val selectedIcon: Int,
     val unselectedIcon: Int,
-    val iconTextId: String,
-    val titleTextId: String,
+    val idItem: String,
+    val title: String,
     val route: String,
 ) {
     HOME(
         selectedIcon = AppIcons.IconHomeSelect,
         unselectedIcon = AppIcons.IconHomeUnSelect,
-        iconTextId = "HOME",
-        titleTextId = "HOME",
+        idItem = "HomeTag",
+        title = "Trang chủ",
         route = Destinations.HOME_ROUTE
     ),
-
-    SEARCH(
-        selectedIcon = AppIcons.IconSearchSelect,
-        unselectedIcon = AppIcons.IconSearchUnSelect,
-        iconTextId = "SEARCH",
-        titleTextId = "SEARCH",
+    EDUCATION(
+        selectedIcon = AppIcons.IconEducationSelect,
+        unselectedIcon = AppIcons.IconEducationUnSelect,
+        idItem = "EducationTag",
+        title = "Học tập",
         route = Destinations.EDUCATION_ROUTE
+    ),
+    OPPORTUNITY(
+        selectedIcon = AppIcons.IconOpportunitySelect,
+        unselectedIcon = AppIcons.IconOpportunityUnSelect,
+        idItem = "OpportunityTag",
+        title = "Cơ hội",
+        route = Destinations.OPPORTUNITY_ROUTE
+    ),
+
+    COMMUNITY(
+        selectedIcon = AppIcons.IconCommunitySelect,
+        unselectedIcon = AppIcons.IconCommunityUnSelect,
+        idItem = "CommunityTag",
+        title = "Cộng đồng",
+        route = Destinations.COMMUNITY_ROUTE
     ),
 
     USER(
         selectedIcon = AppIcons.IconUserSelect,
         unselectedIcon = AppIcons.IconUserUnSelect,
-        iconTextId = "USER",
-        titleTextId = "USER",
+        idItem = "USER",
+        title = "USER",
         route = Destinations.USER_ROUTE
     ),
 }

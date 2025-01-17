@@ -6,17 +6,18 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import com.example.demo_structure.core.navigation.Destinations
+import com.example.demo_structure.screen.main.MainDestination
 import org.koin.androidx.compose.koinViewModel
 
 fun NavController.toEducation(navOptions: NavOptions) =
-    navigate(route = Destinations.EDUCATION_ROUTE, navOptions)
+    navigate(route = MainDestination.EDUCATION.route, navOptions)
 
 fun NavGraphBuilder.EducationNavGraph(
     onTopicClick: (String) -> Unit,
 ) {
     this.apply {
         composable(
-            route = Destinations.EDUCATION_ROUTE,
+            route = MainDestination.EDUCATION.route,
             deepLinks = listOf(
                 navDeepLink {
                     uriPattern = "Google.com"

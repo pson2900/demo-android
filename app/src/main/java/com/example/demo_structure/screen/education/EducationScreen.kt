@@ -37,7 +37,7 @@ import org.koin.androidx.compose.koinViewModel
  */
 
 @Composable
-fun EducationScreen(viewModel: SearchResultViewModel, onTopicClick: (String) -> Unit) {
+fun EducationScreen(viewModel: EducationResultViewModel, onTopicClick: (String) -> Unit) {
     val modifier: Modifier = Modifier
         .fillMaxSize()
         .navigationBarsPadding()

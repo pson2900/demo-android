@@ -12,6 +12,8 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
@@ -22,7 +24,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.theme.ProductXApplicationTheme
 import kotlinx.coroutines.launch
@@ -42,6 +52,7 @@ fun AppLoadingWheel(
     modifier: Modifier = Modifier,
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "wheel transition")
+
     // Specifies the float animation for slowly drawing out the lines on entering
     val startValue = if (LocalInspectionMode.current) 0F else 1F
     val floatAnimValues = (0 until NUM_OF_LINES).map { remember { Animatable(startValue) } }
@@ -71,8 +82,8 @@ fun AppLoadingWheel(
     )
 
     // Specifies the color animation for the base-to-progress line color change
-    val baseLineColor = MaterialTheme.colorScheme.onBackground
-    val progressLineColor = MaterialTheme.colorScheme.inversePrimary
+    val baseLineColor = MaterialTheme.colorScheme.primary
+    val progressLineColor = MaterialTheme.colorScheme.onBackground
 
     val colorAnimValues = (0 until NUM_OF_LINES).map { index ->
         infiniteTransition.animateColor(
@@ -92,35 +103,31 @@ fun AppLoadingWheel(
     }
 
     // Draws out the LoadingWheel Canvas composable and sets the animations
-//    Canvas(
-//        modifier = modifier
-//            .size(48.dp)
-//            .padding(8.dp)
-//            .graphicsLayer { rotationZ = rotationAnim }
-//            .semantics { contentDescription = contentDesc }
-//            .testTag("loadingWheel"),
-//    ) {
-//        repeat(NUM_OF_LINES) { index ->
-//            rotate(degrees = index * 30f) {
-//                drawLine(
-//                    color = colorAnimValues[index].value,
-//                    // Animates the initially drawn 1 pixel alpha from 0 to 1
-//                    alpha = if (floatAnimValues[index].value < 1f) 1f else 0f,
-//                    strokeWidth = 4F,
-//                    cap = StrokeCap.Round,
-//                    start = Offset(size.width / 2, size.height / 4),
-//                    end = Offset(size.width / 2, floatAnimValues[index].value * size.height / 4),
-//                )
-//            }
-//        }
-//    }
-
-    CircularProgressIndicator(
-        modifier = modifier,
-        color = MaterialTheme.colorScheme.onSecondary,
-        strokeWidth = 2.dp
-    )
+    Canvas(
+        modifier = modifier
+            .size(48.dp)
+            .padding(8.dp)
+            .graphicsLayer { rotationZ = rotationAnim }
+            .semantics { contentDescription = contentDesc }
+            .testTag("loadingWheel"),
+    ) {
+        repeat(NUM_OF_LINES) { index ->
+            rotate(degrees = index * 30f) {
+                drawLine(
+                    color = colorAnimValues[index].value,
+                    // Animates the initially drawn 1 pixel alpha from 0 to 1
+                    alpha = if (floatAnimValues[index].value < 1f) 1f else 0f,
+                    strokeWidth = 4F,
+                    cap = StrokeCap.Round,
+                    start = Offset(size.width / 2, size.height / 4),
+                    end = Offset(size.width / 2, floatAnimValues[index].value * size.height / 4),
+                )
+            }
+        }
+    }
 }
+
+
 @Composable
 fun OverlayLoadingWheel(
     contentDesc: String,
@@ -140,7 +147,6 @@ fun OverlayLoadingWheel(
 }
 
 @ThemePreviews
-
 @Composable
 fun LoadingWheelPreview() {
     ProductXApplicationTheme {

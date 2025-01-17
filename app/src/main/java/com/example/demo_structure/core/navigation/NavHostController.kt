@@ -16,11 +16,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.demo_structure.app.LocalNavAnimatedVisibilityScope
+import com.example.demo_structure.screen.community.CommunityNavGraph
 import com.example.demo_structure.screen.education.EducationNavGraph
 import com.example.demo_structure.screen.home.HomeNavGraph
 import com.example.demo_structure.screen.job_detail.JobDetailNavGraph
 import com.example.demo_structure.screen.login.toLoginScreen
 import com.example.demo_structure.screen.main.AppNavGraph
+import com.example.demo_structure.screen.opportunity.OpportunityNavGraph
 import com.example.demo_structure.screen.user.UserNavGraph
 import com.example.demo_structure.util.logNavigation
 
@@ -93,6 +95,16 @@ fun MainNavHost(
             onNavigateToJobDetail = onNavigateToJobDetail,
         )
         EducationNavGraph(
+            onTopicClick = {
+
+            },
+        )
+        OpportunityNavGraph(
+            onTopicClick = {
+
+            },
+        )
+        CommunityNavGraph(
             onTopicClick = {
 
             },

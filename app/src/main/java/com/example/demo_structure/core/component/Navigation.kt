@@ -1,6 +1,7 @@
 package com.example.demo_structure.core.component
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.material3.NavigationBar
@@ -10,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -31,49 +33,55 @@ import com.example.demo_structure.util.AlwaysOnlineNetworkMonitor
 @Composable
 fun BottomNavigationBar(
     modifier: Modifier,
-    appState: AppState,
     containerColor: Color = ProductXTheme.colors.background,
     contentColor: Color = ProductXTheme.colors.secondary,
     tonalElevation: Dp = 0.dp,
-    windowInsets: WindowInsets = WindowInsets.navigationBars
+    windowInsets: WindowInsets = WindowInsets.navigationBars,
+    content: @Composable RowScope.() -> Unit
 ) {
-    val currentRoute = appState.navController.currentBackStackEntryAsState().value?.destination?.route
+
 
     NavigationBar(
         modifier = modifier,
         tonalElevation = tonalElevation,
         windowInsets = windowInsets,
-        containerColor = containerColor, // Use the surface color from theme
-        contentColor = contentColor // Text and icon color from theme
-    ) {
-        MainDestination.entries.forEach { item ->
-            NavigationBarItem(
-                selected = currentRoute == item.route,
-                onClick = {
-                    appState.navigateToBottomBarRoute(item.route)
-                },
-                label = {
-                    Text(
-                        text = item.name,
-//                        style = ProductXTheme.typography.body2.copy(fontSize = 10.sp)
-                    )
-                },
-                icon = {
-                    if (currentRoute == item.route) {
-                        item.selectedIcon.toIcon()
-                    } else {
-                        item.unselectedIcon.toIcon()
-                    }
-                },
-                alwaysShowLabel = false, // Consider showing labels only on selected items for better UX
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = ProductXTheme.colors.iconSecondary,
-                    selectedTextColor = ProductXTheme.colors.iconSecondary,
-                    unselectedIconColor = Color.Gray,
-                    unselectedTextColor = Color.Gray
+        containerColor = containerColor,
+        contentColor = contentColor,
+        content = content
+    )
+}
+
+@Composable
+fun RowScope.initBottomMainScreen(appState: AppState) {
+    val currentRoute = appState.navController.currentBackStackEntryAsState().value?.destination?.route
+    MainDestination.entries.forEach { item ->
+        NavigationBarItem(
+            modifier = Modifier.testTag(item.idItem),
+            selected = currentRoute == item.route,
+            onClick = {
+                appState.navigateToBottomBarRoute(item.route)
+            },
+            label = {
+                Text(
+                    text = item.title,
                 )
+            },
+            icon = {
+                if (currentRoute == item.route) {
+                    item.selectedIcon.toIcon()
+                } else {
+                    item.unselectedIcon.toIcon()
+                }
+            },
+            alwaysShowLabel = false, // Consider showing labels only on selected items for better UX
+            colors = NavigationBarItemDefaults.colors(
+                selectedIconColor = ProductXTheme.colors.tertiary,
+                selectedTextColor = ProductXTheme.colors.tertiary,
+                unselectedIconColor = ProductXTheme.colors.onTertiary,
+                unselectedTextColor = ProductXTheme.colors.onTertiary,
+                indicatorColor = Color.Transparent
             )
-        }
+        )
     }
 }
 
@@ -85,7 +93,8 @@ fun BottomNavigationViewPreview() {
         var appState = rememberAppState(networkMonitor = AlwaysOnlineNetworkMonitor())
         BottomNavigationBar(
             modifier = Modifier,
-            appState = appState
-        )
+        ) {
+            initBottomMainScreen(appState)
+        }
     }
 }

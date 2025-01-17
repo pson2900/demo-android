@@ -6,17 +6,18 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import com.example.demo_structure.core.navigation.Destinations
+import com.example.demo_structure.screen.main.MainDestination
 import org.koin.androidx.compose.koinViewModel
 
 fun NavController.navigateToCommunity(navOptions: NavOptions) =
-    navigate(route = Destinations.COMMUNITY_ROUTE, navOptions)
+    navigate(route = MainDestination.COMMUNITY.route, navOptions)
 
 fun NavGraphBuilder.CommunityNavGraph(
     onTopicClick: (String) -> Unit,
 ) {
     this.apply {
         composable(
-            route = Destinations.COMMUNITY_ROUTE,
+            route = MainDestination.COMMUNITY.route,
             deepLinks = listOf(
                 navDeepLink {
                     uriPattern = "Google.com"

@@ -3,9 +3,7 @@ package com.example.demo_structure.theme
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
@@ -70,8 +68,12 @@ fun IconImage(
 object AppIcons {
     val IconHomeSelect = R.drawable.ic_home_select
     val IconHomeUnSelect = R.drawable.ic_home_unselect
-    val IconSearchSelect = R.drawable.ic_search_select
-    val IconSearchUnSelect = R.drawable.ic_search_unselect
+    val IconEducationSelect = R.drawable.ic_education_select
+    val IconEducationUnSelect = R.drawable.ic_education_unselect
+    val IconOpportunitySelect = R.drawable.ic_opportunity_select
+    val IconOpportunityUnSelect = R.drawable.ic_opportunity_unselect
+    val IconCommunitySelect = R.drawable.ic_community_select
+    val IconCommunityUnSelect = R.drawable.ic_community_unselect
     val IconUserSelect = R.drawable.ic_user_select
     val IconUserUnSelect = R.drawable.ic_user_unselect
     val IconHeart = R.drawable.ic_heart
