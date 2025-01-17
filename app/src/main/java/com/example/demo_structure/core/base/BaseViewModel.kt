@@ -42,7 +42,7 @@ abstract class BaseViewModel constructor(val savedStateHandle: SavedStateHandle)
     }
 
     fun <T> getInitialData(key: String): T? {
-        return savedStateHandle.get<T>(key) // Lấy giá trị từ Navigation
+        return savedStateHandle.get<T>(key)
     }
 
     protected fun <T> handleApiCall(

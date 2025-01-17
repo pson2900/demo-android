@@ -66,12 +66,13 @@ fun AppNavHost(
             AppNavGraph(
                 appState = appState
             ) {
-            }
-            JobDetailNavGraph {
+                JobDetailNavGraph {
 
+                }
+
+                toLoginScreen()
             }
 
-            toLoginScreen()
         })
 }
 

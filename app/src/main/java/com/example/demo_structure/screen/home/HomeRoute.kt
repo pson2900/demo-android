@@ -8,7 +8,7 @@ import androidx.navigation.navDeepLink
 import com.example.demo_structure.core.navigation.Destinations
 import org.koin.androidx.compose.koinViewModel
 
-fun NavController.navigateToHome(navOptions: NavOptions) =
+fun NavController.toHome(navOptions: NavOptions) =
     navigate(route = Destinations.HOME_ROUTE, navOptions)
 
 fun NavGraphBuilder.HomeNavGraph(

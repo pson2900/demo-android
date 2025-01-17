@@ -1,8 +1,8 @@
 package com.example.demo_structure.app.di
 
 import com.example.data.remote.ErrorMapper
-import com.example.domain.HomeRepository
 import com.example.data.repository.HomeRepositoryImpl
+import com.example.domain.repository.HomeRepository
 import org.koin.dsl.module
 
 /**
