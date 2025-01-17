@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.map
 
 class DataStoreManager(val context: Context) {
     private val USER_INFO_KEY = stringPreferencesKey("user_info")
+
     private val Context.preferencesDataStore: DataStore<Preferences> by preferencesDataStore(
         name = "user_preferences"
     )
