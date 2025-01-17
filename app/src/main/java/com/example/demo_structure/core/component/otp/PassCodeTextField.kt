@@ -50,7 +50,7 @@ fun PassCodeTextField(
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit,
     @IntRange(from = 4, to = 6) numDigits: Int = 4,
-    errorMessage:String?= null
+    errorMessage: String? = null
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() } // Create FocusRequester
@@ -121,24 +121,21 @@ fun PassCodeTextField(
                         end = 0.dp
                     )
             ) {
-                if(!errorMessage.isNullOrEmpty()){
-                    for (i in 0 until numDigits) {
+                for (i in 0 until numDigits) {
+                    if (!errorMessage.isNullOrEmpty()) {
                         Dot(colorResource(R.color.bridesmaid))
-                    }
-                    setText(TextFieldValue(""))
-                }else{
-                    for (i in 0 until numDigits) {
+                        setText(TextFieldValue(""))
+                    } else
                         if (i < text.text.length) {
                             Dot(colorResource(R.color.tundora))
                         } else {
-                            Dot(colorResource(R.color.mercury ))
+                            Dot(colorResource(R.color.mercury))
                         }
-                    }
                 }
             }
         }
-        if( !errorMessage.isNullOrEmpty()) {
-            Text(text = errorMessage,  style = TextStyle(color = Color.Red))
+        if (!errorMessage.isNullOrEmpty()) {
+            Text(text = errorMessage, style = TextStyle(color = Color.Red))
         }
     }
     // LaunchedEffect outside clickable
