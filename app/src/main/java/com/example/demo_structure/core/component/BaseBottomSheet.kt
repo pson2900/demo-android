@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 
 @Preview(showBackground = true)
 @Composable
-fun BottomSheetPreview() {
+private fun BottomSheetPreview() {
     var showBottomSheet by remember { mutableStateOf(true) }
 
     BaseBottomSheet(isShowBottomSheet = showBottomSheet, sheetContent = {

@@ -25,7 +25,7 @@ import com.example.demo_structure.R
 @OptIn(ExperimentalGlideComposeApi::class)
 @Preview(showBackground = true)
 @Composable
-fun NetworkImagePreview() {
+private fun NetworkImagePreview() {
     NetworkImage(
         imageUrl = "https://i.pinimg.com/originals/40/90/e6/4090e6607e8bea2c9845b12630a927fd.jpg",
         modifier = Modifier
