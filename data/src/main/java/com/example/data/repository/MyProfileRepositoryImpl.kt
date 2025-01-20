@@ -1,8 +1,8 @@
 package com.example.data.repository
 
 import com.example.data.remote.ErrorMapper
-import com.example.data.remote.response.MyProfileUserResponse
-import com.example.domain.model.MyProfileUser
+import com.example.data.remote.response.MyProfileResponse
+import com.example.domain.model.MyProfile
 import com.example.domain.repository.MyProfileRepository
 import com.google.gson.Gson
 
@@ -17,194 +17,133 @@ import kotlinx.coroutines.flow.asStateFlow
  */
 class MyProfileRepositoryImpl(private val errorMapper: ErrorMapper) : MyProfileRepository {
 
-    override suspend fun getMyProfile(): Flow<MyProfileUser> {
+    override suspend fun getMyProfile(): Flow<MyProfile> {
         val gson = Gson()
-        val json =  """
-          {
-            "basicInfo": {
-              "userId": 6700374,
-              "firstName": "Huy",
-              "lastName": "Dinh Van",
-              "jobTitle": "Frontend Developer",
-              "jobLevelId": 7,
-              "highestDegreeId": 12,
-              "avatar": "https://images.vietnamworks.com/pictureofresume/90/1727791409104250.png",
-              "yearsExperience": 4,
-              "email": "dvhuy.dev@gmail.com",
-              "phone": "+84-981563497",
-              "birthday": "1997-10-09 07:00:00",
-              "genderId": 1,
-              "countryId": 1,
-              "cityId": 29,
-              "address": "141/28 Ton That Tuyệt",
-              "nationalityId": 1,
-              "maritalStatusId": 2,
-              "districtId": 4
+        val json = """
+           {
+            "basic": {
+              "id": 1,
+              "userId": 1,
+              "firstName": "John",
+              "lastName": "Doe",
+              "photo": "https://example.com/photo.jpg",
+              "birthDate": "1990-01-01",
+              "gender": "Male",
+              "phone": "1234567890",
+              "currentCity": "New York",
+              "isVietnamese": "No"
             },
-            "workingHistories": [
+            "preference": {
+              "id": 1,
+              "userId": 1,
+              "desiredSalary": 50000000,
+              "desiredJobTitle": "Software Engineer",
+              "desiredCareerPath": 1,
+              "desiredCity": [
+                1,
+                2
+              ],
+              "relocation": true,
+              "desiredEmploymentType": [
+                1,
+                2
+              ],
+              "desiredLocationType": [
+                1
+              ],
+              "desiredIndustry": [
+                1,
+                2,
+                3
+              ]
+            },
+            "summary": "A highly motivated software engineer with 5+ years of experience.",
+            "education": [
               {
-                "jobTitle": "Frontend Team Leader - Mobile Web Squad",
-                "jobLevelId": 0,
-                "companyId": 0,
-                "companyName": "Navigos Group",
-                "companyLogo": "",
-                "countryId": 0,
-                "cityId": 0,
-                "industryId": 0,
-                "description": "<p>ReactJS, NextJs</p>",
-                "experienceOrder": 1,
-                "isCurrent": 1,
-                "startDate": "2022-12-01",
-                "endDate": "0000-00-00",
-                "skills": [
-                  {
-                    "skillName": "React Native",
-                    "skillId": 193318,
-                    "rate": 1
-                  },
-                  {
-                    "skillName": "CSS Framework",
-                    "skillId": 35505,
-                    "rate": 1
-                  }
-                ]
-              },
-              {
-                "jobTitle": "Frontend developer",
-                "jobLevelId": 0,
-                "companyId": 0,
-                "companyName": "Solidbytes",
-                "companyLogo": "",
-                "countryId": 0,
-                "cityId": 0,
-                "industryId": 0,
-                "description": "<p>NextJs</p>",
-                "experienceOrder": 2,
-                "isCurrent": 0,
-                "startDate": "2022-06-01",
-                "endDate": "2023-01-01",
-                "skills": [
-                  {
-                    "skillName": "React Native",
-                    "skillId": 193318,
-                    "rate": 1
-                  },
-                  {
-                    "skillName": "CSS Framework",
-                    "skillId": 35505,
-                    "rate": 1
-                  },
-                  {
-                    "skillName": "Bootstrap",
-                    "skillId": 9168,
-                    "rate": 1
-                  },
-                  {
-                    "skillName": "OOP",
-                    "skillId": 75579,
-                    "rate": 1
-                  }
-                ]
+                "id": 1,
+                "userId": 1,
+                "educationInstituteName": "University of Technology",
+                "educationInstituteId": null,
+                "educationInstituteType": "Public",
+                "educationMajor": "Computer Science",
+                "educationStart": "2008-09-01T00:00:00Z",
+                "educationEnd": null,
+                "educationDegree": 1,
+                "educationGpa": null,
+                "educationGpaSystem": 4
               }
             ],
-            "educations": [
+            "experience": [
               {
-                "highestDegreeId": 12,
-                "schoolId": 0,
-                "schoolName": "Cao đẳng kỹ thuật Cao Thắng",
-                "major": "Công nghệ thông tin",
-                "countryId": 0,
-                "description": "<p>123123</p>",
-                "educationOrder": 1,
-                "startDate": "2015-08-01",
-                "endDate": "2018-08-01"
+                "id": 1,
+                "userId": 1,
+                "experienceTitleOriginal": "Software Developer",
+                "experienceCompanyName": "TechCorp",
+                "experienceStart": "2015-01-01T00:00:00Z",
+                "experienceCurrent": true,
+                "experienceDescription": "Developed scalable web applications."
               }
             ],
-            "certifications": [
+            "extraCurricular": [
               {
-                "certification": "Google Analytics for Beginners",
-                "organization": "Google",
-                "organizationId": 0,
-                "startDate": "2015-08-01",
-                "endDate": "2018-08-01",
-                "linkCertification": "https://drive.google.com/file/d/1-6B58QjVo-lo50pxMGP46uziBvZtEPKc/vi"
+                "id": 1,
+                "userId": 1,
+                "extraCurricularOrganization": "Tech Club",
+                "extraCurricularRole": "President",
+                "extraCurricularStart": "2014-09-01T00:00:00Z",
+                "extraCurricularDescription": "Led technical workshops and events."
               }
             ],
-            "activities": [
+            "skill": [
               {
-                "activity": "Software Tester",
-                "title": "Công ty TNHH Tổng Công ty Công nghệ và Giải pháp CMC",
-                "organization": "",
-                "startDate": "2015-08-01",
-                "endDate": "2018-08-01",
-                "isCurrent": 0,
-                "description": "",
-                "skills": [
-                  {
-                    "skillName": "React Native",
-                    "skillId": 193318,
-                    "rate": 1
-                  },
-                  {
-                    "skillName": "CSS Framework",
-                    "skillId": 35505,
-                    "rate": 1
-                  },
-                  {
-                    "skillName": "Bootstrap",
-                    "skillId": 9168,
-                    "rate": 1
-                  },
-                  {
-                    "skillName": "OOP",
-                    "skillId": 75579,
-                    "rate": 1
-                  }
-                ]
+                "id": 1,
+                "userId": 1,
+                "skillName": "Golang",
+                "skillYoe": 5
               }
             ],
-            "hobbies": [
+            "certification": [
               {
-                "hobbyId": 0,
-                "hobbyName": "Coding Challenges",
-                "description": "Enjoys solving coding problems on platforms like LeetCode and HackerRank to sharpen programming skills."
-              },
-              {
-                "hobbyId": 1,
-                "hobbyName": "Reading Tech Blogs",
-                "description": "Follows the latest trends in frontend development by reading blogs and articles from industry experts."
-              },
-              {
-                "hobbyId": 2,
-                "hobbyName": "Fitness Enthusiast",
-                "description": "Regularly engages in physical activities such as running and gym workouts to maintain a healthy lifestyle."
+                "id": 1,
+                "userId": 1,
+                "certificationName": "AWS Certified Solutions Architect",
+                "certificationOrganization": "Amazon",
+                "certificationIssueDate": "2020-01-15T00:00:00Z",
+                "certificationCredentialUrl": "https://example.com/cert"
               }
             ],
-            "characteristics": [
+            "reference": [
               {
-                "trait": "Detail-Oriented",
-                "description": "Pays close attention to details, ensuring high-quality code and user interfaces."
-              },
-              {
-                "trait": "Team Player",
-                "description": "Works effectively within a team, demonstrating strong communication and collaboration skills."
-              },
-              {
-                "trait": "Proactive Learner",
-                "description": "Continuously seeks opportunities to learn new technologies and improve existing skills."
-              },
-              {
-                "trait": "Problem Solver",
-                "description": "Possesses strong analytical and problem-solving abilities, capable of tackling complex technical challenges."
-              },
-              {
-                "trait": "Adaptable",
-                "description": "Quickly adapts to new environments and technologies, staying ahead in the fast-paced tech industry."
+                "id": 1,
+                "userId": 1,
+                "referenceName": "Jane Smith",
+                "referenceTitle": "Manager",
+                "referenceCompany": "TechCorp",
+                "referenceEmail": "jane.smith@example.com",
+                "referencePhone": "9876543210"
               }
-            ]
-          }
+            ],
+            "language": [
+              {
+                "id": 1,
+                "userId": 1,
+                "languageName": "English",
+                "languageId": 1,
+                "languageLevel": 5
+              }
+            ],
+            "attachment": [
+              {
+                "id": 1,
+                "userId": 1,
+                "attachmentFilename": "resume.pdf",
+                "attachmentType": "Resume"
+              }
+            ],
+            "completionIndicator": 85
+            }
         """.trimIndent()
-        val result = gson.fromJson(json, MyProfileUserResponse::class.java)
+        val result = gson.fromJson(json, MyProfileResponse::class.java)
         val flow = MutableStateFlow(result.toDomain())
         return flow.asStateFlow()
     }

@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.demo_structure.theme.ProductXTheme
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 
 /**
  * Created by Phạm Sơn at 15:33/10/1/25

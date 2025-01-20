@@ -16,7 +16,7 @@ import com.example.demo_structure.app.di.dataModule
 import com.example.demo_structure.app.di.domainModule
 import com.example.demo_structure.app.di.networkModule
 import com.example.demo_structure.app.di.presentationModule
-import com.example.demo_structure.theme.ProductXApplicationTheme
+import com.example.demo_structure.app.manager.theme.ProductXApplicationTheme
 import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.screen.main.ThemeSettings
 import com.example.demo_structure.core.navigation.AppNavHost

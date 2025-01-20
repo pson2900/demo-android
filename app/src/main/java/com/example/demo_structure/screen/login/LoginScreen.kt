@@ -47,7 +47,7 @@ import com.example.demo_structure.R
 import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.core.component.ProductXScaffold
-import com.example.demo_structure.theme.ProductXApplicationTheme
+import com.example.demo_structure.app.manager.theme.ProductXApplicationTheme
 import org.koin.androidx.compose.koinViewModel
 
 /**

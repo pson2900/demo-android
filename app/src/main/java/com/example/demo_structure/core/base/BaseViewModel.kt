@@ -16,7 +16,7 @@ import com.example.data.remote.UiState
 import com.example.demo_structure.JobDetail
 import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
-import com.example.demo_structure.theme.ProductXTheme
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.google.gson.Gson
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow

@@ -26,11 +26,11 @@ class ErrorMapper {
     fun mapToErrorType(exception: Throwable): ErrorType {
         return when (exception) {
             is IOException -> ErrorType.NetworkError
-//            is HttpException -> {
-////                val code = exception.hashCode()
-//                val message = exception.message.toString()
-//                ErrorType.ServerError(400, message)
-//            }
+            is HttpException -> {
+//                val code = exception.hashCode()
+                val message = exception.message.toString()
+                ErrorType.ServerError(400, message)
+            }
             is SQLiteException -> ErrorType.DatabaseError
             else -> ErrorType.UnknownError
         }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.demo_structure.theme
+package com.example.demo_structure.app.manager.theme
 
 import android.graphics.Typeface
 import androidx.compose.material3.Typography

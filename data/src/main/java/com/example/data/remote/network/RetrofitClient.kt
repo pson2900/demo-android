@@ -6,6 +6,7 @@ package com.example.data.remote.network
  * Email: son.pham@navigosgroup.com
  */
 
+import androidx.core.os.trace
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -22,7 +23,7 @@ object RetrofitClient {
             .build()
     }
 
-    val retrofit: Retrofit by lazy {
+    val networkApi: Retrofit by lazy{
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
@@ -31,6 +32,6 @@ object RetrofitClient {
     }
 
     inline fun <reified T> createService(): T {
-        return retrofit.create(T::class.java)
+        return networkApi.create(T::class.java)
     }
 }

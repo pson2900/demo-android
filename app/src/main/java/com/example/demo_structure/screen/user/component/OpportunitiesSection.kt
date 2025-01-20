@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.demo_structure.R
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
-import com.example.demo_structure.theme.IconImage
+import com.example.demo_structure.app.manager.theme.IconImage
 
 /**
  * Created by Phạm Sơn at 13:20/14/1/25

@@ -7,7 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -18,9 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SnackbarDuration.Indefinite
 import androidx.compose.material3.SnackbarHost
@@ -52,6 +48,7 @@ import com.example.demo_structure.app.InitializeApp
 import com.example.demo_structure.app.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.app.LocalSharedTransitionScope
 import com.example.demo_structure.app.manager.LanguageManager
+import com.example.demo_structure.app.manager.theme.LocalGradientColors
 import com.example.demo_structure.core.component.AppBackground
 import com.example.demo_structure.core.component.AppGradientBackground
 import com.example.demo_structure.core.component.BottomNavigationBar
@@ -62,7 +59,6 @@ import com.example.demo_structure.core.component.initBottomMainScreen
 import com.example.demo_structure.core.component.rememberScaffoldState
 import com.example.demo_structure.core.navigation.MainNavHost
 import com.example.demo_structure.core.navigation.rememberAppState
-import com.example.demo_structure.theme.LocalGradientColors
 import com.example.demo_structure.util.NetworkMonitor
 import com.example.demo_structure.util.isSystemInDarkTheme
 import com.example.demo_structure.util.logNavigation
@@ -158,7 +154,7 @@ class MainActivity : ComponentActivity() {
             AppBackground(modifier = Modifier) {
                 AppGradientBackground(gradientColors = LocalGradientColors.current) {
                     val snackbarHostState = remember { SnackbarHostState() }
-                    val appState = rememberAppState(networkMonitor = koinInject())
+                    val appState = rememberAppState()
                     val isOffline by appState.isOffline.collectAsStateWithLifecycle()
 
                     // If user is not connected to the internet show a snack bar to inform them.
@@ -178,18 +174,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class, ExperimentalSharedTransitionApi::class, ExperimentalComposeUiApi::class)
-@Composable
-fun MainRoute(
-    modifier: Modifier = Modifier,
-    onNavigateToJobDetail: (Int, String) -> Unit,
-    onNavigateToLogin: () -> Unit
-) {
-
-}
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class, ExperimentalSharedTransitionApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun MainContent(
     modifier: Modifier = Modifier,
@@ -224,7 +209,8 @@ fun MainContent(
         },
         snackBarHostState = scaffoldState.snackBarHostState,
         bottomBar = {
-            BottomNavigationBar(modifier = modifier){
+            BottomNavigationBar(modifier = modifier,
+                containerColor = Color.White) {
                 initBottomMainScreen(appState = nestedNavigation)
             }
         },
@@ -259,7 +245,7 @@ fun MainContentPreview() {
             },
             snackBarHostState = snackbarHostState,
             bottomBar = {
-                BottomNavigationBar(Modifier){
+                BottomNavigationBar(Modifier) {
                     initBottomMainScreen(appState)
                 }
             }

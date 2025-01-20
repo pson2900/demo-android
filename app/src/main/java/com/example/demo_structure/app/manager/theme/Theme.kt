@@ -1,4 +1,4 @@
-package com.example.demo_structure.theme
+package com.example.demo_structure.app.manager.theme
 
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast

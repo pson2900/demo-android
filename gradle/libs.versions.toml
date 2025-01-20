@@ -1,4 +1,5 @@
 [versions]
+accompanistPermissions = "0.31.6-rc"
 agp = "8.4.2"
 koinBom = "3.5.6"
 kotlin = "2.0.0"
@@ -6,6 +7,7 @@ kotlinAndroid = "1.9.10"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
+kotlinxDatetime = "0.6.1"
 material = "1.12.0"
 retrofit = "2.11.0"
 mockwebserver = "4.11.0"
@@ -20,7 +22,7 @@ accompanistNavigationAnimation = "0.32.0"
 #------
 kotlinxSerializationJson = "1.6.0"
 activityCompose = "1.8.0"
-roomKtx = "2.6.1"
+roomKtx = "2.6.0"
 viewModelKtx = "2.6.1"
 viewModelComposeKtx = "2.6.1"
 lifecycleRuntimeKtx = "2.6.1"
@@ -38,9 +40,10 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 # Mark: Room
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomKtx" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomKtx" }
 
 # Mark: Testing Libraries
-androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomKtx" }
+
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 
@@ -56,6 +59,7 @@ koin-android = { module = "io.insert-koin:koin-android" }
 koin-androidx-navigation = { module = "io.insert-koin:koin-androidx-navigation" }
 
 # Mark: ACCOMPANIST Libraries
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 accompanist-drawablepainter = { module = "com.google.accompanist:accompanist-drawablepainter", version.ref = "accompanistDrawablepainter" }
 accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanistNavigationAnimation" }
 
@@ -68,6 +72,7 @@ retrofit-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "converterGson" }
 retrofit-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
 retrofit-kotlin-coroutines-adapter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlin-coroutines-adapter", version.ref = "retrofitKotlinCoroutinesAdapter" }
+retrofit-kotlin-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
 
 # Mark: Compose Libraries (Managed by BOM)
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
@@ -92,9 +97,10 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-adaptive = { module = "androidx.compose.material3.adaptive:adaptive", version.ref = "adaptiveAndroid" }
 androidx-adaptive-layout-android = { module = "androidx.compose.material3.adaptive:adaptive-layout-android", version.ref = "adaptiveAndroid" }
 androidx-appcompat-resources = { module = "androidx.appcompat:appcompat-resources", version.ref = "appcompatResources" }
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 androidx-adaptive-navigation-suite = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite-android", version.ref = "material3AdaptiveNavigationSuiteAndroid" }
-
+# Mark: Kotlinx Libraries
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 [plugins]
 # Mark: Android Plugins
 android-application = { id = "com.android.application", version.ref = "agp" }

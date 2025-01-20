@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.example.demo_structure.theme.ProductXTheme
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 import kotlin.math.ln
 
 /**

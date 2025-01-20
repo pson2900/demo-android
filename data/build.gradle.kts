@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -29,6 +29,7 @@ android {
         jvmTarget = "17"
     }
 
+
 }
 
 dependencies {
@@ -36,11 +37,18 @@ dependencies {
     implementation(project(":domain"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.com.google.material)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    // Mark: Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit.logging.interceptor)
     implementation(libs.retrofit.kotlin.coroutines.adapter)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.retrofit.kotlin.serialization)
+    // Mark: Room
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 }

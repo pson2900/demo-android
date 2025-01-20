@@ -36,15 +36,15 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.demo_structure.R
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.core.component.ProductXSurface
-import com.example.demo_structure.theme.AppIcons.IconAdvancement
-import com.example.demo_structure.theme.AppIcons.IconArrowRight
-import com.example.demo_structure.theme.IconImage
+import com.example.demo_structure.app.manager.theme.AppIcons.IconAdvancement
+import com.example.demo_structure.app.manager.theme.AppIcons.IconArrowRight
+import com.example.demo_structure.app.manager.theme.IconImage
 
 @Composable
-fun HeaderSection(title: String) {
+fun HeaderSection(title: String, avatar: String) {
     ConstraintLayout(
         Modifier
-            .background(colorResource(R.color.pale_violet))
+            .background(colorResource(R.color.violets_are_blue))
             .fillMaxWidth()
             .wrapContentHeight()
     ) {
@@ -155,7 +155,7 @@ fun HeaderSection(title: String) {
 fun HeaderSectionPreview() {
     ProductXPreviewWrapper {
         HeaderSection(
-            "Hiếu Minh Nguyễn"
+            "Hiếu Minh Nguyễn",""
         )
     }
 }

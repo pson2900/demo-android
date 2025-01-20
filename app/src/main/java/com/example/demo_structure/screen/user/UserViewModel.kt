@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.data.remote.UiState
 import com.example.demo_structure.core.base.BaseViewModel
-import com.example.domain.model.MyProfileUser
+import com.example.domain.model.MyProfile
 import com.example.domain.usecase.MyProfileUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,11 +19,10 @@ import kotlinx.coroutines.launch
  * Email: son.pham@navigosgroup.com
  */
 class UserViewModel(private val myProfileUseCase: MyProfileUseCase, stateHandle: SavedStateHandle) : BaseViewModel(stateHandle) {
-    private val _state: MutableStateFlow<UiState<MyProfileUser>> = MutableStateFlow(UiState.Loading)
-    val state: StateFlow<UiState<MyProfileUser>> = _state.asStateFlow()
+    private val _state: MutableStateFlow<UiState<MyProfile>> = MutableStateFlow(UiState.Loading)
+    val state: StateFlow<UiState<MyProfile>> = _state.asStateFlow()
 
     init {
-//        fetchMyProfile()
         wrapperApiCall(
             call = { myProfileUseCase.getMyProfile() },
             stateFlow = _state,
@@ -31,13 +30,13 @@ class UserViewModel(private val myProfileUseCase: MyProfileUseCase, stateHandle:
         )
     }
 
-    private var _myProfileUser: MyProfileUser? = loadFromSavedState(USER_KEY)
+    private var _myProfileUser: MyProfile? = loadFromSavedState(USER_KEY)
         set(value) {
             field = value
             saveToSavedState(USER_KEY, value)
         }
 
-    private fun getInitialState(): UiState<MyProfileUser>? {
+    private fun getInitialState(): UiState<MyProfile>? {
         return _myProfileUser?.let {
             UiState.Success(it)
         }

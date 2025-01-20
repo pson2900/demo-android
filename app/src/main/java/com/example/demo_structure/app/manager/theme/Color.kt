@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.demo_structure.theme
+package com.example.demo_structure.app.manager.theme
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Immutable

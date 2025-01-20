@@ -14,11 +14,13 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.example.demo_structure.screen.login.toLogin
 import com.example.demo_structure.util.NetworkMonitor
+import com.example.demo_structure.util.TimeZoneMonitor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.serialization.Serializable
+import kotlinx.datetime.TimeZone
+import org.koin.compose.koinInject
 
 /**
  * Created by Phạm Sơn at 10:55/10/1/25
@@ -30,16 +32,16 @@ import kotlinx.serialization.Serializable
  */
 @Composable
 fun rememberAppState(
-    networkMonitor: NetworkMonitor,
+    networkMonitor: NetworkMonitor = koinInject(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
+//    timeZoneMonitor: TimeZoneMonitor = koinInject(),
 ): AppState = remember(key1 = navController, key2 = coroutineScope, calculation = {
     AppState(
         navController = navController,
         coroutineScope = coroutineScope,
         networkMonitor = networkMonitor,
-//            userNewsResourceRepository = userNewsResourceRepository,
-//            timeZoneMonitor = timeZoneMonitor,
+//        timeZoneMonitor = timeZoneMonitor,
     )
 })
 
@@ -48,6 +50,7 @@ class AppState(
     val navController: NavHostController,
     coroutineScope: CoroutineScope,
     networkMonitor: NetworkMonitor,
+//    timeZoneMonitor: TimeZoneMonitor,
 ) {
     val isOffline = networkMonitor.isOnline
         .map(Boolean::not)
@@ -56,6 +59,13 @@ class AppState(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = false,
         )
+
+    /*val currentTimeZone = timeZoneMonitor.currentTimeZone
+        .stateIn(
+            coroutineScope,
+            SharingStarted.WhileSubscribed(5_000),
+            TimeZone.currentSystemDefault(),
+        )*/
 
     // ----------------------------------------------------------
     // Navigation state source of truth
@@ -143,14 +153,7 @@ private tailrec fun findStartDestination(graph: NavDestination): NavDestination 
     return if (graph is NavGraph) findStartDestination(graph.startDestination!!) else graph
 }
 
-@Serializable
-data object MainRoute
-
-@Serializable
-data object AppRoute
-
 object Destinations {
-    const val APP = "app"
     const val MAIN = "main"
     const val HOME_ROUTE = "home"
     const val EDUCATION_ROUTE = "education"

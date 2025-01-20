@@ -134,14 +134,15 @@ fun HomeContent(onItemSelected: (Int, String) -> Unit) {
         snackBarHostState = rememberSnackbarHostState,
         topBar = {
             TopAppBar(
-                title = { Text("Preview!") },
+                title = { Text("Home") })
+            /*,
                 navigationIcon = {
                     AppBarIcon(
                         contentDescription = null,
                         modifier = Modifier.size(24.dp),
                         imageResource = R.drawable.ic_back_arrow
                     )
-                })
+                })*/
         }
     ) {
         ProductXSurface(

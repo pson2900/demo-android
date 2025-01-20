@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,18 +29,19 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.R
+import com.example.demo_structure.app.manager.theme.ProductXApplicationTheme
 import com.example.demo_structure.core.base.DataStateWrapper
 import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.core.component.ProductXScaffold
+import com.example.demo_structure.core.component.ProductXSnackBar
 import com.example.demo_structure.screen.user.component.BasicInformationItem
 import com.example.demo_structure.screen.user.component.HeaderSection
 import com.example.demo_structure.screen.user.component.OpportunitiesSection
 import com.example.demo_structure.screen.user.component.ProfileStatusSection
 import com.example.demo_structure.screen.user.component.SkillSection
-import com.example.demo_structure.theme.ProductXApplicationTheme
 import com.example.domain.model.BasicInformation
-import com.example.domain.model.MyProfileUser
+import com.example.domain.model.MyProfile
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -57,11 +60,10 @@ internal fun UserScreen(
         clearUndoState()
     }
 
-    DataStateWrapper(modifier = modifier, state = state) { myProfileUser ->
-//        val myProfileUser = remember { myProfileUser }
+    DataStateWrapper(modifier = modifier, state = state) { myProfile ->
         UserContent(
             modifier = modifier.fillMaxSize(),
-            myProfileUser = myProfileUser,
+            myProfile = myProfile,
             onNavigateToLogin = onNavigateToLogin,
             rememberHostState = rememberHostState
         )
@@ -69,11 +71,18 @@ internal fun UserScreen(
 }
 
 @Composable
-fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: () -> Unit, rememberHostState: SnackbarHostState, myProfileUser: MyProfileUser) {
+fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: () -> Unit, rememberHostState: SnackbarHostState, myProfile: MyProfile) {
     ProductXApplicationTheme {
         ProductXScaffold(
             modifier = modifier,
-            snackBarHostState = rememberHostState
+            snackBarHostState = rememberHostState,
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = it,
+                    modifier = Modifier.systemBarsPadding(),
+                    snackbar = { snackbarData -> ProductXSnackBar(snackbarData) }
+                )
+            }
         ) { paddingValue ->
             Column(
                 modifier = Modifier
@@ -88,13 +97,17 @@ fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: () -> Unit, re
                     BasicInformation(R.drawable.ic_my_profile_opprotunities_crow, "Kinh nghiệm làm việc", 0)
                 )
                 LazyColumn(Modifier) {
-                    item { HeaderSection(title = "${myProfileUser.basicInfo?.lastName + myProfileUser.basicInfo?.firstName}") }
+                    item { HeaderSection(title = "${myProfile.basic?.lastName + myProfile.basic?.firstName}", avatar = myProfile.basic?.photo ?: "") }
                     item { Spacer(Modifier.size(24.dp)) }
-                    item { ProfileStatusSection() }
+                    item {
+                        ProfileStatusSection(onClick = {
+
+                        })
+                    }
                     item { Spacer(Modifier.height(24.dp)) }
                     item { OpportunitiesSection() }
                     item { Spacer(Modifier.height(24.dp)) }
-                    item { SkillSection(listOf("Design Systems", "Typography", "Typography", "Typography")) }
+                    item { SkillSection(myProfile.skill.map { it.skillName ?: "" }) }
                     item { Spacer(Modifier.height(24.dp)) }
                     item { Text("Thông tin hồ sơ", Modifier.padding(10.dp, 0.dp, 10.dp, 0.dp), style = MaterialTheme.typography.titleLarge) }
                     items(result.size) {

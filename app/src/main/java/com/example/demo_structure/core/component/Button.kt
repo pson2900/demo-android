@@ -18,6 +18,7 @@ fun AppButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     background: Color,
+    colorEffect: Color,
     enabled: Boolean = true,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit
@@ -30,7 +31,7 @@ fun AppButton(
         contentPadding = contentPadding,
         colors = ButtonDefaults.buttonColors(
             containerColor = background, // Background color
-            contentColor = Color.DarkGray, // Text and icon color
+            contentColor = colorEffect, // Text and icon color
             disabledContainerColor = Color.DarkGray, // Background color when disabled
             disabledContentColor = Color.DarkGray // Text and icon color when disabled
         ),

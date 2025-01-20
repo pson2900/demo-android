@@ -62,17 +62,20 @@ fun AppNavHost(
     logNavigation(navController)
     NavHost(
         navController = navController,
-        startDestination = Destinations.APP,
+        startDestination = Destinations.MAIN,
         modifier = modifier,
         builder = {
             AppNavGraph(
                 appState = appState
             ) {
-                JobDetailNavGraph {
 
-                }
+            }
+            JobDetailNavGraph {
 
-                toLoginScreen()
+            }
+
+            toLoginScreen(){
+                appState.upPress()
             }
 
         })

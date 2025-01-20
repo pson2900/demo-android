@@ -20,9 +20,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.demo_structure.theme.GradientColors
-import com.example.demo_structure.theme.LocalGradientColors
-import com.example.demo_structure.theme.ProductXApplicationTheme
+import com.example.demo_structure.app.manager.theme.GradientColors
+import com.example.demo_structure.app.manager.theme.LocalGradientColors
+import com.example.demo_structure.app.manager.theme.ProductXApplicationTheme
 import kotlin.math.tan
 
 /**

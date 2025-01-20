@@ -1,8 +1,6 @@
 package com.example.domain.usecase
 
-import com.example.domain.model.MyProfileUser
-import com.example.domain.model.UserProfile
-import com.example.domain.repository.HomeRepository
+import com.example.domain.model.MyProfile
 import com.example.domain.repository.MyProfileRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -12,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
  * Email: son.pham@navigosgroup.com
  */
 class MyProfileUseCase(private val myProfileRepository: MyProfileRepository) {
-    suspend fun getMyProfile(): Flow<MyProfileUser> {
+    suspend fun getMyProfile(): Flow<MyProfile> {
         return myProfileRepository.getMyProfile()
     }
 }

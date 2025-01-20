@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.R
-import com.example.demo_structure.theme.ProductXTheme
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 
 /**
  * Created by Phạm Sơn at 10:33/11/1/25

@@ -22,13 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.R
+import com.example.demo_structure.app.manager.theme.IconImage
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.core.component.ProductXSurface
-import com.example.demo_structure.theme.IconImage
 import com.example.domain.model.BasicInformation
 
 /**
@@ -56,7 +55,8 @@ fun BasicInformationItem(basicInformation: BasicInformation) {
             .padding(10.dp, 10.dp, 10.dp, 0.dp)
             .height(50.dp),
         border = BorderStroke(1.dp, Color.White),
-        shape = RoundedCornerShape(10.dp), elevation = 5.dp,
+
+        shape = RoundedCornerShape(10.dp), elevation = 0.dp,
     ) {
         Box(contentAlignment = Alignment.CenterStart, modifier = Modifier.padding(10.dp, 10.dp, 10.dp, 0.dp)) {
             Row(
@@ -78,7 +78,9 @@ fun BasicInformationItem(basicInformation: BasicInformation) {
                 Text(
                     text = basicInformation.title,
                     style = MaterialTheme.typography.labelLarge,
-                    maxLines = 1, modifier = Modifier.padding(5.dp,0.dp,0.dp,0.dp).weight(2f)
+                    maxLines = 1, modifier = Modifier
+                        .padding(5.dp, 0.dp, 0.dp, 0.dp)
+                        .weight(2f)
                 )
 
 

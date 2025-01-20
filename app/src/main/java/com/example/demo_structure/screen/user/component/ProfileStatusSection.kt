@@ -1,6 +1,7 @@
 package com.example.demo_structure.screen.user.component
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,8 +33,8 @@ import androidx.compose.ui.unit.dp
 import com.example.demo_structure.R
 import com.example.demo_structure.core.component.AppButton
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
-import com.example.demo_structure.theme.AppIcons.IconAdd
-import com.example.demo_structure.theme.AppIcons.IconShoppingForSportsEquipment
+import com.example.demo_structure.app.manager.theme.AppIcons.IconAdd
+import com.example.demo_structure.app.manager.theme.AppIcons.IconShoppingForSportsEquipment
 
 /**
  * Created by Phạm Sơn at 13:20/14/1/25
@@ -41,7 +42,7 @@ import com.example.demo_structure.theme.AppIcons.IconShoppingForSportsEquipment
  * Email: son.pham@navigosgroup.com
  */
 @Composable
-fun ProfileStatusSection(modifier: Modifier = Modifier) {
+fun ProfileStatusSection(modifier: Modifier = Modifier, onClick: () -> Unit) {
     Surface(
         modifier = modifier.padding(10.dp, 0.dp, 10.dp, 0.dp),
         border = BorderStroke(2.dp, colorResource(R.color.pale_violet)),
@@ -111,7 +112,9 @@ fun ProfileProgressAction(modifier: Modifier = Modifier) {
             }
             AppButton(modifier = Modifier
                 .fillMaxWidth(),
-                background = colorResource(R.color.alice_blue), onClick = { }) {
+                background = colorResource(R.color.alice_blue),
+                colorEffect = colorResource(R.color.violets_are_blue)
+                , onClick = {} ) {
                 Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
                     Image(
                         imageVector = ImageVector.vectorResource(IconAdd),
@@ -155,6 +158,8 @@ fun ProfileProgressBar(progress: Int, max: Int) {
 @Composable
 fun StatusSectionPreview() {
     ProductXPreviewWrapper {
-        ProfileStatusSection(Modifier.wrapContentHeight())
+        ProfileStatusSection(Modifier.wrapContentHeight()){
+
+        }
     }
 }

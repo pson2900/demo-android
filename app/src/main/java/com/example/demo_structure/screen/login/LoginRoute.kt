@@ -11,7 +11,7 @@ import com.example.demo_structure.core.navigation.Destinations
 fun NavController.toLogin(navOptions: NavOptions = navOptions {}) =
     navigate(route = Destinations.LOGIN_ROUTE, navOptions)
 
-fun NavGraphBuilder.toLoginScreen() {
+fun NavGraphBuilder.toLoginScreen(onBackClick: () -> Unit) {
     this.apply {
         composable(
             route = Destinations.LOGIN_ROUTE,

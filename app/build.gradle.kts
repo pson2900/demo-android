@@ -4,9 +4,15 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.compose.compiler)
     id("kotlinx-serialization")
+
 }
 
+
 android {
+    signingConfigs {
+        create("release") {
+        }
+    }
     namespace = "com.example.demo_structure"
     compileSdk = 34
 
@@ -20,9 +26,26 @@ android {
     }
 
     buildTypes {
-        release {
+
+        debug {
             isMinifyEnabled = false
+        }
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+    }
+
+    flavorDimensions += "version"
+    productFlavors {
+        create("develop") {
+            applicationIdSuffix = ".develop"
+            dimension = "version"
+        }
+        create("production") {
+            applicationIdSuffix = ".production"
+            dimension = "version"
         }
     }
 
@@ -39,6 +62,12 @@ android {
     buildFeatures {
         viewBinding = true
         compose = true
+        buildConfig = true
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
@@ -91,17 +120,15 @@ dependencies {
 
     // Mark: Serialization library
     implementation(libs.kotlinx.serialization.json) // Kotlin Serialization for JSON parsing
+    implementation(libs.kotlinx.datetime)
 
     // Mark: Accompanist for additional Compose functionality
     implementation(libs.accompanist.drawablepainter) // Drawable painter for Compose
     implementation(libs.accompanist.navigation.animation) // Navigation with animations for Compose
+    implementation(libs.accompanist.permissions)
 
     // Mark: AndroidX Material3 Adaptive Navigation Suite for Compose
     implementation(libs.androidx.adaptive.navigation.suite) // Adaptive Navigation Suite for Compose
 
-    // Mark: Room
-//    implementation(libs.androidx.room.runtime)
-//    annotationProcessor(libs.androidx.room.compiler)
-//    ksp(libs.androidx.room.compiler)
-//    implementation(libs.androidx.room.ktx)
+
 }

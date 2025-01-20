@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import com.example.demo_structure.app.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.app.LocalSharedTransitionScope
 import com.example.demo_structure.core.component.ProductXScaffold
-import com.example.demo_structure.theme.ProductXApplicationTheme
-import com.example.demo_structure.theme.ProductXTheme
+import com.example.demo_structure.app.manager.theme.ProductXApplicationTheme
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.util.SharedElementKey
 import com.example.demo_structure.util.SharedElementType
 import org.koin.androidx.compose.koinViewModel

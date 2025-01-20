@@ -6,6 +6,7 @@ import com.example.demo_structure.screen.home.HomeViewModel
 import com.example.demo_structure.screen.job_detail.JobDetailViewModel
 import com.example.demo_structure.screen.login.LoginViewModel
 import com.example.demo_structure.screen.education.EducationResultViewModel
+import com.example.demo_structure.screen.main.MainViewModel
 import com.example.demo_structure.screen.opportunity.OpportunityViewModel
 import com.example.demo_structure.screen.user.UserViewModel
 import kotlinx.coroutines.flow.Flow
@@ -19,6 +20,7 @@ import org.koin.dsl.module
  */
 val presentationModule = module {
     viewModel { HomeViewModel() }
+    viewModel { MainViewModel() }
     viewModel { OpportunityViewModel() }
     viewModel { CommunityViewModel() }
     viewModel { UserViewModel(get(), get()) }
