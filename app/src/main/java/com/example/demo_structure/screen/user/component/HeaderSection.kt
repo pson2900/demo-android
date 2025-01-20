@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -95,7 +96,7 @@ fun HeaderSection(title: String, avatar: String) {
                             .padding(10.dp, 24.dp, 10.dp, 10.dp),
                         color = Color.White,
                         shape = RoundedCornerShape(10.dp, 10.dp, 10.dp, 10.dp),
-                        shadowElevation = 5.dp,
+                        shadowElevation = 0.dp,
                         border = BorderStroke(2.dp, Color.White)
                     ) {
                         val InternalRowModifier = Modifier
@@ -125,6 +126,7 @@ fun HeaderSection(title: String, avatar: String) {
                 .size(100.dp)
                 .clip(CircleShape)
                 .shadow(5.dp)
+                .border(4.dp,Color.White, CircleShape)
                 .background(Color.DarkGray)
                 .constrainAs(AvataLayout) {
                     top.linkTo(parent.top, margin = 50.dp)

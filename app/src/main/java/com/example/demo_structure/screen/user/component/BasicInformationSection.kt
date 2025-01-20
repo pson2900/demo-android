@@ -38,7 +38,7 @@ import com.example.domain.model.BasicInformation
 @Composable
 fun BasicInformationSection(list: List<BasicInformation>) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        item { Text("Thông tin hồ sơ") }
+        item { Text("Thông tin hồ sơ", color = colorResource(R.color.black), style = MaterialTheme.typography.titleLarge) }
         item { Spacer(Modifier.height(12.dp)) }
         items(list.size) {
             BasicInformationItem(list[it])
@@ -52,10 +52,9 @@ fun BasicInformationItem(basicInformation: BasicInformation) {
     ProductXSurface(
         color = Color.White,
         modifier = Modifier
-            .padding(10.dp, 10.dp, 10.dp, 0.dp)
+            .padding(10.dp, 0.dp, 10.dp, 12.dp)
             .height(50.dp),
         border = BorderStroke(1.dp, Color.White),
-
         shape = RoundedCornerShape(10.dp), elevation = 0.dp,
     ) {
         Box(contentAlignment = Alignment.CenterStart, modifier = Modifier.padding(10.dp, 10.dp, 10.dp, 0.dp)) {

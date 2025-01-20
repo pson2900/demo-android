@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -109,7 +110,8 @@ fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: () -> Unit, re
                     item { Spacer(Modifier.height(24.dp)) }
                     item { SkillSection(myProfile.skill.map { it.skillName ?: "" }) }
                     item { Spacer(Modifier.height(24.dp)) }
-                    item { Text("Thông tin hồ sơ", Modifier.padding(10.dp, 0.dp, 10.dp, 0.dp), style = MaterialTheme.typography.titleLarge) }
+                    item { Text("Thông tin hồ sơ", color = Color.Black, modifier = Modifier.padding(10.dp, 0.dp, 10.dp, 0.dp), style = MaterialTheme.typography.titleLarge) }
+                    item { Spacer(Modifier.height(12.dp)) }
                     items(result.size) {
                         BasicInformationItem(result[it])
                     }

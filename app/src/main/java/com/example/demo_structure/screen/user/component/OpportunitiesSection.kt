@@ -20,8 +20,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.demo_structure.R
-import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.app.manager.theme.IconImage
+import com.example.demo_structure.core.component.ProductXPreviewWrapper
 
 /**
  * Created by Phạm Sơn at 13:20/14/1/25
@@ -31,7 +31,8 @@ import com.example.demo_structure.app.manager.theme.IconImage
 @Composable
 fun OpportunitiesSection(modifier: Modifier = Modifier) {
     Column(modifier.padding(10.dp, 0.dp, 10.dp, 0.dp)) {
-        Text(text = "Cơ hội", color = colorResource(R.color.black))
+        Text(text = "Cơ hội", color = colorResource(R.color.black), style = MaterialTheme.typography.titleLarge)
+        Spacer(Modifier.height(12.dp))
         Row(modifier) {
             OpportunitiesItem(
                 modifier = modifier
@@ -91,7 +92,7 @@ fun OpportunitiesItem(modifier: Modifier = Modifier, icon: Int, colorBorder: Int
         Text(modifier = Modifier.constrainAs(subtitleRef) {
             bottom.linkTo(parent.bottom)
             start.linkTo(parent.start)
-        }, text = subtitle, color = colorResource(R.color.black),style = MaterialTheme.typography.headlineSmall)
+        }, text = subtitle, color = colorResource(R.color.black), style = MaterialTheme.typography.headlineSmall)
     }
 }
 
