@@ -14,7 +14,7 @@ android {
         }
     }
     namespace = "com.example.demo_structure"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.demo_structure"
