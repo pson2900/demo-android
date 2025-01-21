@@ -21,127 +21,202 @@ class MyProfileRepositoryImpl(private val errorMapper: ErrorMapper) : MyProfileR
         val gson = Gson()
         val json = """
            {
-            "basic": {
-              "id": 1,
-              "userId": 1,
-              "firstName": "John",
-              "lastName": "Doe",
-              "photo": "https://example.com/photo.jpg",
-              "birthDate": "1990-01-01",
-              "gender": "Male",
-              "phone": "1234567890",
-              "currentCity": "New York",
-              "isVietnamese": "No"
-            },
-            "preference": {
-              "id": 1,
-              "userId": 1,
-              "desiredSalary": 50000000,
-              "desiredJobTitle": "Software Engineer",
-              "desiredCareerPath": 1,
-              "desiredCity": [
-                1,
-                2
-              ],
-              "relocation": true,
-              "desiredEmploymentType": [
-                1,
-                2
-              ],
-              "desiredLocationType": [
-                1
-              ],
-              "desiredIndustry": [
-                1,
-                2,
-                3
-              ]
-            },
-            "summary": "A highly motivated software engineer with 5+ years of experience.",
-            "education": [
-              {
-                "id": 1,
-                "userId": 1,
-                "educationInstituteName": "University of Technology",
-                "educationInstituteId": null,
-                "educationInstituteType": "Public",
-                "educationMajor": "Computer Science",
-                "educationStart": "2008-09-01T00:00:00Z",
-                "educationEnd": null,
-                "educationDegree": 1,
-                "educationGpa": null,
-                "educationGpaSystem": 4
-              }
-            ],
-            "experience": [
-              {
-                "id": 1,
-                "userId": 1,
-                "experienceTitleOriginal": "Software Developer",
-                "experienceCompanyName": "TechCorp",
-                "experienceStart": "2015-01-01T00:00:00Z",
-                "experienceCurrent": true,
-                "experienceDescription": "Developed scalable web applications."
-              }
-            ],
-            "extraCurricular": [
-              {
-                "id": 1,
-                "userId": 1,
-                "extraCurricularOrganization": "Tech Club",
-                "extraCurricularRole": "President",
-                "extraCurricularStart": "2014-09-01T00:00:00Z",
-                "extraCurricularDescription": "Led technical workshops and events."
-              }
-            ],
-            "skill": [
-              {
-                "id": 1,
-                "userId": 1,
-                "skillName": "Golang",
-                "skillYoe": 5
-              }
-            ],
-            "certification": [
-              {
-                "id": 1,
-                "userId": 1,
-                "certificationName": "AWS Certified Solutions Architect",
-                "certificationOrganization": "Amazon",
-                "certificationIssueDate": "2020-01-15T00:00:00Z",
-                "certificationCredentialUrl": "https://example.com/cert"
-              }
-            ],
-            "reference": [
-              {
-                "id": 1,
-                "userId": 1,
-                "referenceName": "Jane Smith",
-                "referenceTitle": "Manager",
-                "referenceCompany": "TechCorp",
-                "referenceEmail": "jane.smith@example.com",
-                "referencePhone": "9876543210"
-              }
-            ],
-            "language": [
-              {
-                "id": 1,
-                "userId": 1,
-                "languageName": "English",
-                "languageId": 1,
-                "languageLevel": 5
-              }
-            ],
-            "attachment": [
-              {
-                "id": 1,
-                "userId": 1,
-                "attachmentFilename": "resume.pdf",
-                "attachmentType": "Resume"
-              }
-            ],
-            "completionIndicator": 85
-            }
+    "basic": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "photo": "https://example.com/photo.jpg",
+      "birthDate": "1990-01-01",
+      "gender": "Male",
+      "phone": "123-456-7890",
+      "currentCity": "Hanoi",
+      "isVietnamese": true
+    },
+    "preference": {
+      "desiredSalary": 30000000,
+      "desiredJobTitle": "Software Engineer",
+      "desiredCareerPath": 1,
+      "desiredCity": [
+        {
+          "id": 24,
+          "name": "Hanoi"
+        }
+      ],
+      "relocation": true,
+      "desiredEmploymentType": [
+        {
+          "id": 1,
+          "name": "internship"
+        },
+        {
+          "id": 2,
+          "name": "full-time"
+        },
+        {
+          "id": 3,
+          "name": "part-time"
+        },
+        {
+          "id": 4,
+          "name": "freelance"
+        },
+        {
+          "id": 5,
+          "name": "contract"
+        }
+      ],
+      "desiredLocationType": [
+        {
+          "id": 1,
+          "name": "remote"
+        },
+        {
+          "id": 2,
+          "name": "hybrid"
+        },
+        {
+          "id": 3,
+          "name": "on-site"
+        }
+      ],
+      "desiredIndustry": [
+        {
+          "id": 1,
+          "name": "Software Development"
+        }
+      ]
+    },
+    "summary": "Highly skilled Software Engineer with 5 years of experience.",
+    "education": [
+      {
+        "id": 1,
+        "instituteName": "University of Hanoi",
+        "instituteType": "Public",
+        "major": "Computer Science",
+        "start": "2010-09-01T00:00:00Z",
+        "Eed": "2012-09-01T00:00:00Z",
+        "degree": 1,
+        "gpa": 3.5,
+        "gpaSystem": 4,
+        "description": "Bachelor's degree in Computer Science.",
+        "favoriteSubject": "Mathematics"
+      }
+    ],
+    "experience": [
+      {
+        "id": 1,
+        "titleOriginal": "Junior Software Developer",
+        "companyName": "Tech Solutions",
+        "start": "2015-06-01T00:00:00Z",
+        "end": "2012-09-01T00:00:00Z",
+        "isCurrent": true,
+        "locationType": 1,
+        "employmentType": 1,
+        "description": "Worked on various full-stack projects and developed web applications.",
+        "skills": [
+          {
+            "id": 1,
+            "name": "Go",
+            "yoe": 3
+          },
+          {
+            "id": 2,
+            "name": "JavaScript",
+            "yoe": 2
+          }
+        ]
+      }
+    ],
+    "extraCurricular": [
+      {
+        "id": 1,
+        "Organization": "Coding Club",
+        "Role": "President",
+        "Type": 1,
+        "Start": "2012-09-01T00:00:00Z",
+        "End": "2012-09-01T00:00:00Z",
+        "Description": "Led club activities and organized coding competitions.",
+        "skills": [
+          {
+            "id": 3,
+            "name": "Leadership",
+            "yoe": 2
+          }
+        ]
+      }
+    ],
+    "skill": [
+      {
+        "id": 1,
+        "name": "Go",
+        "yoe": 3
+      },
+      {
+        "id": 2,
+        "name": "JavaScript",
+        "yoe": 2
+      }
+    ],
+    "certification": [
+      {
+        "id": 1,
+        "name": "Certified Kubernetes Administrator",
+        "organization": "CNCF",
+        "issueDate": "2020-05-15T00:00:00Z",
+        "expireDate": "2012-09-01T00:00:00Z",
+        "credentialUrl": "https://example.com/kubernetes-cert"
+      }
+    ],
+    "reference": [
+      {
+        "id": 1,
+        "name": "Jane Smith",
+        "title": "Manager",
+        "company": "Tech Solutions",
+        "email": "jane.smith@example.com",
+        "phone": "987-654-3210"
+      }
+    ],
+    "language": [
+      {
+        "id": 1,
+        "name": "English",
+        "level": 5
+      }
+    ],
+    "externalDoc": [
+      {
+        "id": 1,
+        "docName": "Resume",
+        "docLink": "https://example.com/resume.pdf"
+      }
+    ],
+    "hobby": [
+      {
+        "id": 1,
+        "name": "Reading"
+      },
+      {
+        "id": 2,
+        "name": "Traveling"
+      }
+    ],
+    "characteristic": [
+      {
+        "id": 1,
+        "userId": 1,
+        "characteristic": "Detail-oriented"
+      }
+    ],
+    "completionIndicator": 30,
+    "attachment": [
+      {
+        "id": 1,
+        "userId": 1,
+        "fileName": "cover_letter.pdf",
+        "fileUrl": "https://example.com/cover_letter.pdf"
+      }
+    ]
+  }
         """.trimIndent()
         val result = gson.fromJson(json, MyProfileResponse::class.java)
         val flow = MutableStateFlow(result.toDomain())

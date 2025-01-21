@@ -48,6 +48,7 @@ val LightDefaultColorScheme = lightColorScheme(
     inverseSurface = DarkPurpleGray20, // Color for inverted elements (light text on dark backgrounds)
     inverseOnSurface = DarkPurpleGray95, // Color for text/icons on the inverseSurface
     outline = PurpleGray50, // Color for borders, dividers or outlines
+
 )
 
 /**

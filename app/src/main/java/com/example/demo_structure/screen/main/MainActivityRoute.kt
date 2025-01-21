@@ -25,38 +25,38 @@ enum class MainDestination(
     val route: String,
 ) {
     HOME(
-        selectedIcon = AppIcons.IconHomeSelect,
-        unselectedIcon = AppIcons.IconHomeUnSelect,
+        selectedIcon = AppIcons.homeSelect,
+        unselectedIcon = AppIcons.homeUnselect,
         idItem = "HomeTag",
         title = "Trang chủ",
         route = Destinations.HOME_ROUTE
     ),
     EDUCATION(
-        selectedIcon = AppIcons.IconEducationSelect,
-        unselectedIcon = AppIcons.IconEducationUnSelect,
+        selectedIcon = AppIcons.educationSelect,
+        unselectedIcon = AppIcons.educationUnselect,
         idItem = "EducationTag",
         title = "Học tập",
         route = Destinations.EDUCATION_ROUTE
     ),
     OPPORTUNITY(
-        selectedIcon = AppIcons.IconOpportunitySelect,
-        unselectedIcon = AppIcons.IconOpportunityUnSelect,
+        selectedIcon = AppIcons.opportunitySelect,
+        unselectedIcon = AppIcons.opportunityUnselect,
         idItem = "OpportunityTag",
         title = "Cơ hội",
         route = Destinations.OPPORTUNITY_ROUTE
     ),
 
     COMMUNITY(
-        selectedIcon = AppIcons.IconCommunitySelect,
-        unselectedIcon = AppIcons.IconCommunityUnSelect,
+        selectedIcon = AppIcons.communitySelect,
+        unselectedIcon = AppIcons.communityUnselect,
         idItem = "CommunityTag",
         title = "Cộng đồng",
         route = Destinations.COMMUNITY_ROUTE
     ),
 
     USER(
-        selectedIcon = AppIcons.IconUserSelect,
-        unselectedIcon = AppIcons.IconUserUnSelect,
+        selectedIcon = AppIcons.userSelect,
+        unselectedIcon = AppIcons.userUnselect,
         idItem = "UserTag",
         title = "Tôi",
         route = Destinations.USER_ROUTE

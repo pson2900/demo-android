@@ -35,11 +35,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.demo_structure.R
+import com.example.demo_structure.app.manager.theme.AppIcons
+import com.example.demo_structure.app.manager.theme.IconImage
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.core.component.ProductXSurface
-import com.example.demo_structure.app.manager.theme.AppIcons.IconAdvancement
-import com.example.demo_structure.app.manager.theme.AppIcons.IconArrowRight
-import com.example.demo_structure.app.manager.theme.IconImage
 
 @Composable
 fun HeaderSection(title: String, avatar: String) {
@@ -52,14 +51,15 @@ fun HeaderSection(title: String, avatar: String) {
         val (BorderLayout, AvataLayout, Setting) = createRefs()
         Box(
             Modifier
-                .clickable {  }
                 .size(48.dp)
                 .clip(CircleShape) // Clip to circle
-                .background(Color.Black.copy(alpha = 0.2f))
+                .background(Color.Black.copy(alpha = 0.2f), CircleShape)
                 .constrainAs(Setting) {
                     top.linkTo(parent.top, 40.dp)
                     end.linkTo(parent.end, margin = 8.dp)
-                },
+                }
+                .clickable { },
+
             contentAlignment = Alignment.Center
         ) {
             Image(ImageVector.vectorResource(R.drawable.ic_setting), contentDescription = null)
@@ -105,7 +105,7 @@ fun HeaderSection(title: String, avatar: String) {
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            IconImage(InternalRowModifier.weight(1.5f), imageResource = IconAdvancement, contentDescription = "IconAdvancement")
+                            IconImage(InternalRowModifier.weight(1.5f), imageResource = AppIcons.advancementIcon, contentDescription = "IconAdvancement")
                             Column(
                                 InternalRowModifier
                                     .weight(7f)
@@ -114,10 +114,9 @@ fun HeaderSection(title: String, avatar: String) {
                                 Text(modifier = Modifier, text = "Bạn đang theo đuổi", style = MaterialTheme.typography.labelMedium, color = Color.Gray)
                                 Text(modifier = Modifier, text = "Product Designer, Ux research", style = MaterialTheme.typography.labelLarge, color = Color.Black)
                             }
-                            IconImage(InternalRowModifier.weight(1.5f), imageResource = IconArrowRight, contentDescription = "IconArrowRight")
+                            IconImage(InternalRowModifier.weight(1.5f), imageResource = AppIcons.arrowRightIcon, contentDescription = "IconArrowRight")
                         }
                     }
-
                 })
         }
 
@@ -126,7 +125,7 @@ fun HeaderSection(title: String, avatar: String) {
                 .size(100.dp)
                 .clip(CircleShape)
                 .shadow(5.dp)
-                .border(4.dp,Color.White, CircleShape)
+                .border(4.dp, Color.White, CircleShape)
                 .background(Color.DarkGray)
                 .constrainAs(AvataLayout) {
                     top.linkTo(parent.top, margin = 50.dp)
@@ -157,7 +156,7 @@ fun HeaderSection(title: String, avatar: String) {
 fun HeaderSectionPreview() {
     ProductXPreviewWrapper {
         HeaderSection(
-            "Hiếu Minh Nguyễn",""
+            "Hiếu Minh Nguyễn", ""
         )
     }
 }

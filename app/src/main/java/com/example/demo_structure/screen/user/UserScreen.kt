@@ -43,6 +43,7 @@ import com.example.demo_structure.screen.user.component.ProfileStatusSection
 import com.example.demo_structure.screen.user.component.SkillSection
 import com.example.domain.model.BasicInformation
 import com.example.domain.model.MyProfile
+import com.example.domain.model.Profile
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -75,7 +76,7 @@ internal fun UserScreen(
 fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: () -> Unit, rememberHostState: SnackbarHostState, myProfile: MyProfile) {
     ProductXApplicationTheme {
         ProductXScaffold(
-            modifier = modifier,
+            modifier = modifier.fillMaxSize(),
             snackBarHostState = rememberHostState,
             snackbarHost = {
                 SnackbarHost(
@@ -90,15 +91,10 @@ fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: () -> Unit, re
                     .fillMaxSize()
                     .background(color = colorResource(R.color.anti_flash_white))
             ) {
-                val result = listOf(
-                    BasicInformation(R.drawable.ic_my_profile_opprotunities_crow, "Kinh nghiệm làm việc", 0),
-                    BasicInformation(R.drawable.ic_my_profile_opprotunities_crow, "Kinh nghiệm làm việc", 0),
-                    BasicInformation(R.drawable.ic_my_profile_opprotunities_crow, "Kinh nghiệm làm việc", 0),
-                    BasicInformation(R.drawable.ic_my_profile_opprotunities_crow, "Kinh nghiệm làm việc", 0),
-                    BasicInformation(R.drawable.ic_my_profile_opprotunities_crow, "Kinh nghiệm làm việc", 0)
-                )
+
+                val basicInformation = remember { (myProfile.profiles.find { it is Profile.BasicProfile } as? Profile.BasicProfile)?.basic }
                 LazyColumn(Modifier) {
-                    item { HeaderSection(title = "${myProfile.basic?.lastName + myProfile.basic?.firstName}", avatar = myProfile.basic?.photo ?: "") }
+                    item { HeaderSection(title = "${basicInformation?.lastName} ${basicInformation?.firstName}", avatar = basicInformation?.photo ?: "") }
                     item { Spacer(Modifier.size(24.dp)) }
                     item {
                         ProfileStatusSection(onClick = {
@@ -108,12 +104,14 @@ fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: () -> Unit, re
                     item { Spacer(Modifier.height(24.dp)) }
                     item { OpportunitiesSection() }
                     item { Spacer(Modifier.height(24.dp)) }
-                    item { SkillSection(myProfile.skill.map { it.skillName ?: "" }) }
+                    item { SkillSection(myProfile.skill.map { it.name ?: "" }) }
                     item { Spacer(Modifier.height(24.dp)) }
                     item { Text("Thông tin hồ sơ", color = Color.Black, modifier = Modifier.padding(10.dp, 0.dp, 10.dp, 0.dp), style = MaterialTheme.typography.titleLarge) }
                     item { Spacer(Modifier.height(12.dp)) }
-                    items(result.size) {
-                        BasicInformationItem(result[it])
+                    items(myProfile.profiles.size) { index ->
+                        BasicInformationItem(myProfile.profiles[index]) {
+
+                        }
                     }
                     item { Spacer(Modifier.height(12.dp)) }
                 }

@@ -23,6 +23,7 @@ import android.content.IntentFilter
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import androidx.compose.ui.util.trace
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
@@ -48,11 +49,11 @@ interface TimeZoneMonitor {
 
 internal class TimeZoneBroadcastMonitor(
     private val context: Context,
+    ioDispatcher: CoroutineDispatcher,
     appScope: CoroutineScope,
-    ioDispatcher: Dispatchers,
 ) : TimeZoneMonitor {
 
-    override val currentTimeZone: SharedFlow<TimeZone> =
+    override val currentTimeZone: Flow<TimeZone> =
         callbackFlow {
             // Send the default time zone first.
             trySend(TimeZone.currentSystemDefault())
@@ -94,7 +95,8 @@ internal class TimeZoneBroadcastMonitor(
             // We use to prevent multiple emissions of the same type, because we use trySend multiple times.
             .distinctUntilChanged()
             .conflate()
-            .flowOn(ioDispatcher.IO)
+            .flowOn(ioDispatcher)
+
             // Sharing the callback to prevent multiple BroadcastReceivers being registered
-            .shareIn(appScope, SharingStarted.WhileSubscribed(5_000), 1)
+//            .shareIn(appScope, SharingStarted.WhileSubscribed(5_000), 1)
 }

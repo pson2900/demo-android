@@ -182,7 +182,7 @@ fun MainContent(
     onNavigateToLogin: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
-    val nestedNavigation = rememberAppState(networkMonitor = koinInject())
+    val nestedNavigation = rememberAppState()
     val navBackStackEntry by nestedNavigation.navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val sharedTransitionScope = LocalSharedTransitionScope.current

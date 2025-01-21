@@ -1,7 +1,6 @@
 package com.example.demo_structure.screen.user.component
 
 import android.content.res.Configuration
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,10 +30,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.R
+import com.example.demo_structure.app.manager.theme.AppIcons
+import com.example.demo_structure.core.component.AppBox
 import com.example.demo_structure.core.component.AppButton
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
-import com.example.demo_structure.app.manager.theme.AppIcons.IconAdd
-import com.example.demo_structure.app.manager.theme.AppIcons.IconShoppingForSportsEquipment
 
 /**
  * Created by Phạm Sơn at 13:20/14/1/25
@@ -70,11 +69,6 @@ fun ProfileProgressContent(modifier: Modifier = Modifier, progress: Int, max: In
                 style = MaterialTheme.typography.titleMedium,
                 color = Color.White
             )
-            Text(
-                "Điểm hoàn thiện hồ sơ: Thấp",
-                style = MaterialTheme.typography.titleMedium,
-                color = Color.White
-            )
             ProfileProgressBar(progress, max)
         }
     }
@@ -92,7 +86,7 @@ fun ProfileProgressAction(modifier: Modifier = Modifier) {
     ) {
         Column(modifier = Modifier.align(Alignment.Center)) {
             Row {
-                Image(modifier = Modifier.weight(2f), painter = painterResource(IconShoppingForSportsEquipment), contentDescription = "IconShoppingForSportsEquipment")
+                Image(modifier = Modifier.weight(2f), painter = painterResource(AppIcons.shoppingForSportsEquipmentIcon), contentDescription = "IconShoppingForSportsEquipment")
                 Column(
                     Modifier
                         .weight(8f)
@@ -110,14 +104,13 @@ fun ProfileProgressAction(modifier: Modifier = Modifier) {
                     )
                 }
             }
-            AppButton(modifier = Modifier
-                .fillMaxWidth(),
+            AppButton(modifier = Modifier.fillMaxWidth(),
                 background = colorResource(R.color.alice_blue),
-                colorEffect = colorResource(R.color.violets_are_blue)
-                , onClick = {} ) {
+                colorEffect = colorResource(R.color.violets_are_blue),
+                onClick = {}) {
                 Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
                     Image(
-                        imageVector = ImageVector.vectorResource(IconAdd),
+                        imageVector = ImageVector.vectorResource(AppIcons.addIcon),
                         modifier = Modifier.padding(3.dp),
                         colorFilter = ColorFilter.tint(colorResource(R.color.violets_are_blue), BlendMode.SrcIn), contentDescription = "IconAdd"
                     )
@@ -140,7 +133,7 @@ fun ProfileProgressBar(progress: Int, max: Int) {
             .height(24.dp)
             .background(color = Color.White, shape = RoundedCornerShape(10.dp))
     ) {
-        Box(
+        AppBox(
             modifier = Modifier
                 .padding(4.dp)
                 .background(
@@ -158,7 +151,7 @@ fun ProfileProgressBar(progress: Int, max: Int) {
 @Composable
 fun StatusSectionPreview() {
     ProductXPreviewWrapper {
-        ProfileStatusSection(Modifier.wrapContentHeight()){
+        ProfileStatusSection(Modifier.wrapContentHeight()) {
 
         }
     }

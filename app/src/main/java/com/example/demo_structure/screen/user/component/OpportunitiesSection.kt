@@ -2,10 +2,14 @@ package com.example.demo_structure.screen.user.component
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -13,8 +17,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,6 +42,11 @@ fun OpportunitiesSection(modifier: Modifier = Modifier) {
         Row(modifier) {
             OpportunitiesItem(
                 modifier = modifier
+                    .background(colorResource(R.color.white), shape = RoundedCornerShape(5.dp))
+                    .fillMaxWidth()
+                    .clickable {  }
+                    .testTag("Opportunity_MatchJob")
+                    .height(150.dp)
                     .weight(1f),
                 icon = R.drawable.ic_my_profile_opprotunities_crow,
                 colorBorder = R.color.cosmic_latte,
@@ -45,6 +56,11 @@ fun OpportunitiesSection(modifier: Modifier = Modifier) {
             Spacer(Modifier.size(12.dp))
             OpportunitiesItem(
                 modifier = modifier
+                    .background(colorResource(R.color.white), shape = RoundedCornerShape(5.dp))
+                    .fillMaxWidth()
+                    .testTag("Opportunity_SaveJob")
+                    .height(150.dp)
+                    .clickable {  }
                     .weight(1f),
                 icon = R.drawable.ic_my_profile_opprotunities_heart,
                 colorBorder = R.color.lavender_blush,
@@ -54,6 +70,11 @@ fun OpportunitiesSection(modifier: Modifier = Modifier) {
             Spacer(Modifier.size(12.dp))
             OpportunitiesItem(
                 modifier = modifier
+                    .fillMaxWidth()
+                    .clickable {  }
+                    .testTag("Opportunity_ApplyJob")
+                    .background(colorResource(R.color.white), shape = RoundedCornerShape(5.dp))
+                    .height(150.dp)
                     .weight(1f),
                 icon = R.drawable.ic_my_profile_opprotunities_bag,
                 colorBorder = R.color.nyanza,
@@ -66,33 +87,44 @@ fun OpportunitiesSection(modifier: Modifier = Modifier) {
 
 @Composable
 fun OpportunitiesItem(modifier: Modifier = Modifier, icon: Int, colorBorder: Int, title: String, subtitle: String) {
-    ConstraintLayout(
-        modifier
-            .height(150.dp)
-            .background(Color.White, shape = RoundedCornerShape(10.dp))
-            .padding(8.dp),
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.CenterStart
     ) {
-        val (iconRef, titleRef, subtitleRef) = createRefs()
-        Box(
-            Modifier
-                .background(colorResource(colorBorder), shape = RoundedCornerShape(5.dp))
-                .constrainAs(iconRef) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                }
-        ) {
-            IconImage(imageResource = icon, contentDescription = null)
-        }
-        Text(modifier = Modifier.constrainAs(titleRef) {
-            top.linkTo(iconRef.bottom)
-            start.linkTo(parent.start)
-            bottom.linkTo(subtitleRef.top)
-        }, text = title, color = colorResource(R.color.slate_gray), style = MaterialTheme.typography.labelLarge)
+        ConstraintLayout(Modifier.fillMaxSize()) {
+            val (iconRef, titleRef, subtitleRef) = createRefs()
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(paddingValues = PaddingValues(8.dp))
+                    .constrainAs(iconRef) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                    }
+            ) {
+                IconImage(imageResource = icon, contentDescription = null)
+            }
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(paddingValues = PaddingValues(8.dp))
+                    .constrainAs(titleRef) {
+                        top.linkTo(iconRef.bottom)
+                        start.linkTo(parent.start)
+                        bottom.linkTo(subtitleRef.top)
+                    }, text = title, color = colorResource(R.color.slate_gray), style = MaterialTheme.typography.labelLarge
+            )
 
-        Text(modifier = Modifier.constrainAs(subtitleRef) {
-            bottom.linkTo(parent.bottom)
-            start.linkTo(parent.start)
-        }, text = subtitle, color = colorResource(R.color.black), style = MaterialTheme.typography.headlineSmall)
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(paddingValues = PaddingValues(8.dp))
+                    .constrainAs(subtitleRef) {
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                    }, text = subtitle, color = colorResource(R.color.black), style = MaterialTheme.typography.headlineSmall
+            )
+        }
     }
 }
 
