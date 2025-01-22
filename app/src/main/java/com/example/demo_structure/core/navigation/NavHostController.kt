@@ -68,6 +68,8 @@ fun AppNavHost(
         navController = navController,
         startDestination = Destinations.MAIN,
         modifier = modifier,
+        enterTransition = { fadeIn(animationSpec = tween(500)) },
+        exitTransition = { fadeOut(animationSpec = tween(500)) },
         builder = {
             AppNavGraph(
                 appState = appState
@@ -85,7 +87,6 @@ fun AppNavHost(
         })
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MainNavHost(
     modifier: Modifier,
@@ -94,8 +95,8 @@ fun MainNavHost(
     onNavigateToJobDetail: (Int, String) -> Unit,
     onNavigateToLogin: () -> Unit,
 ) {
-    val navController = appState.navController
-    AnimatedNavHost(
+    appState.navController
+    NavHost(
         navController = appState.navController,
         startDestination = Destinations.HOME_ROUTE,
         modifier = modifier,

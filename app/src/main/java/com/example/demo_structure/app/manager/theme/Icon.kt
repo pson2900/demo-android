@@ -49,11 +49,7 @@ fun IconImage(
             contentScale = contentScale
         )
     }*/
-    if (color != null) {
-//        colorFilter = ColorFilter.tint(color = color, BlendMode.SrcIn)
-    } else {
-
-    }
+    //        colorFilter = ColorFilter.tint(color = color, BlendMode.SrcIn)
     Image(
         modifier = modifier,
         imageVector = ImageVector.vectorResource(imageResource),
