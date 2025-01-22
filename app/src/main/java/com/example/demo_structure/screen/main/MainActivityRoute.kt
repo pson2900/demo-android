@@ -4,12 +4,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navDeepLink
+import com.example.demo_structure.app.manager.theme.AppIcons
 import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.core.navigation.composableWith
-import com.example.demo_structure.screen.job_detail.toJobDetail
-import com.example.demo_structure.screen.login.toLogin
-import com.example.demo_structure.app.manager.theme.AppIcons
 
 /**
  * Created by Phạm Sơn at 15:56/2/1/25
@@ -71,7 +69,6 @@ fun NavGraphBuilder.AppNavGraph(
     appState: AppState,
     topicDestination: NavGraphBuilder.() -> Unit,
 ) {
-    val navController = appState.navController
     composableWith(
         route = Destinations.MAIN,
         deepLinks = listOf(
@@ -97,10 +94,10 @@ fun NavGraphBuilder.AppNavGraph(
     ) { backStackEntry ->
         MainContent(
             onNavigateToJobDetail = { jobId, origin ->
-                navController.toJobDetail(jobId, origin)
+                appState.navigateToJobDetail(jobId, origin, from = backStackEntry)
             },
             onNavigateToLogin = {
-                navController.toLogin()
+                appState.navigateToLogin(from = backStackEntry)
             }
         )
     }

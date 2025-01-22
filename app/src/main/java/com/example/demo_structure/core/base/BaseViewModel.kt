@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.remote.UiState
+import com.example.data.remote.UIState
 import com.example.demo_structure.JobDetail
 import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
@@ -52,7 +52,7 @@ abstract class BaseViewModel constructor(val savedStateHandle: SavedStateHandle)
 
     protected inline fun <reified T> wrapperApiCall(
         crossinline call: suspend () -> Flow<T>,
-        stateFlow: MutableStateFlow<UiState<T>>,
+        stateFlow: MutableStateFlow<UIState<T>>,
         dataKey: String? = null
     ) {
         viewModelScope.launch {
@@ -61,17 +61,17 @@ abstract class BaseViewModel constructor(val savedStateHandle: SavedStateHandle)
             val savedData = dataKey?.let { loadFromSavedState<T>(it) }
             if (savedData == null) {
                 Log.d(tag, "No saved data found for dataKey: $dataKey, emitting loading state")
-                stateFlow.value = UiState.Loading
+                stateFlow.value = UIState.Loading
                 delay(3000L)
             } else {
                 Log.d(tag, "Loaded data from saved state: $savedData for dataKey: $dataKey, emitting success")
-                stateFlow.value = UiState.Success<T>(savedData)
+                stateFlow.value = UIState.Success<T>(savedData)
             }
             try {
                 call()
                     .catch { error ->
                         Log.e(tag, "API call failed with catch for dataKey: $dataKey", error)
-                        stateFlow.value = UiState.Error(error)
+                        stateFlow.value = UIState.Error(error)
                     }
                     .collect { data ->
                         Log.d(tag, "API call success with collect: $data for dataKey: $dataKey")
@@ -79,10 +79,10 @@ abstract class BaseViewModel constructor(val savedStateHandle: SavedStateHandle)
                             Log.d(tag, "Saving the data using the dataKey: $dataKey")
                             saveToSavedState(dataKey, data)
                         }
-                        stateFlow.value = UiState.Success(data)
+                        stateFlow.value = UIState.Success(data)
                     }
             } catch (e: Exception) {
-                stateFlow.value = UiState.Error(e)
+                stateFlow.value = UIState.Error(e)
             }
         }
     }
@@ -91,7 +91,7 @@ abstract class BaseViewModel constructor(val savedStateHandle: SavedStateHandle)
 @Composable
 fun <T> DataStateWrapper(
     modifier: Modifier = Modifier,
-    state: UiState<T>,
+    state: UIState<T>,
     onLoadingContent: @Composable () -> Unit = {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             AppLoadingWheel(contentDesc = "LoadingWheel")
@@ -107,9 +107,9 @@ fun <T> DataStateWrapper(
     onSuccessContent: @Composable (data: T) -> Unit
 ) {
     when (state) {
-        is UiState.Loading -> onLoadingContent()
-        is UiState.Success -> onSuccessContent(state.data)
-        is UiState.Error -> onErrorContent("")
+        is UIState.Loading -> onLoadingContent()
+        is UIState.Success -> onSuccessContent(state.data)
+        is UIState.Error -> onErrorContent("")
     }
 }
 
@@ -119,7 +119,7 @@ fun <T> DataStateWrapper(
 fun DataStateWrapperPreview() {
     ProductXPreviewWrapper {
         DataStateWrapper<JobDetail>(
-            state = UiState.Loading,
+            state = UIState.Loading,
             onSuccessContent = {}
         )
     }

@@ -2,7 +2,7 @@ package com.example.demo_structure.screen.user
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.example.data.remote.UiState
+import com.example.data.remote.UIState
 import com.example.demo_structure.core.base.BaseViewModel
 import com.example.domain.model.MyProfile
 import com.example.domain.usecase.MyProfileUseCase
@@ -19,8 +19,8 @@ import kotlinx.coroutines.launch
  * Email: son.pham@navigosgroup.com
  */
 class UserViewModel(private val myProfileUseCase: MyProfileUseCase, stateHandle: SavedStateHandle) : BaseViewModel(stateHandle) {
-    private val _state: MutableStateFlow<UiState<MyProfile>> = MutableStateFlow(UiState.Loading)
-    val state: StateFlow<UiState<MyProfile>> = _state.asStateFlow()
+    private val _state: MutableStateFlow<UIState<MyProfile>> = MutableStateFlow(UIState.Loading)
+    val state: StateFlow<UIState<MyProfile>> = _state.asStateFlow()
 
     init {
         wrapperApiCall(
@@ -36,9 +36,9 @@ class UserViewModel(private val myProfileUseCase: MyProfileUseCase, stateHandle:
             saveToSavedState(USER_KEY, value)
         }
 
-    private fun getInitialState(): UiState<MyProfile>? {
+    private fun getInitialState(): UIState<MyProfile>? {
         return _myProfileUser?.let {
-            UiState.Success(it)
+            UIState.Success(it)
         }
 
     }
@@ -47,16 +47,16 @@ class UserViewModel(private val myProfileUseCase: MyProfileUseCase, stateHandle:
         viewModelScope.launch {
             val initialValue = getInitialState()
             if (initialValue == null) {
-                _state.value = UiState.Loading
+                _state.value = UIState.Loading
             } else {
                 _state.value = initialValue
             }
             delay(3000)
             myProfileUseCase.getMyProfile()
-                .catch { error -> _state.value = UiState.Error(error) }
+                .catch { error -> _state.value = UIState.Error(error) }
                 .collect { user ->
                     _myProfileUser = user
-                    _state.value = UiState.Success(user)
+                    _state.value = UIState.Success(user)
                 }
         }
     }

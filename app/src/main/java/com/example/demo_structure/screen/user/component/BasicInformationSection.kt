@@ -52,27 +52,9 @@ fun BasicInformationSection(list: List<BasicInformation>) {
 }
 
 
+
 @Composable
 fun BasicInformationItem(profile: Profile, onActionClick: (Profile) -> Unit) {
-    /*  Box(
-          modifier = Modifier
-              .background(Color.White, shape = RoundedCornerShape(10.dp))
-              .padding(10.dp)
-              .height(72.dp),
-          contentAlignment = Alignment.CenterStart
-  //        border = BorderStroke(1.dp, Color.White),
-  //        shape = RoundedCornerShape(10.dp), elevation = 0.dp,
-      ) {
-
-          *//*Box(contentAlignment = Alignment.CenterStart, modifier = Modifier) {
-
-        }*//*
-    }*/
-    toProfile(profile, onActionClick)
-}
-
-@Composable
-fun toProfile(profile: Profile, onActionClick: (Profile) -> Unit) {
     var title = ""
     var icon = 0
     when (profile) {

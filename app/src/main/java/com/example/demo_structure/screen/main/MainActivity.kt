@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
@@ -18,16 +19,14 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ScaffoldDefaults
-import androidx.compose.material3.SnackbarDuration.Indefinite
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -40,18 +39,15 @@ import androidx.compose.ui.util.trace
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.window.layout.DisplayFeature
 import com.example.demo_structure.app.InitializeApp
-import com.example.demo_structure.app.LocalNavAnimatedVisibilityScope
-import com.example.demo_structure.app.LocalSharedTransitionScope
 import com.example.demo_structure.app.manager.LanguageManager
-import com.example.demo_structure.app.manager.theme.LocalGradientColors
-import com.example.demo_structure.core.component.AppBackground
-import com.example.demo_structure.core.component.AppGradientBackground
 import com.example.demo_structure.core.component.BottomNavigationBar
+import com.example.demo_structure.core.component.LocalNavAnimatedVisibilityScope
+import com.example.demo_structure.core.component.LocalSharedTransitionScope
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.core.component.ProductXScaffold
 import com.example.demo_structure.core.component.ProductXSnackBar
@@ -85,6 +81,8 @@ private val darkScrim = android.graphics.Color.argb(0x80, 0x1b, 0x1b, 0x1b)
  * Class for the system theme settings.
  * This wrapping class allows us to combine all the changes and prevent unnecessary recompositions.
  */
+
+
 data class ThemeSettings(
     val darkTheme: Boolean,
     val androidTheme: Boolean,
@@ -151,25 +149,7 @@ class MainActivity : ComponentActivity() {
         }
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            AppBackground(modifier = Modifier) {
-                AppGradientBackground(gradientColors = LocalGradientColors.current) {
-                    val snackbarHostState = remember { SnackbarHostState() }
-                    val appState = rememberAppState()
-                    val isOffline by appState.isOffline.collectAsStateWithLifecycle()
-
-                    // If user is not connected to the internet show a snack bar to inform them.
-                    val notConnectedMessage = "notConnectedMessage"
-                    LaunchedEffect(isOffline) {
-                        if (isOffline) {
-                            snackbarHostState.showSnackbar(
-                                message = notConnectedMessage,
-                                duration = Indefinite,
-                            )
-                        }
-                    }
-                    InitializeApp(appState = appState, themeSettings = themeSettings)
-                }
-            }
+            InitializeApp(modifier = Modifier.fillMaxSize(), themeSettings = themeSettings)
         }
     }
 }
@@ -184,6 +164,7 @@ fun MainContent(
     val scaffoldState = rememberScaffoldState()
     val nestedNavigation = rememberAppState()
     val navBackStackEntry by nestedNavigation.navController.currentBackStackEntryAsState()
+    val adaptiveInfo = currentWindowAdaptiveInfo()
     val currentRoute = navBackStackEntry?.destination?.route
     val sharedTransitionScope = LocalSharedTransitionScope.current
         ?: throw IllegalStateException("No SharedElementScope found")
@@ -209,14 +190,17 @@ fun MainContent(
         },
         snackBarHostState = scaffoldState.snackBarHostState,
         bottomBar = {
-            BottomNavigationBar(modifier = modifier,
-                containerColor = Color.White) {
+            BottomNavigationBar(
+                modifier = modifier,
+                containerColor = Color.White
+            ) {
                 initBottomMainScreen(appState = nestedNavigation)
             }
         },
         content = { padding ->
             logNavigation(nestedNavigation.navController)
             MainNavHost(
+                windowSizeClass = adaptiveInfo.windowSizeClass,
                 modifier = modifier.padding(paddingValues = padding),
                 appState = nestedNavigation,
                 onNavigateToJobDetail = onNavigateToJobDetail,

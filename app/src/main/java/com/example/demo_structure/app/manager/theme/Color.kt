@@ -196,12 +196,6 @@ data class ColorAppTheme(
 )
 
 
-/**
- * A composition local for [BackgroundTheme].
- */
-val LocalColorTheme = staticCompositionLocalOf<ColorScheme> {
-    error("No ColorPalette provided")
-}
 
 
 internal val Blue10 = Color(0xFF001F28)

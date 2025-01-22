@@ -34,7 +34,4 @@ data class GradientColors(
     val container: Color = Color.Unspecified,
 )
 
-/**
- * A composition local for [GradientColors].
- */
-val LocalGradientColors = staticCompositionLocalOf { GradientColors() }
+

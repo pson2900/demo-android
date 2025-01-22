@@ -1,25 +1,31 @@
 package com.example.demo_structure.core.navigation
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.util.trace
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navOptions
 import com.example.demo_structure.screen.login.toLogin
 import com.example.demo_structure.util.NetworkMonitor
-import com.example.demo_structure.util.TimeZoneMonitor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.datetime.TimeZone
 import org.koin.compose.koinInject
 
 /**
@@ -35,12 +41,14 @@ fun rememberAppState(
     networkMonitor: NetworkMonitor = koinInject(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
+    context: Context = LocalContext.current,
 //    timeZoneMonitor: TimeZoneMonitor = koinInject(),
 ): AppState = remember(key1 = navController, key2 = coroutineScope, calculation = {
     AppState(
         navController = navController,
         coroutineScope = coroutineScope,
         networkMonitor = networkMonitor,
+        context = context
 //        timeZoneMonitor = timeZoneMonitor,
     )
 })
@@ -50,6 +58,7 @@ class AppState(
     val navController: NavHostController,
     coroutineScope: CoroutineScope,
     networkMonitor: NetworkMonitor,
+    var context: Context
 //    timeZoneMonitor: TimeZoneMonitor,
 ) {
     val isOffline = networkMonitor.isOnline
@@ -60,6 +69,26 @@ class AppState(
             initialValue = false,
         )
 
+    var isOnline by mutableStateOf(checkIfOnline())
+        private set
+
+    fun refreshOnline() {
+        isOnline = checkIfOnline()
+    }
+
+
+    @Suppress("DEPRECATION")
+    private fun checkIfOnline(): Boolean {
+        val cm = getSystemService(context, ConnectivityManager::class.java)
+
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val capabilities = cm?.getNetworkCapabilities(cm.activeNetwork) ?: return false
+            capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+                    capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+        } else {
+            cm?.activeNetworkInfo?.isConnectedOrConnecting == true
+        }
+    }
  /*   val currentTimeZone = timeZoneMonitor.currentTimeZone
         .stateIn(
             coroutineScope,
@@ -101,16 +130,6 @@ class AppState(
         }
     }
 
-    fun navigateToJobDetail(jobId: Int, origin: String) {
-        // In order to discard duplicated navigation events, we check the Lifecycle
-        val route = "${Destinations.JOB_DETAIL_ROUTE}/$jobId?origin=$origin"
-        trace("Navigation : ${route}") {
-//            if (from.lifecycleIsResumed()) {
-            navController.navigate(route = route)
-//            }
-        }
-    }
-
     fun navigateToLogin(from: NavBackStackEntry) {
         // In order to discard duplicated navigation events, we check the Lifecycle
         val route = Destinations.LOGIN_ROUTE
@@ -118,16 +137,6 @@ class AppState(
             if (from.lifecycleIsResumed()) {
                 navController.toLogin()
             }
-        }
-    }
-
-    fun navigateToLogin() {
-        // In order to discard duplicated navigation events, we check the Lifecycle
-        val route = Destinations.LOGIN_ROUTE
-        trace("Navigation : ${route}") {
-//            if (from.lifecycleIsResumed()) {
-            navController.toLogin(navOptions { })
-//            }
         }
     }
 

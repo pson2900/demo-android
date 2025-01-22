@@ -19,7 +19,7 @@ import org.koin.dsl.module
  * Email: son.pham@navigosgroup.com
  */
 val presentationModule = module {
-    viewModel { HomeViewModel() }
+    viewModel { HomeViewModel(get()) }
     viewModel { MainViewModel() }
     viewModel { OpportunityViewModel() }
     viewModel { CommunityViewModel() }

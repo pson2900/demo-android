@@ -1,7 +1,9 @@
 package com.example.demo_structure.screen.home
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.demo_structure.core.base.BaseViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +15,7 @@ import kotlinx.coroutines.launch
  * Copyright (c) 2025 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-class HomeViewModel : ViewModel() {
+class HomeViewModel(stateHandle: SavedStateHandle) : BaseViewModel(stateHandle){
     val homeUiState: StateFlow<HomeState> = MutableStateFlow<HomeState>(HomeState.Loading).apply {
         viewModelScope.launch {
             delay(2000)

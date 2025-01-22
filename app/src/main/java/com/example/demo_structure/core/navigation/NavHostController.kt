@@ -4,6 +4,8 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
@@ -15,7 +17,8 @@ import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.demo_structure.app.LocalNavAnimatedVisibilityScope
+import androidx.window.core.layout.WindowSizeClass
+import com.example.demo_structure.core.component.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.screen.community.CommunityNavGraph
 import com.example.demo_structure.screen.education.EducationNavGraph
 import com.example.demo_structure.screen.home.HomeNavGraph
@@ -25,6 +28,7 @@ import com.example.demo_structure.screen.main.AppNavGraph
 import com.example.demo_structure.screen.opportunity.OpportunityNavGraph
 import com.example.demo_structure.screen.user.UserNavGraph
 import com.example.demo_structure.util.logNavigation
+import com.google.accompanist.navigation.animation.AnimatedNavHost
 
 /**
  * Created by Phạm Sơn at 14:59/3/1/25
@@ -81,20 +85,25 @@ fun AppNavHost(
         })
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MainNavHost(
     modifier: Modifier,
+    windowSizeClass: WindowSizeClass,
     appState: AppState,
     onNavigateToJobDetail: (Int, String) -> Unit,
     onNavigateToLogin: () -> Unit,
 ) {
     val navController = appState.navController
-    NavHost(
-        navController = navController,
+    AnimatedNavHost(
+        navController = appState.navController,
         startDestination = Destinations.HOME_ROUTE,
-        modifier = modifier
+        modifier = modifier,
+        enterTransition = { fadeIn(animationSpec = tween(500)) },
+        exitTransition = { fadeOut(animationSpec = tween(500)) },
     ) {
         HomeNavGraph(
+            windowSizeClass = windowSizeClass,
             onNavigateToJobDetail = onNavigateToJobDetail,
         )
         EducationNavGraph(

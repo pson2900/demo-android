@@ -48,13 +48,14 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.window.core.layout.WindowSizeClass
 import com.example.demo_structure.JobDetail
 import com.example.demo_structure.R
-import com.example.demo_structure.app.LocalNavAnimatedVisibilityScope
-import com.example.demo_structure.app.LocalSharedTransitionScope
 import com.example.demo_structure.core.component.AppBarIcon
 import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.JobDetailCard
+import com.example.demo_structure.core.component.LocalNavAnimatedVisibilityScope
+import com.example.demo_structure.core.component.LocalSharedTransitionScope
 import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.core.component.ProductXScaffold
 import com.example.demo_structure.core.component.ProductXSurface
@@ -91,6 +92,7 @@ internal fun LoadingState(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun HomeScreen(
+    windowSizeClass: WindowSizeClass,
     clearUndoState: () -> Unit = {},
     viewModel: HomeViewModel = koinViewModel(),
     onNavigateToJobDetail: (Int, String) -> Unit,

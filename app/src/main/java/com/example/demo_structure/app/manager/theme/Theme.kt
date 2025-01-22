@@ -16,6 +16,10 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.demo_structure.core.component.LocalBackgroundTheme
+import com.example.demo_structure.core.component.LocalCardTheme
+import com.example.demo_structure.core.component.LocalColorTheme
+import com.example.demo_structure.core.component.LocalGradientColors
 
 /**
  * Light default theme color scheme
@@ -265,6 +269,7 @@ fun ProductXApplicationTheme(
                 typography = appTypography,
                 content = content,
             )
+
         }
     )
 }

@@ -32,7 +32,3 @@ data class CardTheme(
     val colorOutline: Color = Color.Unspecified,
 )
 
-/**
- * A composition local for [CardTheme].
- */
-val LocalCardTheme = staticCompositionLocalOf { CardTheme() }

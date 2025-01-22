@@ -1,6 +1,14 @@
 package com.example.demo_structure.core.component
 
 import androidx.annotation.StringRes
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarData
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,6 +20,26 @@ import java.util.UUID
  * Copyright (c) 2025 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
+@Composable
+fun ProductXSnackBar(
+    snackbarData: SnackbarData,
+    modifier: Modifier = Modifier,
+    actionOnNewLine: Boolean = false,
+    shape: Shape = MaterialTheme.shapes.small,
+    backgroundColor: Color = ProductXTheme.backgroundTheme.color,
+    contentColor: Color = ProductXTheme.colors.secondary,
+    actionColor: Color = ProductXTheme.colors.secondary
+) {
+    Snackbar(
+        snackbarData = snackbarData,
+        modifier = modifier,
+        actionOnNewLine = actionOnNewLine,
+        shape = shape,
+        containerColor = backgroundColor,
+        contentColor = contentColor,
+        actionColor = actionColor
+    )
+}
 
 data class Message(val id: Long, @StringRes val messageId: Int)
 

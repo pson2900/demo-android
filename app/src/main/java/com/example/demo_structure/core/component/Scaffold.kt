@@ -26,8 +26,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.demo_structure.app.LocalNavAnimatedVisibilityScope
-import com.example.demo_structure.app.LocalSharedTransitionScope
 import com.example.demo_structure.app.manager.theme.ProductXApplicationTheme
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import kotlinx.coroutines.CoroutineScope

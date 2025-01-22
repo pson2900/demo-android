@@ -23,6 +23,7 @@ object KoinSetup {
         startKoin {
             androidLogger(Level.DEBUG) // Bật debug log
             androidContext(application)
+            printLogger(Level.DEBUG)
             modules(
                 listOf(networkModule, dataModule, domainModule, presentationModule)
             )
