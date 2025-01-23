@@ -12,6 +12,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.data.remote.AppException
+import com.example.data.remote.ErrorMapper
 import com.example.data.remote.UIState
 import com.example.demo_structure.JobDetail
 import com.example.demo_structure.app.manager.theme.ProductXTheme
@@ -60,8 +62,8 @@ abstract class BaseViewModel constructor(val savedStateHandle: SavedStateHandle)
         stateFlow.value = UIState.Success(data)
     }
 
-    protected inline fun <reified T> emitError(stateFlow: MutableStateFlow<UIState<T>>, error: Throwable) {
-        stateFlow.value = UIState.Error(error)
+    protected inline fun <reified T> emitError(stateFlow: MutableStateFlow<UIState<T>>, appException: AppException) {
+        stateFlow.value = UIState.Error(appException)
     }
 
     protected inline fun <reified T> wrapperApiCall(
@@ -87,7 +89,8 @@ abstract class BaseViewModel constructor(val savedStateHandle: SavedStateHandle)
                     }
                     .catch { error ->
                         Log.e(tag, "API call failed for $dataKey", error)
-                        emitError(stateFlow, error)
+                        error.printStackTrace()
+                        emitError(stateFlow, ErrorMapper.toAppException(error))
                     }
                     .collect { data ->
                         Log.d(tag, "API call success for $dataKey: $data")
@@ -96,10 +99,12 @@ abstract class BaseViewModel constructor(val savedStateHandle: SavedStateHandle)
                     }
             } catch (e: CancellationException) {
                 Log.d(tag, "API call canceled for dataKey: $dataKey in outer try-catch")
-            } catch (e: Exception) {
-                emitError(stateFlow, e)
+            } catch(e : Exception){
+                val exception = ErrorMapper.toAppException(e)
+                e.printStackTrace()
+                Log.e(tag, "API call failed in outer catch for $dataKey : $exception",e)
+                emitError(stateFlow, exception)
             }
-
         }
     }
 }
@@ -128,9 +133,8 @@ fun <T> DataStateWrapper(
         is UIState.Loading -> onLoadingContent()
         is UIState.Success -> onSuccessContent(state.data)
         is UIState.Error -> {
-            state.error.printStackTrace()
-            val errorMessage = state.error.message ?: "Unknown error"
-            onErrorContent(errorMessage)
+
+            onErrorContent(state.appException.message ?: "Unknown error")
         }
     }
 }

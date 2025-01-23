@@ -13,7 +13,6 @@ import org.koin.dsl.module
  * Email: son.pham@navigosgroup.com
  */
 val dataModule = module {
-    single<HomeRepository> { HomeRepositoryImpl(get(), get()) }
-    single<MyProfileRepository> { MyProfileRepositoryImpl(get(), get()) }
-    single<ErrorMapper> { ErrorMapper() }
+    single<HomeRepository> { HomeRepositoryImpl(get()) }
+    single<MyProfileRepository> { MyProfileRepositoryImpl(get()) }
 }

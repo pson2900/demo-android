@@ -1,9 +1,7 @@
 package com.example.data.repository
 
-import com.example.data.remote.ErrorMapper
 import com.example.data.remote.network.ApiService
 import com.example.domain.repository.HomeRepository
-import com.example.domain.model.UserProfile
 
 
 /**
@@ -11,5 +9,6 @@ import com.example.domain.model.UserProfile
  * Copyright (c) 2024 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-class HomeRepositoryImpl(private val apiService: ApiService, private val errorMapper: ErrorMapper) : HomeRepository {
+class HomeRepositoryImpl(private val apiService: ApiService) : HomeRepository {
+
 }

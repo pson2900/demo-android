@@ -1,6 +1,5 @@
 package com.example.data.repository
 
-import com.example.data.remote.ErrorMapper
 import com.example.data.remote.network.ApiService
 import com.example.domain.model.MyProfile
 import com.example.domain.repository.MyProfileRepository
@@ -12,7 +11,7 @@ import kotlinx.coroutines.flow.flow
  * Copyright (c) 2024 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-class MyProfileRepositoryImpl(val apiService: ApiService, val errorMapper: ErrorMapper) : MyProfileRepository {
+class MyProfileRepositoryImpl(val apiService: ApiService) : MyProfileRepository {
     override suspend fun getMyProfile(): Flow<MyProfile> {
         return flow {
             emit(apiService.getProfile().data.toDomain())

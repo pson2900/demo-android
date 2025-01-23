@@ -7,6 +7,6 @@ package com.example.data.remote
  */
 sealed class UIState<out T> {
     data class Success<out T>(val data: T) : UIState<T>()
-    data class Error(val error: Throwable) : UIState<Nothing>()
+    data class Error(val appException: AppException) : UIState<Nothing>()
     data object Loading : UIState<Nothing>()
 }
