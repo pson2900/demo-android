@@ -69,7 +69,7 @@ class AppState(
             initialValue = false,
         )
 
-    var isOnline by mutableStateOf(checkIfOnline())
+   /* var isOnline by mutableStateOf(checkIfOnline())
         private set
 
     fun refreshOnline() {
@@ -88,7 +88,7 @@ class AppState(
         } else {
             cm?.activeNetworkInfo?.isConnectedOrConnecting == true
         }
-    }
+    }*/
  /*   val currentTimeZone = timeZoneMonitor.currentTimeZone
         .stateIn(
             coroutineScope,
@@ -122,7 +122,7 @@ class AppState(
 
     fun navigateToJobDetail(jobId: Int, origin: String, from: NavBackStackEntry) {
         // In order to discard duplicated navigation events, we check the Lifecycle
-        val route = "${Destinations.JOB_DETAIL_ROUTE}/$jobId?origin=$origin"
+        val route = "${Destinations.JobDetail.route}/$jobId?origin=$origin"
         trace("Navigation : ${route}") {
             if (from.lifecycleIsResumed()) {
                 navController.navigate(route = route)
@@ -132,15 +132,13 @@ class AppState(
 
     fun navigateToLogin(from: NavBackStackEntry) {
         // In order to discard duplicated navigation events, we check the Lifecycle
-        val route = Destinations.LOGIN_ROUTE
+        val route = Destinations.Login.route
         trace("Navigation : ${route}") {
             if (from.lifecycleIsResumed()) {
                 navController.toLogin()
             }
         }
     }
-
-
 }
 
 /**
@@ -162,6 +160,7 @@ private tailrec fun findStartDestination(graph: NavDestination): NavDestination 
     return if (graph is NavGraph) findStartDestination(graph.startDestination!!) else graph
 }
 
+/*
 object Destinations {
     const val MAIN = "main"
     const val HOME_ROUTE = "home"
@@ -175,3 +174,4 @@ object Destinations {
     const val ORIGIN = "origin"
 }
 
+*/

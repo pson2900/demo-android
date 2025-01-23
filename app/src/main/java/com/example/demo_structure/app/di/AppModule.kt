@@ -23,5 +23,4 @@ val networkModule = module {
     single<CoroutineDispatcher> { Dispatchers.IO }
     single<ApiService> { RetrofitClient.createService<ApiService>() }
     single<NetworkMonitor> { ConnectivityManagerNetworkMonitor(androidContext(), get()) }
-//    single<TimeZoneMonitor> { TimeZoneBroadcastMonitor(androidContext(), get(), get()) }
 }

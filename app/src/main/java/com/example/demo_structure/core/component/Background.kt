@@ -19,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.app.manager.theme.GradientColors
-import com.example.demo_structure.app.manager.theme.ProductXApplicationTheme
+import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import kotlin.math.tan
 
@@ -44,7 +44,7 @@ fun AppBackground(
 ) {
     val color = ProductXTheme.backgroundTheme.color
     val tonalElevation = ProductXTheme.backgroundTheme.tonalElevation
-    ProductXSurface(
+    AppSurface(
         color = if (color == Color.Unspecified) Color.Transparent else color,
         elevation = if (tonalElevation == Dp.Unspecified) 0.dp else tonalElevation,
         modifier = modifier.fillMaxSize(),
@@ -142,7 +142,7 @@ annotation class ThemePreviews
 @ThemePreviews
 @Composable
 fun BackgroundDefault() {
-    ProductXApplicationTheme(disableDynamicTheming = true) {
+    ApplicationTheme(disableDynamicTheming = true) {
         AppBackground(Modifier.size(100.dp), content = {})
     }
 }
@@ -150,7 +150,7 @@ fun BackgroundDefault() {
 @ThemePreviews
 @Composable
 fun BackgroundDynamic() {
-    ProductXApplicationTheme(disableDynamicTheming = false) {
+    ApplicationTheme(disableDynamicTheming = false) {
         AppBackground(Modifier.size(100.dp), content = {})
     }
 }
@@ -158,7 +158,7 @@ fun BackgroundDynamic() {
 @ThemePreviews
 @Composable
 fun BackgroundAndroid() {
-    ProductXApplicationTheme(androidTheme = true) {
+    ApplicationTheme(androidTheme = true) {
         AppBackground(Modifier.size(100.dp), content = {})
     }
 }
@@ -166,7 +166,7 @@ fun BackgroundAndroid() {
 @ThemePreviews
 @Composable
 fun GradientBackgroundDefault() {
-    ProductXApplicationTheme(disableDynamicTheming = true) {
+    ApplicationTheme(disableDynamicTheming = true) {
         AppGradientBackground(Modifier.size(100.dp), content = {})
     }
 }
@@ -174,7 +174,7 @@ fun GradientBackgroundDefault() {
 @ThemePreviews
 @Composable
 fun GradientBackgroundDynamic() {
-    ProductXApplicationTheme(disableDynamicTheming = false) {
+    ApplicationTheme(disableDynamicTheming = false) {
         AppGradientBackground(Modifier.size(100.dp), content = {})
     }
 }
@@ -182,7 +182,7 @@ fun GradientBackgroundDynamic() {
 @ThemePreviews
 @Composable
 fun GradientBackgroundAndroid() {
-    ProductXApplicationTheme(androidTheme = true) {
+    ApplicationTheme(androidTheme = true) {
         AppGradientBackground(Modifier.size(100.dp), content = {})
     }
 }

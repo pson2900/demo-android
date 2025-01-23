@@ -8,6 +8,7 @@ import com.example.demo_structure.app.manager.theme.AppIcons
 import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.core.navigation.composableWith
+import kotlinx.serialization.Serializable
 
 /**
  * Created by Phạm Sơn at 15:56/2/1/25
@@ -22,7 +23,7 @@ enum class MainDestination(
     val title: String,
     val route: String,
 ) {
-    HOME(
+   /* HOME(
         selectedIcon = AppIcons.homeSelect,
         unselectedIcon = AppIcons.homeUnselect,
         idItem = "HomeTag",
@@ -58,11 +59,11 @@ enum class MainDestination(
         idItem = "UserTag",
         title = "Tôi",
         route = Destinations.USER_ROUTE
-    ),
+    ),*/
 }
 
 fun NavController.toMain(navOptions: NavOptions) =
-    navigate(route = Destinations.MAIN, navOptions)
+    navigate(route = Destinations.Main.route, navOptions)
 
 
 fun NavGraphBuilder.AppNavGraph(
@@ -70,7 +71,7 @@ fun NavGraphBuilder.AppNavGraph(
     topicDestination: NavGraphBuilder.() -> Unit,
 ) {
     composableWith(
-        route = Destinations.MAIN,
+        route = Destinations.Main.route,
         deepLinks = listOf(
             navDeepLink {
                 /**

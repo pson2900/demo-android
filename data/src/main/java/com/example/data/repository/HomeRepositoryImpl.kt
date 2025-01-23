@@ -12,8 +12,4 @@ import com.example.domain.model.UserProfile
  * Email: son.pham@navigosgroup.com
  */
 class HomeRepositoryImpl(private val apiService: ApiService, private val errorMapper: ErrorMapper) : HomeRepository {
-
-    override suspend fun getWelcomeMessage(): UserProfile {
-        return apiService.getUser("a").toDomain()
-    }
 }

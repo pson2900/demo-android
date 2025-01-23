@@ -9,12 +9,12 @@ import androidx.navigation.navOptions
 import com.example.demo_structure.core.navigation.Destinations
 
 fun NavController.toLogin(navOptions: NavOptions = navOptions {}) =
-    navigate(route = Destinations.LOGIN_ROUTE, navOptions)
+    navigate(route = Destinations.Login.route, navOptions)
 
 fun NavGraphBuilder.toLoginScreen(onBackClick: () -> Unit) {
     this.apply {
         composable(
-            route = Destinations.LOGIN_ROUTE,
+            route = Destinations.Login.route,
             deepLinks = listOf(
                 navDeepLink {
                     uriPattern = "Google.com"

@@ -16,7 +16,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -25,7 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
@@ -34,7 +32,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import com.example.demo_structure.app.manager.theme.ProductXApplicationTheme
+import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import kotlinx.coroutines.launch
 
 /**
@@ -149,7 +147,7 @@ fun OverlayLoadingWheel(
 @ThemePreviews
 @Composable
 fun LoadingWheelPreview() {
-    ProductXApplicationTheme {
+    ApplicationTheme {
         Surface {
             AppLoadingWheel(contentDesc = "LoadingWheel")
         }

@@ -9,7 +9,4 @@ import com.example.domain.model.UserProfile
  * Email: son.pham@navigosgroup.com
  */
 class HomeUseCase(private val homeRepository: HomeRepository) {
-    suspend fun execute(): UserProfile {
-        return homeRepository.getWelcomeMessage()
-    }
 }

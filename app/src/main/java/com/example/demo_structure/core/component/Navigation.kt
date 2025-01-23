@@ -23,6 +23,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.app.manager.theme.toIcon
 import com.example.demo_structure.core.navigation.AppState
+import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.screen.main.MainDestination
 import com.example.demo_structure.util.AlwaysOnlineNetworkMonitor
@@ -56,9 +57,9 @@ fun BottomNavigationBar(
 @Composable
 fun RowScope.initBottomMainScreen(appState: AppState) {
     val currentRoute = appState.navController.currentBackStackEntryAsState().value?.destination?.route
-    MainDestination.entries.forEach { item ->
+    Destinations.Main.getEntries().forEach { item ->
         NavigationBarItem(
-            modifier = Modifier.testTag(item.idItem),
+            modifier = Modifier.testTag(item.testTag),
             selected = currentRoute == item.route,
             onClick = {
                 appState.navigateToBottomBarRoute(item.route)
@@ -96,7 +97,7 @@ fun RowScope.initBottomMainScreen(appState: AppState) {
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun BottomNavigationViewPreview() {
-    ProductXPreviewWrapper {
+    AppPreviewWrapper {
         var appState = rememberAppState(networkMonitor = AlwaysOnlineNetworkMonitor())
         BottomNavigationBar(
             modifier = Modifier,

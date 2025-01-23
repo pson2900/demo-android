@@ -1,8 +1,9 @@
 package com.example.data.remote.network
 
-import com.example.data.remote.response.UserProfileResponse
+import com.example.data.remote.response.BaseResponse
+import com.example.data.remote.response.MyProfileResponse
+import kotlinx.coroutines.flow.Flow
 import retrofit2.http.GET
-import retrofit2.http.Path
 
 /**
  * Created by Phạm Sơn at 11:08/28/12/24
@@ -10,6 +11,6 @@ import retrofit2.http.Path
  * Email: son.pham@navigosgroup.com
  */
 interface ApiService {
-    @GET("user/{id}")
-    suspend fun getUser(@Path("id") userId: String): UserProfileResponse
+    @GET("jobseeker/api/v1/jobseeker-info/profile")
+    suspend fun getProfile(): BaseResponse<MyProfileResponse>
 }

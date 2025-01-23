@@ -85,7 +85,7 @@ fun ProductXFilterChip(
 @ThemePreviews
 @Composable
 fun ChipPreview() {
-    ProductXPreviewWrapper {
+    AppPreviewWrapper {
         ProductXFilterChip(selected = true, onSelectedChange = {}) {
             Text("Chip")
         }

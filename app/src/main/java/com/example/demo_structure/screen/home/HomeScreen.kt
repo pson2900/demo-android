@@ -51,14 +51,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowSizeClass
 import com.example.demo_structure.JobDetail
 import com.example.demo_structure.R
-import com.example.demo_structure.core.component.AppBarIcon
 import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.JobDetailCard
 import com.example.demo_structure.core.component.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.core.component.LocalSharedTransitionScope
-import com.example.demo_structure.core.component.ProductXPreviewWrapper
-import com.example.demo_structure.core.component.ProductXScaffold
-import com.example.demo_structure.core.component.ProductXSurface
+import com.example.demo_structure.core.component.AppPreviewWrapper
+import com.example.demo_structure.core.component.AppScaffold
+import com.example.demo_structure.core.component.AppSurface
 import com.example.demo_structure.jobResult
 import com.example.demo_structure.screen.job_detail.nonSpatialExpressiveSpring
 import com.example.demo_structure.screen.job_detail.spatialExpressiveSpring
@@ -129,7 +128,7 @@ fun HomeContent(onItemSelected: (Int, String) -> Unit) {
     val columState = rememberLazyListState()
     val itemAnimationSpecFade = nonSpatialExpressiveSpring<Float>()
     val itemPlacementSpec = spatialExpressiveSpring<IntOffset>()
-    ProductXScaffold(
+    AppScaffold(
         contentWindowInsets = WindowInsets.systemBars,
         modifier = Modifier
             .fillMaxSize(),
@@ -147,7 +146,7 @@ fun HomeContent(onItemSelected: (Int, String) -> Unit) {
                 })*/
         }
     ) {
-        ProductXSurface(
+        AppSurface(
             modifier = Modifier.fillMaxSize()
         ) {
             LazyColumn(
@@ -180,7 +179,7 @@ fun HomeContent(onItemSelected: (Int, String) -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun ItemResultPreview() {
-    ProductXPreviewWrapper {
+    AppPreviewWrapper {
         ItemResult(Modifier, jobResult[0], onItemSelected = { jobId, str ->
 
         })
@@ -190,7 +189,7 @@ fun ItemResultPreview() {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    ProductXPreviewWrapper {
+    AppPreviewWrapper {
         HomeContent() { jobId, str ->
 
         }

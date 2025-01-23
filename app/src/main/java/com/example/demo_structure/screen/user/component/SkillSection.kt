@@ -31,7 +31,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import com.example.demo_structure.core.component.ProductXPreviewWrapper
+import com.example.demo_structure.core.component.AppPreviewWrapper
 
 /**
  * Created by Phạm Sơn at 09:30/16/1/25
@@ -211,7 +211,7 @@ fun SkillChip(skill: String) {
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun SkillSectionPreview() {
-    ProductXPreviewWrapper {
+    AppPreviewWrapper {
         SkillSection(
             skills = listOf("Skill 1", "Skill 2", "Skill 3", "Skill 4", "Skill 5", "Skill 6", "Skill 7", "Skill 8", "Skill 9")
         )

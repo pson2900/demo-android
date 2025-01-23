@@ -14,6 +14,6 @@ import org.koin.dsl.module
  */
 val dataModule = module {
     single<HomeRepository> { HomeRepositoryImpl(get(), get()) }
-    single<MyProfileRepository> { MyProfileRepositoryImpl(get()) }
+    single<MyProfileRepository> { MyProfileRepositoryImpl(get(), get()) }
     single<ErrorMapper> { ErrorMapper() }
 }

@@ -8,5 +8,4 @@ import com.example.domain.model.UserProfile
  * Email: son.pham@navigosgroup.com
  */
 interface HomeRepository {
-    suspend fun getWelcomeMessage(): UserProfile
 }

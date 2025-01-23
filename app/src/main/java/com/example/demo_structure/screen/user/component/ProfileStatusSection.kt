@@ -33,7 +33,7 @@ import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.AppIcons
 import com.example.demo_structure.core.component.AppBox
 import com.example.demo_structure.core.component.AppButton
-import com.example.demo_structure.core.component.ProductXPreviewWrapper
+import com.example.demo_structure.core.component.AppPreviewWrapper
 
 /**
  * Created by Phạm Sơn at 13:20/14/1/25
@@ -141,7 +141,9 @@ fun ProfileProgressBar(progress: Int, max: Int) {
                 )
                 .fillMaxWidth(progress.toFloat() / max)
                 .fillMaxHeight()
-        )
+        ){
+
+        }
         Text(text = "$progress/$max", style = MaterialTheme.typography.labelSmall, modifier = Modifier.align(Alignment.Center), color = Color.Black)
     }
 }
@@ -150,7 +152,7 @@ fun ProfileProgressBar(progress: Int, max: Int) {
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun StatusSectionPreview() {
-    ProductXPreviewWrapper {
+    AppPreviewWrapper {
         ProfileStatusSection(Modifier.wrapContentHeight()) {
 
         }

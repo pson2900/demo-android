@@ -42,15 +42,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.window.layout.DisplayFeature
 import com.example.demo_structure.app.InitializeApp
 import com.example.demo_structure.app.manager.LanguageManager
 import com.example.demo_structure.core.component.BottomNavigationBar
 import com.example.demo_structure.core.component.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.core.component.LocalSharedTransitionScope
-import com.example.demo_structure.core.component.ProductXPreviewWrapper
-import com.example.demo_structure.core.component.ProductXScaffold
-import com.example.demo_structure.core.component.ProductXSnackBar
+import com.example.demo_structure.core.component.AppPreviewWrapper
+import com.example.demo_structure.core.component.AppScaffold
+import com.example.demo_structure.core.component.AppSnackBar
 import com.example.demo_structure.core.component.initBottomMainScreen
 import com.example.demo_structure.core.component.rememberScaffoldState
 import com.example.demo_structure.core.navigation.MainNavHost
@@ -171,7 +170,7 @@ fun MainContent(
     val animatedVisibilityScope = LocalNavAnimatedVisibilityScope.current
         ?: throw IllegalStateException("No SharedElementScope found")
 
-    ProductXScaffold(
+    AppScaffold(
         modifier = modifier
             .semantics {
                 testTagsAsResourceId = true
@@ -185,7 +184,7 @@ fun MainContent(
             SnackbarHost(
                 hostState = it,
                 modifier = Modifier.systemBarsPadding(),
-                snackbar = { snackbarData -> ProductXSnackBar(snackbarData) }
+                snackbar = { snackbarData -> AppSnackBar(snackbarData) }
             )
         },
         snackBarHostState = scaffoldState.snackBarHostState,
@@ -214,17 +213,17 @@ fun MainContent(
 @Preview
 @Composable
 fun MainContentPreview() {
-    ProductXPreviewWrapper {
+    AppPreviewWrapper {
         val context = LocalContext.current
         val appState = rememberAppState(networkMonitor = koinInject())
         val snackbarHostState = SnackbarHostState()
-        ProductXScaffold(
+        AppScaffold(
             modifier = Modifier,
             snackbarHost = {
                 SnackbarHost(
                     hostState = it,
                     modifier = Modifier.systemBarsPadding(),
-                    snackbar = { snackbarData -> ProductXSnackBar(snackbarData) }
+                    snackbar = { snackbarData -> AppSnackBar(snackbarData) }
                 )
             },
             snackBarHostState = snackbarHostState,

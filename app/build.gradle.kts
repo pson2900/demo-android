@@ -9,6 +9,7 @@ plugins {
 
 
 android {
+
     namespace = "com.example.demo_structure"
     compileSdk = 35
 
@@ -117,9 +118,12 @@ dependencies {
 
     // Mark: Retrofit
     implementation(libs.retrofit) // Retrofit for network requests
+    implementation(libs.retrofit.moshi.kotlin)
+    implementation(libs.retrofit.converter.moshi)
     implementation(libs.retrofit.converter.gson) // Retrofit Gson converter
     implementation(libs.retrofit.logging.interceptor) // Retrofit logging interceptor
     implementation(libs.retrofit.kotlin.coroutines.adapter) // Retrofit Kotlin coroutines adapter
+    implementation(libs.retrofit.kotlin.serialization) // Retrofit Kotlin coroutines adapter
     testImplementation(libs.retrofit.mockwebserver) // MockWebServer for testing Retrofit
 
     // Mark: Compose
@@ -150,7 +154,7 @@ dependencies {
 
     // Mark: Accompanist for additional Compose functionality
     implementation(libs.accompanist.drawablepainter) // Drawable painter for Compose
-    implementation(libs.accompanist.navigation.animation) // Navigation with animations for Compose
+//    implementation(libs.accompanist.navigation.animation) // Navigation with animations for Compose
     implementation(libs.accompanist.permissions)
 
     // Mark: AndroidX Material3 Adaptive Navigation Suite for Compose

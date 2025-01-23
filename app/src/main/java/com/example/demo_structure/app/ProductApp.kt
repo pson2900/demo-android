@@ -15,7 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.demo_structure.app.manager.theme.ProductXApplicationTheme
+import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.core.component.AppBackground
 import com.example.demo_structure.core.component.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.core.component.LocalSharedTransitionScope
@@ -44,7 +44,7 @@ fun InitializeApp(
     themeSettings: ThemeSettings,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
-    ProductXApplicationTheme(
+    ApplicationTheme(
         darkTheme = themeSettings.darkTheme,
         androidTheme = themeSettings.androidTheme,
         disableDynamicTheming = themeSettings.disableDynamicTheming,

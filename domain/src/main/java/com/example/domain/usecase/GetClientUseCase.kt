@@ -9,5 +9,4 @@ import com.example.domain.repository.HomeRepository
  * Email: son.pham@navigosgroup.com
  */
 class GetClientUseCase (private val homeRepository: HomeRepository) {
-    suspend fun execute() = homeRepository.getWelcomeMessage()
 }

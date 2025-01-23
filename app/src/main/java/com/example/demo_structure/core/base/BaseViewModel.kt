@@ -14,15 +14,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.remote.UIState
 import com.example.demo_structure.JobDetail
-import com.example.demo_structure.core.component.AppLoadingWheel
-import com.example.demo_structure.core.component.ProductXPreviewWrapper
 import com.example.demo_structure.app.manager.theme.ProductXTheme
+import com.example.demo_structure.core.component.AppLoadingWheel
+import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.google.gson.Gson
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 /**
  * Created by Phạm Sơn at 09:55/29/12/24
@@ -50,6 +52,18 @@ abstract class BaseViewModel constructor(val savedStateHandle: SavedStateHandle)
         }
     }
 
+    protected inline fun <reified T> emitLoading(stateFlow: MutableStateFlow<UIState<T>>) {
+        stateFlow.value = UIState.Loading
+    }
+
+    protected inline fun <reified T> emitSuccess(stateFlow: MutableStateFlow<UIState<T>>, data: T) {
+        stateFlow.value = UIState.Success(data)
+    }
+
+    protected inline fun <reified T> emitError(stateFlow: MutableStateFlow<UIState<T>>, error: Throwable) {
+        stateFlow.value = UIState.Error(error)
+    }
+
     protected inline fun <reified T> wrapperApiCall(
         crossinline call: suspend () -> Flow<T>,
         stateFlow: MutableStateFlow<UIState<T>>,
@@ -58,32 +72,34 @@ abstract class BaseViewModel constructor(val savedStateHandle: SavedStateHandle)
         viewModelScope.launch {
             val tag = "wrapperApiCall"
             Log.d(tag, "Starting API call for dataKey: $dataKey")
-            val savedData = dataKey?.let { loadFromSavedState<T>(it) }
-            if (savedData == null) {
-                Log.d(tag, "No saved data found for dataKey: $dataKey, emitting loading state")
-                stateFlow.value = UIState.Loading
-                delay(3000L)
-            } else {
-                Log.d(tag, "Loaded data from saved state: $savedData for dataKey: $dataKey, emitting success")
-                stateFlow.value = UIState.Success<T>(savedData)
-            }
             try {
                 call()
+                    .onStart {
+                        val savedData = dataKey?.let { loadFromSavedState<T>(it) }
+                        if (savedData == null) {
+                            Log.d(tag, "No saved data for $dataKey, emitting loading state")
+                            emitLoading(stateFlow)
+                            delay(2000L)
+                        } else {
+                            Log.d(tag, "Loaded data for $dataKey, emitting success")
+                            emitSuccess(stateFlow, savedData)
+                        }
+                    }
                     .catch { error ->
-                        Log.e(tag, "API call failed with catch for dataKey: $dataKey", error)
-                        stateFlow.value = UIState.Error(error)
+                        Log.e(tag, "API call failed for $dataKey", error)
+                        emitError(stateFlow, error)
                     }
                     .collect { data ->
-                        Log.d(tag, "API call success with collect: $data for dataKey: $dataKey")
-                        if (dataKey != null) {
-                            Log.d(tag, "Saving the data using the dataKey: $dataKey")
-                            saveToSavedState(dataKey, data)
-                        }
-                        stateFlow.value = UIState.Success(data)
+                        Log.d(tag, "API call success for $dataKey: $data")
+                        dataKey?.let { saveToSavedState(it, data) }
+                        emitSuccess(stateFlow, data)
                     }
+            } catch (e: CancellationException) {
+                Log.d(tag, "API call canceled for dataKey: $dataKey in outer try-catch")
             } catch (e: Exception) {
-                stateFlow.value = UIState.Error(e)
+                emitError(stateFlow, e)
             }
+
         }
     }
 }
@@ -102,14 +118,20 @@ fun <T> DataStateWrapper(
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(text = "Error: $message", color = ProductXTheme.colors.error)
         }
-        Log.d("QQQ", "onErrorContent")
+        Log.d("QQQ", "onErrorContent: ${message}")
     },
-    onSuccessContent: @Composable (data: T) -> Unit
+    onSuccessContent: @Composable (data: T) -> Unit = {
+        Log.d("QQQ", "onSuccessContent")
+    }
 ) {
     when (state) {
         is UIState.Loading -> onLoadingContent()
         is UIState.Success -> onSuccessContent(state.data)
-        is UIState.Error -> onErrorContent("")
+        is UIState.Error -> {
+            state.error.printStackTrace()
+            val errorMessage = state.error.message ?: "Unknown error"
+            onErrorContent(errorMessage)
+        }
     }
 }
 
@@ -117,7 +139,7 @@ fun <T> DataStateWrapper(
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun DataStateWrapperPreview() {
-    ProductXPreviewWrapper {
+    AppPreviewWrapper {
         DataStateWrapper<JobDetail>(
             state = UIState.Loading,
             onSuccessContent = {}

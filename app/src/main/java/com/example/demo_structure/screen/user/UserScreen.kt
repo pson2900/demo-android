@@ -18,6 +18,9 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -30,18 +33,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.R
-import com.example.demo_structure.app.manager.theme.ProductXApplicationTheme
+import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.core.base.DataStateWrapper
 import com.example.demo_structure.core.component.AppLoadingWheel
-import com.example.demo_structure.core.component.ProductXPreviewWrapper
-import com.example.demo_structure.core.component.ProductXScaffold
-import com.example.demo_structure.core.component.ProductXSnackBar
+import com.example.demo_structure.core.component.AppPreviewWrapper
+import com.example.demo_structure.core.component.AppScaffold
+import com.example.demo_structure.core.component.AppSnackBar
 import com.example.demo_structure.screen.user.component.BasicInformationItem
 import com.example.demo_structure.screen.user.component.HeaderSection
 import com.example.demo_structure.screen.user.component.OpportunitiesSection
 import com.example.demo_structure.screen.user.component.ProfileStatusSection
 import com.example.demo_structure.screen.user.component.SkillSection
-import com.example.domain.model.BasicInformation
 import com.example.domain.model.MyProfile
 import com.example.domain.model.Profile
 import org.koin.androidx.compose.koinViewModel
@@ -57,32 +59,37 @@ internal fun UserScreen(
     userViewModel: UserViewModel = koinViewModel()
 ) {
     val state by userViewModel.state.collectAsStateWithLifecycle()
-    val rememberHostState = remember { SnackbarHostState() }
-    LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
-        clearUndoState()
+
+    LaunchedEffect(userViewModel) {
+        userViewModel.fetchMyProfile()
+    }
+    DisposableEffect(userViewModel) {
+        onDispose {
+            clearUndoState()
+        }
     }
 
     DataStateWrapper(modifier = modifier, state = state) { myProfile ->
         UserContent(
             modifier = modifier.fillMaxSize(),
-            myProfile = myProfile,
             onNavigateToLogin = onNavigateToLogin,
-            rememberHostState = rememberHostState
+            myProfile = myProfile
         )
     }
 }
 
 @Composable
-fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: () -> Unit, rememberHostState: SnackbarHostState, myProfile: MyProfile) {
-    ProductXApplicationTheme {
-        ProductXScaffold(
+fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: () -> Unit, myProfile: MyProfile) {
+    val rememberHostState = remember { SnackbarHostState() }
+    ApplicationTheme {
+        AppScaffold(
             modifier = modifier.fillMaxSize(),
             snackBarHostState = rememberHostState,
             snackbarHost = {
                 SnackbarHost(
                     hostState = it,
                     modifier = Modifier.systemBarsPadding(),
-                    snackbar = { snackbarData -> ProductXSnackBar(snackbarData) }
+                    snackbar = { snackbarData -> AppSnackBar(snackbarData) }
                 )
             }
         ) { paddingValue ->
@@ -124,7 +131,7 @@ fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: () -> Unit, re
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun UserContentPreview() {
-    ProductXPreviewWrapper { modifier ->
+    AppPreviewWrapper { modifier ->
         /* val hostState = remember { SnackbarHostState() }
          UserContent(onNavigateToLogin = {
 

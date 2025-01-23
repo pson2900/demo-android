@@ -21,7 +21,7 @@ import java.util.UUID
  * Email: son.pham@navigosgroup.com
  */
 @Composable
-fun ProductXSnackBar(
+fun AppSnackBar(
     snackbarData: SnackbarData,
     modifier: Modifier = Modifier,
     actionOnNewLine: Boolean = false,
@@ -40,6 +40,7 @@ fun ProductXSnackBar(
         actionColor = actionColor
     )
 }
+
 
 data class Message(val id: Long, @StringRes val messageId: Int)
 

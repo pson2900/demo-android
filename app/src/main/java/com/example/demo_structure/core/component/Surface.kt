@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -26,7 +27,7 @@ import kotlin.math.ln
  * Email: son.pham@navigosgroup.com
  */
 @Composable
-fun ProductXSurface(
+fun AppSurface(
     modifier: Modifier = Modifier,
     shape: Shape = RectangleShape,
     color: Color = ProductXTheme.colors.background,
@@ -49,6 +50,17 @@ fun ProductXSurface(
         CompositionLocalProvider(LocalContentColor provides contentColor, content = content)
     }
 }
+
+@ThemePreviews
+@Composable
+fun AppSurfacePreviews() {
+    AppPreviewWrapper {
+        AppSurface(){
+            Text(text = "AppSurface")
+        }
+    }
+}
+
 
 @Composable
 private fun getBackgroundColorForElevation(color: Color, elevation: Dp): Color {

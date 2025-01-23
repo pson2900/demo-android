@@ -19,7 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.IconImage
-import com.example.demo_structure.core.component.ProductXPreviewWrapper
+import com.example.demo_structure.core.component.AppPreviewWrapper
 
 /**
  * Created by Phạm Sơn at 13:20/14/1/25
@@ -133,7 +132,7 @@ fun OpportunitiesItem(modifier: Modifier = Modifier, icon: Int, colorBorder: Int
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun OpportunitiesSectionPreview() {
-    ProductXPreviewWrapper {
+    AppPreviewWrapper {
         OpportunitiesSection(Modifier)
     }
 }

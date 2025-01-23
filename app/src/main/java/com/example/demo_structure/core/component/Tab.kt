@@ -49,7 +49,7 @@ fun AppTab(
             ProvideTextStyle(
                 value = style,
                 content = {
-                    Box(modifier = Modifier.padding(top = NiaTabDefaults.TabTopPadding)) {
+                    Box(modifier = Modifier.padding(top = TabDefaults.TabTopPadding)) {
                         text()
                     }
                 },
@@ -91,7 +91,7 @@ fun AppTabRow(
 @ThemePreviews
 @Composable
 fun TabsPreview() {
-    ProductXPreviewWrapper {
+    AppPreviewWrapper {
         val titles = listOf("MyJob", "Applied", "Saved")
         AppTabRow(selectedTabIndex = 0) {
             titles.forEachIndexed { index, title ->
@@ -105,6 +105,6 @@ fun TabsPreview() {
     }
 }
 
-object NiaTabDefaults {
+object TabDefaults {
     val TabTopPadding = 7.dp
 }

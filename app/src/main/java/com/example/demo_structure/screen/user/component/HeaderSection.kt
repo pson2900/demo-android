@@ -37,8 +37,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.AppIcons
 import com.example.demo_structure.app.manager.theme.IconImage
-import com.example.demo_structure.core.component.ProductXPreviewWrapper
-import com.example.demo_structure.core.component.ProductXSurface
+import com.example.demo_structure.core.component.AppPreviewWrapper
+import com.example.demo_structure.core.component.AppSurface
 
 @Composable
 fun HeaderSection(title: String, avatar: String) {
@@ -64,7 +64,7 @@ fun HeaderSection(title: String, avatar: String) {
         ) {
             Image(ImageVector.vectorResource(R.drawable.ic_setting), contentDescription = null)
         }
-        ProductXSurface(
+        AppSurface(
             shape = RoundedCornerShape(30.dp, 30.dp, 0.dp, 0.dp),
             modifier = Modifier
                 .fillMaxWidth()
@@ -154,7 +154,7 @@ fun HeaderSection(title: String, avatar: String) {
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 fun HeaderSectionPreview() {
-    ProductXPreviewWrapper {
+    AppPreviewWrapper {
         HeaderSection(
             "Hiếu Minh Nguyễn", ""
         )

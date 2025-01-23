@@ -4,9 +4,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 
 /**
  * Created by Phạm Sơn at 15:08/16/1/25
@@ -38,4 +40,15 @@ fun AppButton(
         content = content
     )
 
+}
+
+
+@Composable
+@ThemePreviews
+fun AppButtonPreview(){
+    AppPreviewWrapper {
+        AppButton(onClick = {}, background = ProductXTheme.colors.background, colorEffect = ProductXTheme.colors.onPrimary) {
+            Text("OnClick Item")
+        }
+    }
 }

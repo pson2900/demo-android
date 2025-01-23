@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.AppIcons
 import com.example.demo_structure.app.manager.theme.IconImage
-import com.example.demo_structure.core.component.ProductXPreviewWrapper
+import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.domain.model.BasicInformation
 import com.example.domain.model.Profile
 
@@ -195,7 +195,7 @@ fun BasicInformationItemPreview() {
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun BasicInformationSectionPreview() {
-    ProductXPreviewWrapper {
+    AppPreviewWrapper {
         BasicInformationSection(
             listOf(
                 BasicInformation(R.drawable.ic_my_profile_opprotunities_crow, "Kinh nghiệm làm việc", 0),

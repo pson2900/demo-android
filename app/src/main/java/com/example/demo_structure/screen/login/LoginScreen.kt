@@ -45,9 +45,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.R
 import com.example.demo_structure.core.component.AppLoadingWheel
-import com.example.demo_structure.core.component.ProductXPreviewWrapper
-import com.example.demo_structure.core.component.ProductXScaffold
-import com.example.demo_structure.app.manager.theme.ProductXApplicationTheme
+import com.example.demo_structure.core.component.AppPreviewWrapper
+import com.example.demo_structure.core.component.AppScaffold
+import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -87,8 +87,8 @@ internal fun LoginScreen(
         }
     }
 
-    ProductXApplicationTheme {
-        ProductXScaffold(
+    ApplicationTheme {
+        AppScaffold(
             modifier = modifier,
             snackBarHostState = rememberHostState
         ) {
@@ -198,7 +198,7 @@ fun CircularProgressBar(
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun UserContentPreview() {
-    ProductXPreviewWrapper { modifier ->
+    AppPreviewWrapper { modifier ->
         LoginContent(modifier)
     }
 }

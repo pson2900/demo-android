@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -28,13 +27,13 @@ import com.example.demo_structure.screen.main.AppNavGraph
 import com.example.demo_structure.screen.opportunity.OpportunityNavGraph
 import com.example.demo_structure.screen.user.UserNavGraph
 import com.example.demo_structure.util.logNavigation
-import com.google.accompanist.navigation.animation.AnimatedNavHost
 
 /**
  * Created by Phạm Sơn at 14:59/3/1/25
  * Copyright (c) 2025 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
+
 
 fun NavGraphBuilder.composableWith(
     route: String,
@@ -66,7 +65,7 @@ fun AppNavHost(
     logNavigation(navController)
     NavHost(
         navController = navController,
-        startDestination = Destinations.MAIN,
+        startDestination = Destinations.Main.route,
         modifier = modifier,
         enterTransition = { fadeIn(animationSpec = tween(500)) },
         exitTransition = { fadeOut(animationSpec = tween(500)) },
@@ -80,7 +79,7 @@ fun AppNavHost(
 
             }
 
-            toLoginScreen(){
+            toLoginScreen() {
                 appState.upPress()
             }
 
@@ -98,7 +97,7 @@ fun MainNavHost(
     appState.navController
     NavHost(
         navController = appState.navController,
-        startDestination = Destinations.HOME_ROUTE,
+        startDestination = Destinations.Main.Home.route,
         modifier = modifier,
         enterTransition = { fadeIn(animationSpec = tween(500)) },
         exitTransition = { fadeOut(animationSpec = tween(500)) },
