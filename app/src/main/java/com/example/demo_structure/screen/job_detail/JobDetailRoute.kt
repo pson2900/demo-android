@@ -9,12 +9,8 @@ import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.core.navigation.composableWith
 import org.koin.androidx.compose.koinViewModel
 
-fun NavController.toJobDetail(jobId: Int, origin: String, navOptions: NavOptions = androidx.navigation.navOptions { }) =
-    navigate(
-        route = "${Destinations.JobDetail.route}/" +
-                "$jobId" +
-                "?origin=${origin}", navOptions
-    )
+fun NavController.toJobDetail(route: String, navOptions: NavOptions = androidx.navigation.navOptions { }) =
+    navigate(route = route, navOptions = navOptions)
 
 fun NavGraphBuilder.JobDetailNavGraph(onBackClick: () -> Unit) {
     composableWith(

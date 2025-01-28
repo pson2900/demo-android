@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toKotlinTimeZone
+import org.koin.core.component.KoinComponent
 import java.time.ZoneId
 
 /**
@@ -49,9 +50,9 @@ interface TimeZoneMonitor {
 
 internal class TimeZoneBroadcastMonitor(
     private val context: Context,
-    ioDispatcher: CoroutineDispatcher,
-    appScope: CoroutineScope,
-) : TimeZoneMonitor {
+    private val appScope: CoroutineScope,
+    private val ioDispatcher: CoroutineDispatcher
+) :KoinComponent, TimeZoneMonitor {
 
     override val currentTimeZone: Flow<TimeZone> =
         callbackFlow {

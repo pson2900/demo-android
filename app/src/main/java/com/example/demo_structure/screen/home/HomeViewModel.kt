@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
  * Copyright (c) 2025 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-class HomeViewModel(stateHandle: SavedStateHandle) : BaseViewModel(stateHandle){
+class HomeViewModel(savedStateHandle: SavedStateHandle) : BaseViewModel(savedStateHandle){
     val homeUiState: StateFlow<HomeState> = MutableStateFlow<HomeState>(HomeState.Loading).apply {
         viewModelScope.launch {
             delay(2000)

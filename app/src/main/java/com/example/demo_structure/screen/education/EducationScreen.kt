@@ -34,9 +34,9 @@ import org.koin.androidx.compose.koinViewModel
  */
 
 @Composable
-fun EducationScreen(viewModel: EducationResultViewModel, onTopicClick: (String) -> Unit) {
+fun EducationScreen(viewModel: EducationViewModel, onTopicClick: (String) -> Unit) {
     val modifier: Modifier = Modifier.fillMaxSize()
-    val state = viewModel.uiState.collectAsStateWithLifecycle()
+    val state = viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     ApplicationTheme {

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -20,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -29,12 +29,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
-import com.example.demo_structure.core.base.DataStateWrapper
 import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
@@ -58,10 +55,13 @@ internal fun UserScreen(
     clearUndoState: () -> Unit = {},
     userViewModel: UserViewModel = koinViewModel()
 ) {
-    val state by userViewModel.state.collectAsStateWithLifecycle()
+    val myProfileState by userViewModel.myProfileState.collectAsStateWithLifecycle()
+    val featureItemState by userViewModel.featureItemState.collectAsStateWithLifecycle()
 
     LaunchedEffect(userViewModel) {
         userViewModel.fetchMyProfile()
+        userViewModel.fetchListItem()
+
     }
     DisposableEffect(userViewModel) {
         onDispose {
@@ -69,14 +69,19 @@ internal fun UserScreen(
         }
     }
 
-    DataStateWrapper(modifier = modifier, state = state) { myProfile ->
-        UserContent(
-            modifier = modifier.fillMaxSize(),
-            onNavigateToLogin = onNavigateToLogin,
-            myProfile = myProfile
-        )
-    }
+    UserViewModelState.ToMyProfileUiState(modifier, myProfileState, onNavigateToLogin)
+    UserViewModelState.ToFeatureItemUiState(modifier, featureItemState, onNavigateToLogin)
+
+    /*    DataStateWrapper(modifier = modifier, uiState = state) { userState ->
+            Log.d("QQQ","userState: $userState")
+            UserContent(
+                modifier = modifier.fillMaxSize(),
+                onNavigateToLogin = onNavigateToLogin,
+                myProfile = userState
+            )
+        }*/
 }
+
 
 @Composable
 fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: () -> Unit, myProfile: MyProfile) {
@@ -98,33 +103,37 @@ fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: () -> Unit, my
                     .fillMaxSize()
                     .background(color = colorResource(R.color.anti_flash_white))
             ) {
-
-                val basicInformation = remember { (myProfile.profiles.find { it is Profile.BasicProfile } as? Profile.BasicProfile)?.basic }
                 LazyColumn(Modifier) {
-                    item { HeaderSection(title = "${basicInformation?.lastName} ${basicInformation?.firstName}", avatar = basicInformation?.photo ?: "") }
-                    item { Spacer(Modifier.size(24.dp)) }
-                    item {
-                        ProfileStatusSection(onClick = {
-
-                        })
-                    }
-                    item { Spacer(Modifier.height(24.dp)) }
-                    item { OpportunitiesSection() }
-                    item { Spacer(Modifier.height(24.dp)) }
-                    item { SkillSection(myProfile.skill.map { it.name ?: "" }) }
-                    item { Spacer(Modifier.height(24.dp)) }
-                    item { Text("Thông tin hồ sơ", color = Color.Black, modifier = Modifier.padding(10.dp, 0.dp, 10.dp, 0.dp), style = MaterialTheme.typography.titleLarge) }
-                    item { Spacer(Modifier.height(12.dp)) }
-                    items(myProfile.profiles.size) { index ->
-                        BasicInformationItem(myProfile.profiles[index]) {
-
-                        }
-                    }
-                    item { Spacer(Modifier.height(12.dp)) }
+                    myProfileBody(myProfile)
                 }
             }
         }
     }
+}
+
+fun LazyListScope.myProfileBody(myProfile: MyProfile){
+    val basicInformation = (myProfile.profiles.find { it is Profile.BasicProfile } as? Profile.BasicProfile)?.basic
+    item { HeaderSection(title = "${basicInformation?.lastName} ${basicInformation?.firstName}", avatar = basicInformation?.photo ?: "") }
+    item { Spacer(Modifier.size(24.dp)) }
+    item {
+        ProfileStatusSection(onClick = {
+
+        })
+    }
+    item { Spacer(Modifier.height(24.dp)) }
+    item { OpportunitiesSection() }
+    item { Spacer(Modifier.height(24.dp)) }
+    item { SkillSection(myProfile.skill.map { it.name ?: "" }) }
+    item { Spacer(Modifier.height(24.dp)) }
+    item { Text("Thông tin hồ sơ", color = Color.Black, modifier = Modifier.padding(10.dp, 0.dp, 10.dp, 0.dp), style = MaterialTheme.typography.titleLarge) }
+    item { Spacer(Modifier.height(12.dp)) }
+    items(myProfile.profiles.size) { index ->
+        BasicInformationItem(myProfile.profiles[index]) {
+
+        }
+    }
+    item { Spacer(Modifier.height(12.dp)) }
+
 }
 
 @Preview("Light Mode")

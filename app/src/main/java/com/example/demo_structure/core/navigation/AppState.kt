@@ -1,27 +1,22 @@
 package com.example.demo_structure.core.navigation
 
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.util.trace
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.demo_structure.screen.job_detail.toJobDetail
 import com.example.demo_structure.screen.login.toLogin
 import com.example.demo_structure.util.NetworkMonitor
+import com.example.demo_structure.util.TimeZoneMonitor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -42,14 +37,14 @@ fun rememberAppState(
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
     context: Context = LocalContext.current,
-//    timeZoneMonitor: TimeZoneMonitor = koinInject(),
+    timeZoneMonitor: TimeZoneMonitor = koinInject(),
 ): AppState = remember(key1 = navController, key2 = coroutineScope, calculation = {
     AppState(
         navController = navController,
         coroutineScope = coroutineScope,
         networkMonitor = networkMonitor,
-        context = context
-//        timeZoneMonitor = timeZoneMonitor,
+        context = context,
+        timeZoneMonitor = timeZoneMonitor,
     )
 })
 
@@ -58,8 +53,8 @@ class AppState(
     val navController: NavHostController,
     coroutineScope: CoroutineScope,
     networkMonitor: NetworkMonitor,
-    var context: Context
-//    timeZoneMonitor: TimeZoneMonitor,
+    var context: Context,
+    timeZoneMonitor: TimeZoneMonitor,
 ) {
     val isOffline = networkMonitor.isOnline
         .map(Boolean::not)
@@ -69,32 +64,32 @@ class AppState(
             initialValue = false,
         )
 
-   /* var isOnline by mutableStateOf(checkIfOnline())
-        private set
+    /* var isOnline by mutableStateOf(checkIfOnline())
+         private set
 
-    fun refreshOnline() {
-        isOnline = checkIfOnline()
-    }
+     fun refreshOnline() {
+         isOnline = checkIfOnline()
+     }
 
 
-    @Suppress("DEPRECATION")
-    private fun checkIfOnline(): Boolean {
-        val cm = getSystemService(context, ConnectivityManager::class.java)
+     @Suppress("DEPRECATION")
+     private fun checkIfOnline(): Boolean {
+         val cm = getSystemService(context, ConnectivityManager::class.java)
 
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val capabilities = cm?.getNetworkCapabilities(cm.activeNetwork) ?: return false
-            capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
-                    capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
-        } else {
-            cm?.activeNetworkInfo?.isConnectedOrConnecting == true
-        }
-    }*/
- /*   val currentTimeZone = timeZoneMonitor.currentTimeZone
-        .stateIn(
-            coroutineScope,
-            SharingStarted.WhileSubscribed(5_000),
-            TimeZone.currentSystemDefault(),
-        )*/
+         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+             val capabilities = cm?.getNetworkCapabilities(cm.activeNetwork) ?: return false
+             capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+                     capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+         } else {
+             cm?.activeNetworkInfo?.isConnectedOrConnecting == true
+         }
+     }*/
+    /*   val currentTimeZone = timeZoneMonitor.currentTimeZone
+           .stateIn(
+               coroutineScope,
+               SharingStarted.WhileSubscribed(5_000),
+               TimeZone.currentSystemDefault(),
+           )*/
 
     // ----------------------------------------------------------
     // Navigation state source of truth
@@ -125,7 +120,7 @@ class AppState(
         val route = "${Destinations.JobDetail.route}/$jobId?origin=$origin"
         trace("Navigation : ${route}") {
             if (from.lifecycleIsResumed()) {
-                navController.navigate(route = route)
+                navController.toJobDetail(Destinations.JobDetail.createRoute(jobId.toString(), origin))
             }
         }
     }
@@ -139,6 +134,8 @@ class AppState(
             }
         }
     }
+
+
 }
 
 /**

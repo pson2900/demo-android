@@ -7,7 +7,6 @@ import com.example.domain.model.MyProfile
 import com.example.domain.usecase.MyProfileUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 /**
  * Created by Phạm Sơn at 15:17/3/1/25
@@ -15,34 +14,35 @@ import kotlinx.coroutines.flow.asStateFlow
  * Email: son.pham@navigosgroup.com
  */
 class UserViewModel(private val myProfileUseCase: MyProfileUseCase, stateHandle: SavedStateHandle) : BaseViewModel(stateHandle) {
-    private val _state: MutableStateFlow<UIState<MyProfile>> = MutableStateFlow(UIState.Loading)
-    val state: StateFlow<UIState<MyProfile>> = _state.asStateFlow()
+    private val _myProfileState: MutableStateFlow<UIState<MyProfile>> = MutableStateFlow(UIState.Loading)
+    val  myProfileState: StateFlow<UIState<MyProfile>> = _myProfileState
 
-
-
-    private var _myProfileUser: MyProfile? = loadFromSavedState(USER_PROFILE_KEY)
-        set(value) {
-            field = value
-            saveToSavedState(USER_PROFILE_KEY, value)
-        }
-
-    private fun getInitialState(): UIState<MyProfile>? {
-        return _myProfileUser?.let {
-            UIState.Success(it)
-        }
-
-    }
+    private val _featureItemState: MutableStateFlow<UIState<List<String>>> = MutableStateFlow(UIState.Loading)
+    val featureItemState: StateFlow<UIState<List<String>>> = _featureItemState
 
     fun fetchMyProfile() {
         wrapperApiCall(
-            call = { myProfileUseCase.getMyProfile() },
-            stateFlow = _state,
+            call = {
+                myProfileUseCase.getMyProfile()
+            },
+            state = _myProfileState,
             dataKey = USER_PROFILE_KEY
+        )
+    }
+
+    fun fetchListItem() {
+        wrapperApiCall(
+            call = {
+                myProfileUseCase.getListItem()
+            },
+            state = _featureItemState,
+            dataKey = ITEMS
         )
     }
 
     companion object {
         private const val USER_PROFILE_KEY = "user_profile"
+        private const val ITEMS = "items"
 
     }
 }

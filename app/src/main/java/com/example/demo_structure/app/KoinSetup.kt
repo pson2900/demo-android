@@ -18,6 +18,11 @@ import org.koin.core.logger.Level
  * Email: son.pham@navigosgroup.com
  */
 
+enum class AppDispatchers {
+    Default,
+    IO,
+}
+
 object KoinSetup {
     fun init(application: Application) {
         startKoin {

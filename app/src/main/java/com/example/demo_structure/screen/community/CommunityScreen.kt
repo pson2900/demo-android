@@ -41,7 +41,7 @@ fun CommunityScreen(viewModel: CommunityViewModel, onTopicClick: (String) -> Uni
         .fillMaxSize()
         .navigationBarsPadding()
         .statusBarsPadding()
-    val state = viewModel.uiState.collectAsStateWithLifecycle()
+    val state = viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     ApplicationTheme {

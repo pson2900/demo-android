@@ -73,7 +73,7 @@ sealed class Destinations(val route: String) {
         const val JOB_DETAIL_ID = "jobId"
         const val ORIGIN = "origin"
         fun createRoute(jobId: String, origin: String): String {
-            return "detail/${jobId}?origin=${origin}"
+            return "detail/$jobId?origin=${origin}"
         }
     }
 

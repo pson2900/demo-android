@@ -1,6 +1,7 @@
 [versions]
 #  ---  Android ---
 agp = "8.8.0"
+coilComposeVersion = "3.0.4"
 converterMoshi = "2.9.0"
 converterScalars = "2.9.0"
 minSdk = "24"
@@ -87,8 +88,6 @@ androidx-adaptive = { module = "androidx.compose.material3.adaptive:adaptive", v
 androidx-adaptive-layout-android = { module = "androidx.compose.material3.adaptive:adaptive-layout-android", version.ref = "adaptiveAndroid" }
 
 # Mark: Testing Libraries
-
-
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 
@@ -131,7 +130,8 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose" }
 
 
-# Mark: Other Libraries
+# Mark: coil Compose
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilComposeVersion" }
 
 # Mark: Kotlinx Libraries
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlinStdlib" }

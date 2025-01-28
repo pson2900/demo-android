@@ -154,8 +154,11 @@ dependencies {
 
     // Mark: Accompanist for additional Compose functionality
     implementation(libs.accompanist.drawablepainter) // Drawable painter for Compose
-//    implementation(libs.accompanist.navigation.animation) // Navigation with animations for Compose
+    implementation(libs.accompanist.navigation.animation) // Navigation with animations for Compose
     implementation(libs.accompanist.permissions)
+
+    // Mark: Coil Compose
+    implementation(libs.coil.compose)
 
     // Mark: AndroidX Material3 Adaptive Navigation Suite for Compose
     implementation(libs.androidx.adaptive.navigation.suite) // Adaptive Navigation Suite for Compose
