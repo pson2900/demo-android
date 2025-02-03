@@ -6,22 +6,23 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import com.example.demo_structure.core.navigation.Destinations
+import org.koin.androidx.compose.koinViewModel
 
 
 fun NavController.toVerifyEmail(navOptions: NavOptions = androidx.navigation.navOptions {}) =
-    navigate(route = Destinations.VERIFY_EMAIL, navOptions)
+    navigate(route =Destinations.Email.route, navOptions)
 
 fun NavGraphBuilder.toVerifyEmailScreen() {
     this.apply {
         composable(
-            route = Destinations.VERIFY_EMAIL,
+            route = Destinations.Email.route,
             deepLinks = listOf(
                 navDeepLink {
                     uriPattern = "Google.com"
                 }
             ),
             content = { navBackStackEntry ->
-                VerifyEmailRoute() {
+                VerifyEmailRoute(viewModel = koinViewModel()) {
 
                 }
             }

@@ -4,15 +4,21 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.compose.compiler)
     id("kotlinx-serialization")
+
 }
 
+
 android {
+
     namespace = "com.example.demo_structure"
-    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.demo_structure"
-        minSdk = 26
+        minSdk = rootProject.extra["defaultMinSdkVersion"] as Int
+        buildToolsVersion = rootProject.extra["defaultBuildToolsVersion"] as String
+        compileSdkVersion = rootProject.extra["defaultCompileSdkVersion"] as String
+        compileSdk = rootProject.extra["defaultCompileSdk"] as Int
+        targetSdk = rootProject.extra["defaultTargetSdkVersion"] as Int
         versionCode = 1
         versionName = "1.0"
 
@@ -20,25 +26,48 @@ android {
     }
 
     buildTypes {
-        release {
+
+        debug {
             isMinifyEnabled = false
+        }
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 
+    flavorDimensions += "version"
+    productFlavors {
+        create("develop") {
+            applicationIdSuffix = ".develop"
+            dimension = "version"
+        }
+        create("production") {
+            applicationIdSuffix = ".production"
+            dimension = "version"
+        }
+    }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
 
     // Enable ViewBinding and Jetpack Compose
     buildFeatures {
         viewBinding = true
         compose = true
+        buildConfig = true
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
@@ -47,7 +76,40 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
 
-    // Mark: Google
+    // Mark: AndroidX Core
+    implementation(libs.androidx.core.ktx)
+
+    // Mark: AndroidX Lifecycle
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose.ktx)
+
+    // Mark: AndroidX Room
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime)
+
+    // Mark: AndroidX Navigation
+    implementation(libs.androidx.navigation.ktx)
+
+    // Mark: AndroidX Activity Compose
+    implementation(libs.androidx.activity.compose)
+
+    // Mark: AndroidX Core Splashscreen
+    implementation(libs.androidx.core.splash)
+
+    // Mark: AndroidX Appcompat
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.appcompat.resources)
+
+    // Mark: AndroidX Constraint Layout
+    implementation(libs.androidx.constraintlayout.compose)
+
+    // Mark: Testing
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+
+    // Mark: Google Material Components
     implementation(libs.com.google.material) // Material Components for UI elements
 
     // Mark: Dependency Injection - Koin
@@ -59,45 +121,50 @@ dependencies {
 
     // Mark: Retrofit
     implementation(libs.retrofit) // Retrofit for network requests
+    implementation(libs.retrofit.moshi.kotlin)
+    implementation(libs.retrofit.converter.moshi)
     implementation(libs.retrofit.converter.gson) // Retrofit Gson converter
     implementation(libs.retrofit.logging.interceptor) // Retrofit logging interceptor
     implementation(libs.retrofit.kotlin.coroutines.adapter) // Retrofit Kotlin coroutines adapter
+    implementation(libs.retrofit.kotlin.serialization) // Retrofit Kotlin coroutines adapter
     testImplementation(libs.retrofit.mockwebserver) // MockWebServer for testing Retrofit
 
     // Mark: Compose
     implementation(platform(libs.androidx.compose.bom)) // Use Compose BOM for consistent versions
-    implementation(libs.androidx.ui) // Compose UI library
-    implementation(libs.androidx.material3) // Material3 for Compose
-    implementation(libs.androidx.ui.graphics) // Compose UI graphics
-    implementation(libs.androidx.ui.tooling) // Tooling support for Compose
-    implementation(libs.androidx.ui.tooling.preview) // Preview support for Compose
-    implementation(libs.androidx.animation) // Compose animation library
+    implementation(libs.androidx.ui.compose) // Compose UI library
+    implementation(libs.androidx.ui.graphics.compose) // Compose UI graphics
+    implementation(libs.androidx.ui.runtime.compose) // Compose Runtime
+    implementation(libs.androidx.ui.test.compose) //Compose UI testing
+    implementation(libs.androidx.ui.util.compose) // Compose UI Util
+    implementation(libs.androidx.ui.foundation.compose) //Compose UI Foundation
+    implementation(libs.androidx.ui.tooling.compose) // Tooling support for Compose
+    implementation(libs.androidx.ui.tooling.preview.compose) // Preview support for Compose
+    implementation(libs.androidx.animation.compose) // Compose animation library
     implementation(libs.androidx.navigation.compose) // Compose Navigation for screen transitions
-    implementation(libs.androidx.constraintlayout.compose) // Compose ConstraintLayout
-
-    // Debug dependencies
-    debugImplementation(libs.androidx.ui.tooling) // Compose tooling for debugging
-
+    implementation(libs.androidx.material3.compose) // Material3 for Compose
+    implementation(libs.androidx.material3.window.size) // Material3 Window Size Class
+    implementation(libs.androidx.lifecycle.viewmodel.compose) // ViewModel for Compose
+    implementation(libs.androidx.material)
     // Mark: Other dependencies
-    implementation(libs.androidx.core.splash) // SplashScreen API support
-    implementation(libs.androidx.espresso.core) // Espresso for UI testing
-    implementation(libs.androidx.lifecycle.runtime.ktx) // Lifecycle runtime for ViewModel and LiveData
-    implementation(libs.androidx.lifecycle.viewmodel.ktx) // ViewModel KTX extensions
-    implementation(libs.androidx.lifecycle.viewmodel.compose.ktx) // ViewModel Compose KTX extensions
-    implementation(libs.androidx.activity.compose) // Compose support for activities
     implementation(libs.androidx.adaptive) // Adaptive UI for Compose
     implementation(libs.androidx.adaptive.layout.android) // Adaptive layout for Android
-    implementation(libs.androidx.appcompat.resources) // AppCompat resources
 
-    // Mark: Serialization library
+    // Mark: Kotlinx library
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.json) // Kotlin Serialization for JSON parsing
+    implementation(libs.kotlinx.datetime)
 
     // Mark: Accompanist for additional Compose functionality
     implementation(libs.accompanist.drawablepainter) // Drawable painter for Compose
     implementation(libs.accompanist.navigation.animation) // Navigation with animations for Compose
+    implementation(libs.accompanist.permissions)
+
+    // Mark: Coil Compose
+    implementation(libs.coil.compose)
 
     // Mark: AndroidX Material3 Adaptive Navigation Suite for Compose
     implementation(libs.androidx.adaptive.navigation.suite) // Adaptive Navigation Suite for Compose
-    implementation(libs.compose)
-    implementation (libs.androidx.material)
+    //GlideImage jetpack
+    implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
 }

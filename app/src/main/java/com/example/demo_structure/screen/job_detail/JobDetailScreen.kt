@@ -21,14 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.demo_structure.app.LocalNavAnimatedVisibilityScope
-import com.example.demo_structure.app.LocalSharedTransitionScope
-import com.example.demo_structure.core.component.ProductXScaffold
-import com.example.demo_structure.theme.ProductXApplicationTheme
-import com.example.demo_structure.theme.ProductXTheme
+import com.example.demo_structure.core.component.AppScaffold
+import com.example.demo_structure.app.manager.theme.ApplicationTheme
+import com.example.demo_structure.app.manager.theme.ProductXTheme
+import com.example.demo_structure.core.component.LocalNavAnimatedVisibilityScope
+import com.example.demo_structure.core.component.LocalSharedTransitionScope
 import com.example.demo_structure.util.SharedElementKey
 import com.example.demo_structure.util.SharedElementType
-import org.koin.androidx.compose.koinViewModel
 
 /**
  * Created by Phạm Sơn at 23:48/8/1/25
@@ -57,8 +56,8 @@ fun JobDetailScreen(
             }
         }
     with(sharedTransitionScope) {
-        ProductXApplicationTheme {
-            ProductXScaffold(
+        ApplicationTheme {
+            AppScaffold(
                 snackBarHostState = rememberHostState,
                 content = { padding ->
                     Box(
@@ -118,8 +117,8 @@ fun JobDetailPreview() {
     /*    JobDetailScreen(Modifier, jobId = 10, origin = "origin", onTopicClick = {
 
         }, onBackClick = {})*/
-    ProductXApplicationTheme {
-        ProductXScaffold(snackBarHostState = SnackbarHostState(),
+    ApplicationTheme {
+        AppScaffold(snackBarHostState = SnackbarHostState(),
             content = { padding ->
                 Box(
                     Modifier

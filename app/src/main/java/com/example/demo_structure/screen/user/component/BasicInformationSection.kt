@@ -1,11 +1,11 @@
 package com.example.demo_structure.screen.user.component
 
 import android.content.res.Configuration
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,17 +19,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.R
-import com.example.demo_structure.core.component.ProductXPreviewWrapper
-import com.example.demo_structure.core.component.ProductXSurface
-import com.example.demo_structure.theme.IconImage
+import com.example.demo_structure.app.manager.theme.AppIcons
+import com.example.demo_structure.app.manager.theme.IconImage
+import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.domain.model.BasicInformation
+import com.example.domain.model.Profile
 
 /**
  * Created by Phạm Sơn at 10:29/16/1/25
@@ -39,73 +41,153 @@ import com.example.domain.model.BasicInformation
 @Composable
 fun BasicInformationSection(list: List<BasicInformation>) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        item { Text("Thông tin hồ sơ") }
+        item { Text("Thông tin hồ sơ", color = colorResource(R.color.black), style = MaterialTheme.typography.titleLarge) }
         item { Spacer(Modifier.height(12.dp)) }
         items(list.size) {
-            BasicInformationItem(list[it])
+            BasicInformationItem(Profile.AttachmentProfile(emptyList())) {
+
+            }
         }
     }
 }
 
 
+
 @Composable
-fun BasicInformationItem(basicInformation: BasicInformation) {
-    ProductXSurface(
-        color = Color.White,
-        modifier = Modifier
-            .padding(10.dp, 10.dp, 10.dp, 0.dp)
-            .height(50.dp),
-        border = BorderStroke(1.dp, Color.White),
-        shape = RoundedCornerShape(10.dp), elevation = 5.dp,
-    ) {
-        Box(contentAlignment = Alignment.CenterStart, modifier = Modifier.padding(10.dp, 10.dp, 10.dp, 0.dp)) {
-            Row(
-                Modifier
-                    .testTag("basicInformationItem")
-                    .clickable {
+fun BasicInformationItem(profile: Profile, onActionClick: (Profile) -> Unit) {
+    var title = ""
+    var icon = 0
+    when (profile) {
+        is Profile.PreferenceProfile -> {
+            icon = AppIcons.attachmentIcon
+            title = "Tiêu chí tìm việc"
+            onActionClick.invoke(profile)
+        }
 
-                    },
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    Modifier
-                        .background(colorResource(R.color.cosmic_latte), shape = RoundedCornerShape(5.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    IconImage(imageResource = basicInformation.icon, contentDescription = null)
-                }
-                Text(
-                    text = basicInformation.title,
-                    style = MaterialTheme.typography.labelLarge,
-                    maxLines = 1, modifier = Modifier.padding(5.dp,0.dp,0.dp,0.dp).weight(2f)
-                )
+        is Profile.BasicProfile -> {
+            icon = AppIcons.basicInformationIcon
+            title = "Thông tin liên hệ"
+            onActionClick.invoke(profile)
+        }
+
+        is Profile.ExperienceProfile -> {
+            icon = AppIcons.experienceIcon
+            title = "Tiêu chí tìm việc"
+            onActionClick.invoke(profile)
+        }
+
+        is Profile.CharacteristicProfile -> {
+            icon = AppIcons.attachmentIcon
+            title = "Kinh nghiệm làm việc"
+            onActionClick.invoke(profile)
+        }
+
+        is Profile.EducationProfile -> {
+            icon = AppIcons.educationIcon
+            title = "Trình độ học vấn"
+            onActionClick.invoke(profile)
+        }
+
+        is Profile.CertificationProfile -> {
+            icon = AppIcons.certificationIcon
+            title = "Chứng chỉ"
+            onActionClick.invoke(profile)
+        }
 
 
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .clickable { }
-                ) {
-                    IconImage(
-                        imageResource = R.drawable.ic_arrow_right,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(16.dp)
-                            .align(Alignment.CenterEnd)
-                    )
-                }
-            }
+        is Profile.AttachmentProfile -> {
+            icon = AppIcons.cvMarkIcon
+            title = "CV đính kèm"
+            onActionClick.invoke(profile)
+        }
+
+        is Profile.LanguageProfile -> {
+            icon = AppIcons.languageIcon
+            title = "Ngoại ngữ"
+            onActionClick.invoke(profile)
+        }
+
+        is Profile.ExternalDocProfile -> {
+            icon = AppIcons.linkIcon
+            title = "Đường link dự án cá nhân"
+            onActionClick.invoke(profile)
+        }
+
+        is Profile.ReferenceProfile -> {
+            icon = AppIcons.referenceIcon
+            title = "Người tham chiếu"
+            onActionClick.invoke(profile)
+        }
+
+        is Profile.HobbyProfile -> {
+            icon = AppIcons.attachmentIcon
+            title = "Sở thích / tính cách"
+            onActionClick.invoke(profile)
+        }
+
+        is Profile.ExtraCurricularProfile -> {
+            icon = AppIcons.attachmentIcon
+            title = "Hoạt động ngoại khoa"
+            onActionClick.invoke(profile)
         }
     }
+    Row(
+        Modifier
+            .padding(10.dp)
+            .background(Color.White, shape = RoundedCornerShape(10.dp))
+            .clip(shape = RoundedCornerShape(10.dp))
+            .height(72.dp)
+            .testTag("basicInformationItem")
+            .clickable {
 
+            },
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            Modifier
+                .padding(paddingValues = PaddingValues(8.dp))
+                .background(colorResource(R.color.cosmic_latte), shape = RoundedCornerShape(5.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            IconImage(imageResource = icon, contentDescription = null)
+        }
+        Text(
+            text = title,
+            textAlign = TextAlign.Start,
+            color = MaterialTheme.colorScheme.onPrimary,
+            style = MaterialTheme.typography.labelLarge,
+            maxLines = 1,
+            modifier = Modifier
+                .padding(start = 5.dp)
+                .weight(2.7f)
+        )
+
+        Box(
+            modifier = Modifier
+                .weight(0.3f)
+                .fillMaxSize()
+                .clickable { }
+        ) {
+            IconImage(
+                imageResource = R.drawable.ic_arrow_right,
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(end = 8.dp)
+                    .size(16.dp)
+                    .align(Alignment.CenterEnd)
+            )
+        }
+    }
 }
 
 @Preview("Light Mode")
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun BasicInformationItemPreview() {
-    BasicInformationItem(BasicInformation(R.drawable.ic_my_profile_opprotunities_crow, "Kinh nghiệm làm việc", 0))
+    BasicInformationItem(Profile.AttachmentProfile(emptyList())) {
+
+    }
 
 }
 
@@ -113,7 +195,7 @@ fun BasicInformationItemPreview() {
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun BasicInformationSectionPreview() {
-    ProductXPreviewWrapper {
+    AppPreviewWrapper {
         BasicInformationSection(
             listOf(
                 BasicInformation(R.drawable.ic_my_profile_opprotunities_crow, "Kinh nghiệm làm việc", 0),

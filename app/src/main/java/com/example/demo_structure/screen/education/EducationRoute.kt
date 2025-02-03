@@ -7,11 +7,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.Destinations
-import com.example.demo_structure.screen.main.MainDestination
 import org.koin.androidx.compose.koinViewModel
 
 fun NavController.toEducation(navOptions: NavOptions) =
-    navigate(route = MainDestination.EDUCATION.route, navOptions)
+    navigate(route = Destinations.Main.Education.route, navOptions)
 
 fun NavGraphBuilder.EducationNavGraph(
     onNavigateToVerifyEmail: () -> Unit,
@@ -20,14 +19,16 @@ fun NavGraphBuilder.EducationNavGraph(
 
     this.apply {
         composable(
-            route = MainDestination.EDUCATION.route,
+            route = Destinations.Main.Education.route,
             deepLinks = listOf(
                 navDeepLink {
                     uriPattern = "Google.com"
                 }
             ),
             content = {
-                EducationScreen(viewModel = koinViewModel(), onTopicClick, onNavigateToVerifyEmail = onNavigateToVerifyEmail)
+                EducationScreen(viewModel = koinViewModel(),
+                    onNavigateToVerifyEmail = onNavigateToVerifyEmail,
+                    onTopicClick = onTopicClick)
             }
         )
     }

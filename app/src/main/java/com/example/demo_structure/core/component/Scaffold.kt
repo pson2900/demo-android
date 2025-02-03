@@ -9,9 +9,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeContent
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Shapes
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -22,14 +20,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.demo_structure.app.LocalNavAnimatedVisibilityScope
-import com.example.demo_structure.app.LocalSharedTransitionScope
-import com.example.demo_structure.theme.ProductXApplicationTheme
-import com.example.demo_structure.theme.ProductXTheme
+import com.example.demo_structure.app.manager.theme.ApplicationTheme
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -78,7 +73,7 @@ class ScaffoldState(
  * Wrap Material [androidx.compose.material3.Scaffold] and set [ProductXTheme] colors.
  */
 @Composable
-fun ProductXScaffold(
+fun AppScaffold(
     modifier: Modifier = Modifier,
     snackBarHostState: SnackbarHostState,
     topBar: @Composable () -> Unit = {},
@@ -122,8 +117,8 @@ private fun resources(): Resources {
 @OptIn(ExperimentalSharedTransitionApi::class)
 
 @Composable
-fun ProductXPreviewWrapper(content: @Composable (Modifier) -> Unit) {
-    ProductXApplicationTheme {
+fun AppPreviewWrapper(content: @Composable (Modifier) -> Unit) {
+    ApplicationTheme {
         val modifier: Modifier = Modifier
         SharedTransitionLayout {
             AnimatedVisibility(visible = true) {
@@ -131,7 +126,7 @@ fun ProductXPreviewWrapper(content: @Composable (Modifier) -> Unit) {
                     LocalSharedTransitionScope provides this@SharedTransitionLayout,
                     LocalNavAnimatedVisibilityScope provides this
                 ) {
-                    ProductXSurface(
+                    AppSurface(
                         modifier = modifier,
                         shape = RectangleShape,
                         color = ProductXTheme.colors.background,

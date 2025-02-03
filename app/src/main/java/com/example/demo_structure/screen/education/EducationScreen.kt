@@ -3,20 +3,16 @@ package com.example.demo_structure.screen.education
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.material.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -25,11 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.demo_structure.core.component.ProductXPreviewWrapper
-import com.example.demo_structure.core.component.ProductXScaffold
-import com.example.demo_structure.core.component.ProductXSnackBar
-import com.example.demo_structure.core.component.TopSearchAppBar
-import com.example.demo_structure.theme.ProductXApplicationTheme
+import com.example.demo_structure.app.manager.theme.ApplicationTheme
+import com.example.demo_structure.core.component.AppPreviewWrapper
+import com.example.demo_structure.core.component.AppScaffold
+import com.example.demo_structure.core.component.AppSnackBar
+import com.example.demo_structure.core.component.AppSurface
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -40,69 +36,58 @@ import org.koin.androidx.compose.koinViewModel
  */
 
 @Composable
-fun EducationScreen(viewModel: EducationResultViewModel,
-                    onTopicClick: (String) -> Unit,
-                    onNavigateToVerifyEmail: () -> Unit,) {
-    val modifier: Modifier = Modifier
-        .fillMaxSize()
-        .navigationBarsPadding()
-        .statusBarsPadding()
-    val state = viewModel.uiState.collectAsStateWithLifecycle()
+fun EducationScreen(viewModel: EducationViewModel, onNavigateToVerifyEmail: () -> Unit, onTopicClick: (String) -> Unit) {
+    val modifier: Modifier = Modifier.fillMaxSize()
+    val state = viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
-    ProductXApplicationTheme {
-        ProductXScaffold(
+    ApplicationTheme {
+        AppScaffold(
             modifier = modifier,
             contentWindowInsets = WindowInsets.systemBars,
             snackbarHost = {
                 SnackbarHost(
                     hostState = it,
                     modifier = Modifier.systemBarsPadding(),
-                    snackbar = { snackbarData -> ProductXSnackBar(snackbarData) }
+                    snackbar = { snackbarData -> AppSnackBar(snackbarData) }
                 )
             },
-            topBar = {
-                TopSearchAppBar(
-                    modifier = Modifier.fillMaxWidth(),
-                    actions = {
-                        onTopicClick.invoke("hehe")
-                    },
-                    content = "Hello World"
-                )
-            },
+
             snackBarHostState = snackbarHostState,
             content = { padding ->
-
-                Column(
-                    modifier = modifier
-                        .background(Color.White)
-                        .padding(padding)
-                        .fillMaxSize()
-//                        .clickable {
-//                            coroutineScope.launch {
-//                                val result = snackbarHostState.showSnackbar(
-//                                    message = "Message",
-//                                    actionLabel = "Action",
-//                                )
-//                                when (result) {
-//                                    SnackbarResult.ActionPerformed -> {
-//                                        println("Action clicked")
-//                                    }
-//
-//                                    SnackbarResult.Dismissed -> {
-//                                        println("Dismissed")
-//                                    }
-//                                }
-//                            }
-//                        },
+                AppSurface(
+                    modifier = modifier.padding(padding)
                 ) {
-                    Button(onClick = {
-                        onNavigateToVerifyEmail.invoke()
-                    }) {
-                        Text(text = "Login")
+                    Box(
+                        modifier = modifier
+                            .background(Color.White)
+                            .clickable {
+                                coroutineScope.launch {
+                                    val result = snackbarHostState.showSnackbar(
+                                        message = "Message",
+                                        actionLabel = "Action",
+                                    )
+                                    when (result) {
+                                        SnackbarResult.ActionPerformed -> {
+                                            println("Action clicked")
+                                        }
+
+                                        SnackbarResult.Dismissed -> {
+                                            println("Dismissed")
+                                        }
+                                    }
+                                }
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Button(onClick = {
+                            onNavigateToVerifyEmail.invoke()
+                        }) {
+                            Text(modifier = Modifier, text = "Login")
+                        }
                     }
-//                    Text("SearchResultScreen")
                 }
+
             }
         )
     }
@@ -112,11 +97,8 @@ fun EducationScreen(viewModel: EducationResultViewModel,
 @Preview
 @Composable
 fun SearchResultScreenPreview() {
-    ProductXPreviewWrapper {
-        EducationScreen(viewModel = koinViewModel(), onTopicClick = { _ -> },
-            onNavigateToVerifyEmail = {
+    AppPreviewWrapper {
 
-        })
     }
 }
 

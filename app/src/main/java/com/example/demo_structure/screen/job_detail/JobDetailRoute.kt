@@ -9,31 +9,27 @@ import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.core.navigation.composableWith
 import org.koin.androidx.compose.koinViewModel
 
-fun NavController.toJobDetail(jobId: Int, origin: String, navOptions: NavOptions = androidx.navigation.navOptions { }) =
-    navigate(
-        route = "${Destinations.JOB_DETAIL_ROUTE}/" +
-                "$jobId" +
-                "?origin=${origin}", navOptions
-    )
+fun NavController.toJobDetail(route: String, navOptions: NavOptions = androidx.navigation.navOptions { }) =
+    navigate(route = route, navOptions = navOptions)
 
 fun NavGraphBuilder.JobDetailNavGraph(onBackClick: () -> Unit) {
     composableWith(
-        route = "${Destinations.JOB_DETAIL_ROUTE}/" +
-                "{${Destinations.JOB_DETAIL_ID_KEY}}" +
-                "?origin={${Destinations.ORIGIN}}",
+        route = "${Destinations.JobDetail.route}/" +
+                "{${Destinations.JobDetail.JOB_DETAIL_ID}}" +
+                "?origin={${Destinations.JobDetail.ORIGIN}}",
         arguments = listOf(
-            navArgument(Destinations.JOB_DETAIL_ID_KEY) {
+            navArgument(Destinations.JobDetail.JOB_DETAIL_ID) {
                 type = NavType.IntType
             },
-            navArgument(Destinations.ORIGIN) {
+            navArgument(Destinations.JobDetail.ORIGIN) {
                 type = NavType.StringType
                 nullable = true
             }
         ),
         content = { navBackStackEntry ->
             val arguments = requireNotNull(navBackStackEntry.arguments)
-            val jobId = arguments.getInt(Destinations.JOB_DETAIL_ID_KEY)
-            val origin = arguments.getString(Destinations.ORIGIN)
+            val jobId = arguments.getInt(Destinations.JobDetail.JOB_DETAIL_ID)
+            val origin = arguments.getString(Destinations.JobDetail.ORIGIN)
             JobDetailScreen(
                 jobId = jobId,
                 origin = origin ?: "",

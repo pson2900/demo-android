@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,10 +31,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.R
+import com.example.demo_structure.app.manager.theme.AppIcons
+import com.example.demo_structure.core.component.AppBox
 import com.example.demo_structure.core.component.AppButton
-import com.example.demo_structure.core.component.ProductXPreviewWrapper
-import com.example.demo_structure.theme.AppIcons.IconAdd
-import com.example.demo_structure.theme.AppIcons.IconShoppingForSportsEquipment
+import com.example.demo_structure.core.component.AppPreviewWrapper
 
 /**
  * Created by Phạm Sơn at 13:20/14/1/25
@@ -41,7 +42,7 @@ import com.example.demo_structure.theme.AppIcons.IconShoppingForSportsEquipment
  * Email: son.pham@navigosgroup.com
  */
 @Composable
-fun ProfileStatusSection(modifier: Modifier = Modifier) {
+fun ProfileStatusSection(modifier: Modifier = Modifier, onClick: () -> Unit) {
     Surface(
         modifier = modifier.padding(10.dp, 0.dp, 10.dp, 0.dp),
         border = BorderStroke(2.dp, colorResource(R.color.pale_violet)),
@@ -69,11 +70,7 @@ fun ProfileProgressContent(modifier: Modifier = Modifier, progress: Int, max: In
                 style = MaterialTheme.typography.titleMedium,
                 color = Color.White
             )
-            Text(
-                "Điểm hoàn thiện hồ sơ: Thấp",
-                style = MaterialTheme.typography.titleMedium,
-                color = Color.White
-            )
+            Spacer(Modifier.height(8.dp))
             ProfileProgressBar(progress, max)
         }
     }
@@ -91,7 +88,7 @@ fun ProfileProgressAction(modifier: Modifier = Modifier) {
     ) {
         Column(modifier = Modifier.align(Alignment.Center)) {
             Row {
-                Image(modifier = Modifier.weight(2f), painter = painterResource(IconShoppingForSportsEquipment), contentDescription = "IconShoppingForSportsEquipment")
+                Image(modifier = Modifier.weight(2f), painter = painterResource(AppIcons.shoppingForSportsEquipmentIcon), contentDescription = "IconShoppingForSportsEquipment")
                 Column(
                     Modifier
                         .weight(8f)
@@ -109,12 +106,13 @@ fun ProfileProgressAction(modifier: Modifier = Modifier) {
                     )
                 }
             }
-            AppButton(modifier = Modifier
-                .fillMaxWidth(),
-                background = colorResource(R.color.alice_blue), onClick = { }) {
+            AppButton(modifier = Modifier.fillMaxWidth(),
+                background = colorResource(R.color.alice_blue),
+                colorEffect = colorResource(R.color.violets_are_blue),
+                onClick = {}) {
                 Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
                     Image(
-                        imageVector = ImageVector.vectorResource(IconAdd),
+                        imageVector = ImageVector.vectorResource(AppIcons.addIcon),
                         modifier = Modifier.padding(3.dp),
                         colorFilter = ColorFilter.tint(colorResource(R.color.violets_are_blue), BlendMode.SrcIn), contentDescription = "IconAdd"
                     )
@@ -137,7 +135,7 @@ fun ProfileProgressBar(progress: Int, max: Int) {
             .height(24.dp)
             .background(color = Color.White, shape = RoundedCornerShape(10.dp))
     ) {
-        Box(
+        AppBox(
             modifier = Modifier
                 .padding(4.dp)
                 .background(
@@ -145,7 +143,9 @@ fun ProfileProgressBar(progress: Int, max: Int) {
                 )
                 .fillMaxWidth(progress.toFloat() / max)
                 .fillMaxHeight()
-        )
+        ){
+
+        }
         Text(text = "$progress/$max", style = MaterialTheme.typography.labelSmall, modifier = Modifier.align(Alignment.Center), color = Color.Black)
     }
 }
@@ -154,7 +154,9 @@ fun ProfileProgressBar(progress: Int, max: Int) {
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun StatusSectionPreview() {
-    ProductXPreviewWrapper {
-        ProfileStatusSection(Modifier.wrapContentHeight())
+    AppPreviewWrapper {
+        ProfileStatusSection(Modifier.wrapContentHeight()) {
+
+        }
     }
 }

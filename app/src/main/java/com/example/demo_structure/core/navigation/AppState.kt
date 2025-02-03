@@ -1,24 +1,36 @@
 package com.example.demo_structure.core.navigation
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.util.trace
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navOptions
+import com.example.demo_structure.screen.job_detail.toJobDetail
 import com.example.demo_structure.screen.login.toLogin
+import com.example.demo_structure.screen.verify_email.toVerifyEmail
 import com.example.demo_structure.util.NetworkMonitor
+import com.example.demo_structure.util.TimeZoneMonitor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.serialization.Serializable
+import kotlinx.datetime.TimeZone
+import org.koin.compose.koinInject
 
 /**
  * Created by Phạm Sơn at 10:55/10/1/25
@@ -30,16 +42,18 @@ import kotlinx.serialization.Serializable
  */
 @Composable
 fun rememberAppState(
-    networkMonitor: NetworkMonitor,
+    networkMonitor: NetworkMonitor = koinInject(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
+    context: Context = LocalContext.current,
+    timeZoneMonitor: TimeZoneMonitor = koinInject(),
 ): AppState = remember(key1 = navController, key2 = coroutineScope, calculation = {
     AppState(
         navController = navController,
         coroutineScope = coroutineScope,
         networkMonitor = networkMonitor,
-//            userNewsResourceRepository = userNewsResourceRepository,
-//            timeZoneMonitor = timeZoneMonitor,
+        context = context,
+        timeZoneMonitor = timeZoneMonitor,
     )
 })
 
@@ -48,6 +62,8 @@ class AppState(
     val navController: NavHostController,
     coroutineScope: CoroutineScope,
     networkMonitor: NetworkMonitor,
+    var context: Context,
+    timeZoneMonitor: TimeZoneMonitor,
 ) {
     val isOffline = networkMonitor.isOnline
         .map(Boolean::not)
@@ -55,6 +71,27 @@ class AppState(
             scope = coroutineScope,
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = false,
+        )
+
+    var isOnline by mutableStateOf(checkIfOnline())
+        private set
+
+    fun refreshOnline() {
+        isOnline = checkIfOnline()
+    }
+
+
+    @Suppress("DEPRECATION")
+    private fun checkIfOnline(): Boolean {
+        val cm = getSystemService(context, ConnectivityManager::class.java)
+        return cm?.activeNetworkInfo?.isConnectedOrConnecting == true
+    }
+
+    val currentTimeZone = timeZoneMonitor.currentTimeZone
+        .stateIn(
+            coroutineScope,
+            SharingStarted.WhileSubscribed(5_000),
+            TimeZone.currentSystemDefault(),
         )
 
     // ----------------------------------------------------------
@@ -83,27 +120,17 @@ class AppState(
 
     fun navigateToJobDetail(jobId: Int, origin: String, from: NavBackStackEntry) {
         // In order to discard duplicated navigation events, we check the Lifecycle
-        val route = "${Destinations.JOB_DETAIL_ROUTE}/$jobId?origin=$origin"
+        val route = "${Destinations.JobDetail.route}/$jobId?origin=$origin"
         trace("Navigation : ${route}") {
             if (from.lifecycleIsResumed()) {
-                navController.navigate(route = route)
+                navController.toJobDetail(Destinations.JobDetail.createRoute(jobId.toString(), origin))
             }
-        }
-    }
-
-    fun navigateToJobDetail(jobId: Int, origin: String) {
-        // In order to discard duplicated navigation events, we check the Lifecycle
-        val route = "${Destinations.JOB_DETAIL_ROUTE}/$jobId?origin=$origin"
-        trace("Navigation : ${route}") {
-//            if (from.lifecycleIsResumed()) {
-            navController.navigate(route = route)
-//            }
         }
     }
 
     fun navigateToLogin(from: NavBackStackEntry) {
         // In order to discard duplicated navigation events, we check the Lifecycle
-        val route = Destinations.LOGIN_ROUTE
+        val route = Destinations.Login.route
         trace("Navigation : ${route}") {
             if (from.lifecycleIsResumed()) {
                 navController.toLogin()
@@ -111,17 +138,15 @@ class AppState(
         }
     }
 
-    fun navigateToLogin() {
+    fun navigateToEmail(from: NavBackStackEntry) {
         // In order to discard duplicated navigation events, we check the Lifecycle
-        val route = Destinations.LOGIN_ROUTE
+        val route = Destinations.Email.route
         trace("Navigation : ${route}") {
-//            if (from.lifecycleIsResumed()) {
-            navController.toLogin(navOptions { })
-//            }
+            if (from.lifecycleIsResumed()) {
+                navController.toVerifyEmail()
+            }
         }
     }
-
-
 }
 
 /**
@@ -143,14 +168,8 @@ private tailrec fun findStartDestination(graph: NavDestination): NavDestination 
     return if (graph is NavGraph) findStartDestination(graph.startDestination!!) else graph
 }
 
-@Serializable
-data object MainRoute
-
-@Serializable
-data object AppRoute
-
+/*
 object Destinations {
-    const val APP = "app"
     const val MAIN = "main"
     const val HOME_ROUTE = "home"
     const val EDUCATION_ROUTE = "education"
@@ -164,3 +183,4 @@ object Destinations {
     const val ORIGIN = "origin"
 }
 
+*/

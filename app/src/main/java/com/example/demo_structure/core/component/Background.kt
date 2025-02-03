@@ -8,10 +8,8 @@ import androidx.compose.material3.LocalAbsoluteTonalElevation
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
@@ -20,9 +18,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.demo_structure.theme.GradientColors
-import com.example.demo_structure.theme.LocalGradientColors
-import com.example.demo_structure.theme.ProductXApplicationTheme
+import com.example.demo_structure.app.manager.theme.GradientColors
+import com.example.demo_structure.app.manager.theme.ApplicationTheme
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 import kotlin.math.tan
 
 /**
@@ -38,30 +36,22 @@ import kotlin.math.tan
  * @param content The background content.
  */
 
-@Immutable
-data class BackgroundTheme(
-    val color: Color = Color.Unspecified,
-    val tonalElevation: Dp = Dp.Unspecified,
-)
-
-/**
- * A composition local for [BackgroundTheme].
- */
-val LocalBackgroundTheme = staticCompositionLocalOf { BackgroundTheme() }
 
 @Composable
 fun AppBackground(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
-    val color = LocalBackgroundTheme.current.color
-    val tonalElevation = LocalBackgroundTheme.current.tonalElevation
-    Surface(
+    val color = ProductXTheme.backgroundTheme.color
+    val tonalElevation = ProductXTheme.backgroundTheme.tonalElevation
+    AppSurface(
         color = if (color == Color.Unspecified) Color.Transparent else color,
-        tonalElevation = if (tonalElevation == Dp.Unspecified) 0.dp else tonalElevation,
+        elevation = if (tonalElevation == Dp.Unspecified) 0.dp else tonalElevation,
         modifier = modifier.fillMaxSize(),
     ) {
-        CompositionLocalProvider(LocalAbsoluteTonalElevation provides 0.dp) {
+        CompositionLocalProvider(
+            LocalAbsoluteTonalElevation provides 0.dp,
+        ) {
             content()
         }
     }
@@ -152,7 +142,7 @@ annotation class ThemePreviews
 @ThemePreviews
 @Composable
 fun BackgroundDefault() {
-    ProductXApplicationTheme(disableDynamicTheming = true) {
+    ApplicationTheme(disableDynamicTheming = true) {
         AppBackground(Modifier.size(100.dp), content = {})
     }
 }
@@ -160,7 +150,7 @@ fun BackgroundDefault() {
 @ThemePreviews
 @Composable
 fun BackgroundDynamic() {
-    ProductXApplicationTheme(disableDynamicTheming = false) {
+    ApplicationTheme(disableDynamicTheming = false) {
         AppBackground(Modifier.size(100.dp), content = {})
     }
 }
@@ -168,7 +158,7 @@ fun BackgroundDynamic() {
 @ThemePreviews
 @Composable
 fun BackgroundAndroid() {
-    ProductXApplicationTheme(androidTheme = true) {
+    ApplicationTheme(androidTheme = true) {
         AppBackground(Modifier.size(100.dp), content = {})
     }
 }
@@ -176,7 +166,7 @@ fun BackgroundAndroid() {
 @ThemePreviews
 @Composable
 fun GradientBackgroundDefault() {
-    ProductXApplicationTheme(disableDynamicTheming = true) {
+    ApplicationTheme(disableDynamicTheming = true) {
         AppGradientBackground(Modifier.size(100.dp), content = {})
     }
 }
@@ -184,7 +174,7 @@ fun GradientBackgroundDefault() {
 @ThemePreviews
 @Composable
 fun GradientBackgroundDynamic() {
-    ProductXApplicationTheme(disableDynamicTheming = false) {
+    ApplicationTheme(disableDynamicTheming = false) {
         AppGradientBackground(Modifier.size(100.dp), content = {})
     }
 }
@@ -192,7 +182,7 @@ fun GradientBackgroundDynamic() {
 @ThemePreviews
 @Composable
 fun GradientBackgroundAndroid() {
-    ProductXApplicationTheme(androidTheme = true) {
+    ApplicationTheme(androidTheme = true) {
         AppGradientBackground(Modifier.size(100.dp), content = {})
     }
 }

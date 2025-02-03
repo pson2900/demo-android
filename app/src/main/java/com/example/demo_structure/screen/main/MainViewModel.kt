@@ -1,5 +1,6 @@
 package com.example.demo_structure.screen.main
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.demo_structure.JobDetail
@@ -15,7 +16,7 @@ import kotlinx.coroutines.launch
  * Copyright (c) 2024 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-class MainViewModel : ViewModel() {
+class MainViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
     var uiState: MutableStateFlow<MainActivityUiState> = MutableStateFlow(MainActivityUiState.Loading)
 
     init {

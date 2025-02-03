@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-package com.example.demo_structure.theme
+package com.example.demo_structure.app.manager.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 /**
- * A class to model background color and tonal elevation values for Now in Android.
+ * A class to model gradient color values for Now in Android.
+ *
+ * @param top The top gradient color to be rendered.
+ * @param bottom The bottom gradient color to be rendered.
+ * @param container The container gradient color over which the gradient will be rendered.
  */
 @Immutable
-data class CardTheme(
-    val colorBackground: Color = Color.Unspecified,
-    val colorText: Color = Color.Unspecified,
-    val colorBackgroundHeader: Color = Color.Unspecified,
-    val colorTextHeader: Color = Color.Unspecified,
-    val colorOutline: Color = Color.Unspecified,
+data class GradientColors(
+    val top: Color = Color.Unspecified,
+    val bottom: Color = Color.Unspecified,
+    val container: Color = Color.Unspecified,
 )
 
-/**
- * A composition local for [CardTheme].
- */
-val LocalCardTheme = staticCompositionLocalOf { CardTheme() }
+

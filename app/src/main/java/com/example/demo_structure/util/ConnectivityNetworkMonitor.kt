@@ -32,16 +32,21 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
+import org.koin.core.component.KoinComponent
 
 class AlwaysOnlineNetworkMonitor constructor() : NetworkMonitor {
     override val isOnline: Flow<Boolean> = flowOf(true)
 }
 
+interface NetworkMonitor {
+    val isOnline: Flow<Boolean>
+}
 
-internal class ConnectivityManagerNetworkMonitor constructor(
+
+internal class ConnectivityManagerNetworkMonitor(
     private val context: Context,
-    private val ioDispatcher: CoroutineDispatcher,
-) : NetworkMonitor {
+    private val ioDispatcher: CoroutineDispatcher
+) : KoinComponent, NetworkMonitor {
     override val isOnline: Flow<Boolean> = callbackFlow {
         trace("NetworkMonitor.callbackFlow") {
             val connectivityManager = context.getSystemService<ConnectivityManager>()

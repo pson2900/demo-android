@@ -1,6 +1,5 @@
 package com.example.demo_structure.core.component
 
-import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
@@ -12,11 +11,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.R
-import com.example.demo_structure.theme.ProductXTheme
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 
 /**
  * Created by Phạm Sơn at 10:33/11/1/25
@@ -33,7 +31,7 @@ fun JobDetailCard(
     elevation: Dp = 4.dp,
     content: @Composable () -> Unit
 ) {
-    ProductXSurface(
+    AppSurface(
         modifier = modifier,
         shape = shape,
         color = color,
@@ -43,14 +41,11 @@ fun JobDetailCard(
         content = content
     )
 }
-
-@Preview("Light Mode")
-@Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@ThemePreviews
 @Composable
 private fun CardPreview() {
-    ProductXPreviewWrapper {
-        ProductXSurface(Modifier, shape = CircleShape, ) {
-//            Text(text = "Demo", modifier = Modifier.padding(16.dp))
+    AppPreviewWrapper {
+        AppSurface(Modifier, shape = CircleShape, ) {
             Image(imageVector = ImageVector.vectorResource(R.drawable.ic_setting),
                 contentDescription = "ic_setting",
                 modifier = Modifier.padding(16.dp))

@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
@@ -15,7 +16,8 @@ import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.demo_structure.app.LocalNavAnimatedVisibilityScope
+import androidx.window.core.layout.WindowSizeClass
+import com.example.demo_structure.core.component.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.screen.community.CommunityNavGraph
 import com.example.demo_structure.screen.education.EducationNavGraph
 import com.example.demo_structure.screen.home.HomeNavGraph
@@ -32,6 +34,7 @@ import com.example.demo_structure.util.logNavigation
  * Copyright (c) 2025 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
+
 
 fun NavGraphBuilder.composableWith(
     route: String,
@@ -63,42 +66,49 @@ fun AppNavHost(
     logNavigation(navController)
     NavHost(
         navController = navController,
-        startDestination = Destinations.APP,
+        startDestination = Destinations.Main.route,
         modifier = modifier,
+        enterTransition = { fadeIn(animationSpec = tween(500)) },
+        exitTransition = { fadeOut(animationSpec = tween(500)) },
         builder = {
             AppNavGraph(
                 appState = appState
             ) {
-                JobDetailNavGraph {
-                }
-                toLoginScreen()
-                toVerifyEmailScreen()
-            }
 
+            }
+            JobDetailNavGraph {
+
+            }
+            toLoginScreen() {
+                appState.upPress()
+            }
+            toVerifyEmailScreen()
         })
 }
 
 @Composable
 fun MainNavHost(
     modifier: Modifier,
+    windowSizeClass: WindowSizeClass,
     appState: AppState,
     onNavigateToJobDetail: (Int, String) -> Unit,
     onNavigateToLogin: () -> Unit,
     onNavigateToVerifyEmail: () -> Unit,
 ) {
-    val navController = appState.navController
+    appState.navController
     NavHost(
-        navController = navController,
-        startDestination = Destinations.HOME_ROUTE,
-        modifier = modifier
+        navController = appState.navController,
+        startDestination = Destinations.Main.Home.route,
+        modifier = modifier,
+        enterTransition = { fadeIn(animationSpec = tween(500)) },
+        exitTransition = { fadeOut(animationSpec = tween(500)) },
     ) {
         HomeNavGraph(
+            windowSizeClass = windowSizeClass,
             onNavigateToJobDetail = onNavigateToJobDetail,
         )
         EducationNavGraph(
-            onTopicClick = {
-
-            },
+            onTopicClick = {},
             onNavigateToVerifyEmail = onNavigateToVerifyEmail
         )
         OpportunityNavGraph(

@@ -1,15 +1,16 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-
+    id("com.google.devtools.ksp")
 }
 
 android {
     namespace = "com.example.data"
-    compileSdk = 34
-
     defaultConfig {
-        minSdk = 26
+        minSdk = rootProject.extra["defaultMinSdkVersion"] as Int
+        buildToolsVersion = rootProject.extra["defaultBuildToolsVersion"] as String
+        compileSdkVersion = rootProject.extra["defaultCompileSdkVersion"] as String
+        compileSdk = rootProject.extra["defaultCompileSdk"] as Int
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -21,12 +22,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
 
 }
@@ -36,16 +37,24 @@ dependencies {
     implementation(project(":domain"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.com.google.material)
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
-    implementation(libs.retrofit.logging.interceptor)
-    implementation(libs.retrofit.kotlin.coroutines.adapter)
-    implementation(libs.core.ktx)
-    implementation(libs.core.ktx)
-    implementation(libs.core.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    // Mark: Retrofit
+    implementation(libs.retrofit) // Retrofit for network requests
+    implementation(libs.retrofit.converter.moshi)
+    implementation(libs.retrofit.moshi.kotlin)
+    implementation(libs.retrofit.converter.gson) // Retrofit Gson converter
+    implementation(libs.retrofit.logging.interceptor) // Retrofit logging interceptor
+    implementation(libs.retrofit.kotlin.coroutines.adapter) // Retrofit Kotlin coroutines adapter
+    implementation(libs.retrofit.kotlin.serialization) // Retrofit Kotlin coroutines adapter
+    testImplementation(libs.retrofit.mockwebserver) // MockWebServer for testing Retrofit
+
+    // Mark: Room
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    // Preferences DataStore
     implementation(libs.androidx.datastore.preferences)
-    implementation(libs.gson)
 }

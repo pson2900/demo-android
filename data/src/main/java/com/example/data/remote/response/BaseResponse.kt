@@ -5,6 +5,6 @@ package com.example.data.remote.response
  * Copyright (c) 2025 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-class BaseResponse<T>(
-    status: String, message: String, data: T, error: Error?
+data class BaseResponse<T>(
+    val status: String, val message: String, val data: T
 )

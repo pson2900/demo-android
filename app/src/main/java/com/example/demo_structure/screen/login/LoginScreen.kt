@@ -45,9 +45,10 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.R
 import com.example.demo_structure.core.component.AppLoadingWheel
-import com.example.demo_structure.core.component.ProductXPreviewWrapper
-import com.example.demo_structure.core.component.ProductXScaffold
-import com.example.demo_structure.theme.ProductXApplicationTheme
+import com.example.demo_structure.core.component.AppPreviewWrapper
+import com.example.demo_structure.core.component.AppScaffold
+import com.example.demo_structure.app.manager.theme.ApplicationTheme
+import com.example.demo_structure.screen.home.LoadingState
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -87,8 +88,8 @@ internal fun LoginScreen(
         }
     }
 
-    ProductXApplicationTheme {
-        ProductXScaffold(
+    ApplicationTheme {
+        AppScaffold(
             modifier = modifier,
             snackBarHostState = rememberHostState
         ) {
@@ -100,9 +101,51 @@ internal fun LoginScreen(
 @Composable
 fun LoginContent(modifier: Modifier) {
     ConstraintLayout(
-        modifier = modifier.background(Color.White)) {
+        modifier = modifier.background(Color.White)
+    ) {
 
 
+        @Composable
+        fun CircularProgressBar(
+            percentage: Float, number: Int, fontSize: TextUnit = 28.sp,
+            radius: Dp = 50.dp, color: Color = Color.Green, strokeWidth: Dp = 5.dp, animDuration: Int = 1000, animDelay: Int = 0
+        ) {
+            var animationPlayed by remember { mutableStateOf(false) }
+            val curPercentage = animateFloatAsState(
+                targetValue = if (animationPlayed) percentage else 0f,
+                animationSpec = tween(
+                    durationMillis = animDuration,
+                    delayMillis = animDelay
+                )
+            )
+            LaunchedEffect(key1 = true) {
+                animationPlayed = true
+            }
+
+            Box(
+                modifier = Modifier.size(radius * 2f),
+                contentAlignment = Alignment.Center,
+            ) {
+                Canvas(Modifier.size(radius * 2f)) {
+                    drawArc(
+                        color = color,
+                        startAngle = -90f,
+                        sweepAngle = 360 * curPercentage.value,
+                        useCenter = false,
+                        style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Preview("Light Mode")
+@Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun UserContentPreview() {
+    AppPreviewWrapper { modifier ->
+        LoginContent(modifier)
     }
 }
 

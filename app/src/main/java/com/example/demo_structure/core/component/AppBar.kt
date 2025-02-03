@@ -1,6 +1,5 @@
 package com.example.demo_structure.core.component
 
-import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,7 +29,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.R
 
@@ -75,11 +73,6 @@ fun AppBarIcon(
             contentDescription = null,
             tint = Color.Black
         )
-//        Icon(
-//            painter = painterResource(id = R.drawable.ic_jetchat_front),
-//            contentDescription = null,
-//            tint = MaterialTheme.colorScheme.primary
-//        )
     }
 }
 
@@ -136,11 +129,10 @@ fun TopSearchAppBar(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview("Light Mode", showBackground = true,)
-@Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@ThemePreviews
 @Composable
 fun AppBarPreviewDark() {
-    ProductXPreviewWrapper {
+    AppPreviewWrapper {
         Column {
             TopAppBar(title = { Text("Preview!") },
                 navigationIcon = {

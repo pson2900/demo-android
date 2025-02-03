@@ -7,31 +7,26 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.ScaffoldDefaults
-import androidx.compose.material3.SnackbarDuration.Indefinite
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -44,25 +39,21 @@ import androidx.compose.ui.util.trace
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.demo_structure.app.InitializeApp
-import com.example.demo_structure.app.LocalNavAnimatedVisibilityScope
-import com.example.demo_structure.app.LocalSharedTransitionScope
 import com.example.demo_structure.app.manager.LanguageManager
-import com.example.demo_structure.core.component.AppBackground
-import com.example.demo_structure.core.component.AppGradientBackground
 import com.example.demo_structure.core.component.BottomNavigationBar
-import com.example.demo_structure.core.component.ProductXPreviewWrapper
-import com.example.demo_structure.core.component.ProductXScaffold
-import com.example.demo_structure.core.component.ProductXSnackBar
+import com.example.demo_structure.core.component.LocalNavAnimatedVisibilityScope
+import com.example.demo_structure.core.component.LocalSharedTransitionScope
+import com.example.demo_structure.core.component.AppPreviewWrapper
+import com.example.demo_structure.core.component.AppScaffold
+import com.example.demo_structure.core.component.AppSnackBar
 import com.example.demo_structure.core.component.initBottomMainScreen
 import com.example.demo_structure.core.component.rememberScaffoldState
 import com.example.demo_structure.core.navigation.MainNavHost
 import com.example.demo_structure.core.navigation.rememberAppState
-import com.example.demo_structure.theme.LocalGradientColors
 import com.example.demo_structure.util.NetworkMonitor
 import com.example.demo_structure.util.isSystemInDarkTheme
 import com.example.demo_structure.util.logNavigation
@@ -89,6 +80,8 @@ private val darkScrim = android.graphics.Color.argb(0x80, 0x1b, 0x1b, 0x1b)
  * Class for the system theme settings.
  * This wrapping class allows us to combine all the changes and prevent unnecessary recompositions.
  */
+
+
 data class ThemeSettings(
     val darkTheme: Boolean,
     val androidTheme: Boolean,
@@ -155,41 +148,12 @@ class MainActivity : ComponentActivity() {
         }
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            AppBackground(modifier = Modifier) {
-                AppGradientBackground(gradientColors = LocalGradientColors.current) {
-                    val snackbarHostState = remember { SnackbarHostState() }
-                    val appState = rememberAppState(networkMonitor = koinInject())
-                    val isOffline by appState.isOffline.collectAsStateWithLifecycle()
-
-                    // If user is not connected to the internet show a snack bar to inform them.
-                    val notConnectedMessage = "notConnectedMessage"
-                    LaunchedEffect(isOffline) {
-                        if (isOffline) {
-                            snackbarHostState.showSnackbar(
-                                message = notConnectedMessage,
-                                duration = Indefinite,
-                            )
-                        }
-                    }
-                    InitializeApp(appState = appState, themeSettings = themeSettings)
-                }
-            }
+            InitializeApp(modifier = Modifier.fillMaxSize(), themeSettings = themeSettings)
         }
     }
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class, ExperimentalSharedTransitionApi::class, ExperimentalComposeUiApi::class)
-@Composable
-fun MainRoute(
-    modifier: Modifier = Modifier,
-    onNavigateToJobDetail: (Int, String) -> Unit,
-    onNavigateToLogin: () -> Unit
-) {
-
-}
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class, ExperimentalSharedTransitionApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun MainContent(
     modifier: Modifier = Modifier,
@@ -198,15 +162,16 @@ fun MainContent(
     onNavigateToVerifyEmail: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
-    val nestedNavigation = rememberAppState(networkMonitor = koinInject())
+    val nestedNavigation = rememberAppState()
     val navBackStackEntry by nestedNavigation.navController.currentBackStackEntryAsState()
+    val adaptiveInfo = currentWindowAdaptiveInfo()
     val currentRoute = navBackStackEntry?.destination?.route
     val sharedTransitionScope = LocalSharedTransitionScope.current
         ?: throw IllegalStateException("No SharedElementScope found")
     val animatedVisibilityScope = LocalNavAnimatedVisibilityScope.current
         ?: throw IllegalStateException("No SharedElementScope found")
 
-    ProductXScaffold(
+    AppScaffold(
         modifier = modifier
             .semantics {
                 testTagsAsResourceId = true
@@ -220,18 +185,22 @@ fun MainContent(
             SnackbarHost(
                 hostState = it,
                 modifier = Modifier.systemBarsPadding(),
-                snackbar = { snackbarData -> ProductXSnackBar(snackbarData) }
+                snackbar = { snackbarData -> AppSnackBar(snackbarData) }
             )
         },
         snackBarHostState = scaffoldState.snackBarHostState,
         bottomBar = {
-            BottomNavigationBar(modifier = modifier) {
+            BottomNavigationBar(
+                modifier = modifier,
+                containerColor = Color.White
+            ) {
                 initBottomMainScreen(appState = nestedNavigation)
             }
         },
         content = { padding ->
             logNavigation(nestedNavigation.navController)
             MainNavHost(
+                windowSizeClass = adaptiveInfo.windowSizeClass,
                 modifier = modifier.padding(paddingValues = padding),
                 appState = nestedNavigation,
                 onNavigateToJobDetail = onNavigateToJobDetail,
@@ -245,17 +214,17 @@ fun MainContent(
 @Preview
 @Composable
 fun MainContentPreview() {
-    ProductXPreviewWrapper {
+    AppPreviewWrapper {
         val context = LocalContext.current
         val appState = rememberAppState(networkMonitor = koinInject())
         val snackbarHostState = SnackbarHostState()
-        ProductXScaffold(
+        AppScaffold(
             modifier = Modifier,
             snackbarHost = {
                 SnackbarHost(
                     hostState = it,
                     modifier = Modifier.systemBarsPadding(),
-                    snackbar = { snackbarData -> ProductXSnackBar(snackbarData) }
+                    snackbar = { snackbarData -> AppSnackBar(snackbarData) }
                 )
             },
             snackBarHostState = snackbarHostState,

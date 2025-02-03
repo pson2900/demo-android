@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,36 +35,36 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.demo_structure.R
-import com.example.demo_structure.core.component.ProductXPreviewWrapper
-import com.example.demo_structure.core.component.ProductXSurface
-import com.example.demo_structure.theme.AppIcons.IconAdvancement
-import com.example.demo_structure.theme.AppIcons.IconArrowRight
-import com.example.demo_structure.theme.IconImage
+import com.example.demo_structure.app.manager.theme.AppIcons
+import com.example.demo_structure.app.manager.theme.IconImage
+import com.example.demo_structure.core.component.AppPreviewWrapper
+import com.example.demo_structure.core.component.AppSurface
 
 @Composable
-fun HeaderSection(title: String) {
+fun HeaderSection(title: String, avatar: String) {
     ConstraintLayout(
         Modifier
-            .background(colorResource(R.color.pale_violet))
+            .background(colorResource(R.color.violets_are_blue))
             .fillMaxWidth()
             .wrapContentHeight()
     ) {
         val (BorderLayout, AvataLayout, Setting) = createRefs()
         Box(
             Modifier
-                .clickable {  }
                 .size(48.dp)
                 .clip(CircleShape) // Clip to circle
-                .background(Color.Black.copy(alpha = 0.2f))
+                .background(Color.Black.copy(alpha = 0.2f), CircleShape)
                 .constrainAs(Setting) {
                     top.linkTo(parent.top, 40.dp)
                     end.linkTo(parent.end, margin = 8.dp)
-                },
+                }
+                .clickable { },
+
             contentAlignment = Alignment.Center
         ) {
             Image(ImageVector.vectorResource(R.drawable.ic_setting), contentDescription = null)
         }
-        ProductXSurface(
+        AppSurface(
             shape = RoundedCornerShape(30.dp, 30.dp, 0.dp, 0.dp),
             modifier = Modifier
                 .fillMaxWidth()
@@ -95,7 +96,7 @@ fun HeaderSection(title: String) {
                             .padding(10.dp, 24.dp, 10.dp, 10.dp),
                         color = Color.White,
                         shape = RoundedCornerShape(10.dp, 10.dp, 10.dp, 10.dp),
-                        shadowElevation = 5.dp,
+                        shadowElevation = 0.dp,
                         border = BorderStroke(2.dp, Color.White)
                     ) {
                         val InternalRowModifier = Modifier
@@ -104,7 +105,7 @@ fun HeaderSection(title: String) {
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            IconImage(InternalRowModifier.weight(1.5f), imageResource = IconAdvancement, contentDescription = "IconAdvancement")
+                            IconImage(InternalRowModifier.weight(1.5f), imageResource = AppIcons.advancementIcon, contentDescription = "IconAdvancement")
                             Column(
                                 InternalRowModifier
                                     .weight(7f)
@@ -113,10 +114,9 @@ fun HeaderSection(title: String) {
                                 Text(modifier = Modifier, text = "Bạn đang theo đuổi", style = MaterialTheme.typography.labelMedium, color = Color.Gray)
                                 Text(modifier = Modifier, text = "Product Designer, Ux research", style = MaterialTheme.typography.labelLarge, color = Color.Black)
                             }
-                            IconImage(InternalRowModifier.weight(1.5f), imageResource = IconArrowRight, contentDescription = "IconArrowRight")
+                            IconImage(InternalRowModifier.weight(1.5f), imageResource = AppIcons.arrowRightIcon, contentDescription = "IconArrowRight")
                         }
                     }
-
                 })
         }
 
@@ -125,6 +125,7 @@ fun HeaderSection(title: String) {
                 .size(100.dp)
                 .clip(CircleShape)
                 .shadow(5.dp)
+                .border(4.dp, Color.White, CircleShape)
                 .background(Color.DarkGray)
                 .constrainAs(AvataLayout) {
                     top.linkTo(parent.top, margin = 50.dp)
@@ -153,9 +154,9 @@ fun HeaderSection(title: String) {
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 fun HeaderSectionPreview() {
-    ProductXPreviewWrapper {
+    AppPreviewWrapper {
         HeaderSection(
-            "Hiếu Minh Nguyễn"
+            "Hiếu Minh Nguyễn", ""
         )
     }
 }

@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-package com.example.demo_structure.util
+package com.example.demo_structure.app.manager.theme
 
-import kotlinx.coroutines.flow.Flow
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 
 /**
- * Utility for reporting app connectivity status
+ * A class to model background color and tonal elevation values for Now in Android.
  */
-interface NetworkMonitor {
-    val isOnline: Flow<Boolean>
-}
+@Immutable
+data class BackgroundTheme(
+    val color: Color = Color.Unspecified,
+    val tonalElevation: Dp = Dp.Unspecified,
+)
+
+

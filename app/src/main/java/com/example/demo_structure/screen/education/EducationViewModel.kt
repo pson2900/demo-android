@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.stateIn
  * Copyright (c) 2025 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-class EducationResultViewModel(savedStateHandle: SavedStateHandle) : BaseViewModel(savedStateHandle) {
+class EducationViewModel(savedStateHandle: SavedStateHandle) : BaseViewModel(savedStateHandle) {
     private val searchResultState = MutableStateFlow(
         EducationResultViewModelState(
             isLoading = true,
@@ -22,7 +22,7 @@ class EducationResultViewModel(savedStateHandle: SavedStateHandle) : BaseViewMod
         )
     )
 
-    val uiState = searchResultState
+    val state = searchResultState
         .map(EducationResultViewModelState::toUiState)
         .stateIn(
             viewModelScope,

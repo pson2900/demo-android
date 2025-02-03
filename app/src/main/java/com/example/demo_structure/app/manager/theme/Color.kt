@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.demo_structure.theme
+package com.example.demo_structure.app.manager.theme
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Immutable
@@ -196,12 +196,7 @@ data class ColorAppTheme(
 )
 
 
-/**
- * A composition local for [BackgroundTheme].
- */
-val LocalColorTheme = staticCompositionLocalOf<ColorScheme> {
-    error("No ColorPalette provided")
-}
+/*
 
 
 internal val Blue10 = Color(0xFF001F28)
@@ -360,3 +355,4 @@ val FunctionalGrey = Color(0xfff6f6f6)
 val FunctionalDarkGrey = Color(0xff2e2e2e)
 
 const val AlphaNearOpaque = 0.95f
+*/

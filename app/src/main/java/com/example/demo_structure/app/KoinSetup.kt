@@ -18,11 +18,17 @@ import org.koin.core.logger.Level
  * Email: son.pham@navigosgroup.com
  */
 
+enum class AppDispatchers {
+    Default,
+    IO,
+}
+
 object KoinSetup {
     fun init(application: Application) {
         startKoin {
             androidLogger(Level.DEBUG) // Bật debug log
             androidContext(application)
+            printLogger(Level.DEBUG)
             modules(
                 listOf(networkModule, dataModule, domainModule, presentationModule)
             )
