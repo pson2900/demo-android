@@ -24,6 +24,7 @@ import com.example.demo_structure.screen.login.toLoginScreen
 import com.example.demo_structure.screen.main.AppNavGraph
 import com.example.demo_structure.screen.opportunity.OpportunityNavGraph
 import com.example.demo_structure.screen.user.UserNavGraph
+import com.example.demo_structure.screen.verify_email.toVerifyEmailScreen
 import com.example.demo_structure.util.logNavigation
 
 /**
@@ -69,10 +70,9 @@ fun AppNavHost(
                 appState = appState
             ) {
                 JobDetailNavGraph {
-
                 }
-
                 toLoginScreen()
+                toVerifyEmailScreen()
             }
 
         })
@@ -84,6 +84,7 @@ fun MainNavHost(
     appState: AppState,
     onNavigateToJobDetail: (Int, String) -> Unit,
     onNavigateToLogin: () -> Unit,
+    onNavigateToVerifyEmail: () -> Unit,
 ) {
     val navController = appState.navController
     NavHost(
@@ -98,6 +99,7 @@ fun MainNavHost(
             onTopicClick = {
 
             },
+            onNavigateToVerifyEmail = onNavigateToVerifyEmail
         )
         OpportunityNavGraph(
             onTopicClick = {
@@ -112,7 +114,6 @@ fun MainNavHost(
         UserNavGraph(
             onNavigateToLogin = onNavigateToLogin,
         )
-
     }
 }
 

@@ -194,7 +194,8 @@ fun MainRoute(
 fun MainContent(
     modifier: Modifier = Modifier,
     onNavigateToJobDetail: (Int, String) -> Unit,
-    onNavigateToLogin: () -> Unit
+    onNavigateToLogin: () -> Unit,
+    onNavigateToVerifyEmail: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
     val nestedNavigation = rememberAppState(networkMonitor = koinInject())
@@ -224,7 +225,7 @@ fun MainContent(
         },
         snackBarHostState = scaffoldState.snackBarHostState,
         bottomBar = {
-            BottomNavigationBar(modifier = modifier){
+            BottomNavigationBar(modifier = modifier) {
                 initBottomMainScreen(appState = nestedNavigation)
             }
         },
@@ -234,10 +235,10 @@ fun MainContent(
                 modifier = modifier.padding(paddingValues = padding),
                 appState = nestedNavigation,
                 onNavigateToJobDetail = onNavigateToJobDetail,
-                onNavigateToLogin = onNavigateToLogin
+                onNavigateToLogin = onNavigateToLogin,
+                onNavigateToVerifyEmail = onNavigateToVerifyEmail
             )
         }
-
     )
 }
 
@@ -259,7 +260,7 @@ fun MainContentPreview() {
             },
             snackBarHostState = snackbarHostState,
             bottomBar = {
-                BottomNavigationBar(Modifier){
+                BottomNavigationBar(Modifier) {
                     initBottomMainScreen(appState)
                 }
             }

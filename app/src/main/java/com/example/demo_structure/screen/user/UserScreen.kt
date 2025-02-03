@@ -69,7 +69,7 @@ internal fun UserScreen(
 }
 
 @Composable
-fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: () -> Unit, rememberHostState: SnackbarHostState, myProfileUser: MyProfileUser) {
+fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: () -> Unit, rememberHostState: SnackbarHostState, myProfileUser: MyProfileUser?) {
     ProductXApplicationTheme {
         ProductXScaffold(
             modifier = modifier,
@@ -88,7 +88,7 @@ fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: () -> Unit, re
                     BasicInformation(R.drawable.ic_my_profile_opprotunities_crow, "Kinh nghiệm làm việc", 0)
                 )
                 LazyColumn(Modifier) {
-                    item { HeaderSection(title = "${myProfileUser.basicInfo?.lastName + myProfileUser.basicInfo?.firstName}") }
+                    item { HeaderSection(title = "${myProfileUser?.basicInfo?.lastName + myProfileUser?.basicInfo?.firstName}") }
                     item { Spacer(Modifier.size(24.dp)) }
                     item { ProfileStatusSection() }
                     item { Spacer(Modifier.height(24.dp)) }
@@ -112,11 +112,12 @@ fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: () -> Unit, re
 @Composable
 fun UserContentPreview() {
     ProductXPreviewWrapper { modifier ->
-        /* val hostState = remember { SnackbarHostState() }
+         val hostState = remember { SnackbarHostState() }
          UserContent(onNavigateToLogin = {
 
-         }, modifier = modifier, rememberHostState = hostState)*/
-        LoadingState(modifier)
+         }, modifier = modifier,
+             rememberHostState = hostState, myProfileUser = null)
+       // LoadingState(modifier)
     }
 }
 

@@ -8,6 +8,7 @@ import com.example.demo_structure.screen.login.LoginViewModel
 import com.example.demo_structure.screen.education.EducationResultViewModel
 import com.example.demo_structure.screen.opportunity.OpportunityViewModel
 import com.example.demo_structure.screen.user.UserViewModel
+import com.example.demo_structure.screen.verify_email.VerifyEmailViewModel
 import kotlinx.coroutines.flow.Flow
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -25,4 +26,5 @@ val presentationModule = module {
     viewModel { EducationResultViewModel(savedStateHandle = SavedStateHandle()) }
     viewModel { JobDetailViewModel() }
     viewModel { LoginViewModel() }
+    viewModel { VerifyEmailViewModel() }
 }

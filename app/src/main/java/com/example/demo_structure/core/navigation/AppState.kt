@@ -160,6 +160,7 @@ object Destinations {
     const val JOB_DETAIL_ROUTE = "job_detail"
     const val LOGIN_ROUTE = "login"
     const val JOB_DETAIL_ID_KEY = "jobId"
+    const val VERIFY_EMAIL = "verify_email"
     const val ORIGIN = "origin"
 }
 

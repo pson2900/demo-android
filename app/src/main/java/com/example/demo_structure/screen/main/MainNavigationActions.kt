@@ -7,6 +7,7 @@ import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.core.navigation.composableWith
 import com.example.demo_structure.screen.job_detail.toJobDetail
 import com.example.demo_structure.screen.login.toLogin
+import com.example.demo_structure.screen.verify_email.toVerifyEmail
 
 /**
  * Created by Phạm Sơn at 16:37/2/1/25
@@ -48,6 +49,9 @@ fun NavGraphBuilder.AppNavGraph(
             },
             onNavigateToLogin = {
                 navController.toLogin()
+            },
+            onNavigateToVerifyEmail = {
+                navController.toVerifyEmail()
             }
         )
     }

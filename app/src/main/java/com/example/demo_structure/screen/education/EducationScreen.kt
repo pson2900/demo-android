@@ -3,6 +3,7 @@ package com.example.demo_structure.screen.education
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material.Text
+import androidx.compose.material3.Button
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -37,7 +40,9 @@ import org.koin.androidx.compose.koinViewModel
  */
 
 @Composable
-fun EducationScreen(viewModel: EducationResultViewModel, onTopicClick: (String) -> Unit) {
+fun EducationScreen(viewModel: EducationResultViewModel,
+                    onTopicClick: (String) -> Unit,
+                    onNavigateToVerifyEmail: () -> Unit,) {
     val modifier: Modifier = Modifier
         .fillMaxSize()
         .navigationBarsPadding()
@@ -67,31 +72,35 @@ fun EducationScreen(viewModel: EducationResultViewModel, onTopicClick: (String) 
             },
             snackBarHostState = snackbarHostState,
             content = { padding ->
-                Box(
+
+                Column(
                     modifier = modifier
                         .background(Color.White)
                         .padding(padding)
                         .fillMaxSize()
-                        .clickable {
-                            coroutineScope.launch {
-                                val result = snackbarHostState.showSnackbar(
-                                    message = "Message",
-                                    actionLabel = "Action",
-                                )
-                                when (result) {
-                                    SnackbarResult.ActionPerformed -> {
-                                        println("Action clicked")
-                                    }
-
-                                    SnackbarResult.Dismissed -> {
-                                        println("Dismissed")
-                                    }
-                                }
-                            }
-                        },
-                    contentAlignment = Alignment.TopStart
+//                        .clickable {
+//                            coroutineScope.launch {
+//                                val result = snackbarHostState.showSnackbar(
+//                                    message = "Message",
+//                                    actionLabel = "Action",
+//                                )
+//                                when (result) {
+//                                    SnackbarResult.ActionPerformed -> {
+//                                        println("Action clicked")
+//                                    }
+//
+//                                    SnackbarResult.Dismissed -> {
+//                                        println("Dismissed")
+//                                    }
+//                                }
+//                            }
+//                        },
                 ) {
-
+                    Button(onClick = {
+                        onNavigateToVerifyEmail.invoke()
+                    }) {
+                        Text(text = "Login")
+                    }
 //                    Text("SearchResultScreen")
                 }
             }
@@ -104,8 +113,10 @@ fun EducationScreen(viewModel: EducationResultViewModel, onTopicClick: (String) 
 @Composable
 fun SearchResultScreenPreview() {
     ProductXPreviewWrapper {
+        EducationScreen(viewModel = koinViewModel(), onTopicClick = { _ -> },
+            onNavigateToVerifyEmail = {
 
-        EducationScreen(viewModel = koinViewModel(), onTopicClick = { _ -> })
+        })
     }
 }
 

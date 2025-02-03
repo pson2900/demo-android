@@ -99,5 +99,5 @@ dependencies {
     // Mark: AndroidX Material3 Adaptive Navigation Suite for Compose
     implementation(libs.androidx.adaptive.navigation.suite) // Adaptive Navigation Suite for Compose
     implementation(libs.compose)
-    implementation ("androidx.compose.material:material:1.4.2")
+    implementation (libs.androidx.material)
 }
