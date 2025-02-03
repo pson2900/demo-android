@@ -65,9 +65,9 @@ fun RowScope.initBottomMainScreen(appState: AppState) {
             },
             label = {
                 Row(horizontalArrangement = Arrangement.Center) {
-                    Text(
+                    AppText(
                         text = item.title,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = ProductXTheme.typography.RegularLabelSmall,
                         color = if (currentRoute == item.route) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onTertiary,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,

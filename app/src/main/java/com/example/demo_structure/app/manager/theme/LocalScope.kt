@@ -36,6 +36,11 @@ val LocalGradientColors = staticCompositionLocalOf { GradientColors() }
 val LocalBackgroundTheme = staticCompositionLocalOf { BackgroundTheme(color = hexToColor("#F1F5F9")) }
 
 /**
+ * A composition local for [AppTypography].
+ */
+val LocalAppTypography = staticCompositionLocalOf { AppTypography() }
+
+/**
  * A composition local for [CardTheme].
  */
 val LocalCardTheme = staticCompositionLocalOf {

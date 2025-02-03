@@ -109,6 +109,10 @@ object ProductXTheme {
     val gradientColors: GradientColors
         @Composable
         get() = LocalGradientColors.current
+
+    val typography: AppTypography
+        @Composable
+        get() = LocalAppTypography.current
 }
 
 
@@ -154,16 +158,17 @@ fun ApplicationTheme(
         shape = RoundedCornerShape(8.dp),
         border = BorderStroke(10.dp, Color.Unspecified),
     )
+
     // Composition locals
     CompositionLocalProvider(
         LocalColorTheme provides colorScheme,
         LocalGradientColors provides gradientColors,
         LocalBackgroundTheme provides backgroundTheme,
         LocalCardTheme provides cardTheme,
+
         content = {
             MaterialTheme(
                 colorScheme = colorScheme,
-                typography = appTypography,
                 content = content,
             )
 

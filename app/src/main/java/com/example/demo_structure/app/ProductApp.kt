@@ -15,7 +15,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.demo_structure.app.manager.theme.AppTypography
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
+import com.example.demo_structure.app.manager.theme.LocalAppTypography
 import com.example.demo_structure.core.component.AppBackground
 import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
@@ -42,6 +44,7 @@ class ProductApp : Application() {
 fun InitializeApp(
     modifier: Modifier = Modifier,
     themeSettings: ThemeSettings,
+    appTypography: AppTypography = AppTypography(),
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfo(),
 ) {
     ApplicationTheme(
@@ -51,6 +54,7 @@ fun InitializeApp(
         SharedTransitionLayout {
             AnimatedVisibility(visible = true) {
                 CompositionLocalProvider(
+                    LocalAppTypography provides appTypography,
                     LocalSharedTransitionScope provides this@SharedTransitionLayout,
                     LocalNavAnimatedVisibilityScope provides this,
                     LocalWindowAdaptiveInfo provides windowAdaptiveInfo
