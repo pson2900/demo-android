@@ -25,7 +25,6 @@ import com.example.demo_structure.app.manager.theme.toIcon
 import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.core.navigation.rememberAppState
-import com.example.demo_structure.screen.main.MainDestination
 import com.example.demo_structure.util.AlwaysOnlineNetworkMonitor
 
 /**

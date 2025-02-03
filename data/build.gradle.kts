@@ -6,10 +6,11 @@ plugins {
 
 android {
     namespace = "com.example.data"
-    compileSdk = 35
-
     defaultConfig {
-        minSdk = 26
+        minSdk = rootProject.extra["defaultMinSdkVersion"] as Int
+        buildToolsVersion = rootProject.extra["defaultBuildToolsVersion"] as String
+        compileSdkVersion = rootProject.extra["defaultCompileSdkVersion"] as String
+        compileSdk = rootProject.extra["defaultCompileSdk"] as Int
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -21,14 +22,13 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
-
 
 }
 

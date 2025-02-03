@@ -25,10 +25,8 @@ import android.os.Build.VERSION_CODES
 import androidx.compose.ui.util.trace
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.conflate
@@ -48,11 +46,11 @@ interface TimeZoneMonitor {
     val currentTimeZone: Flow<TimeZone>
 }
 
-internal class TimeZoneBroadcastMonitor(
+class TimeZoneBroadcastMonitor(
     private val context: Context,
     private val appScope: CoroutineScope,
     private val ioDispatcher: CoroutineDispatcher
-) :KoinComponent, TimeZoneMonitor {
+) : KoinComponent, TimeZoneMonitor {
 
     override val currentTimeZone: Flow<TimeZone> =
         callbackFlow {
@@ -99,5 +97,5 @@ internal class TimeZoneBroadcastMonitor(
             .flowOn(ioDispatcher)
 
             // Sharing the callback to prevent multiple BroadcastReceivers being registered
-//            .shareIn(appScope, SharingStarted.WhileSubscribed(5_000), 1)
+            .shareIn(appScope, SharingStarted.WhileSubscribed(5_000), 1)
 }

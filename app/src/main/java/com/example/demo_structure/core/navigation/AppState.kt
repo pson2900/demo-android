@@ -1,12 +1,19 @@
 package com.example.demo_structure.core.navigation
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.util.trace
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
@@ -21,6 +28,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.datetime.TimeZone
 import org.koin.compose.koinInject
 
 /**
@@ -64,32 +72,26 @@ class AppState(
             initialValue = false,
         )
 
-    /* var isOnline by mutableStateOf(checkIfOnline())
-         private set
+    var isOnline by mutableStateOf(checkIfOnline())
+        private set
 
-     fun refreshOnline() {
-         isOnline = checkIfOnline()
-     }
+    fun refreshOnline() {
+        isOnline = checkIfOnline()
+    }
 
 
-     @Suppress("DEPRECATION")
-     private fun checkIfOnline(): Boolean {
-         val cm = getSystemService(context, ConnectivityManager::class.java)
+    @Suppress("DEPRECATION")
+    private fun checkIfOnline(): Boolean {
+        val cm = getSystemService(context, ConnectivityManager::class.java)
+        return cm?.activeNetworkInfo?.isConnectedOrConnecting == true
+    }
 
-         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-             val capabilities = cm?.getNetworkCapabilities(cm.activeNetwork) ?: return false
-             capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
-                     capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
-         } else {
-             cm?.activeNetworkInfo?.isConnectedOrConnecting == true
-         }
-     }*/
-    /*   val currentTimeZone = timeZoneMonitor.currentTimeZone
-           .stateIn(
-               coroutineScope,
-               SharingStarted.WhileSubscribed(5_000),
-               TimeZone.currentSystemDefault(),
-           )*/
+    val currentTimeZone = timeZoneMonitor.currentTimeZone
+        .stateIn(
+            coroutineScope,
+            SharingStarted.WhileSubscribed(5_000),
+            TimeZone.currentSystemDefault(),
+        )
 
     // ----------------------------------------------------------
     // Navigation state source of truth

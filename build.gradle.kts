@@ -12,3 +12,10 @@ plugins {
 }
 
 
+allprojects {
+    extra["defaultTargetSdkVersion"] = 35
+    extra["defaultMinSdkVersion"] = 26
+    extra["defaultCompileSdkVersion"] = "android-35"
+    extra["defaultCompileSdk"] = 35
+    extra["defaultBuildToolsVersion"] = "35.0.0"
+}

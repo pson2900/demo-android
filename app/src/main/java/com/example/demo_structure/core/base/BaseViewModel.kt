@@ -7,6 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.util.trace
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,7 +19,6 @@ import com.example.demo_structure.core.component.AppLoadingWheel
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -104,47 +104,49 @@ abstract class BaseViewModel constructor(val savedStateHandle: SavedStateHandle)
         dataKey: String? = null,
     ) {
         val tag = "wrapperApiCall"
-        viewModelScope.launch{
-            call()
-                .onStart {
-                    Log.d(tag, "Starting API call for dataKey: $dataKey")
-                    Log.d(tag, "API flow started: $dataKey")
-                    val savedData = dataKey?.let { loadFromSavedState<T>(it) }
-                    if (savedData == null) {
-                        Log.d(tag, "No saved data for $dataKey, emitting loading state")
-                        emitLoading(state)
-                    } else {
-                        Log.d(tag, "Loaded data for $dataKey, emitting success")
-                        emitSuccess(state, savedData)
-                    }
-                }
-
-                .catch {
-                    if (it is CancellationException) {
-                        Log.d(tag, "API call canceled for dataKey: $dataKey in outer try-catch")
-                    } else {
-                        val exception = ErrorMapper.toAppException(it)
-                        Log.e(tag, "API call failed in outer catch for $dataKey : $exception", it)
-                        emitError(state, exception)
+        trace("wrapperApiCall") {
+            Log.d(tag, "Starting API call for dataKey: $dataKey")
+            viewModelScope.launch {
+                call()
+                    .onStart {
+                        Log.d(tag, "API flow started: $dataKey")
+                        val savedData = dataKey?.let { loadFromSavedState<T>(it) }
+                        if (savedData == null) {
+                            Log.d(tag, "No saved data for $dataKey, emitting loading state")
+                            emitLoading(state)
+                        } else {
+                            Log.d(tag, "Loaded data for $dataKey, emitting success")
+                            emitSuccess(state, savedData)
+                        }
                     }
 
-                }
-                .collect { data ->
-                    Log.d(tag, "API call success for $dataKey: $data")
-                    dataKey?.let {
-                        saveToSavedState(it, data)
-                    }
+                    .catch {
+                        if (it is CancellationException) {
+                            Log.d(tag, "API call canceled for dataKey: $dataKey in outer try-catch")
+                        } else {
+                            val exception = ErrorMapper.toAppException(it)
+                            Log.e(tag, "API call failed in outer catch for $dataKey : $exception", it)
+                            emitError(state, exception)
+                        }
 
-                    emitSuccess(state, data)
-                }
+                    }
+                    .collect { data ->
+                        Log.d(tag, "API call success for $dataKey: $data")
+                        dataKey?.let {
+                            saveToSavedState(it, data)
+                        }
+
+                        emitSuccess(state, data)
+                    }
+            }
         }
+
     }
 
 }
 
 @Composable
-fun <T> DataStateWrapper(
-    modifier: Modifier = Modifier,
+fun <T> UiStateWrapper(
     uiState: UIState<T>,
     onLoadingContent: @Composable () -> Unit = {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -165,9 +167,7 @@ fun <T> DataStateWrapper(
     when (uiState) {
         is UIState.Loading -> onLoadingContent()
         is UIState.Success -> onSuccessContent(uiState.data)
-        is UIState.Error -> {
-            onErrorContent(uiState.appException.message ?: "Unknown error")
-        }
+        is UIState.Error -> onErrorContent(uiState.appException.message ?: "Unknown error")
     }
 }
 

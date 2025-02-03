@@ -7,7 +7,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import androidx.window.core.layout.WindowSizeClass
 import com.example.demo_structure.core.navigation.Destinations
-import com.example.demo_structure.screen.main.MainDestination
 import org.koin.androidx.compose.koinViewModel
 
 fun NavController.toHome(navOptions: NavOptions) =

@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
+import com.example.demo_structure.core.base.UiStateWrapper
 import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
@@ -69,17 +70,13 @@ internal fun UserScreen(
         }
     }
 
-    UserViewModelState.ToMyProfileUiState(modifier, myProfileState, onNavigateToLogin)
-    UserViewModelState.ToFeatureItemUiState(modifier, featureItemState, onNavigateToLogin)
-
-    /*    DataStateWrapper(modifier = modifier, uiState = state) { userState ->
-            Log.d("QQQ","userState: $userState")
-            UserContent(
-                modifier = modifier.fillMaxSize(),
-                onNavigateToLogin = onNavigateToLogin,
-                myProfile = userState
-            )
-        }*/
+    UiStateWrapper(uiState = myProfileState, onSuccessContent = {
+        UserContent(
+            modifier = modifier.fillMaxSize(),
+            onNavigateToLogin = onNavigateToLogin,
+            myProfile = it
+        )
+    })
 }
 
 
@@ -111,7 +108,7 @@ fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: () -> Unit, my
     }
 }
 
-fun LazyListScope.myProfileBody(myProfile: MyProfile){
+fun LazyListScope.myProfileBody(myProfile: MyProfile) {
     val basicInformation = (myProfile.profiles.find { it is Profile.BasicProfile } as? Profile.BasicProfile)?.basic
     item { HeaderSection(title = "${basicInformation?.lastName} ${basicInformation?.firstName}", avatar = basicInformation?.photo ?: "") }
     item { Spacer(Modifier.size(24.dp)) }

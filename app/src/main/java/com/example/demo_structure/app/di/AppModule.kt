@@ -31,10 +31,10 @@ val networkModule = module {
         CoroutineScope(SupervisorJob() + get<CoroutineDispatcher>(named(AppDispatchers.Default.name)))
     }
     single<ApiService> { RetrofitClient.createService<ApiService>() }
-    single {
-        TimeZoneBroadcastMonitor(androidContext(),get(),get(named(AppDispatchers.IO.name)))
+    single<TimeZoneMonitor> {
+        TimeZoneBroadcastMonitor(androidContext(), get(), get(named(AppDispatchers.IO.name)))
     }
-    single {
-        ConnectivityManagerNetworkMonitor(androidContext(),get(named(AppDispatchers.IO.name)))
+    single<NetworkMonitor> {
+        ConnectivityManagerNetworkMonitor(androidContext(), get(named(AppDispatchers.IO.name)))
     }
 }

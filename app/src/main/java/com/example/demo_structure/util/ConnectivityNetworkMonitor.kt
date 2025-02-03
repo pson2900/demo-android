@@ -38,6 +38,10 @@ class AlwaysOnlineNetworkMonitor constructor() : NetworkMonitor {
     override val isOnline: Flow<Boolean> = flowOf(true)
 }
 
+interface NetworkMonitor {
+    val isOnline: Flow<Boolean>
+}
+
 
 internal class ConnectivityManagerNetworkMonitor(
     private val context: Context,
