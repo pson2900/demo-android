@@ -17,9 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.core.component.AppBackground
-import com.example.demo_structure.core.component.LocalNavAnimatedVisibilityScope
-import com.example.demo_structure.core.component.LocalSharedTransitionScope
-import com.example.demo_structure.core.component.LocalWindowAdaptiveInfo
+import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
+import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
+import com.example.demo_structure.app.manager.theme.LocalWindowAdaptiveInfo
 import com.example.demo_structure.core.navigation.AppNavHost
 import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.screen.main.ThemeSettings
@@ -46,7 +46,6 @@ fun InitializeApp(
 ) {
     ApplicationTheme(
         darkTheme = themeSettings.darkTheme,
-        androidTheme = themeSettings.androidTheme,
         disableDynamicTheming = themeSettings.disableDynamicTheming,
     ) {
         SharedTransitionLayout {

@@ -16,19 +16,24 @@
 
 package com.example.demo_structure.app.manager.theme
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.material3.CardElevation
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.Dp
 
 /**
  * A class to model background color and tonal elevation values for Now in Android.
  */
 @Immutable
 data class CardTheme(
-    val colorBackground: Color = Color.Unspecified,
-    val colorText: Color = Color.Unspecified,
+    val background: Color = Color.Unspecified,
+    val text: Color = Color.Unspecified,
     val colorBackgroundHeader: Color = Color.Unspecified,
     val colorTextHeader: Color = Color.Unspecified,
     val colorOutline: Color = Color.Unspecified,
+    val border: BorderStroke,
+    val shape: Shape,
 )
 

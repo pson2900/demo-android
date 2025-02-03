@@ -24,6 +24,8 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
+import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
+import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

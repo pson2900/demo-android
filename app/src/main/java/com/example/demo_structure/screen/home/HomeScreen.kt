@@ -52,9 +52,9 @@ import androidx.window.core.layout.WindowSizeClass
 import com.example.demo_structure.JobDetail
 import com.example.demo_structure.R
 import com.example.demo_structure.core.component.AppLoadingWheel
-import com.example.demo_structure.core.component.JobDetailCard
-import com.example.demo_structure.core.component.LocalNavAnimatedVisibilityScope
-import com.example.demo_structure.core.component.LocalSharedTransitionScope
+import com.example.demo_structure.core.component.AppCard
+import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
+import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppSurface
@@ -212,7 +212,7 @@ fun ItemResult(modifier: Modifier = Modifier, jobDetail: JobDetail, onItemSelect
                     EnterExitState.PostExit -> 20.dp
                 }
             }
-        JobDetailCard(
+        AppCard(
             elevation = 0.dp,
             shape = RoundedCornerShape(roundedCornerAnimation),
             modifier = Modifier
@@ -223,24 +223,6 @@ fun ItemResult(modifier: Modifier = Modifier, jobDetail: JobDetail, onItemSelect
                 .clickable {
                     onItemSelected(jobDetail.jobId, "origin")
                 }
-                /* .sharedBounds(
-                     sharedContentState = rememberSharedContentState(
-                         key = SharedElementKey(
-                             jobId = 10,
-                             origin = "origin",
-                             type = SharedElementType.Bounds
-                         )
-                     ),
-                     animatedVisibilityScope = animatedVisibilityScope,
-                     boundsTransform = snackDetailBoundsTransform,
-                     clipInOverlayDuringTransition = OverlayClip(
-                         RoundedCornerShape(
-                             roundedCornerAnimation
-                         )
-                     ),
-                     enter = fadeIn(),
-                     exit = fadeOut()
-                 )*/
                 .size(
                     width = HighlightCardWidth,
                     height = 150.dp

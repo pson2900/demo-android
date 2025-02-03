@@ -2,8 +2,6 @@ package com.example.demo_structure.core.navigation
 
 import android.content.Context
 import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -136,8 +134,6 @@ class AppState(
             }
         }
     }
-
-
 }
 
 /**
@@ -158,19 +154,3 @@ private val NavGraph.startDestination: NavDestination?
 private tailrec fun findStartDestination(graph: NavDestination): NavDestination {
     return if (graph is NavGraph) findStartDestination(graph.startDestination!!) else graph
 }
-
-/*
-object Destinations {
-    const val MAIN = "main"
-    const val HOME_ROUTE = "home"
-    const val EDUCATION_ROUTE = "education"
-    const val OPPORTUNITY_ROUTE = "opportunity"
-    const val COMMUNITY_ROUTE = "community"
-    const val USER_ROUTE = "user"
-    const val JOB_DETAIL_ROUTE = "job_detail"
-    const val LOGIN_ROUTE = "login"
-    const val JOB_DETAIL_ID_KEY = "jobId"
-    const val ORIGIN = "origin"
-}
-
-*/

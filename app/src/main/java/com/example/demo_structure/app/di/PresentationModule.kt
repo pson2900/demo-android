@@ -1,10 +1,10 @@
 package com.example.demo_structure.app.di
 
 import com.example.demo_structure.screen.community.CommunityViewModel
+import com.example.demo_structure.screen.education.EducationViewModel
 import com.example.demo_structure.screen.home.HomeViewModel
 import com.example.demo_structure.screen.job_detail.JobDetailViewModel
 import com.example.demo_structure.screen.login.LoginViewModel
-import com.example.demo_structure.screen.education.EducationViewModel
 import com.example.demo_structure.screen.main.MainViewModel
 import com.example.demo_structure.screen.opportunity.OpportunityViewModel
 import com.example.demo_structure.screen.user.UserViewModel
@@ -22,7 +22,7 @@ val presentationModule = module {
     viewModel { OpportunityViewModel(savedStateHandle = get()) }
     viewModel { CommunityViewModel(savedStateHandle = get()) }
     viewModel { UserViewModel(myProfileUseCase = get(), stateHandle = get()) }
-    viewModel { EducationViewModel(savedStateHandle =  get()) }
+    viewModel { EducationViewModel(savedStateHandle = get()) }
     viewModel { JobDetailViewModel(savedStateHandle = get()) }
     viewModel { LoginViewModel(savedStateHandle = get()) }
 }

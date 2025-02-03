@@ -3,7 +3,9 @@ package com.example.demo_structure.app.manager.theme
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.VisibleForTesting
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -13,12 +15,9 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.demo_structure.core.component.LocalBackgroundTheme
-import com.example.demo_structure.core.component.LocalCardTheme
-import com.example.demo_structure.core.component.LocalColorTheme
-import com.example.demo_structure.core.component.LocalGradientColors
 
 /**
  * Light default theme color scheme
@@ -52,10 +51,6 @@ val LightDefaultColorScheme = lightColorScheme(
     inverseOnSurface = hexToColor("#000000"), // Color for text/icons on the inverseSurface
     outline = hexToColor("#9984FB"), // Color for borders, dividers or outlines
     outlineVariant = hexToColor("#9984FB"), // Color for borders, dividers or outlines on surfaces
-
-
-
-
 )
 
 /**
@@ -73,7 +68,7 @@ val DarkDefaultColorScheme = darkColorScheme(
     onSecondaryContainer = hexToColor("#FFFFFF"), // Color for text/icons on the secondaryContainer (dark theme)
     tertiary = hexToColor("#000000"), // Tertiary color (dark theme)
     onTertiary = hexToColor("#FFFFFF"), // Color for text/icons on the tertiary color (dark theme)
-    tertiaryContainer =  hexToColor("#000000"), // Background color for containers based on tertiary (dark theme)
+    tertiaryContainer = hexToColor("#000000"), // Background color for containers based on tertiary (dark theme)
     onTertiaryContainer = hexToColor("#FFFFFF"), // Color for text/icons on the tertiaryContainer (dark theme)
     error = hexToColor("#EC221F"), // Color for errors (dark theme)
     onError = hexToColor("#EC221F"), // Color for text/icons on the error color (dark theme)
@@ -120,19 +115,11 @@ object ProductXTheme {
 @Composable
 fun ApplicationTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    androidTheme: Boolean = false,
     disableDynamicTheming: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     // Color scheme
     val colorScheme = when {
-        /*androidTheme -> if (darkTheme) DarkAndroidColorScheme else LightAndroidColorScheme
-        !disableDynamicTheming && supportsDynamicTheming() -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        else -> if (darkTheme) DarkDefaultColorScheme else LightDefaultColorScheme*/
         !disableDynamicTheming && supportsDynamicTheming() -> {
             if (darkTheme) dynamicDarkColorScheme(LocalContext.current) else dynamicLightColorScheme(LocalContext.current)
         }
@@ -150,30 +137,23 @@ fun ApplicationTheme(
     )
 
     val gradientColors = when {
-//        androidTheme -> if (darkTheme) DarkAndroidGradientColors else LightAndroidGradientColors
         !disableDynamicTheming && supportsDynamicTheming() -> emptyGradientColors
         else -> defaultGradientColors
     }
     // Background theme
-    val defaultBackgroundTheme = BackgroundTheme(
+    val backgroundTheme = BackgroundTheme(
         color = colorScheme.background,
         tonalElevation = 2.dp,
     )
-    val backgroundTheme = when {
-//        androidTheme -> if (darkTheme) DarkAndroidBackgroundTheme else LightAndroidBackgroundTheme
-        else -> defaultBackgroundTheme
-    }
-    val cardTheme = when {
-//        androidTheme -> TintTheme()
-        !disableDynamicTheming && supportsDynamicTheming() -> CardTheme(colorScheme.primary)
-        else -> CardTheme(
-            colorBackground = colorScheme.surface,
-            colorText = colorScheme.onSurface,
-            colorBackgroundHeader = colorScheme.surfaceVariant,
-            colorTextHeader = colorScheme.onSurfaceVariant,
-            colorOutline = colorScheme.outline
-        )
-    }
+    val cardTheme = CardTheme(
+        background = colorScheme.surface,
+        text = colorScheme.onSurface,
+        colorBackgroundHeader = colorScheme.surfaceVariant,
+        colorTextHeader = colorScheme.onSurfaceVariant,
+        colorOutline = colorScheme.outline,
+        shape = RoundedCornerShape(8.dp),
+        border = BorderStroke(10.dp, Color.Unspecified),
+    )
     // Composition locals
     CompositionLocalProvider(
         LocalColorTheme provides colorScheme,

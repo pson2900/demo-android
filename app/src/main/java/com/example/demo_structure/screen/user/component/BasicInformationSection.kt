@@ -52,7 +52,6 @@ fun BasicInformationSection(list: List<BasicInformation>) {
 }
 
 
-
 @Composable
 fun BasicInformationItem(profile: Profile, onActionClick: (Profile) -> Unit) {
     var title = ""
@@ -181,18 +180,8 @@ fun BasicInformationItem(profile: Profile, onActionClick: (Profile) -> Unit) {
     }
 }
 
-@Preview("Light Mode")
-@Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun BasicInformationItemPreview() {
-    BasicInformationItem(Profile.AttachmentProfile(emptyList())) {
-
-    }
-
-}
-
-@Preview("Light Mode")
-@Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Mobile Light Mode", group = "Mobile")
+@Preview(name = "Mobile Dark Mode", group = "Mobile", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun BasicInformationSectionPreview() {
     AppPreviewWrapper {
