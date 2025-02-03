@@ -29,22 +29,12 @@ fun ProductXFilterChip(
         selected = selected,
         onClick = { onSelectedChange(!selected) },
         label = {
-            ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
+            ProvideTextStyle(value = ProductXTheme.typography.RegularLabelLarge) {
                 label()
             }
         },
         modifier = modifier,
         enabled = enabled,
-       /* leadingIcon = if (selected) {
-            {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_check),
-                    contentDescription = null,
-                )
-            }
-        } else {
-            null
-        },*/
         shape = CircleShape,
         border = FilterChipDefaults.filterChipBorder(
             enabled = enabled,

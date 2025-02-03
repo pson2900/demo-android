@@ -3,16 +3,14 @@ package com.example.demo_structure.core.component
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.material3.LocalContentColor
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.unit.Dp
@@ -29,9 +27,8 @@ import kotlin.math.ln
 @Composable
 fun AppSurface(
     modifier: Modifier = Modifier,
-    shape: Shape = RectangleShape,
+    shape: Shape = RoundedCornerShape(5.dp),
     color: Color = ProductXTheme.colors.background,
-    contentColor: Color = ProductXTheme.cardTheme.text,
     border: BorderStroke? = null,
     elevation: Dp = 0.dp,
     content: @Composable () -> Unit
@@ -40,22 +37,21 @@ fun AppSurface(
         modifier = modifier
             .shadow(elevation = elevation, shape = shape, clip = false)
             .zIndex(elevation.value)
-            .then(if (border != null) Modifier.border(border, shape) else Modifier)
+            .clip(shape)
+            .then(if (border != null) modifier.border(border, shape) else Modifier)
             .background(
                 color = getBackgroundColorForElevation(color, elevation),
                 shape = shape
-            )
-            .clip(shape)
-    ) {
-        CompositionLocalProvider(LocalContentColor provides contentColor, content = content)
-    }
+            ),
+        content = content
+    )
 }
 
 @ThemePreviews
 @Composable
 fun AppSurfacePreviews() {
     AppPreviewWrapper {
-        AppSurface(){
+        AppSurface {
             Text(text = "AppSurface")
         }
     }

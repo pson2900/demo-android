@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 
 /**
  * Created by Phạm Sơn at 13:32/20/1/25
@@ -45,7 +46,7 @@ fun AppTab(
         modifier = modifier,
         enabled = enabled,
         text = {
-            val style = MaterialTheme.typography.labelLarge.copy(textAlign = TextAlign.Center)
+            val style = ProductXTheme.typography.SemiBoldLabelLarge.copy(textAlign = TextAlign.Center)
             ProvideTextStyle(
                 value = style,
                 content = {

@@ -270,6 +270,7 @@ object AppFont {
 
 @Immutable
 class AppTypography(
+    /* Regular */
     val RegularDisplayXLarge: TextStyle = AppFont.Regular.Display.X_Large,
     val RegularDisplayLarge: TextStyle = AppFont.Regular.Display.Large,
     val RegularDisplayMedium: TextStyle = AppFont.Regular.Display.Medium,
@@ -297,6 +298,7 @@ class AppTypography(
     val RegularBodyMedium: TextStyle = AppFont.Regular.Body.Medium,
     val RegularBodySmall: TextStyle = AppFont.Regular.Body.Small,
 
+    /* Italic */
     val ItalicDisplayXLarge: TextStyle = AppFont.Italic.Display.X_Large,
     val ItalicDisplayLarge: TextStyle = AppFont.Italic.Display.Large,
     val ItalicDisplayMedium: TextStyle = AppFont.Italic.Display.Medium,
@@ -324,6 +326,7 @@ class AppTypography(
     val ItalicBodyMedium: TextStyle = AppFont.Italic.Body.Medium,
     val ItalicBodySmall: TextStyle = AppFont.Italic.Body.Small,
 
+    /* SemiBold */
     val SemiBoldDisplayXLarge: TextStyle = AppFont.SemiBold.Display.X_Large,
     val SemiBoldDisplayLarge: TextStyle = AppFont.SemiBold.Display.Large,
     val SemiBoldDisplayMedium: TextStyle = AppFont.SemiBold.Display.Medium,
@@ -333,6 +336,8 @@ class AppTypography(
     val SemiBoldHeadingXLarge: TextStyle = AppFont.SemiBold.Heading.X_Large,
     val SemiBoldHeadingLarge: TextStyle = AppFont.SemiBold.Heading.Large,
     val SemiBoldHeadingMedium: TextStyle = AppFont.SemiBold.Heading.Medium,
+    val SemiBoldHeadingSmall: TextStyle = AppFont.SemiBold.Heading.Small,
+    val SemiBoldHeadingXSmall: TextStyle = AppFont.SemiBold.Heading.X_Small,
 
     val SemiBoldTitleXLarge: TextStyle = AppFont.SemiBold.Title.X_Large,
     val SemiBoldTitleLarge: TextStyle = AppFont.SemiBold.Title.Large,

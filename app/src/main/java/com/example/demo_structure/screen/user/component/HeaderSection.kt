@@ -1,7 +1,6 @@
 package com.example.demo_structure.screen.user.component
 
 import android.content.res.Configuration
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,8 +18,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -65,45 +63,50 @@ fun HeaderSection(title: String, avatar: String) {
         ) {
             Image(ImageVector.vectorResource(R.drawable.ic_setting), contentDescription = null)
         }
+        val iconMargin = 50.dp
         AppSurface(
-            shape = RoundedCornerShape(30.dp, 30.dp, 0.dp, 0.dp),
             modifier = Modifier
+
+                .background(color = colorResource(R.color.anti_flash_white), shape = RoundedCornerShape(30.dp, 30.dp, 0.dp, 0.dp))
                 .fillMaxWidth()
                 .constrainAs(BorderLayout) {
-                    top.linkTo(AvataLayout.top, margin = 50.dp)
+                    top.linkTo(AvataLayout.top, margin = iconMargin)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-
-                }
+                },
+            shape = RoundedCornerShape(30.dp, 30.dp, 0.dp, 0.dp)
         ) {
             Column(modifier = Modifier
-
-                .background(color = colorResource(R.color.anti_flash_white)),
+                .background(colorResource(R.color.anti_flash_white))
+                .padding(start = 16.dp, end = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top,
                 content = {
                     Spacer(
                         Modifier
-                            .size(60.dp)
+                            .height(iconMargin)
                             .background(color = colorResource(R.color.anti_flash_white))
                     )
-                    ProductXTheme.cardTheme
                     AppText(
                         modifier = Modifier, text = title,
                         style = ProductXTheme.typography.SemiBoldHeadingMedium,
                         color = Color.Black
                     )
-
-                    AppSurface(
+                    Spacer(
+                        Modifier
+                            .height(24.dp)
+                            .background(color = colorResource(R.color.anti_flash_white))
+                    )
+                    Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(10.dp))
-                            .padding(10.dp, 24.dp, 10.dp, 10.dp)
-                            .clickable {  }
-                            .height(72.dp),
-                        color = Color.White,
-                        shape = RoundedCornerShape(10.dp),
-                        border = BorderStroke(2.dp, Color.White),
+                            .background(colorResource(R.color.white), shape = RoundedCornerShape(16.dp))
+//                            .fillMaxWidth()
+
+                            .clip(shape = RoundedCornerShape(16.dp))
+                            .testTag("HeaderSection_Job")
+//                            .height(72.dp)
+                            .clickable { },
+                        contentAlignment = Alignment.Center
                     ) {
                         Row(
                             modifier = Modifier,
@@ -116,10 +119,14 @@ fun HeaderSection(title: String, avatar: String) {
                                     .weight(7f)
                                     .padding(8.dp)
                             ) {
-                                AppText(modifier = Modifier, text = "Bạn đang theo đuổi",
-                                    style = ProductXTheme.typography.RegularBodyMedium, color = Color.Gray)
-                                AppText(modifier = Modifier, text = "Product Designer, Ux research",
-                                    style = ProductXTheme.typography.SemiBoldBodyLarge, color = Color.Black)
+                                AppText(
+                                    modifier = Modifier, text = "Bạn đang theo đuổi",
+                                    style = ProductXTheme.typography.RegularBodyMedium, color = Color.Gray
+                                )
+                                AppText(
+                                    modifier = Modifier, text = "Product Designer, Ux research",
+                                    style = ProductXTheme.typography.SemiBoldBodyLarge, color = Color.Black
+                                )
                             }
                             IconImage(Modifier.weight(1.5f), imageResource = AppIcons.arrowRightIcon, contentDescription = "IconArrowRight")
                         }

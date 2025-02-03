@@ -46,9 +46,9 @@ fun AppBackground(
     val color = ProductXTheme.backgroundTheme.color
     val tonalElevation = ProductXTheme.backgroundTheme.tonalElevation
     AppSurface(
+        modifier = modifier.fillMaxSize(),
         color = if (color == Color.Unspecified) Color.Transparent else color,
         elevation = if (tonalElevation == Dp.Unspecified) 0.dp else tonalElevation,
-        modifier = modifier.fillMaxSize(),
     ) {
         CompositionLocalProvider(
             LocalAbsoluteTonalElevation provides 0.dp,

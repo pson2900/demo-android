@@ -44,7 +44,7 @@ import com.example.demo_structure.core.component.AppText
 @Composable
 fun ProfileStatusSection(modifier: Modifier = Modifier, onClick: () -> Unit) {
     Surface(
-        modifier = modifier.padding(10.dp, 0.dp, 10.dp, 0.dp),
+        modifier = modifier.padding(start = 16.dp, end = 16.dp),
         border = BorderStroke(2.dp, colorResource(R.color.pale_violet)),
         shape = RoundedCornerShape(10.dp),
     ) {

@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.IconImage
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppPreviewWrapper
+import com.example.demo_structure.core.component.AppText
 
 /**
  * Created by Phạm Sơn at 13:20/14/1/25
@@ -36,8 +36,11 @@ import com.example.demo_structure.core.component.AppPreviewWrapper
  */
 @Composable
 fun OpportunitiesSection(modifier: Modifier = Modifier) {
-    Column(modifier.padding(10.dp, 0.dp, 10.dp, 0.dp)) {
-        Text(text = "Cơ hội", color = colorResource(R.color.black), style = MaterialTheme.typography.titleLarge)
+    Column(modifier.padding(start = 16.dp, end = 16.dp)) {
+        AppText(
+            text = "Cơ hội", color = colorResource(R.color.black),
+            style = ProductXTheme.typography.SemiBoldTitleLarge
+        )
         Spacer(Modifier.height(12.dp))
         Row(modifier) {
             OpportunitiesItem(
@@ -50,7 +53,6 @@ fun OpportunitiesSection(modifier: Modifier = Modifier) {
                     .height(150.dp)
                     .weight(1f),
                 icon = R.drawable.ic_my_profile_opprotunities_crow,
-                colorBorder = R.color.cosmic_latte,
                 title = "Việc phù hợp\nvới bạn",
                 subtitle = "32"
             )
@@ -65,7 +67,6 @@ fun OpportunitiesSection(modifier: Modifier = Modifier) {
                     .clickable { }
                     .weight(1f),
                 icon = R.drawable.ic_my_profile_opprotunities_heart,
-                colorBorder = R.color.lavender_blush,
                 title = "Việc\nđã lưu",
                 subtitle = "0"
             )
@@ -80,7 +81,6 @@ fun OpportunitiesSection(modifier: Modifier = Modifier) {
                     .height(150.dp)
                     .weight(1f),
                 icon = R.drawable.ic_my_profile_opprotunities_bag,
-                colorBorder = R.color.nyanza,
                 title = "Việc\nđã nộp",
                 subtitle = "2"
             )
@@ -89,7 +89,7 @@ fun OpportunitiesSection(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun OpportunitiesItem(modifier: Modifier = Modifier, icon: Int, colorBorder: Int, title: String, subtitle: String) {
+fun OpportunitiesItem(modifier: Modifier = Modifier, icon: Int, title: String, subtitle: String) {
     Box(
         modifier = modifier,
         contentAlignment = Alignment.CenterStart
@@ -107,7 +107,7 @@ fun OpportunitiesItem(modifier: Modifier = Modifier, icon: Int, colorBorder: Int
             ) {
                 IconImage(imageResource = icon, contentDescription = null)
             }
-            Text(
+            AppText(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(paddingValues = PaddingValues(8.dp))
@@ -115,17 +115,19 @@ fun OpportunitiesItem(modifier: Modifier = Modifier, icon: Int, colorBorder: Int
                         top.linkTo(iconRef.bottom)
                         start.linkTo(parent.start)
                         bottom.linkTo(subtitleRef.top)
-                    }, text = title, color = colorResource(R.color.slate_gray), style = MaterialTheme.typography.labelLarge
+                    }, text = title, color = colorResource(R.color.slate_gray),
+                style = ProductXTheme.typography.RegularLabelLarge
             )
 
-            Text(
+            AppText(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(paddingValues = PaddingValues(8.dp))
                     .constrainAs(subtitleRef) {
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
-                    }, text = subtitle, color = colorResource(R.color.black), style = MaterialTheme.typography.headlineSmall
+                    }, text = subtitle, color = colorResource(R.color.black),
+                style = ProductXTheme.typography.SemiBoldHeadingSmall
             )
         }
     }

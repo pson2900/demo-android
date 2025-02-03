@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,7 +30,9 @@ import androidx.compose.ui.unit.dp
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.AppIcons
 import com.example.demo_structure.app.manager.theme.IconImage
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppPreviewWrapper
+import com.example.demo_structure.core.component.AppText
 import com.example.domain.model.BasicInformation
 import com.example.domain.model.Profile
 
@@ -41,7 +44,8 @@ import com.example.domain.model.Profile
 @Composable
 fun BasicInformationSection(list: List<BasicInformation>) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        item { Text("Thông tin hồ sơ", color = colorResource(R.color.black), style = MaterialTheme.typography.titleLarge) }
+        item { AppText(text = "Thông tin hồ sơ", color = colorResource(R.color.black),
+            style = ProductXTheme.typography.SemiBoldLabelLarge) }
         item { Spacer(Modifier.height(12.dp)) }
         items(list.size) {
             BasicInformationItem(Profile.AttachmentProfile(emptyList())) {
@@ -132,7 +136,7 @@ fun BasicInformationItem(profile: Profile, onActionClick: (Profile) -> Unit) {
     }
     Row(
         Modifier
-            .padding(10.dp)
+            .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
             .background(Color.White, shape = RoundedCornerShape(10.dp))
             .clip(shape = RoundedCornerShape(10.dp))
             .height(72.dp)
@@ -151,11 +155,11 @@ fun BasicInformationItem(profile: Profile, onActionClick: (Profile) -> Unit) {
         ) {
             IconImage(imageResource = icon, contentDescription = null)
         }
-        Text(
+        AppText(
             text = title,
             textAlign = TextAlign.Start,
-            color = MaterialTheme.colorScheme.onPrimary,
-            style = MaterialTheme.typography.labelLarge,
+            color = Color.Black,
+            style = ProductXTheme.typography.RegularLabelLarge,
             maxLines = 1,
             modifier = Modifier
                 .padding(start = 5.dp)
@@ -166,6 +170,7 @@ fun BasicInformationItem(profile: Profile, onActionClick: (Profile) -> Unit) {
             modifier = Modifier
                 .weight(0.3f)
                 .fillMaxSize()
+                .clip(CircleShape)
                 .clickable { }
         ) {
             IconImage(

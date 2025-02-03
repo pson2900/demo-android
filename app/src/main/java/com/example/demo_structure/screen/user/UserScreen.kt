@@ -14,10 +14,8 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -32,11 +30,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.base.UiStateWrapper
 import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppSnackBar
+import com.example.demo_structure.core.component.AppText
 import com.example.demo_structure.screen.user.component.BasicInformationItem
 import com.example.demo_structure.screen.user.component.HeaderSection
 import com.example.demo_structure.screen.user.component.OpportunitiesSection
@@ -72,7 +72,7 @@ internal fun UserScreen(
 
     UiStateWrapper(uiState = myProfileState, onSuccessContent = {
         UserContent(
-            modifier = modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             onNavigateToLogin = onNavigateToLogin,
             myProfile = it
         )
@@ -122,7 +122,13 @@ fun LazyListScope.myProfileBody(myProfile: MyProfile) {
     item { Spacer(Modifier.height(24.dp)) }
     item { SkillSection(myProfile.skill.map { it.name ?: "" }) }
     item { Spacer(Modifier.height(24.dp)) }
-    item { Text("Thông tin hồ sơ", color = Color.Black, modifier = Modifier.padding(10.dp, 0.dp, 10.dp, 0.dp), style = MaterialTheme.typography.titleLarge) }
+    item {
+        AppText(
+            text = "Thông tin hồ sơ", color = Color.Black,
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+            style = ProductXTheme.typography.SemiBoldTitleLarge
+        )
+    }
     item { Spacer(Modifier.height(12.dp)) }
     items(myProfile.profiles.size) { index ->
         BasicInformationItem(myProfile.profiles[index]) {

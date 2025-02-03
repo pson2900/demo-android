@@ -36,9 +36,8 @@ fun AppCard(
         modifier = modifier,
         shape = shape,
         color = color,
-        contentColor = contentColor,
-        elevation = elevation,
         border = border,
+        elevation = elevation,
         content = content
     )
 }

@@ -132,7 +132,6 @@ fun AppPreviewWrapper(content: @Composable (Modifier) -> Unit) {
                         modifier = modifier,
                         shape = RectangleShape,
                         color = ProductXTheme.colors.background,
-                        contentColor = ProductXTheme.colors.secondary,
                         elevation = 0.dp,
                         content = {
                             content(modifier.fillMaxSize())
