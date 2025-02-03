@@ -1,5 +1,6 @@
 package com.example.demo_structure.screen.verify_email
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -74,6 +75,7 @@ internal fun VerifyEmailScreen(
     contentView(modifier = Modifier, onNavigateToVerifyOtp = onNavigateToVerifyOtp)
 }
 
+@SuppressLint("ContextCastToActivity")
 @Composable
 private fun contentView(
     modifier: Modifier = Modifier,
@@ -90,17 +92,17 @@ private fun contentView(
         keyboardController?.hide()
     }
 
-//    val keyboardController = LocalSoftwareKeyboardController.current
-//    val focusManager = LocalFocusManager.current
-//    val activity = LocalContext.current as Activity
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+    val activity = LocalContext.current as Activity
 
     ConstraintLayout(
         modifier = modifier
-//            .pointerInput(Unit) {
-//                detectTapGestures(onTap = {
-//                    hideKeyboardAndClearFocus(activity, focusManager, keyboardController)
-//                })
-//            }
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = {
+                    hideKeyboardAndClearFocus(activity, focusManager, keyboardController)
+                })
+            }
             .padding(top = 48.dp)
             .fillMaxSize()
             .statusBarsPadding()

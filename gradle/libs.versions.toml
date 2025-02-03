@@ -1,6 +1,6 @@
 [versions]
 #  ---  Android ---
-agp = "8.8.0-alpha09"
+agp = "8.8.0"
 coilComposeVersion = "3.0.4"
 converterMoshi = "2.9.0"
 converterScalars = "2.9.0"

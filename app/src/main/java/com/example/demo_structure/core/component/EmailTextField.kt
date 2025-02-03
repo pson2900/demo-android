@@ -30,7 +30,9 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -159,7 +161,7 @@ fun EmailTextField(
     error: String? = null
 ) {
     var isFocused by remember { mutableStateOf(false) }
-    val paddingTop = if (isFocused) 0.dp else 6.dp
+    val paddingTop = 4.dp
 
     Column(modifier = modifier.fillMaxWidth()) {
         TextField(
@@ -169,12 +171,13 @@ fun EmailTextField(
                 Text(
                     modifier = Modifier.padding(top = paddingTop),
                     style = TextStyle(
-                        fontSize = 16.sp
+                        fontSize = 14.sp
                     ),
                     text = hint,
                     color = Color.Gray
                 )
             },
+            textStyle = TextStyle(fontSize = 16.sp),
             colors = TextFieldDefaults.colors(
                 focusedTextColor = Color.Black,
                 unfocusedTextColor = Color.Gray,
