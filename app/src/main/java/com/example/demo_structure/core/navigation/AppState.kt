@@ -91,6 +91,13 @@ class AppState(
             TimeZone.currentSystemDefault(),
         )
 
+    val currentTime = timeZoneMonitor.currentTime
+        .stateIn(
+            coroutineScope,
+            SharingStarted.WhileSubscribed(5_000),
+            TimeZone.currentSystemDefault(),
+        )
+
     // ----------------------------------------------------------
     // Navigation state source of truth
     // ----------------------------------------------------------

@@ -12,6 +12,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -24,7 +26,9 @@ import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppSnackBar
 import com.example.demo_structure.core.component.AppSurface
+import com.example.demo_structure.core.navigation.rememberAppState
 import kotlinx.coroutines.launch
+import kotlinx.datetime.TimeZone
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -36,9 +40,14 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun EducationScreen(viewModel: EducationViewModel, onTopicClick: (String) -> Unit) {
     val modifier: Modifier = Modifier.fillMaxSize()
+
     val state = viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    val appState = rememberAppState()
+
+    val time = appState.currentTimeZone.collectAsStateWithLifecycle()
+    val currentTime by appState.currentTime.collectAsState(initial = "")
     ApplicationTheme {
         AppScaffold(
             modifier = modifier,
@@ -78,7 +87,7 @@ fun EducationScreen(viewModel: EducationViewModel, onTopicClick: (String) -> Uni
                             },
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("EducationScreen")
+                        Text("EducationScreen: ${time.value}\ncurrentTime: $currentTime")
                     }
                 }
 

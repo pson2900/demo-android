@@ -26,17 +26,23 @@ import androidx.compose.ui.util.trace
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toKotlinTimeZone
 import org.koin.core.component.KoinComponent
+import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.util.Locale
 
 /**
  * Utility for reporting current timezone the device has set.
@@ -44,6 +50,7 @@ import java.time.ZoneId
  */
 interface TimeZoneMonitor {
     val currentTimeZone: Flow<TimeZone>
+    val currentTime: Flow<String>
 }
 
 class TimeZoneBroadcastMonitor(
@@ -51,6 +58,16 @@ class TimeZoneBroadcastMonitor(
     private val appScope: CoroutineScope,
     private val ioDispatcher: CoroutineDispatcher
 ) : KoinComponent, TimeZoneMonitor {
+    override val currentTime: Flow<String> = flow {
+        val formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM).withLocale(Locale.getDefault())
+        while (true) {
+            val currentDateTime = LocalDateTime.now()
+            emit(currentDateTime.format(formatter))
+            delay(1000) // Emit every 1 second
+        }
+    }.conflate()
+        .flowOn(ioDispatcher)
+        .shareIn(appScope, SharingStarted.WhileSubscribed(5_000), 1)
 
     override val currentTimeZone: Flow<TimeZone> =
         callbackFlow {
