@@ -17,7 +17,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.window.core.layout.WindowSizeClass
-import com.example.demo_structure.core.component.LocalNavAnimatedVisibilityScope
+import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.screen.community.CommunityNavGraph
 import com.example.demo_structure.screen.education.EducationNavGraph
 import com.example.demo_structure.screen.home.HomeNavGraph

@@ -21,12 +21,13 @@ import com.example.demo_structure.app.manager.theme.ProductXTheme
  * Copyright (c) 2025 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
+
 @Composable
-fun JobDetailCard(
+fun AppCard(
     modifier: Modifier,
     shape: Shape = MaterialTheme.shapes.medium,
     color: Color = ProductXTheme.colors.background,
-    contentColor: Color = ProductXTheme.cardTheme.colorText,
+    contentColor: Color = ProductXTheme.cardTheme.text,
     border: BorderStroke? = null,
     elevation: Dp = 4.dp,
     content: @Composable () -> Unit
@@ -41,14 +42,17 @@ fun JobDetailCard(
         content = content
     )
 }
+
 @ThemePreviews
 @Composable
 private fun CardPreview() {
     AppPreviewWrapper {
-        AppSurface(Modifier, shape = CircleShape, ) {
-            Image(imageVector = ImageVector.vectorResource(R.drawable.ic_setting),
+        AppSurface(Modifier, shape = CircleShape) {
+            Image(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_setting),
                 contentDescription = "ic_setting",
-                modifier = Modifier.padding(16.dp))
+                modifier = Modifier.padding(16.dp)
+            )
         }
     }
 }

@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.app.manager.theme.ProductXTheme
-import com.example.demo_structure.core.component.LocalNavAnimatedVisibilityScope
-import com.example.demo_structure.core.component.LocalSharedTransitionScope
+import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
+import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
 import com.example.demo_structure.util.SharedElementKey
 import com.example.demo_structure.util.SharedElementType
 

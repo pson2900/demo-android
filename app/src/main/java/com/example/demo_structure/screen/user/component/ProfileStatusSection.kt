@@ -15,9 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,9 +30,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.AppIcons
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppBox
 import com.example.demo_structure.core.component.AppButton
 import com.example.demo_structure.core.component.AppPreviewWrapper
+import com.example.demo_structure.core.component.AppText
 
 /**
  * Created by Phạm Sơn at 13:20/14/1/25
@@ -65,9 +65,9 @@ fun ProfileProgressContent(modifier: Modifier = Modifier, progress: Int, max: In
         Column(
             modifier = modifier.padding(10.dp)
         ) {
-            Text(
-                "Hoàn thiện hồ sơ - thu hút nhà tuyển dụng!",
-                style = MaterialTheme.typography.titleMedium,
+            AppText(
+                text = "Hoàn thiện hồ sơ - thu hút nhà tuyển dụng!",
+                style = ProductXTheme.typography.SemiBoldTitleMedium,
                 color = Color.White
             )
             Spacer(Modifier.height(8.dp))
@@ -94,14 +94,14 @@ fun ProfileProgressAction(modifier: Modifier = Modifier) {
                         .weight(8f)
                         .padding(5.dp)
                 ) {
-                    Text(
+                    AppText(
                         text = "+1 điểm hoàn thiện hồ sơ",
-                        style = MaterialTheme.typography.titleSmall,
+                        style = ProductXTheme.typography.SemiBoldTitleSmall,
                         color = colorResource(R.color.persian_green)
                     )
-                    Text(
+                    AppText(
                         text = "Bạn đã tham gia những hoạt động ngoại khoá nào?",
-                        style = MaterialTheme.typography.titleMedium,
+                        style = ProductXTheme.typography.SemiBoldTitleMedium,
                         color = colorResource(R.color.black)
                     )
                 }
@@ -116,8 +116,9 @@ fun ProfileProgressAction(modifier: Modifier = Modifier) {
                         modifier = Modifier.padding(3.dp),
                         colorFilter = ColorFilter.tint(colorResource(R.color.violets_are_blue), BlendMode.SrcIn), contentDescription = "IconAdd"
                     )
-                    Text(
-                        text = "Thêm ngay", style = MaterialTheme.typography.titleMedium,
+                    AppText(
+                        text = "Thêm ngay",
+                        style = ProductXTheme.typography.SemiBoldTitleMedium,
                         color = colorResource(R.color.violets_are_blue)
                     )
                 }
@@ -143,10 +144,13 @@ fun ProfileProgressBar(progress: Int, max: Int) {
                 )
                 .fillMaxWidth(progress.toFloat() / max)
                 .fillMaxHeight()
-        ){
+        ) {
 
         }
-        Text(text = "$progress/$max", style = MaterialTheme.typography.labelSmall, modifier = Modifier.align(Alignment.Center), color = Color.Black)
+        AppText(
+            text = "$progress/$max",
+            style = ProductXTheme.typography.RegularLabelSmall, modifier = Modifier.align(Alignment.Center), color = Color.Black
+        )
     }
 }
 

@@ -31,7 +31,7 @@ fun AppSurface(
     modifier: Modifier = Modifier,
     shape: Shape = RectangleShape,
     color: Color = ProductXTheme.colors.background,
-    contentColor: Color = ProductXTheme.cardTheme.colorText,
+    contentColor: Color = ProductXTheme.cardTheme.text,
     border: BorderStroke? = null,
     elevation: Dp = 0.dp,
     content: @Composable () -> Unit

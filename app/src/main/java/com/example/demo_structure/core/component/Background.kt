@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.app.manager.theme.GradientColors
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
+import com.example.demo_structure.app.manager.theme.LocalGradientColors
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import kotlin.math.tan
 
@@ -158,7 +159,7 @@ fun BackgroundDynamic() {
 @ThemePreviews
 @Composable
 fun BackgroundAndroid() {
-    ApplicationTheme(androidTheme = true) {
+    ApplicationTheme {
         AppBackground(Modifier.size(100.dp), content = {})
     }
 }
@@ -182,7 +183,7 @@ fun GradientBackgroundDynamic() {
 @ThemePreviews
 @Composable
 fun GradientBackgroundAndroid() {
-    ApplicationTheme(androidTheme = true) {
+    ApplicationTheme {
         AppGradientBackground(Modifier.size(100.dp), content = {})
     }
 }

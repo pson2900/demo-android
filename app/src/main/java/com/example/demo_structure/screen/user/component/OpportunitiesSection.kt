@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,10 +41,11 @@ fun OpportunitiesSection(modifier: Modifier = Modifier) {
         Spacer(Modifier.height(12.dp))
         Row(modifier) {
             OpportunitiesItem(
-                modifier = modifier
+                modifier = Modifier
                     .background(colorResource(R.color.white), shape = RoundedCornerShape(5.dp))
+                    .clip(shape = RoundedCornerShape(5.dp))
                     .fillMaxWidth()
-                    .clickable {  }
+                    .clickable { }
                     .testTag("Opportunity_MatchJob")
                     .height(150.dp)
                     .weight(1f),
@@ -54,12 +56,13 @@ fun OpportunitiesSection(modifier: Modifier = Modifier) {
             )
             Spacer(Modifier.size(12.dp))
             OpportunitiesItem(
-                modifier = modifier
+                modifier = Modifier
                     .background(colorResource(R.color.white), shape = RoundedCornerShape(5.dp))
                     .fillMaxWidth()
+                    .clip(shape = RoundedCornerShape(5.dp))
                     .testTag("Opportunity_SaveJob")
                     .height(150.dp)
-                    .clickable {  }
+                    .clickable { }
                     .weight(1f),
                 icon = R.drawable.ic_my_profile_opprotunities_heart,
                 colorBorder = R.color.lavender_blush,
@@ -70,7 +73,8 @@ fun OpportunitiesSection(modifier: Modifier = Modifier) {
             OpportunitiesItem(
                 modifier = modifier
                     .fillMaxWidth()
-                    .clickable {  }
+                    .clip(shape = RoundedCornerShape(5.dp))
+                    .clickable { }
                     .testTag("Opportunity_ApplyJob")
                     .background(colorResource(R.color.white), shape = RoundedCornerShape(5.dp))
                     .height(150.dp)
@@ -90,7 +94,7 @@ fun OpportunitiesItem(modifier: Modifier = Modifier, icon: Int, colorBorder: Int
         modifier = modifier,
         contentAlignment = Alignment.CenterStart
     ) {
-        ConstraintLayout(Modifier.fillMaxSize()) {
+        ConstraintLayout(modifier.fillMaxSize()) {
             val (iconRef, titleRef, subtitleRef) = createRefs()
             Box(
                 Modifier

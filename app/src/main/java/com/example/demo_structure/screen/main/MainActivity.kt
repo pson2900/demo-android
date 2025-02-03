@@ -45,8 +45,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.demo_structure.app.InitializeApp
 import com.example.demo_structure.app.manager.LanguageManager
 import com.example.demo_structure.core.component.BottomNavigationBar
-import com.example.demo_structure.core.component.LocalNavAnimatedVisibilityScope
-import com.example.demo_structure.core.component.LocalSharedTransitionScope
+import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
+import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppSnackBar

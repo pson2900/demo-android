@@ -5,6 +5,7 @@ import com.example.data.repository.HomeRepositoryImpl
 import com.example.data.repository.MyProfileRepositoryImpl
 import com.example.domain.repository.HomeRepository
 import com.example.domain.repository.MyProfileRepository
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 /**

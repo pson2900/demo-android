@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,8 +36,10 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.AppIcons
 import com.example.demo_structure.app.manager.theme.IconImage
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppSurface
+import com.example.demo_structure.core.component.AppText
 
 @Composable
 fun HeaderSection(title: String, avatar: String) {
@@ -76,6 +77,7 @@ fun HeaderSection(title: String, avatar: String) {
                 }
         ) {
             Column(modifier = Modifier
+
                 .background(color = colorResource(R.color.anti_flash_white)),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top,
@@ -85,36 +87,41 @@ fun HeaderSection(title: String, avatar: String) {
                             .size(60.dp)
                             .background(color = colorResource(R.color.anti_flash_white))
                     )
-
-                    Text(
-                        modifier = Modifier, text = title, style = MaterialTheme.typography.headlineMedium, color = Color.Black
+                    ProductXTheme.cardTheme
+                    AppText(
+                        modifier = Modifier, text = title,
+                        style = ProductXTheme.typography.SemiBoldHeadingMedium,
+                        color = Color.Black
                     )
 
-                    Surface(
+                    AppSurface(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp, 24.dp, 10.dp, 10.dp),
+                            .clip(RoundedCornerShape(10.dp))
+                            .padding(10.dp, 24.dp, 10.dp, 10.dp)
+                            .clickable {  }
+                            .height(72.dp),
                         color = Color.White,
-                        shape = RoundedCornerShape(10.dp, 10.dp, 10.dp, 10.dp),
-                        shadowElevation = 0.dp,
-                        border = BorderStroke(2.dp, Color.White)
+                        shape = RoundedCornerShape(10.dp),
+                        border = BorderStroke(2.dp, Color.White),
                     ) {
-                        val InternalRowModifier = Modifier
                         Row(
-                            modifier = InternalRowModifier,
+                            modifier = Modifier,
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            IconImage(InternalRowModifier.weight(1.5f), imageResource = AppIcons.advancementIcon, contentDescription = "IconAdvancement")
+                            IconImage(Modifier.weight(1.5f), imageResource = AppIcons.advancementIcon, contentDescription = "IconAdvancement")
                             Column(
-                                InternalRowModifier
+                                Modifier
                                     .weight(7f)
                                     .padding(8.dp)
                             ) {
-                                Text(modifier = Modifier, text = "Bạn đang theo đuổi", style = MaterialTheme.typography.labelMedium, color = Color.Gray)
-                                Text(modifier = Modifier, text = "Product Designer, Ux research", style = MaterialTheme.typography.labelLarge, color = Color.Black)
+                                AppText(modifier = Modifier, text = "Bạn đang theo đuổi",
+                                    style = ProductXTheme.typography.RegularBodyMedium, color = Color.Gray)
+                                AppText(modifier = Modifier, text = "Product Designer, Ux research",
+                                    style = ProductXTheme.typography.SemiBoldBodyLarge, color = Color.Black)
                             }
-                            IconImage(InternalRowModifier.weight(1.5f), imageResource = AppIcons.arrowRightIcon, contentDescription = "IconArrowRight")
+                            IconImage(Modifier.weight(1.5f), imageResource = AppIcons.arrowRightIcon, contentDescription = "IconArrowRight")
                         }
                     }
                 })

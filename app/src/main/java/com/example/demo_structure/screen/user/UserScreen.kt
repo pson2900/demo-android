@@ -54,7 +54,7 @@ internal fun UserScreen(
     modifier: Modifier = Modifier,
     onNavigateToLogin: () -> Unit,
     clearUndoState: () -> Unit = {},
-    userViewModel: UserViewModel = koinViewModel()
+    userViewModel: UserViewModel = koinViewModel<UserViewModel>()
 ) {
     val myProfileState by userViewModel.myProfileState.collectAsStateWithLifecycle()
     val featureItemState by userViewModel.featureItemState.collectAsStateWithLifecycle()
