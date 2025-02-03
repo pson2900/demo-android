@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +26,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,12 +54,11 @@ fun VerifyOTPScreen(viewModel: VerifyEmailViewModel, email: String, origin: Stri
 private fun contentView(modifier: Modifier = Modifier, email: String, origin: String) {
     ConstraintLayout(
         modifier = modifier
-            .padding(top = 48.dp, start = 24.dp, end = 24.dp)
+            .padding(top = 48.dp, start = 24.dp, end = 24.dp, bottom = 24.dp)
             .fillMaxSize()
             .statusBarsPadding()
             .navigationBarsPadding()
     ) {
-        val context = LocalContext.current
         val (emailTextview, textViewDescription, otpTextField, textViewError, columnBottom) = createRefs()
         val label = "Mã xác nhận đã được gửi qua email $email"
         var otp by remember { mutableStateOf("") }
@@ -100,8 +101,20 @@ private fun contentView(modifier: Modifier = Modifier, email: String, origin: St
             text = "Hãy kiểm tra hộp thư Chính hoặc Spam trong mail của bạn nhé"
         )
 
+        fun checkOTP(otp: String) {
+            if (otp.length == 4) {
+                isError = false
+                if (otp == "1234") {
+
+                } else {
+                    isError = true
+                }
+            }
+        }
+
         OTPTextField(
             modifier = Modifier
+                .width(260.dp)
                 .constrainAs(otpTextField) {
                     top.linkTo(textViewDescription.bottom)
                     start.linkTo(parent.start)
@@ -111,6 +124,7 @@ private fun contentView(modifier: Modifier = Modifier, email: String, origin: St
             value = otp, // Initial value
             onTextChanged = {
                 otp = it
+                checkOTP(it)
             },
             numDigits = 4, // Number of digits in OTP
             isMasked = false, // Mask digits for security
@@ -118,6 +132,8 @@ private fun contentView(modifier: Modifier = Modifier, email: String, origin: St
             textStyle = MaterialTheme.typography.titleLarge, // Configure text style
             isError = isError // Indicate whether the OTP field is in an error state
         )
+
+
         if (isError) {
             Text(
                 modifier = Modifier
@@ -161,7 +177,13 @@ private fun contentView(modifier: Modifier = Modifier, email: String, origin: St
                     }
                 )
 
-                BasicText(text = resendString)
+                BasicText(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp, bottom = 20.dp),
+                    text = resendString,
+                    style = TextStyle(textAlign = TextAlign.Center)
+                )
             } else {
                 Row(
                     Modifier
