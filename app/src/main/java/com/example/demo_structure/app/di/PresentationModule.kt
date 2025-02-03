@@ -7,6 +7,7 @@ import com.example.demo_structure.screen.login.LoginViewModel
 import com.example.demo_structure.screen.education.EducationViewModel
 import com.example.demo_structure.screen.main.MainViewModel
 import com.example.demo_structure.screen.opportunity.OpportunityViewModel
+import com.example.demo_structure.screen.otp.VerifyOTPViewModel
 import com.example.demo_structure.screen.user.UserViewModel
 import com.example.demo_structure.screen.verify_email.VerifyEmailViewModel
 import kotlinx.coroutines.flow.Flow
@@ -28,4 +29,5 @@ val presentationModule = module {
     viewModel { JobDetailViewModel(savedStateHandle = get()) }
     viewModel { LoginViewModel(savedStateHandle = get()) }
     viewModel { VerifyEmailViewModel(savedStateHandle = get()) }
+    viewModel { VerifyOTPViewModel(savedStateHandle = get()) }
 }

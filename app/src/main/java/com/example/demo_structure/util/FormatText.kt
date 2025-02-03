@@ -14,19 +14,14 @@ object FormatText {
         text: String, // The full text including the specific text
         clickableText: String, // The specific text you want to be clickable
         style: SpanStyle,
+        textLinkStyles : TextLinkStyles,
         tag: String,
-        color: Color,
         onClick: ((link: LinkAnnotation) -> Unit)? = null
     ): AnnotatedString {
         return buildAnnotatedString {
             val startIndex = text.indexOf(clickableText)
             val endIndex = startIndex + clickableText.length
 
-            val textLinkStyles = TextLinkStyles(
-                style = style.copy(color = color,
-                    fontSize = 17.sp
-                )
-            )
             withStyle(style = style) { append(text) }
             addLink(
                 LinkAnnotation.Clickable(

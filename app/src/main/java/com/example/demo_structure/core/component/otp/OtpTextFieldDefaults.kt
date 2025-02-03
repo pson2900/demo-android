@@ -14,12 +14,12 @@ object OtpTextFieldDefaults {
     @Composable
     fun outlinedContainer(
         size: Dp = 54.dp,
-        shape: Shape = RoundedCornerShape(12.dp),
+        shape: Shape = RoundedCornerShape(16.dp),
         containerColor: Color = MaterialTheme.colorScheme.background,
         focusedBorderColor: Color = MaterialTheme.colorScheme.primary,
         unfocusedBorderColor: Color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
-        focusedBorderWidth: Dp = 2.dp,
-        unfocusedBorderWidth: Dp = 2.dp,
+        focusedBorderWidth: Dp = 1.dp,
+        unfocusedBorderWidth: Dp = 1.dp,
         errorColor: Color = MaterialTheme.colorScheme.error,
     ): DigitContainerStyle.Outlined {
         return DigitContainerStyle.Outlined(

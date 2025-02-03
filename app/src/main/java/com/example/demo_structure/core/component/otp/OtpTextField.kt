@@ -74,7 +74,7 @@ fun OTPTextField(
     mask: @Composable() (() -> Unit)? = null,
     digitContainerStyle: DigitContainerStyle = DigitContainerStyle.Underlined(),
     textStyle: TextStyle = MaterialTheme.typography.titleLarge.copy(
-        fontSize = 28.sp
+        fontSize = 24.sp
     ),
     isError: Boolean = false,
 ) {

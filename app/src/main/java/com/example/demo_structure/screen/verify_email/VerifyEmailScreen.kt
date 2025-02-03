@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,17 +44,6 @@ import com.example.demo_structure.screen.education.EducationViewModel
 import com.example.demo_structure.util.FormatText.buildClickableText
 import org.koin.androidx.compose.koinViewModel
 
-@Composable
-internal fun VerifyEmailRoute(
-    viewModel: VerifyEmailViewModel,
-    onNavigateLogin: (String) -> Unit,
-) {
-    val emailState by viewModel.menuUiState.collectAsStateWithLifecycle()
-    VerifyEmailScreen(
-        modifier = Modifier.fillMaxSize(),
-        state = emailState
-    )
-}
 
 @Preview(showBackground = true)
 @Composable
@@ -63,12 +53,19 @@ fun LoginScreenPreview() {
 
 
 @Composable
-internal fun VerifyEmailScreen(state: EmailState, modifier: Modifier = Modifier) {
-    contentView(modifier = modifier)
+internal fun VerifyEmailScreen(
+    viewModel: VerifyEmailViewModel,
+    onNavigateToVerifyOtp: (String) -> Unit,
+    onNavigateToLogin: (String) -> Unit
+) {
+    contentView(modifier = Modifier, onNavigateToVerifyOtp = onNavigateToVerifyOtp)
 }
 
 @Composable
-fun contentView(modifier: Modifier = Modifier) {
+private fun contentView(
+    modifier: Modifier = Modifier,
+    onNavigateToVerifyOtp: ((String) -> Unit)? = null
+) {
     ConstraintLayout(
         modifier = modifier
             .padding(top = 48.dp)
@@ -80,6 +77,7 @@ fun contentView(modifier: Modifier = Modifier) {
         var email by remember { mutableStateOf("") }
         var emailError by remember { mutableStateOf("") }
         var isChecked by remember { mutableStateOf(false) }
+        var isSuccess by remember { mutableStateOf(false) }
 
         val buttonColors = ButtonColors(
             containerColor = colorResource(id = R.color.royal_blue),
@@ -89,8 +87,11 @@ fun contentView(modifier: Modifier = Modifier) {
         )
         var isEnableButton by remember { mutableStateOf(false) }
         isEnableButton = email.isNotEmpty() && isChecked
+
         val intent = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/")) }
+
         val (logo, textview, emailTextField, columnBottom) = createRefs()
+
         fun isValidEmail(email: String): Boolean {
             return Patterns.EMAIL_ADDRESS.matcher(email).matches()
         }
@@ -127,9 +128,11 @@ fun contentView(modifier: Modifier = Modifier) {
             onValueChange = {
                 email = it
                 emailError = ""
+                isSuccess = it.isNotEmpty() && isValidEmail(it)
             },
             error = emailError,
-            onClose = { email = "" }
+            onClose = { email = "" },
+            isSuccess = isSuccess
         )
 
         Column(modifier = Modifier
@@ -148,7 +151,7 @@ fun contentView(modifier: Modifier = Modifier) {
                     onCheckedChange = { isChecked = it },
                     colors = CheckboxDefaults.colors(
                         checkmarkColor = Color.White,
-                        checkedColor = Color.Blue,
+                        checkedColor = colorResource(R.color.violets_are_blue),
                         uncheckedColor = Color.Gray
                     )
                 )
@@ -156,10 +159,15 @@ fun contentView(modifier: Modifier = Modifier) {
                     text = "Bằng việc click vào ô này, bạn đã đồng ý với Điều khoản dịch vụ và chính sách bảo mật của X",
                     clickableText = "Điều khoản dịch vụ và chính sách bảo mật",
                     tag = "tag_name",
-                    color = colorResource(R.color.violets_are_blue),
                     style = SpanStyle(
                         color = Color.Black,
-                        fontSize = 16.sp
+                        fontSize = 17.sp
+                    ),
+                    textLinkStyles = TextLinkStyles(
+                        style = SpanStyle(
+                            color = colorResource(R.color.violets_are_blue),
+                            fontSize = 17.sp
+                        )
                     ),
                     onClick = {
                         context.startActivity(intent)
@@ -170,10 +178,10 @@ fun contentView(modifier: Modifier = Modifier) {
             }
 
 
-            fun verifyEmail(){
+            fun verifyEmail() {
                 emailError = if (email.isEmpty() || !isValidEmail(email)) "Invalid email format" else ""
-                if(emailError.isNullOrEmpty()){
-
+                if (emailError.isNullOrEmpty()) {
+                    onNavigateToVerifyOtp?.invoke(email)
                 }
             }
 

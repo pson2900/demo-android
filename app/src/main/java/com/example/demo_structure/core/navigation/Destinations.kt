@@ -79,4 +79,12 @@ sealed class Destinations(val route: String) {
 
     object Login : Destinations(route = "login")
     object Email : Destinations(route = "email")
+
+    object OTP : Destinations(route = "verify_otp"){
+        const val ORIGIN = "origin"
+        const val EMAIL = "email"
+        fun createRoute(email: String, origin: String): String {
+            return "verify_otp/$email?origin=${origin}"
+        }
+    }
 }

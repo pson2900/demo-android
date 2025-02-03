@@ -25,6 +25,7 @@ import com.example.demo_structure.screen.job_detail.JobDetailNavGraph
 import com.example.demo_structure.screen.login.toLoginScreen
 import com.example.demo_structure.screen.main.AppNavGraph
 import com.example.demo_structure.screen.opportunity.OpportunityNavGraph
+import com.example.demo_structure.screen.otp.toVerifyOtpScreen
 import com.example.demo_structure.screen.user.UserNavGraph
 import com.example.demo_structure.screen.verify_email.toVerifyEmailScreen
 import com.example.demo_structure.util.logNavigation
@@ -82,7 +83,8 @@ fun AppNavHost(
             toLoginScreen() {
                 appState.upPress()
             }
-            toVerifyEmailScreen()
+            toVerifyEmailScreen(appState)
+            toVerifyOtpScreen()
         })
 }
 
