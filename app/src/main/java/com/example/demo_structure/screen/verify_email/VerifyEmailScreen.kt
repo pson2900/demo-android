@@ -1,12 +1,12 @@
 package com.example.demo_structure.screen.verify_email
 
-import android.annotation.SuppressLint
-import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -22,7 +22,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
@@ -39,10 +39,10 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -50,57 +50,153 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.core.content.getSystemService
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.demo_structure.R
 import com.example.demo_structure.core.component.EmailTextField
-import com.example.demo_structure.screen.education.EducationViewModel
-import com.example.demo_structure.util.FormatText.buildClickableText
-import org.koin.androidx.compose.koinViewModel
+import com.example.demo_structure.screen.home.LoadingState
 
+import com.example.demo_structure.util.FormatText.buildClickableText
 
 @Preview(showBackground = true)
 @Composable
-fun LoginScreenPreview() {
-    contentView(Modifier)
+private fun VerifyEmailPreview() {
+    VerifyEmailContent(
+        email = "demo@hihi.com",
+        emailError = "",
+        isEnableButton = true,
+        isChecked = false,
+        isSuccess = false,
+        onEmailChange = {},
+        onCheckboxChange = {},
+        onButtonClick = {},
+        onLinkClick = {},
+        onHandleApi = {}
+    )
 }
 
-
 @Composable
-internal fun VerifyEmailScreen(
-    viewModel: VerifyEmailViewModel,
+fun VerifyEmailScreen(
+    viewModel: VerifyEmailViewModel = viewModel(),
     onNavigateToVerifyOtp: (String) -> Unit,
     onNavigateToLogin: (String) -> Unit
 ) {
-    contentView(modifier = Modifier, onNavigateToVerifyOtp = onNavigateToVerifyOtp)
-}
+    val context = LocalContext.current
+    val emailState by viewModel.emailUiState.collectAsStateWithLifecycle()
+    var email by remember { mutableStateOf("") }
+    var emailError by remember { mutableStateOf("") }
+    var isChecked by remember { mutableStateOf(false) }
+    var isSuccess by remember { mutableStateOf(false) }
+    val isEnableButton = email.isNotEmpty() && isChecked
 
-@SuppressLint("ContextCastToActivity")
-@Composable
-private fun contentView(
-    modifier: Modifier = Modifier,
-    onNavigateToVerifyOtp: ((String) -> Unit)? = null
-) {
-    fun hideKeyboardAndClearFocus(activity: Activity, focusManager: FocusManager, keyboardController: androidx.compose.ui.platform.SoftwareKeyboardController?) {
-        val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        var view: View? = activity.currentFocus
-        if (view == null) {
-            view = View(activity)
-        }
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
-        focusManager.clearFocus()
-        keyboardController?.hide()
+    val intent = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://staging.vietnamworks.com/")) }
+
+    fun isValidEmail(email: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
+    fun verifyEmail() {
+        emailError =
+            if (email.isEmpty() || !isValidEmail(email)) "Invalid email format" else ""
+        if (emailError.isEmpty()) {
+            viewModel.verifyEmail()
+        }
+    }
+
+    fun onEmailChange(newEmail: String) {
+        email = newEmail
+        emailError = ""
+        isSuccess = newEmail.isNotEmpty() && isValidEmail(newEmail)
+    }
+
+    fun onCheckboxChange(newChecked: Boolean) {
+        isChecked = newChecked
+    }
+
+    fun onButtonClick() {
+        verifyEmail()
+    }
+
+    fun onLinkClick() {
+        context.startActivity(intent)
+    }
+
+    @Composable
+    fun onHandleApi(email: String) {
+        when (val state = emailState) {
+            is EmailState.Loading -> {
+                LoadingState(Modifier)
+            }
+
+            is EmailState.Success -> {
+                if (state.found) {
+                    Toast.makeText(context, "login", Toast.LENGTH_SHORT).show()
+                } else {
+                    onNavigateToVerifyOtp(email)
+                }
+            }
+
+            is EmailState.Error -> {
+                Toast.makeText(context, state.msg, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    VerifyEmailContent(
+        email = email,
+        emailError = emailError,
+        isEnableButton = isEnableButton,
+        isChecked = isChecked,
+        isSuccess = isSuccess,
+        onEmailChange = ::onEmailChange,
+        onCheckboxChange = ::onCheckboxChange,
+        onButtonClick = ::onButtonClick,
+        onLinkClick = ::onLinkClick,
+        onHandleApi = { onHandleApi(it) }
+    )
+}
+
+fun hideKeyboardAndClearFocus(
+    context: Context,
+    focusManager: FocusManager,
+    keyboardController: SoftwareKeyboardController?
+) {
+    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    var view: View? = null
+    if (context is android.app.Activity) {
+        view = context.currentFocus
+    }
+    if (view == null) {
+        view = View(context)
+    }
+    imm.hideSoftInputFromWindow(view.windowToken, 0)
+    focusManager.clearFocus()
+    keyboardController?.hide()
+}
+
+
+@Composable
+fun VerifyEmailContent(
+    email: String,
+    emailError: String,
+    isEnableButton: Boolean,
+    isChecked: Boolean,
+    isSuccess: Boolean,
+    onEmailChange: (String) -> Unit,
+    onCheckboxChange: (Boolean) -> Unit,
+    onButtonClick: () -> Unit,
+    onLinkClick: () -> Unit,
+    onHandleApi: @Composable (String) -> Unit
+) {
+    val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
-    val activity = LocalContext.current as Activity
 
     ConstraintLayout(
-        modifier = modifier
+        modifier = Modifier
             .pointerInput(Unit) {
                 detectTapGestures(onTap = {
-                    hideKeyboardAndClearFocus(activity, focusManager, keyboardController)
+                    hideKeyboardAndClearFocus(context, focusManager, keyboardController)
                 })
             }
             .padding(top = 48.dp)
@@ -108,30 +204,17 @@ private fun contentView(
             .statusBarsPadding()
             .navigationBarsPadding()
     ) {
-        val context = LocalContext.current
-        var email by remember { mutableStateOf("") }
-        var emailError by remember { mutableStateOf("") }
-        var isChecked by remember { mutableStateOf(false) }
-        var isSuccess by remember { mutableStateOf(false) }
-
-        val buttonColors = ButtonColors(
+        val buttonColors = ButtonDefaults.buttonColors(
             containerColor = colorResource(id = R.color.royal_blue),
-            contentColor = Color.White, // Default text color
-            disabledContainerColor = colorResource(id = R.color.jumbo), // Disabled background color
-            disabledContentColor = colorResource(id = R.color.tuna)// Disabled text color
+            contentColor = Color.White,
+            disabledContainerColor = colorResource(id = R.color.jumbo),
+            disabledContentColor = colorResource(id = R.color.tuna)
         )
-        var isEnableButton by remember { mutableStateOf(false) }
-        isEnableButton = email.isNotEmpty() && isChecked
-
-        val intent = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/")) }
 
         val (logo, textview, emailTextField, columnBottom) = createRefs()
 
-        fun isValidEmail(email: String): Boolean {
-            return Patterns.EMAIL_ADDRESS.matcher(email).matches()
-        }
         Image(
-            painter = painterResource(id = R.drawable.ic_rondy_stickers), // Load image from drawable
+            painter = painterResource(id = R.drawable.ic_rondy_stickers),
             contentDescription = "Image",
             modifier = Modifier
                 .fillMaxWidth()
@@ -143,14 +226,16 @@ private fun contentView(
                     end.linkTo(parent.end)
                 }
         )
-        Text(text = "Khám phá con đường sự nghiệp của riêng bạn",
-            Modifier
+        Text(
+            text = "Khám phá con đường sự nghiệp của riêng bạn",
+            modifier = Modifier
                 .constrainAs(textview) {
                     top.linkTo(logo.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }
-                .padding(start = 24.dp, end = 24.dp), style = TextStyle(fontSize = 24.sp),
+                .padding(start = 24.dp, end = 24.dp),
+            style = TextStyle(fontSize = 24.sp),
             textAlign = TextAlign.Center
         )
 
@@ -164,13 +249,9 @@ private fun contentView(
                 },
             hint = "Email của bạn",
             value = email,
-            onValueChange = {
-                email = it
-                emailError = ""
-                isSuccess = it.isNotEmpty() && isValidEmail(it)
-            },
+            onValueChange = onEmailChange,
             error = emailError,
-            onClose = { email = "" },
+            onClose = { onEmailChange("") },
             isSuccess = isSuccess
         )
 
@@ -198,14 +279,14 @@ private fun contentView(
                         .width(24.dp)
                         .height(24.dp),
                     checked = isChecked,
-                    onCheckedChange = { isChecked = it },
+                    onCheckedChange = onCheckboxChange,
                     colors = CheckboxDefaults.colors(
                         checkmarkColor = Color.White,
                         checkedColor = colorResource(R.color.violets_are_blue),
                         uncheckedColor = Color.Gray
                     )
                 )
-                val annotatedString = buildClickableText(
+                val (annotatedString, annotations)  = buildClickableText(
                     text = "Bằng việc click vào ô này, bạn đã đồng ý với Điều khoản dịch vụ và chính sách bảo mật của X",
                     clickableText = "Điều khoản dịch vụ và chính sách bảo mật",
                     tag = "tag_name",
@@ -213,38 +294,27 @@ private fun contentView(
                         color = Color.Black,
                         fontSize = 17.sp
                     ),
-                    textLinkStyles = TextLinkStyles(
-                        style = SpanStyle(
-                            color = colorResource(R.color.violets_are_blue),
-                            fontSize = 17.sp
-                        )
-                    ),
-                    onClick = {
-                        context.startActivity(intent)
-                    }
+                    textLinkStyles = SpanStyle(
+                        color = colorResource(R.color.red),
+                        fontSize = 17.sp
+                    ), onClick = onLinkClick
                 )
 
-                BasicText(text = annotatedString, Modifier
-                    .weight(1f)
-                    .padding(start = 8.dp),
-                    style = TextStyle(fontSize = 16.sp,
+                BasicText(
+                    text = annotatedString, Modifier
+                        .weight(1f)
+                        .padding(start = 8.dp),
+                    style = TextStyle(
+                        fontSize = 16.sp,
                         fontWeight = FontWeight(400),
-                        lineHeight = 24.sp)
+                        lineHeight = 24.sp
+                    )
                 )
-            }
-
-
-            fun verifyEmail() {
-                emailError = if (email.isEmpty() || !isValidEmail(email)) "Invalid email format" else ""
-                if (emailError.isNullOrEmpty()) {
-                    onNavigateToVerifyOtp?.invoke(email)
-                }
             }
 
             Button(
-                onClick = {
-                    verifyEmail()
-                }, modifier = Modifier
+                onClick = onButtonClick,
+                modifier = Modifier
                     .fillMaxWidth()
                     .padding(12.dp)
                     .height(56.dp),
@@ -256,4 +326,5 @@ private fun contentView(
             }
         }
     }
+    onHandleApi(email)
 }

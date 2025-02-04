@@ -21,10 +21,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,7 +62,7 @@ private fun contentView(modifier: Modifier = Modifier, email: String, origin: St
         var otp by remember { mutableStateOf("") }
         var isResend by remember { mutableStateOf(false) }
         var isError by remember { mutableStateOf(false) }
-        val annotatedString = buildClickableText(
+        val (annotatedString, annotations)= buildClickableText(
             text = label,
             clickableText = email,
             tag = "tag_name",
@@ -72,15 +70,10 @@ private fun contentView(modifier: Modifier = Modifier, email: String, origin: St
                 color = Color.Black,
                 fontSize = 24.sp
             ),
-            textLinkStyles = TextLinkStyles(
-                style = SpanStyle(
-                    color = colorResource(R.color.violets_are_blue),
-                    fontSize = 24.sp
-                )
-            ),
-            onClick = {
-
-            }
+            textLinkStyles = SpanStyle(
+                color = colorResource(R.color.violets_are_blue),
+                fontSize = 24.sp
+            )
         )
 
         BasicText(text = annotatedString,
@@ -158,7 +151,7 @@ private fun contentView(modifier: Modifier = Modifier, email: String, origin: St
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center) {
             if (isResend) {
-                val resendString = buildClickableText(
+                val (resendString, annotations)  = buildClickableText(
                     text = "Chưa nhận được mã? Gửi lại",
                     clickableText = "Gửi lại",
                     tag = "tag_name",
@@ -166,15 +159,10 @@ private fun contentView(modifier: Modifier = Modifier, email: String, origin: St
                         color = Color.Black,
                         fontSize = 16.sp
                     ),
-                    textLinkStyles = TextLinkStyles(
-                        style = SpanStyle(
-                            color = colorResource(R.color.violets_are_blue),
-                            fontSize = 16.sp
-                        )
-                    ),
-                    onClick = {
-                        isResend = false
-                    }
+                    textLinkStyles = SpanStyle(
+                        color = colorResource(R.color.violets_are_blue),
+                        fontSize = 16.sp
+                    )
                 )
 
                 BasicText(

@@ -1,11 +1,11 @@
 package com.example.demo_structure.app.di
 
-import com.example.data.remote.ErrorMapper
+import com.example.data.repository.AuthRepositoryImpl
 import com.example.data.repository.HomeRepositoryImpl
 import com.example.data.repository.MyProfileRepositoryImpl
+import com.example.domain.repository.AuthRepository
 import com.example.domain.repository.HomeRepository
 import com.example.domain.repository.MyProfileRepository
-import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 /**
@@ -16,4 +16,5 @@ import org.koin.dsl.module
 val dataModule = module {
     single<HomeRepository> { HomeRepositoryImpl(get()) }
     single<MyProfileRepository> { MyProfileRepositoryImpl(get()) }
+    single<AuthRepository> { AuthRepositoryImpl(get()) }
 }

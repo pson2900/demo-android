@@ -28,6 +28,6 @@ val presentationModule = module {
     viewModel { EducationViewModel(savedStateHandle = get()) }
     viewModel { JobDetailViewModel(savedStateHandle = get()) }
     viewModel { LoginViewModel(savedStateHandle = get()) }
-    viewModel { VerifyEmailViewModel(savedStateHandle = get()) }
+    viewModel { VerifyEmailViewModel(authUseCase = get(), savedStateHandle = get()) }
     viewModel { VerifyOTPViewModel(savedStateHandle = get()) }
 }

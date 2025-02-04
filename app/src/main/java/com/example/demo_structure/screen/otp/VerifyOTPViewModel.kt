@@ -14,7 +14,7 @@ class VerifyOTPViewModel(savedStateHandle: SavedStateHandle) : BaseViewModel(sav
     val menuUiState: StateFlow<EmailState> = MutableStateFlow<EmailState>(EmailState.Loading).apply {
         viewModelScope.launch {
             delay(2000)
-            value = EmailState.Success
+            value = EmailState.Success(false)
         }
     }.asStateFlow()
 }

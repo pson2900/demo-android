@@ -1,5 +1,6 @@
 package com.example.demo_structure.app.di
 
+import com.example.domain.usecase.AuthUseCase
 import com.example.domain.usecase.GetClientUseCase
 import com.example.domain.usecase.HomeUseCase
 import com.example.domain.usecase.MyProfileUseCase
@@ -14,4 +15,5 @@ val domainModule = module {
     factory { GetClientUseCase(get()) }
     factory { HomeUseCase(get()) }
     factory { MyProfileUseCase(get()) }
+    factory { AuthUseCase(get()) }
 }
