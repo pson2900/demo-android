@@ -14,14 +14,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class VerifyEmailViewModel(private val authUseCase: AuthUseCase, savedStateHandle: SavedStateHandle)  : BaseViewModel(savedStateHandle) {
+class VerifyEmailViewModel(
+    private val authUseCase: AuthUseCase,
+    savedStateHandle: SavedStateHandle
+) : BaseViewModel(savedStateHandle) {
 
-    private val _emailUiState = MutableStateFlow<EmailState>(EmailState.Loading)
+    private val _emailUiState = MutableStateFlow<EmailState>(EmailState.Loading(false))
     val emailUiState: StateFlow<EmailState> = _emailUiState.asStateFlow()
 
-     fun verifyEmail() {
+    fun verifyEmail() {
         viewModelScope.launch {
-            _emailUiState.value = EmailState.Loading
+            _emailUiState.value = EmailState.Loading(true)
             delay(1000)
             try {
                 val response = authUseCase.verifyEmail()

@@ -2,6 +2,7 @@ package com.example.data.remote.network
 
 import com.example.data.remote.response.BaseResponse
 import com.example.data.remote.response.MyProfileResponse
+import com.example.data.remote.response.SendOtpResponse
 import com.example.data.remote.response.VerifyEmailResponse
 import kotlinx.coroutines.flow.Flow
 import retrofit2.http.GET
@@ -18,4 +19,7 @@ interface ApiService {
 
     @GET("/secure/js/verify-email")
     suspend fun verifyEmail(): BaseResponse<VerifyEmailResponse>
+
+    @GET("/secure/js/send-otp")
+    suspend fun sendOtp(): BaseResponse<SendOtpResponse>
 }

@@ -55,7 +55,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.demo_structure.R
 import com.example.demo_structure.core.component.EmailTextField
 import com.example.demo_structure.screen.home.LoadingState
-
 import com.example.demo_structure.util.FormatText.buildClickableText
 
 @Preview(showBackground = true)
@@ -89,7 +88,8 @@ fun VerifyEmailScreen(
     var isSuccess by remember { mutableStateOf(false) }
     val isEnableButton = email.isNotEmpty() && isChecked
 
-    val intent = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://staging.vietnamworks.com/")) }
+    val intent =
+        remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://staging.vietnamworks.com/")) }
 
     fun isValidEmail(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
@@ -125,12 +125,14 @@ fun VerifyEmailScreen(
     fun onHandleApi(email: String) {
         when (val state = emailState) {
             is EmailState.Loading -> {
-                LoadingState(Modifier)
+                if (state.isLoading) {
+                    LoadingState(Modifier)
+                }
             }
 
             is EmailState.Success -> {
                 if (state.found) {
-                    Toast.makeText(context, "login", Toast.LENGTH_SHORT).show()
+                    onNavigateToLogin(email)
                 } else {
                     onNavigateToVerifyOtp(email)
                 }
@@ -138,6 +140,7 @@ fun VerifyEmailScreen(
 
             is EmailState.Error -> {
                 Toast.makeText(context, state.msg, Toast.LENGTH_SHORT).show()
+                onNavigateToVerifyOtp(email)
             }
         }
     }
@@ -286,7 +289,7 @@ fun VerifyEmailContent(
                         uncheckedColor = Color.Gray
                     )
                 )
-                val (annotatedString, annotations)  = buildClickableText(
+                val annotatedString = buildClickableText(
                     text = "Bằng việc click vào ô này, bạn đã đồng ý với Điều khoản dịch vụ và chính sách bảo mật của X",
                     clickableText = "Điều khoản dịch vụ và chính sách bảo mật",
                     tag = "tag_name",
@@ -295,10 +298,12 @@ fun VerifyEmailContent(
                         fontSize = 17.sp
                     ),
                     textLinkStyles = SpanStyle(
-                        color = colorResource(R.color.red),
+                        color = colorResource(R.color.violets_are_blue),
                         fontSize = 17.sp
-                    ), onClick = onLinkClick
-                )
+                    ),
+                    onClick = {
+                        onLinkClick.invoke()
+                    })
 
                 BasicText(
                     text = annotatedString, Modifier

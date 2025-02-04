@@ -29,5 +29,5 @@ val presentationModule = module {
     viewModel { JobDetailViewModel(savedStateHandle = get()) }
     viewModel { LoginViewModel(savedStateHandle = get()) }
     viewModel { VerifyEmailViewModel(authUseCase = get(), savedStateHandle = get()) }
-    viewModel { VerifyOTPViewModel(savedStateHandle = get()) }
+    viewModel { VerifyOTPViewModel(authUseCase = get(), savedStateHandle = get()) }
 }

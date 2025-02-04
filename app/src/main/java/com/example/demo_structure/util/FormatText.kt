@@ -2,12 +2,14 @@ package com.example.demo_structure.util
 
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.sp
 import kotlin.text.append
 
 object FormatText {
@@ -18,28 +20,21 @@ object FormatText {
         style: SpanStyle,
         textLinkStyles: SpanStyle,
         tag: String,
-        onClick: (() -> Unit)? = null
-    ): Pair<AnnotatedString, List<Pair<String, () -> Unit>>> {
-        val annotatedString = buildAnnotatedString {
+        onClick: ((link: LinkAnnotation) -> Unit)? = null
+    ): AnnotatedString {
+        return buildAnnotatedString {
             val startIndex = text.indexOf(clickableText)
             val endIndex = startIndex + clickableText.length
-
-            withStyle(style = style) {
-                append(text)
-            }
-            pushStringAnnotation(tag = tag, annotation = "")
-            addStyle(
-                style = textLinkStyles,
-                start = startIndex,
-                end = endIndex
+            withStyle(style = style) { append(text) }
+            addLink(
+                LinkAnnotation.Clickable(
+                    tag = tag,
+                    styles = TextLinkStyles(textLinkStyles),
+                    linkInteractionListener = onClick
+                ),
+                startIndex,
+                endIndex
             )
-            pop()
         }
-
-        val annotations = mutableListOf<Pair<String, () -> Unit>>()
-        if (onClick != null) {
-            annotations.add(Pair(tag, onClick))
-        }
-        return Pair(annotatedString, annotations)
     }
 }
