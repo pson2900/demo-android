@@ -1,6 +1,7 @@
 package com.example.demo_structure.screen.otp
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +25,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -31,6 +35,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.R
 import com.example.demo_structure.core.component.CountdownTextView
@@ -58,26 +64,55 @@ data class OTPScreenState(
     val sendOtpSuccess: Boolean = false,
     val isResend: Boolean = false,
     val otp: String = "",
-    val isError: Boolean = false
+    val isError: Boolean = false,
+    val isLoading: Boolean = false
 )
 
 data class OtpStateChange(
     val isSuccess: Boolean = false,
-    val isResend: Boolean = false
+    val isResend: Boolean = false,
+    val isLoading: Boolean = false
 )
 
 @Composable
-fun VerifyOTPScreen(viewModel: VerifyOTPViewModel, email: String, origin: String) {
+fun VerifyOTPScreen(
+    viewModel: VerifyOTPViewModel,
+    email: String,
+    origin: String
+) {
+    val context = LocalContext.current
     var screenState by remember { mutableStateOf(OTPScreenState()) }
+    val lifecycleOwner = LocalLifecycleOwner.current
+
     LaunchedEffect(viewModel) {
         viewModel.sendOtp()
     }
-    HandleOtpState(viewModel = viewModel) { newState ->
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                viewModel.clearOTPState()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
+    HandleOtpState(viewModel = viewModel, onChangeLoading = {
+        screenState = screenState.copy(isLoading = it)
+    }) { newState ->
         screenState = screenState.copy(
             sendOtpSuccess = newState.isSuccess,
-            isResend = newState.isResend
+            isResend = newState.isResend,
+            isLoading = false
         )
     }
+
+
+
     OTPScreenContent(
         viewModel = viewModel,
         email = email,
@@ -103,7 +138,7 @@ private fun OTPScreenContent(
             .statusBarsPadding()
             .navigationBarsPadding()
     ) {
-        val (emailTextview, textViewDescription, otpTextField, textViewError, columnBottom) = createRefs()
+        val (emailTextview, textViewDescription, otpTextField, textViewError, columnBottom,loading) = createRefs()
         val annotatedString = buildClickableText(
             text = "Mã xác nhận đã được gửi qua email $email",
             clickableText = email,
@@ -193,7 +228,9 @@ private fun OTPScreenContent(
         ) {
             if (screenState.sendOtpSuccess) {
                 if (screenState.isResend) {
-                    ResendOtpText(viewModel)
+                    ResendOtpText(viewModel, onStateChange = {
+                        onStateChange(screenState.copy(sendOtpSuccess = false))
+                    })
                 } else {
                     CountdownResendOtpText {
                         onStateChange(screenState.copy(isResend = true))
@@ -201,11 +238,22 @@ private fun OTPScreenContent(
                 }
             }
         }
+
+        if(screenState.isLoading){
+            LoadingState(
+                modifier = Modifier.constrainAs(loading) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+            )
+        }
     }
 }
 
 @Composable
-private fun ResendOtpText(viewModel: VerifyOTPViewModel?) {
+private fun ResendOtpText(viewModel: VerifyOTPViewModel?, onStateChange: (Boolean) -> Unit) {
     val resendString = buildClickableText(
         text = "Chưa nhận được mã? Gửi lại",
         clickableText = "Gửi lại",
@@ -219,6 +267,7 @@ private fun ResendOtpText(viewModel: VerifyOTPViewModel?) {
             fontSize = 16.sp
         ),
         onClick = {
+            onStateChange.invoke(true)
             viewModel?.sendOtp()
         }
     )
@@ -258,7 +307,7 @@ private fun CountdownResendOtpText(onCountdownFinished: () -> Unit) {
             ),
             minutesState = 0.2f,
             onCountdownFinished = {
-                onCountdownFinished()
+                onCountdownFinished.invoke()
             }
         )
     }
@@ -267,23 +316,25 @@ private fun CountdownResendOtpText(onCountdownFinished: () -> Unit) {
 @Composable
 fun HandleOtpState(
     viewModel: VerifyOTPViewModel,
+    onChangeLoading: (Boolean) -> Unit,
     onStateChange: (OtpStateChange) -> Unit
 ) {
     val otpState by viewModel.otplUiState.collectAsStateWithLifecycle()
-
-    when (val state = otpState) {
-        is OtpState.Loading -> {
-            if (state.isLoading) {
-                LoadingState(Modifier)
+    LaunchedEffect(key1 = otpState) {
+        when (val state = otpState) {
+            is OtpState.Loading -> {
+                onChangeLoading.invoke(state.isLoading)
             }
-        }
 
-        is OtpState.Success -> {
-            onStateChange(OtpStateChange(isSuccess = state.isSuccess, isResend = false))
-        }
+            is OtpState.Success -> {
+                onStateChange(OtpStateChange(isSuccess = state.isSuccess, isResend = false))
+            }
 
-        is OtpState.Error -> {
-            onStateChange(OtpStateChange(isSuccess = true, isResend = true))
+            is OtpState.Error -> {
+                onStateChange(OtpStateChange(isSuccess = true, isResend = false))
+            }
+
+            is OtpState.Idle-> Unit
         }
     }
 }

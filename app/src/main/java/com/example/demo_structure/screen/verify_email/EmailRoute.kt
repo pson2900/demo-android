@@ -25,7 +25,7 @@ fun NavGraphBuilder.toVerifyEmailScreen(appState: AppState) {
             content = { navBackStackEntry ->
                 VerifyEmailScreen(
                     viewModel = koinViewModel(),
-                    onNavigateToVerifyOtp = { email -> appState.navigateToOTP(from = navBackStackEntry, email = email, origin = "origin") },
+                    onNavigateToVerifyOtp = { email, type -> appState.navigateToOTP(from = navBackStackEntry, email = email, origin = type) },
                     onNavigateToLogin = { appState.navigateToLogin(from = navBackStackEntry) }
                 )
             }

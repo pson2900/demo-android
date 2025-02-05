@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.demo_structure.R
 
 @Preview(showBackground = true)
@@ -135,7 +136,10 @@ fun PassCodeTextField(
             }
         }
         if (!errorMessage.isNullOrEmpty()) {
-            Text(text = errorMessage, style = TextStyle(color = Color.Red))
+            Text(
+                modifier = Modifier.padding(top = 8.dp), text = errorMessage,
+                style = TextStyle(color = colorResource(R.color.alizarin_crimson), fontSize = 16.sp)
+            )
         }
     }
     // LaunchedEffect outside clickable

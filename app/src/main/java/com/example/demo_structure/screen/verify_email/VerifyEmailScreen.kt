@@ -27,9 +27,12 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
@@ -50,12 +54,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.demo_structure.R
 import com.example.demo_structure.core.component.EmailTextField
 import com.example.demo_structure.screen.home.LoadingState
+import com.example.demo_structure.screen.otp.OTPType
+import com.example.demo_structure.screen.otp.VerifyOTPViewModel
 import com.example.demo_structure.util.FormatText.buildClickableText
+import kotlinx.coroutines.CoroutineScope
 
 @Preview(showBackground = true)
 @Composable
@@ -66,27 +75,33 @@ private fun VerifyEmailPreview() {
         isEnableButton = true,
         isChecked = false,
         isSuccess = false,
+        isLoading = false,
         onEmailChange = {},
         onCheckboxChange = {},
         onButtonClick = {},
-        onLinkClick = {},
-        onHandleApi = {}
+        onLinkClick = {}
     )
 }
 
 @Composable
 fun VerifyEmailScreen(
     viewModel: VerifyEmailViewModel = viewModel(),
-    onNavigateToVerifyOtp: (String) -> Unit,
+    onNavigateToVerifyOtp: (String, String) -> Unit,
     onNavigateToLogin: (String) -> Unit
 ) {
     val context = LocalContext.current
     val emailState by viewModel.emailUiState.collectAsStateWithLifecycle()
-    var email by remember { mutableStateOf("") }
+
+    var email by rememberSaveable { mutableStateOf(viewModel.email) }
+    var isChecked by rememberSaveable { mutableStateOf(viewModel.isChecked) }
+
     var emailError by remember { mutableStateOf("") }
-    var isChecked by remember { mutableStateOf(false) }
     var isSuccess by remember { mutableStateOf(false) }
     val isEnableButton = email.isNotEmpty() && isChecked
+    var isLoading by remember { mutableStateOf(false) }
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+
 
     val intent =
         remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://staging.vietnamworks.com/")) }
@@ -121,27 +136,44 @@ fun VerifyEmailScreen(
         context.startActivity(intent)
     }
 
-    @Composable
-    fun onHandleApi(email: String) {
+    LaunchedEffect(key1 = emailState) {
         when (val state = emailState) {
             is EmailState.Loading -> {
-                if (state.isLoading) {
-                    LoadingState(Modifier)
-                }
+                isLoading = state.isLoading
             }
 
             is EmailState.Success -> {
+                isLoading = false
                 if (state.found) {
                     onNavigateToLogin(email)
                 } else {
-                    onNavigateToVerifyOtp(email)
+                    onNavigateToVerifyOtp(email, OTPType.LOGIN.type)
                 }
             }
 
             is EmailState.Error -> {
-                Toast.makeText(context, state.msg, Toast.LENGTH_SHORT).show()
-                onNavigateToVerifyOtp(email)
+                isLoading = false
+                onNavigateToVerifyOtp(email, OTPType.LOGIN.type)
             }
+            else -> Unit
+        }
+    }
+
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                viewModel.clearEmailState()
+            }
+            if(event ==  Lifecycle.Event.ON_DESTROY){
+                viewModel.email = email
+                viewModel.isChecked = isChecked
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 
@@ -151,11 +183,11 @@ fun VerifyEmailScreen(
         isEnableButton = isEnableButton,
         isChecked = isChecked,
         isSuccess = isSuccess,
+        isLoading = isLoading,
         onEmailChange = ::onEmailChange,
         onCheckboxChange = ::onCheckboxChange,
         onButtonClick = ::onButtonClick,
-        onLinkClick = ::onLinkClick,
-        onHandleApi = { onHandleApi(it) }
+        onLinkClick = ::onLinkClick
     )
 }
 
@@ -177,7 +209,6 @@ fun hideKeyboardAndClearFocus(
     keyboardController?.hide()
 }
 
-
 @Composable
 fun VerifyEmailContent(
     email: String,
@@ -185,11 +216,11 @@ fun VerifyEmailContent(
     isEnableButton: Boolean,
     isChecked: Boolean,
     isSuccess: Boolean,
+    isLoading: Boolean,
     onEmailChange: (String) -> Unit,
     onCheckboxChange: (Boolean) -> Unit,
     onButtonClick: () -> Unit,
-    onLinkClick: () -> Unit,
-    onHandleApi: @Composable (String) -> Unit
+    onLinkClick: () -> Unit
 ) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -214,7 +245,7 @@ fun VerifyEmailContent(
             disabledContentColor = colorResource(id = R.color.tuna)
         )
 
-        val (logo, textview, emailTextField, columnBottom) = createRefs()
+        val (logo, textview, emailTextField, columnBottom, loading) = createRefs()
 
         Image(
             painter = painterResource(id = R.drawable.ic_rondy_stickers),
@@ -330,6 +361,15 @@ fun VerifyEmailContent(
                 Text(text = "Tiếp tục")
             }
         }
+        if (isLoading) {
+            LoadingState(
+                modifier = Modifier.constrainAs(loading) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+            )
+        }
     }
-    onHandleApi(email)
 }

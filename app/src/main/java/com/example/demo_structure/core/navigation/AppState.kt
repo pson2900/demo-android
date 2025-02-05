@@ -2,6 +2,7 @@ package com.example.demo_structure.core.navigation
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -20,6 +21,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.demo_structure.screen.job_detail.toJobDetail
 import com.example.demo_structure.screen.login.toLogin
+import com.example.demo_structure.screen.otp.OTPType
 import com.example.demo_structure.screen.otp.toVerifyOtp
 import com.example.demo_structure.screen.verify_email.toVerifyEmail
 import com.example.demo_structure.util.NetworkMonitor
@@ -122,7 +124,12 @@ class AppState(
         val route = "${Destinations.JobDetail.route}/$jobId?origin=$origin"
         trace("Navigation : ${route}") {
             if (from.lifecycleIsResumed()) {
-                navController.toJobDetail(Destinations.JobDetail.createRoute(jobId.toString(), origin))
+                navController.toJobDetail(
+                    Destinations.JobDetail.createRoute(
+                        jobId.toString(),
+                        origin
+                    )
+                )
             }
         }
     }
@@ -147,12 +154,17 @@ class AppState(
         }
     }
 
-    fun navigateToOTP(from: NavBackStackEntry,email: String,origin: String) {
+    fun navigateToOTP(from: NavBackStackEntry, email: String, origin: String) {
         // In order to discard duplicated navigation events, we check the Lifecycle
         val route = "${Destinations.OTP.route}/$email?origin=$origin"
         trace("Navigation : $route") {
             if (from.lifecycleIsResumed()) {
-                navController.toVerifyOtp(Destinations.OTP.createRoute(email = email, origin = origin))
+                navController.toVerifyOtp(
+                    Destinations.OTP.createRoute(
+                        email = email,
+                        origin = origin
+                    )
+                )
             }
         }
     }

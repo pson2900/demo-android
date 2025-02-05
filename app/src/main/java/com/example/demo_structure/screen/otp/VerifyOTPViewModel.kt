@@ -31,4 +31,7 @@ class VerifyOTPViewModel(val authUseCase: AuthUseCase, savedStateHandle: SavedSt
             }
         }
     }
+    fun clearOTPState() {
+        _otpUiState.value = OtpState.Idle
+    }
 }

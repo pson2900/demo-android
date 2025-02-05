@@ -1,5 +1,6 @@
 package com.example.demo_structure.screen.otp
 
+import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -19,6 +20,7 @@ fun NavGraphBuilder.toVerifyOtpScreen() {
             route = "${Destinations.OTP.route}/" +
                     "{${Destinations.OTP.EMAIL}}" +
                     "?origin={${Destinations.OTP.ORIGIN}}",
+
             arguments = listOf(
                 navArgument(Destinations.OTP.EMAIL) {
                     type = NavType.StringType
