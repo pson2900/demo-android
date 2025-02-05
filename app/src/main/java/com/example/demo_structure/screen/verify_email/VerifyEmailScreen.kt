@@ -114,7 +114,7 @@ fun VerifyEmailScreen(
         emailError =
             if (email.isEmpty() || !isValidEmail(email)) "Invalid email format" else ""
         if (emailError.isEmpty()) {
-            viewModel.verifyEmail()
+            viewModel.verifyEmail(email)
         }
     }
 
@@ -129,7 +129,7 @@ fun VerifyEmailScreen(
     }
 
     fun onButtonClick() {
-        verifyEmail()
+       verifyEmail()
     }
 
     fun onLinkClick() {
@@ -144,16 +144,15 @@ fun VerifyEmailScreen(
 
             is EmailState.Success -> {
                 isLoading = false
-                if (state.found) {
+                if (state.found == true) {
                     onNavigateToLogin(email)
                 } else {
-                    onNavigateToVerifyOtp(email, OTPType.LOGIN.type)
+                    onNavigateToVerifyOtp(email, OTPType.REGISTER.type)
                 }
             }
 
             is EmailState.Error -> {
                 isLoading = false
-                onNavigateToVerifyOtp(email, OTPType.LOGIN.type)
             }
             else -> Unit
         }

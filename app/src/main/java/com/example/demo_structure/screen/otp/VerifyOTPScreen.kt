@@ -53,6 +53,7 @@ fun OTPScreenPreview() {
     OTPScreenContent(
         viewModel = null,
         email = "demo@gmail.com",
+        type = "",
         screenState = screenState,
         onStateChange = { newScreenState ->
             screenState = newScreenState
@@ -85,7 +86,11 @@ fun VerifyOTPScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
 
     LaunchedEffect(viewModel) {
-        viewModel.sendOtp()
+        if (origin == OTPType.REGISTER.type) {
+            viewModel.sendOtp(email)
+        } else {
+            viewModel.forgetPassword(email)
+        }
     }
 
     DisposableEffect(lifecycleOwner) {
@@ -116,6 +121,7 @@ fun VerifyOTPScreen(
     OTPScreenContent(
         viewModel = viewModel,
         email = email,
+        type = origin,
         screenState = screenState,
         onStateChange = { newScreenState ->
             screenState = newScreenState
@@ -128,6 +134,7 @@ private fun OTPScreenContent(
     modifier: Modifier = Modifier,
     viewModel: VerifyOTPViewModel? = null,
     email: String,
+    type: String,
     screenState: OTPScreenState,
     onStateChange: (OTPScreenState) -> Unit
 ) {
@@ -138,7 +145,7 @@ private fun OTPScreenContent(
             .statusBarsPadding()
             .navigationBarsPadding()
     ) {
-        val (emailTextview, textViewDescription, otpTextField, textViewError, columnBottom,loading) = createRefs()
+        val (emailTextview, textViewDescription, otpTextField, textViewError, columnBottom, loading) = createRefs()
         val annotatedString = buildClickableText(
             text = "Mã xác nhận đã được gửi qua email $email",
             clickableText = email,
@@ -228,7 +235,7 @@ private fun OTPScreenContent(
         ) {
             if (screenState.sendOtpSuccess) {
                 if (screenState.isResend) {
-                    ResendOtpText(viewModel, onStateChange = {
+                    ResendOtpText(viewModel, email,type, onStateChange = {
                         onStateChange(screenState.copy(sendOtpSuccess = false))
                     })
                 } else {
@@ -239,7 +246,7 @@ private fun OTPScreenContent(
             }
         }
 
-        if(screenState.isLoading){
+        if (screenState.isLoading) {
             LoadingState(
                 modifier = Modifier.constrainAs(loading) {
                     top.linkTo(parent.top)
@@ -253,7 +260,12 @@ private fun OTPScreenContent(
 }
 
 @Composable
-private fun ResendOtpText(viewModel: VerifyOTPViewModel?, onStateChange: (Boolean) -> Unit) {
+private fun ResendOtpText(
+    viewModel: VerifyOTPViewModel?,
+    email: String,
+    type: String,
+    onStateChange: (Boolean) -> Unit
+) {
     val resendString = buildClickableText(
         text = "Chưa nhận được mã? Gửi lại",
         clickableText = "Gửi lại",
@@ -268,7 +280,11 @@ private fun ResendOtpText(viewModel: VerifyOTPViewModel?, onStateChange: (Boolea
         ),
         onClick = {
             onStateChange.invoke(true)
-            viewModel?.sendOtp()
+            if (type == OTPType.REGISTER.type) {
+                viewModel?.sendOtp(email = email)
+            } else {
+                viewModel?.forgetPassword(email = email)
+            }
         }
     )
 
@@ -330,11 +346,15 @@ fun HandleOtpState(
                 onStateChange(OtpStateChange(isSuccess = state.isSuccess, isResend = false))
             }
 
+            is OtpState.ForgetPasswordSuccess -> {
+                onStateChange(OtpStateChange(isSuccess = state.isSuccess, isResend = false))
+            }
+
             is OtpState.Error -> {
                 onStateChange(OtpStateChange(isSuccess = true, isResend = false))
             }
 
-            is OtpState.Idle-> Unit
+            is OtpState.Idle -> Unit
         }
     }
 }

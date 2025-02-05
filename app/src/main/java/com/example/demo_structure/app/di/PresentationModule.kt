@@ -1,6 +1,7 @@
 package com.example.demo_structure.app.di
 
 import com.example.demo_structure.screen.community.CommunityViewModel
+import com.example.demo_structure.screen.create_pin.PinCodeViewModel
 import com.example.demo_structure.screen.education.EducationViewModel
 import com.example.demo_structure.screen.home.HomeViewModel
 import com.example.demo_structure.screen.job_detail.JobDetailViewModel
@@ -30,4 +31,5 @@ val presentationModule = module {
     viewModel { LoginViewModel(savedStateHandle = get()) }
     viewModel { VerifyEmailViewModel(authUseCase = get(), savedStateHandle = get()) }
     viewModel { VerifyOTPViewModel(authUseCase = get(), savedStateHandle = get()) }
+    viewModel { PinCodeViewModel(authUseCase = get(), savedStateHandle = get()) }
 }

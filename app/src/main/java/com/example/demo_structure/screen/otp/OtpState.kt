@@ -7,5 +7,6 @@ sealed interface OtpState {
     object Idle : OtpState
     data class Loading(val isLoading: Boolean) : OtpState
     data class Success(val isSuccess: Boolean) : OtpState
+    data class ForgetPasswordSuccess(val isSuccess: Boolean) : OtpState
     data class Error(val msg: String): OtpState
 }

@@ -1,6 +1,7 @@
 package com.example.demo_structure.screen.verify_email
 
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.demo_structure.core.base.BaseViewModel
@@ -9,6 +10,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -28,17 +30,17 @@ class VerifyEmailViewModel(
     private val _emailUiState = MutableStateFlow<EmailState>(EmailState.Loading(false))
     val emailUiState: StateFlow<EmailState> = _emailUiState.asStateFlow()
 
-    fun verifyEmail() {
+    fun verifyEmail(email: String) {
         viewModelScope.launch {
             _emailUiState.value = EmailState.Loading(true)
             delay(1000)
-            try {
-                val response = authUseCase.verifyEmail()
-                response.collectLatest { result ->
-                    _emailUiState.value = EmailState.Success(result.found)
-                }
-            } catch (e: Exception) {
+            val response = authUseCase.verifyEmail(email)
+            response.catch { e ->
+                Log.e("Sang", "Error verifying email: ${e.message}")
                 _emailUiState.value = EmailState.Error("Error fetching data: ${e.message}")
+            }.collect { result ->
+                Log.e("Sang", "response $result")
+                _emailUiState.value = EmailState.Success(result.found)
             }
         }
     }

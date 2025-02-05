@@ -8,13 +8,15 @@ import kotlinx.coroutines.flow.Flow
 
 class AuthUseCase(private val authRepository: AuthRepository) {
 
-    suspend fun verifyEmail(): Flow<VerifyEmail> {
-        delay(3000L)
-        return authRepository.verifyEmail()
+    suspend fun verifyEmail(email: String): Flow<VerifyEmail> {
+        return authRepository.verifyEmail(email)
     }
 
-    suspend fun sendOtp(): Flow<SendOtp> {
-        delay(3000L)
-        return authRepository.sendOtp()
+    suspend fun sendOtp(email: String): Flow<SendOtp> {
+        return authRepository.sendOtp(email)
+    }
+
+    suspend fun forgetPassword(email: String): Flow<SendOtp> {
+        return authRepository.forgetPassword(email)
     }
 }

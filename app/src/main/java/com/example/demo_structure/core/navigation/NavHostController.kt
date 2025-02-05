@@ -19,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.window.core.layout.WindowSizeClass
 import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.screen.community.CommunityNavGraph
+import com.example.demo_structure.screen.create_pin.toCreatePinCodeScreen
 import com.example.demo_structure.screen.education.EducationNavGraph
 import com.example.demo_structure.screen.home.HomeNavGraph
 import com.example.demo_structure.screen.job_detail.JobDetailNavGraph
@@ -85,6 +86,7 @@ fun AppNavHost(
             }
             toVerifyEmailScreen(appState)
             toVerifyOtpScreen()
+            toCreatePinCodeScreen(appState)
         })
 }
 
