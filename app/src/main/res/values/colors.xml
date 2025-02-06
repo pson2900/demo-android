@@ -16,4 +16,13 @@
     <color name="nyanza">#EDFBDF</color>
     <color name="anti_flash_white">#F1F5F9</color>
     <color name="alice_blue">#F3F5FC</color>
+    <color name="red">#F44336</color>
+    <color name="portage">#9984FB</color>
+    <color name="tundora">#434343</color>
+    <color name="mercury">#E6E6E6</color>
+    <color name="bridesmaid">#FEE9E7</color>
+    <color name="royal_blue">#6142F3</color>
+    <color name="jumbo">#1F767680</color>
+    <color name="tuna">#3C3C434A</color>
+    <color name="boulder">#757575</color>
 </resources>

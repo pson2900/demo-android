@@ -27,7 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -36,6 +36,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.util.trace
+import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
@@ -44,23 +45,20 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.demo_structure.app.InitializeApp
 import com.example.demo_structure.app.manager.LanguageManager
-import com.example.demo_structure.core.component.BottomNavigationBar
 import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppSnackBar
-import com.example.demo_structure.core.component.initBottomMainScreen
+import com.example.demo_structure.core.component.AppSurface
+import com.example.demo_structure.core.component.BottomNavigationBar
+import com.example.demo_structure.core.component.InitBottomMainScreen
 import com.example.demo_structure.core.component.rememberScaffoldState
 import com.example.demo_structure.core.navigation.MainNavHost
 import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.util.NetworkMonitor
 import com.example.demo_structure.util.isSystemInDarkTheme
-import com.example.demo_structure.util.logNavigation
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
 
@@ -94,61 +92,65 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-        var themeSettings by mutableStateOf(
-            ThemeSettings(
-                darkTheme = resources.configuration.isSystemInDarkTheme,
-                androidTheme = true,
-                disableDynamicTheming = false,
-            ),
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        observeThemeSettings()
+        setupSplashScreen(splashScreen)
+        setContent {
+            val themeSettings by remember { mutableStateOf(getInitialThemeSettings()) }
+            InitializeApp(modifier = Modifier.fillMaxSize(), themeSettings = themeSettings)
+        }
+
+    }
+
+    private fun getInitialThemeSettings(): ThemeSettings {
+        return ThemeSettings(
+            darkTheme = resources.configuration.isSystemInDarkTheme,
+            androidTheme = true,
+            disableDynamicTheming = false,
         )
-        // Update the uiState
+    }
+
+    private fun observeThemeSettings() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 combine(
                     isSystemInDarkTheme(),
                     viewModel.uiState
-                )
-                { systemDark, uiState ->
+                ) { systemDark, uiState ->
                     ThemeSettings(
                         darkTheme = uiState.shouldUseDarkTheme(systemDark),
                         androidTheme = uiState.shouldUseAndroidTheme,
                         disableDynamicTheming = uiState.shouldDisableDynamicTheming,
                     )
                 }
-                    .onEach { themeSettings = it }
-                    .map { it.darkTheme }
-                    .distinctUntilChanged()
-                    .collect { darkTheme ->
-                        trace("appEdgeToEdge") {
-                            // Turn off the decor fitting system windows, which allows us to handle insets,
-                            // including IME animations, and go edge-to-edge.
-                            // This is the same parameters as the default enableEdgeToEdge call, but we manually
-                            // resolve whether or not to show dark theme using uiState, since it can be different
-                            // than the configuration's dark theme value based on the user preference.
-                            enableEdgeToEdge(
-                                statusBarStyle = SystemBarStyle.auto(
-                                    lightScrim = android.graphics.Color.TRANSPARENT,
-                                    darkScrim = android.graphics.Color.TRANSPARENT,
-                                ) { darkTheme },
-                                navigationBarStyle = SystemBarStyle.auto(
-                                    lightScrim = lightScrim,
-                                    darkScrim = darkScrim,
-                                ) { darkTheme },
-                            )
-                        }
+                    .collect { themeSettings ->
+                        updateEdgeToEdgeDisplay(themeSettings.darkTheme)
                     }
             }
         }
+    }
 
+    private fun updateEdgeToEdgeDisplay(darkTheme: Boolean) {
+        trace("appEdgeToEdge") {
+            enableEdgeToEdge(
+                statusBarStyle = SystemBarStyle.auto(
+                    lightScrim = android.graphics.Color.TRANSPARENT,
+                    darkScrim = android.graphics.Color.TRANSPARENT,
+                ) { darkTheme },
+                navigationBarStyle = SystemBarStyle.auto(
+                    lightScrim = lightScrim,
+                    darkScrim = darkScrim,
+                ) { darkTheme },
+            )
+        }
+    }
+
+    private fun setupSplashScreen(splashScreen: SplashScreen) {
         splashScreen.setKeepOnScreenCondition {
             when (viewModel.uiState.value) {
                 MainActivityUiState.Loading -> true
                 is MainActivityUiState.Success -> false
             }
-        }
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        setContent {
-            InitializeApp(modifier = Modifier.fillMaxSize(), themeSettings = themeSettings)
         }
     }
 }
@@ -158,7 +160,8 @@ class MainActivity : ComponentActivity() {
 fun MainContent(
     modifier: Modifier = Modifier,
     onNavigateToJobDetail: (Int, String) -> Unit,
-    onNavigateToLogin: () -> Unit
+    onNavigateToLogin: () -> Unit,
+    onNavigateToVerifyEmail: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
     val nestedNavigation = rememberAppState()
@@ -191,22 +194,26 @@ fun MainContent(
         bottomBar = {
             BottomNavigationBar(
                 modifier = modifier,
-                containerColor = Color.White
             ) {
-                initBottomMainScreen(appState = nestedNavigation)
+                InitBottomMainScreen(appState = nestedNavigation)
             }
         },
         content = { padding ->
-            logNavigation(nestedNavigation.navController)
-            MainNavHost(
-                windowSizeClass = adaptiveInfo.windowSizeClass,
-                modifier = modifier.padding(paddingValues = padding),
-                appState = nestedNavigation,
-                onNavigateToJobDetail = onNavigateToJobDetail,
-                onNavigateToLogin = onNavigateToLogin
-            )
-        }
+            AppSurface(
+                modifier = Modifier
+                    .fillMaxSize()
 
+                    .padding(paddingValues = padding)
+            ) {
+                MainNavHost(
+                    windowSizeClass = adaptiveInfo.windowSizeClass,
+                    appState = nestedNavigation,
+                    onNavigateToJobDetail = onNavigateToJobDetail,
+                    onNavigateToLogin = onNavigateToLogin,
+                    onNavigateToVerifyEmail = onNavigateToVerifyEmail
+                )
+            }
+        }
     )
 }
 
@@ -229,7 +236,7 @@ fun MainContentPreview() {
             snackBarHostState = snackbarHostState,
             bottomBar = {
                 BottomNavigationBar(Modifier) {
-                    initBottomMainScreen(appState)
+                    InitBottomMainScreen(appState)
                 }
             }
         ) { padding ->

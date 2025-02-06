@@ -9,15 +9,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 /**
  * Light default theme color scheme
@@ -29,28 +28,28 @@ val LightDefaultColorScheme = lightColorScheme(
     onPrimary = hexToColor("#000000"), // Color for text/icons on the primary color
     primaryContainer = hexToColor("#775AFF"), // Background color for containers based on primary
     onPrimaryContainer = hexToColor("#775AFF"), // Color for text/icons on the primaryContainer
-    secondary = hexToColor("#000000"), // Secondary color, used for less important parts
+    secondary = hexToColor("#F1F5F9"), // Secondary color, used for less important parts
     onSecondary = hexToColor("#000000"), // Color for text/icons on the secondary color
     secondaryContainer = hexToColor("#FFFFFF"), // Background color for containers based on secondary
     onSecondaryContainer = hexToColor("#000000"), // Color for text/icons on the secondaryContainer
     tertiary = hexToColor("#775AFF"), // Tertiary color, used for accents or small details
     onTertiary = hexToColor("#94A3B8"), // Color for text/icons on the tertiary color
-    tertiaryContainer = hexToColor("#FFFFFF"), // Background color for containers based on tertiary
+    tertiaryContainer = hexToColor("#000000"), // Background color for containers based on tertiary
     onTertiaryContainer = hexToColor("#000000"), // Color for text/icons on the tertiaryContainer
     error = hexToColor("#EC221F"), // Color for errors, e.g., error messages
     onError = hexToColor("#EC221F"), // Color for text/icons on the error color
     errorContainer = hexToColor("#EC221F"), // Background color for containers containing errors
     onErrorContainer = hexToColor("#EC221F"), // Color for text/icons on the errorContainer
-    background = hexToColor("#FFFFFF"), // Background color of the entire app
+    background = Color.White, // Background color of the entire app
     onBackground = hexToColor("#000000"), // Color for text/icons on the background
-    surface = hexToColor("#FFFFFF"), // Color for surfaces like cards or bottom sheets
+    surface = hexToColor("#F1F5F9"), // Color for surfaces like cards or bottom sheets
     onSurface = hexToColor("#000000"), // Color for text/icons on the surface
     surfaceVariant = hexToColor("#FFFFFF"), // Variation of the surface color, for subparts
     onSurfaceVariant = hexToColor("#000000"), // Color for text/icons on the surfaceVariant
     inverseSurface = hexToColor("#FFFFFF"), // Color for inverted elements (light text on dark backgrounds)
     inverseOnSurface = hexToColor("#000000"), // Color for text/icons on the inverseSurface
-    outline = hexToColor("#9984FB"), // Color for borders, dividers or outlines
-    outlineVariant = hexToColor("#9984FB"), // Color for borders, dividers or outlines on surfaces
+    outline = hexToColor("#000000"), // Color for borders, dividers or outlines
+    outlineVariant = hexToColor("#000000"), // Color for borders, dividers or outlines on surfaces
 )
 
 /**
@@ -62,27 +61,28 @@ val DarkDefaultColorScheme = darkColorScheme(
     onPrimary = hexToColor("#FFFFFF"), // Color for text/icons on the primary color (dark theme)
     primaryContainer = hexToColor("#775AFF"), // Background color for containers based on primary (dark theme)
     onPrimaryContainer = hexToColor("#775AFF"), // Color for text/icons on the primaryContainer (dark theme)
-    secondary = hexToColor("#FFFFFF"), // Secondary color (dark theme)
+    secondary = hexToColor("#000000"), // Secondary color (dark theme)
     onSecondary = hexToColor("#FFFFFF"), // Color for text/icons on the secondary color (dark theme)
     secondaryContainer = hexToColor("#000000"), // Background color for containers based on secondary (dark theme)
     onSecondaryContainer = hexToColor("#FFFFFF"), // Color for text/icons on the secondaryContainer (dark theme)
-    tertiary = hexToColor("#000000"), // Tertiary color (dark theme)
-    onTertiary = hexToColor("#FFFFFF"), // Color for text/icons on the tertiary color (dark theme)
-    tertiaryContainer = hexToColor("#000000"), // Background color for containers based on tertiary (dark theme)
+    tertiary = hexToColor("#775AFF"), // Tertiary color (dark theme)
+    onTertiary = hexToColor("#94A3B8"), // Color for text/icons on the tertiary color (dark theme)
+    tertiaryContainer = hexToColor("#FFFFFF"), // Background color for containers based on tertiary (dark theme)
     onTertiaryContainer = hexToColor("#FFFFFF"), // Color for text/icons on the tertiaryContainer (dark theme)
     error = hexToColor("#EC221F"), // Color for errors (dark theme)
     onError = hexToColor("#EC221F"), // Color for text/icons on the error color (dark theme)
     errorContainer = hexToColor("#EC221F"), // Background color for containers containing errors (dark theme)
     onErrorContainer = hexToColor("#EC221F"), // Color for text/icons on the errorContainer (dark theme)
-    background = hexToColor("#000000"), // Background color of the entire app
-    onBackground = hexToColor("#FFFFFF"), // Color for text/icons on the background
+    background = Color.Black, // Background color of the entire app
+    onBackground = Color.White, // Color for text/icons on the background
     surface = hexToColor("#000000"), // Color for surfaces like cards or bottom sheets
-    onSurface = hexToColor("#FFFFFF"), // Color for text/icons on the surface
+    onSurface = Color.White, // Color for text/icons on the surface
     surfaceVariant = hexToColor("#000000"), // Variation of the surface color (dark theme)
-    onSurfaceVariant = hexToColor("#FFFFFF"), // Color for text/icons on the surfaceVariant (dark theme)
+    onSurfaceVariant = Color.White, // Color for text/icons on the surfaceVariant (dark theme)
     inverseSurface = hexToColor("#000000"), // Color for inverted elements (light text on dark backgrounds) (dark theme)
     inverseOnSurface = hexToColor("#FFFFFF"), // Color for text/icons on the inverseSurface (dark theme)
-    outline = hexToColor("#9984FB"), // Color for borders, dividers or outlines (dark theme)
+    outline = hexToColor("#FFFFFF"), // Color for borders, dividers or outlines (dark theme)
+    outlineVariant = hexToColor("#FFFFFF"), // Color for borders, dividers or outlines on surfaces
 )
 
 /**
@@ -102,7 +102,7 @@ object ProductXTheme {
         @Composable
         get() = LocalCardTheme.current
 
-    val colors: ColorScheme
+    val colorScheme: ColorScheme
         @Composable
         get() = LocalColorTheme.current
 
@@ -122,14 +122,16 @@ fun ApplicationTheme(
     disableDynamicTheming: Boolean = true,
     content: @Composable () -> Unit,
 ) {
-    // Color scheme
-    val colorScheme = when {
-        !disableDynamicTheming && supportsDynamicTheming() -> {
-            if (darkTheme) dynamicDarkColorScheme(LocalContext.current) else dynamicLightColorScheme(LocalContext.current)
-        }
-
-        else -> if (darkTheme) DarkDefaultColorScheme else LightDefaultColorScheme
+    val systemUiController = rememberSystemUiController()
+    // Cập nhật màu status bar dựa trên chế độ sáng/tối
+    LaunchedEffect(darkTheme) {
+        systemUiController.setStatusBarColor(
+            color = if (darkTheme) Color.Black else Color.White,
+            darkIcons = !darkTheme
+        )
     }
+    // Color scheme
+    val colorScheme = if (darkTheme) DarkDefaultColorScheme else LightDefaultColorScheme
 
 
     // Gradient colors

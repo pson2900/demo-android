@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,10 +40,14 @@ import com.example.domain.model.Profile
  * Email: son.pham@navigosgroup.com
  */
 @Composable
-fun BasicInformationSection(list: List<BasicInformation>) {
+internal fun BasicInformationSection(list: List<BasicInformation>) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        item { AppText(text = "Thông tin hồ sơ", color = colorResource(R.color.black),
-            style = ProductXTheme.typography.SemiBoldLabelLarge) }
+        item {
+            AppText(
+                text = "Thông tin hồ sơ", color = colorResource(R.color.black),
+                style = ProductXTheme.typography.SemiBoldLabelLarge
+            )
+        }
         item { Spacer(Modifier.height(12.dp)) }
         items(list.size) {
             BasicInformationItem(Profile.AttachmentProfile(emptyList())) {
@@ -57,81 +59,69 @@ fun BasicInformationSection(list: List<BasicInformation>) {
 
 
 @Composable
-fun BasicInformationItem(profile: Profile, onActionClick: (Profile) -> Unit) {
+internal fun BasicInformationItem(profile: Profile, onNavigateToProfile: (Profile) -> Unit) {
     var title = ""
     var icon = 0
     when (profile) {
         is Profile.PreferenceProfile -> {
             icon = AppIcons.attachmentIcon
             title = "Tiêu chí tìm việc"
-            onActionClick.invoke(profile)
         }
 
         is Profile.BasicProfile -> {
             icon = AppIcons.basicInformationIcon
             title = "Thông tin liên hệ"
-            onActionClick.invoke(profile)
         }
 
         is Profile.ExperienceProfile -> {
             icon = AppIcons.experienceIcon
             title = "Tiêu chí tìm việc"
-            onActionClick.invoke(profile)
         }
 
         is Profile.CharacteristicProfile -> {
             icon = AppIcons.attachmentIcon
             title = "Kinh nghiệm làm việc"
-            onActionClick.invoke(profile)
         }
 
         is Profile.EducationProfile -> {
             icon = AppIcons.educationIcon
             title = "Trình độ học vấn"
-            onActionClick.invoke(profile)
         }
 
         is Profile.CertificationProfile -> {
             icon = AppIcons.certificationIcon
             title = "Chứng chỉ"
-            onActionClick.invoke(profile)
         }
 
 
         is Profile.AttachmentProfile -> {
             icon = AppIcons.cvMarkIcon
             title = "CV đính kèm"
-            onActionClick.invoke(profile)
         }
 
         is Profile.LanguageProfile -> {
             icon = AppIcons.languageIcon
             title = "Ngoại ngữ"
-            onActionClick.invoke(profile)
         }
 
         is Profile.ExternalDocProfile -> {
             icon = AppIcons.linkIcon
             title = "Đường link dự án cá nhân"
-            onActionClick.invoke(profile)
         }
 
         is Profile.ReferenceProfile -> {
             icon = AppIcons.referenceIcon
             title = "Người tham chiếu"
-            onActionClick.invoke(profile)
         }
 
         is Profile.HobbyProfile -> {
             icon = AppIcons.attachmentIcon
             title = "Sở thích / tính cách"
-            onActionClick.invoke(profile)
         }
 
         is Profile.ExtraCurricularProfile -> {
             icon = AppIcons.attachmentIcon
             title = "Hoạt động ngoại khoa"
-            onActionClick.invoke(profile)
         }
     }
     Row(
@@ -142,7 +132,7 @@ fun BasicInformationItem(profile: Profile, onActionClick: (Profile) -> Unit) {
             .height(72.dp)
             .testTag("basicInformationItem")
             .clickable {
-
+                onNavigateToProfile.invoke(profile)
             },
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
@@ -171,7 +161,9 @@ fun BasicInformationItem(profile: Profile, onActionClick: (Profile) -> Unit) {
                 .weight(0.3f)
                 .fillMaxSize()
                 .clip(CircleShape)
-                .clickable { }
+                .clickable {
+                    onNavigateToProfile.invoke(profile)
+                }
         ) {
             IconImage(
                 imageResource = R.drawable.ic_arrow_right,

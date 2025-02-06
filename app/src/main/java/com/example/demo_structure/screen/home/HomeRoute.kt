@@ -12,7 +12,7 @@ import org.koin.androidx.compose.koinViewModel
 fun NavController.toHome(navOptions: NavOptions) =
     navigate(route = Destinations.Main.Home.route, navOptions)
 
-fun NavGraphBuilder.HomeNavGraph(
+fun NavGraphBuilder.toHomeSreen(
     windowSizeClass: WindowSizeClass,
     onNavigateToJobDetail: (Int, String) -> Unit,
 ) {

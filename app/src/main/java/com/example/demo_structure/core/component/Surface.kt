@@ -27,8 +27,9 @@ import kotlin.math.ln
 @Composable
 fun AppSurface(
     modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(5.dp),
-    color: Color = ProductXTheme.colors.background,
+    shape: Shape = RoundedCornerShape(0.dp),
+    color: Color = ProductXTheme.colorScheme.surface,
+    contentColor: Color = ProductXTheme.colorScheme.onSurface,
     border: BorderStroke? = null,
     elevation: Dp = 0.dp,
     content: @Composable () -> Unit
@@ -43,6 +44,7 @@ fun AppSurface(
                 color = getBackgroundColorForElevation(color, elevation),
                 shape = shape
             ),
+        contentColor = contentColor,
         content = content
     )
 }

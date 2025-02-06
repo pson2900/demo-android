@@ -11,9 +11,11 @@ import org.koin.androidx.compose.koinViewModel
 fun NavController.toEducation(navOptions: NavOptions) =
     navigate(route = Destinations.Main.Education.route, navOptions)
 
-fun NavGraphBuilder.EducationNavGraph(
+fun NavGraphBuilder.toEducationScreen(
+    onNavigateToVerifyEmail: () -> Unit,
     onTopicClick: (String) -> Unit,
 ) {
+
     this.apply {
         composable(
             route = Destinations.Main.Education.route,
@@ -23,7 +25,9 @@ fun NavGraphBuilder.EducationNavGraph(
                 }
             ),
             content = {
-                EducationScreen(viewModel = koinViewModel(), onTopicClick)
+                EducationScreen(viewModel = koinViewModel(),
+                    onNavigateToVerifyEmail = onNavigateToVerifyEmail,
+                    onTopicClick = onTopicClick)
             }
         )
     }

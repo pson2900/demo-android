@@ -3,10 +3,12 @@ package com.example.demo_structure.core.base
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.trace
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -29,7 +31,7 @@ import kotlin.coroutines.cancellation.CancellationException
  * Copyright (c) 2024 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-abstract class BaseViewModel constructor(val savedStateHandle: SavedStateHandle) : ViewModel() {
+abstract class BaseViewModel(val savedStateHandle: SavedStateHandle) : ViewModel() {
     inline fun <reified T> saveToSavedState(key: String, value: T) {
         savedStateHandle[key] = Gson().toJson(value)
     }
@@ -54,49 +56,6 @@ abstract class BaseViewModel constructor(val savedStateHandle: SavedStateHandle)
     protected inline fun <reified T> emitError(state: MutableStateFlow<UIState<T>>, appException: AppException) {
         state.value = UIState.Error(appException)
     }
-
-    /*protected inline fun <reified T> wrapperApiCall(
-        crossinline call: suspend () -> Flow<T>,
-        state: MutableStateFlow<UIState<T>>,
-        dataKey: String? = null,
-    ) {
-        viewModelScope.launch {
-            val tag = "wrapperApiCall"
-            Log.d(tag, "Starting API call for dataKey: $dataKey")
-            try {
-                call()
-                    .onStart {
-                        Log.d(tag, "API flow started: $dataKey")
-                        val savedData = dataKey?.let { loadFromSavedState<T>(it) }
-                        if (savedData == null) {
-                            Log.d(tag, "No saved data for $dataKey, emitting loading state")
-                            emitLoading(state)
-                        } else {
-                            Log.d(tag, "Loaded data for $dataKey, emitting success")
-                            emitSuccess(state, savedData)
-                        }
-                    }
-                    .catch { error ->
-                        Log.e(tag, "API call failed for $dataKey: ", error)
-                        val appException = ErrorMapper.toAppException(error)
-                        emitError(state, appException)
-                        // Do not throw exception if using Flow, since catch terminates the Flow
-                    }
-                    .collect { data ->
-                        Log.d(tag, "API call success for $dataKey: $data")
-                        dataKey?.let { saveToSavedState(it, data) }
-                        emitSuccess(state, data)
-
-                    }
-            } catch (e: CancellationException) {
-                Log.d(tag, "API call canceled for dataKey: $dataKey in outer try-catch")
-            } catch (e: Exception) {
-                val exception = ErrorMapper.toAppException(e)
-                Log.e(tag, "API call failed in outer catch for $dataKey : $exception", e)
-                emitError(state, exception)
-            }
-        }
-    }*/
 
     protected inline fun <reified T> wrapperApiCall(
         crossinline call: suspend () -> Flow<T>,
@@ -155,8 +114,8 @@ fun <T> UiStateWrapper(
         Log.d("QQQ", "onLoadingContent")
     },
     onErrorContent: @Composable (message: String) -> Unit = { message ->
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(text = "Error: $message", color = ProductXTheme.colors.error)
+        Box(modifier = Modifier.padding(start = 16.dp, end = 16.dp).fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(text = "Error: $message", color = ProductXTheme.colorScheme.error)
         }
         Log.d("QQQ", "onErrorContent: ${message}")
     },

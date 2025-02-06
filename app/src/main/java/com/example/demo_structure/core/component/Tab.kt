@@ -2,7 +2,6 @@ package com.example.demo_structure.core.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -77,12 +76,12 @@ fun AppTabRow(
         selectedTabIndex = selectedTabIndex,
         modifier = modifier,
         containerColor = Color.Transparent,
-        contentColor = MaterialTheme.colorScheme.onSurface,
+        contentColor = ProductXTheme.colorScheme.onSurface,
         indicator = { tabPositions ->
             TabRowDefaults.SecondaryIndicator(
                 modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
                 height = 2.dp,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = ProductXTheme.colorScheme.onSurface,
             )
         },
         tabs = tabs,

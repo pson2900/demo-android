@@ -48,6 +48,7 @@ import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
+import com.example.demo_structure.screen.home.LoadingState
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -92,104 +93,49 @@ internal fun LoginScreen(
             modifier = modifier,
             snackBarHostState = rememberHostState
         ) {
-            LoginContent(
-                modifier = modifier
-//                    .fillMaxSize()
-//                    .padding(it)
-            )
+            LoginContent(modifier = modifier)
         }
     }
-
-
 }
 
 @Composable
 fun LoginContent(modifier: Modifier) {
     ConstraintLayout(
-        modifier = modifier
-            .background(Color.Blue)
+        modifier = modifier.background(Color.White)
     ) {
-        val (borderUser, cardUser, progress) = createRefs()
-        Box(
-            modifier = modifier
-//                .border(25.dp, Color.White, shape = CircleShape)
-                .background(Color.White)
-                .fillMaxHeight()
-                .constrainAs(cardUser) {
-                    top.linkTo(borderUser.top, margin = 50.dp)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    verticalBias = 0.5f
-                },
-            contentAlignment = Alignment.Center
-        ) {
-            /* LazyColumn(modifier) {
-                 item { HeaderSection(modifier = modifier, title = "Nguyen Minh Hieu") }
-                 item { ProfileStatusSection(modifier = modifier) }
-             }*/
-            Button({
 
-            }) {
-                Text("Login")
+
+        @Composable
+        fun CircularProgressBar(
+            percentage: Float, number: Int, fontSize: TextUnit = 28.sp,
+            radius: Dp = 50.dp, color: Color = Color.Green, strokeWidth: Dp = 5.dp, animDuration: Int = 1000, animDelay: Int = 0
+        ) {
+            var animationPlayed by remember { mutableStateOf(false) }
+            val curPercentage = animateFloatAsState(
+                targetValue = if (animationPlayed) percentage else 0f,
+                animationSpec = tween(
+                    durationMillis = animDuration,
+                    delayMillis = animDelay
+                )
+            )
+            LaunchedEffect(key1 = true) {
+                animationPlayed = true
             }
-        }
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .padding(1.dp)
-                .clip(CircleShape)
-                .background(Color.DarkGray)
-                .constrainAs(borderUser) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                },
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressBar(percentage = 0.8f, number = 100)
-            Image(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_urgent),
-                modifier = Modifier
-                    .width(100.dp)
-                    .height(100.dp)
-                    .padding(20.dp),
-                contentDescription = null
-            )
-        }
 
-    }
-}
-
-
-@Composable
-fun CircularProgressBar(
-    percentage: Float, number: Int, fontSize: TextUnit = 28.sp,
-    radius: Dp = 50.dp, color: Color = Color.Green, strokeWidth: Dp = 5.dp, animDuration: Int = 1000, animDelay: Int = 0
-) {
-    var animationPlayed by remember { mutableStateOf(false) }
-    val curPercentage = animateFloatAsState(
-        targetValue = if (animationPlayed) percentage else 0f,
-        animationSpec = tween(
-            durationMillis = animDuration,
-            delayMillis = animDelay
-        )
-    )
-    LaunchedEffect(key1 = true) {
-        animationPlayed = true
-    }
-
-    Box(
-        modifier = Modifier.size(radius * 2f),
-        contentAlignment = Alignment.Center,
-    ) {
-        Canvas(Modifier.size(radius * 2f)) {
-            drawArc(
-                color = color,
-                startAngle = -90f,
-                sweepAngle = 360 * curPercentage.value,
-                useCenter = false,
-                style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
-            )
+            Box(
+                modifier = Modifier.size(radius * 2f),
+                contentAlignment = Alignment.Center,
+            ) {
+                Canvas(Modifier.size(radius * 2f)) {
+                    drawArc(
+                        color = color,
+                        startAngle = -90f,
+                        sweepAngle = 360 * curPercentage.value,
+                        useCenter = false,
+                        style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
+                    )
+                }
+            }
         }
     }
 }

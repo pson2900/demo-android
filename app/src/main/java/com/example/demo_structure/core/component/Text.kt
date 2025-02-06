@@ -21,7 +21,7 @@ import com.example.demo_structure.app.manager.theme.ProductXTheme
 @Composable
 fun AppText(
     modifier: Modifier = Modifier, text: String, style: TextStyle,
-    color: Color = ProductXTheme.colors.onPrimary,
+    color: Color = ProductXTheme.colorScheme.onPrimary,
     textDecoration: TextDecoration? = null,
     textAlign: TextAlign? = null,
     lineHeight: TextUnit = TextUnit.Unspecified,

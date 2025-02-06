@@ -2,8 +2,11 @@ package com.example.demo_structure.core.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,20 +27,24 @@ import com.example.demo_structure.app.manager.theme.ProductXTheme
 
 @Composable
 fun AppCard(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     shape: Shape = MaterialTheme.shapes.medium,
-    color: Color = ProductXTheme.colors.background,
-    contentColor: Color = ProductXTheme.cardTheme.text,
+    color: Color = ProductXTheme.colorScheme.surface,
+    contentColor: Color = ProductXTheme.colorScheme.onSurface,
     border: BorderStroke? = null,
     elevation: Dp = 4.dp,
-    content: @Composable () -> Unit
+    content: @Composable ColumnScope.() -> Unit
 ) {
-    AppSurface(
+    
+    Card(
         modifier = modifier,
         shape = shape,
-        color = color,
+        colors = CardDefaults.cardColors(
+            containerColor = color,
+            contentColor = contentColor
+        ),
         border = border,
-        elevation = elevation,
+        elevation = CardDefaults.cardElevation(defaultElevation = elevation),
         content = content
     )
 }

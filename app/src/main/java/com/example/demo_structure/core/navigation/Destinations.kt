@@ -7,8 +7,8 @@ import com.example.demo_structure.app.manager.theme.AppIcons
  * Copyright (c) 2025 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-abstract class DestinationItem(route: String): Destinations(route) {
-   abstract val selectedIcon: Int
+abstract class DestinationItem(route: String) : Destinations(route) {
+    abstract val selectedIcon: Int
     abstract val unselectedIcon: Int
     abstract val testTag: String
     abstract val title: String
@@ -60,7 +60,7 @@ sealed class Destinations(val route: String) {
             override val title: String = "Cộng đồng"
         }
 
-        object User :  DestinationItem("user") {
+        object User : DestinationItem(route = "user") {
             override val selectedIcon: Int = AppIcons.userSelect
             override val unselectedIcon: Int = AppIcons.userUnselect
             override val testTag: String = "UserTag"
@@ -78,5 +78,13 @@ sealed class Destinations(val route: String) {
     }
 
     object Login : Destinations(route = "login")
+    object Email : Destinations(route = "email")
 
+    object OTP : Destinations(route = "verify_otp") {
+        const val ORIGIN = "origin"
+        const val EMAIL = "email"
+        fun createRoute(email: String, origin: String): String {
+            return "verify_otp/$email?origin=${origin}"
+        }
+    }
 }

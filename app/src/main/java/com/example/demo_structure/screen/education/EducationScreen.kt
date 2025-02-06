@@ -3,10 +3,13 @@ package com.example.demo_structure.screen.education
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material3.Button
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -38,7 +41,7 @@ import org.koin.androidx.compose.koinViewModel
  */
 
 @Composable
-fun EducationScreen(viewModel: EducationViewModel, onTopicClick: (String) -> Unit) {
+fun EducationScreen(viewModel: EducationViewModel, onNavigateToVerifyEmail: () -> Unit, onTopicClick: (String) -> Unit) {
     val modifier: Modifier = Modifier.fillMaxSize()
 
     val state = viewModel.state.collectAsStateWithLifecycle()
@@ -63,7 +66,7 @@ fun EducationScreen(viewModel: EducationViewModel, onTopicClick: (String) -> Uni
             snackBarHostState = snackbarHostState,
             content = { padding ->
                 AppSurface(
-                    modifier = modifier
+                    modifier = modifier.padding(padding)
                 ) {
                     Box(
                         modifier = modifier
@@ -87,7 +90,14 @@ fun EducationScreen(viewModel: EducationViewModel, onTopicClick: (String) -> Uni
                             },
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("EducationScreen: ${time.value}\ncurrentTime: $currentTime")
+                        Column {
+                            Text("EducationScreen: ${time.value}\ncurrentTime: $currentTime")
+                            Button(onClick = {
+                                onNavigateToVerifyEmail.invoke()
+                            }) {
+                                Text(modifier = Modifier, text = "Login")
+                            }
+                        }
                     }
                 }
 
@@ -102,7 +112,6 @@ fun EducationScreen(viewModel: EducationViewModel, onTopicClick: (String) -> Uni
 fun SearchResultScreenPreview() {
     AppPreviewWrapper {
 
-        EducationScreen(viewModel = koinViewModel(), onTopicClick = { _ -> })
     }
 }
 

@@ -3,7 +3,6 @@ package com.example.demo_structure.core.component
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,35 +38,35 @@ fun ProductXFilterChip(
         border = FilterChipDefaults.filterChipBorder(
             enabled = enabled,
             selected = selected,
-            borderColor = ProductXTheme.colors.background,
-            selectedBorderColor = ProductXTheme.colors.background,
-            disabledBorderColor = ProductXTheme.colors.background.copy(
+            borderColor = ProductXTheme.colorScheme.background,
+            selectedBorderColor = ProductXTheme.colorScheme.background,
+            disabledBorderColor = ProductXTheme.colorScheme.background.copy(
                 alpha = ChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
             ),
-            disabledSelectedBorderColor = ProductXTheme.colors.background.copy(
+            disabledSelectedBorderColor = ProductXTheme.colorScheme.background.copy(
                 alpha = ChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
             ),
             selectedBorderWidth = ChipDefaults.ChipBorderWidth,
         ),
         colors = FilterChipDefaults.filterChipColors(
-            labelColor = ProductXTheme.colors.background,
-            iconColor = ProductXTheme.colors.background,
+            labelColor = ProductXTheme.colorScheme.background,
+            iconColor = ProductXTheme.colorScheme.background,
             disabledContainerColor = if (selected) {
-                ProductXTheme.colors.background.copy(
+                ProductXTheme.colorScheme.background.copy(
                     alpha = ChipDefaults.DISABLED_CHIP_CONTAINER_ALPHA,
                 )
             } else {
                 Color.Transparent
             },
-            disabledLabelColor = ProductXTheme.colors.background.copy(
+            disabledLabelColor = ProductXTheme.colorScheme.background.copy(
                 alpha = ChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
             ),
-            disabledLeadingIconColor = ProductXTheme.colors.background.copy(
+            disabledLeadingIconColor = ProductXTheme.colorScheme.background.copy(
                 alpha = ChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
             ),
-            selectedContainerColor = ProductXTheme.colors.primary,
-            selectedLabelColor = ProductXTheme.colors.background,
-            selectedLeadingIconColor = ProductXTheme.colors.background,
+            selectedContainerColor = ProductXTheme.colorScheme.primary,
+            selectedLabelColor = ProductXTheme.colorScheme.background,
+            selectedLeadingIconColor = ProductXTheme.colorScheme.background,
         ),
     )
 }

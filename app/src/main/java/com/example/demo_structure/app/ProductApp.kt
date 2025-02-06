@@ -18,10 +18,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.app.manager.theme.AppTypography
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.app.manager.theme.LocalAppTypography
-import com.example.demo_structure.core.component.AppBackground
 import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
 import com.example.demo_structure.app.manager.theme.LocalWindowAdaptiveInfo
+import com.example.demo_structure.core.component.AppBackground
 import com.example.demo_structure.core.navigation.AppNavHost
 import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.screen.main.ThemeSettings

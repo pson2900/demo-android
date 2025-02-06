@@ -144,7 +144,7 @@ dependencies {
     implementation(libs.androidx.material3.compose) // Material3 for Compose
     implementation(libs.androidx.material3.window.size) // Material3 Window Size Class
     implementation(libs.androidx.lifecycle.viewmodel.compose) // ViewModel for Compose
-
+    implementation(libs.androidx.material)
     // Mark: Other dependencies
     implementation(libs.androidx.adaptive) // Adaptive UI for Compose
     implementation(libs.androidx.adaptive.layout.android) // Adaptive layout for Android
@@ -159,10 +159,12 @@ dependencies {
     implementation(libs.accompanist.drawablepainter) // Drawable painter for Compose
     implementation(libs.accompanist.navigation.animation) // Navigation with animations for Compose
     implementation(libs.accompanist.permissions)
-
+    implementation(libs.accompanist.systemuicontroller)
     // Mark: Coil Compose
     implementation(libs.coil.compose)
 
     // Mark: AndroidX Material3 Adaptive Navigation Suite for Compose
     implementation(libs.androidx.adaptive.navigation.suite) // Adaptive Navigation Suite for Compose
+    //GlideImage jetpack
+    implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
 }

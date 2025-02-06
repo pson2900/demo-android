@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -16,6 +17,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,15 +33,16 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.R
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 
 /**
  * Created by Phạm Sơn at 11:11/4/1/25
  * Copyright (c) 2025 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-@ExperimentalMaterial3Api
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBar(
+fun AppTopBar(
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     onNavIconPressed: () -> Unit = { },
@@ -48,6 +51,13 @@ fun TopAppBar(
     actions: @Composable RowScope.() -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
+        colors = TopAppBarColors(
+            containerColor = ProductXTheme.colorScheme.background,
+            scrolledContainerColor = Color.Transparent,
+            navigationIconContentColor = ProductXTheme.colorScheme.onBackground,
+            titleContentColor = ProductXTheme.colorScheme.onBackground,
+            actionIconContentColor = ProductXTheme.colorScheme.onBackground
+        ),
         modifier = modifier, navigationIcon = navigationIcon, title = title, actions = actions,
         scrollBehavior = scrollBehavior,
     )
@@ -134,7 +144,7 @@ fun TopSearchAppBar(
 fun AppBarPreviewDark() {
     AppPreviewWrapper {
         Column {
-            TopAppBar(title = { Text("Preview!") },
+            AppTopBar(title = { Text("Preview!") },
                 navigationIcon = {
                     AppBarIcon(
                         contentDescription = null,

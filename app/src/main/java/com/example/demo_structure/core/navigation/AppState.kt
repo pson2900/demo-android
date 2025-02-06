@@ -20,6 +20,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.demo_structure.screen.job_detail.toJobDetail
 import com.example.demo_structure.screen.login.toLogin
+import com.example.demo_structure.screen.otp.toVerifyOtp
+import com.example.demo_structure.screen.verify_email.toVerifyEmail
 import com.example.demo_structure.util.NetworkMonitor
 import com.example.demo_structure.util.TimeZoneMonitor
 import kotlinx.coroutines.CoroutineScope
@@ -138,6 +140,26 @@ class AppState(
         trace("Navigation : ${route}") {
             if (from.lifecycleIsResumed()) {
                 navController.toLogin()
+            }
+        }
+    }
+
+    fun navigateToEmail(from: NavBackStackEntry) {
+        // In order to discard duplicated navigation events, we check the Lifecycle
+        val route = Destinations.Email.route
+        trace("Navigation : $route") {
+            if (from.lifecycleIsResumed()) {
+                navController.toVerifyEmail()
+            }
+        }
+    }
+
+    fun navigateToOTP(from: NavBackStackEntry, email: String, origin: String) {
+        // In order to discard duplicated navigation events, we check the Lifecycle
+        val route = "${Destinations.OTP.route}/$email?origin=$origin"
+        trace("Navigation : $route") {
+            if (from.lifecycleIsResumed()) {
+                navController.toVerifyOtp(Destinations.OTP.createRoute(email = email, origin = origin))
             }
         }
     }

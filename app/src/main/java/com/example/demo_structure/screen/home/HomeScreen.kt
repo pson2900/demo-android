@@ -17,7 +17,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
@@ -28,12 +30,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.testTag
@@ -51,13 +53,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowSizeClass
 import com.example.demo_structure.JobDetail
 import com.example.demo_structure.R
-import com.example.demo_structure.core.component.AppLoadingWheel
-import com.example.demo_structure.core.component.AppCard
 import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
+import com.example.demo_structure.app.manager.theme.ProductXTheme
+import com.example.demo_structure.core.component.AppCard
+import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppSurface
+import com.example.demo_structure.core.component.AppTopBar
 import com.example.demo_structure.jobResult
 import com.example.demo_structure.screen.job_detail.nonSpatialExpressiveSpring
 import com.example.demo_structure.screen.job_detail.spatialExpressiveSpring
@@ -130,26 +134,17 @@ fun HomeContent(onItemSelected: (Int, String) -> Unit) {
     val itemPlacementSpec = spatialExpressiveSpring<IntOffset>()
     AppScaffold(
         contentWindowInsets = WindowInsets.systemBars,
-        modifier = Modifier
-            .fillMaxSize(),
         snackBarHostState = rememberSnackbarHostState,
         topBar = {
-            TopAppBar(
-                title = { Text("Home") })
-            /*,
-                navigationIcon = {
-                    AppBarIcon(
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp),
-                        imageResource = R.drawable.ic_back_arrow
-                    )
-                })*/
+            AppTopBar(title = { Text("Home") })
         }
     ) {
-        AppSurface(
-            modifier = Modifier.fillMaxSize()
+        AppSurface (
+            modifier = Modifier
+                .padding(top = it.calculateTopPadding())
         ) {
             LazyColumn(
+                modifier = Modifier.padding(top = 8.dp),
                 state = columState,
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 contentPadding = PaddingValues(start = 24.dp, end = 24.dp)
@@ -219,19 +214,20 @@ fun ItemResult(modifier: Modifier = Modifier, jobDetail: JobDetail, onItemSelect
                 .testTag("Tag: ${jobDetail.jobTitle}")
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
-                .border(1.dp, color = Color.Black, shape = RoundedCornerShape(roundedCornerAnimation)) // Đặt border
-                .clickable {
-                    onItemSelected(jobDetail.jobId, "origin")
-                }
+
                 .size(
                     width = HighlightCardWidth,
                     height = 150.dp
                 )
+                .clip(shape = RoundedCornerShape(roundedCornerAnimation))
                 .border(
-                    1.dp,
-                    color = Color.Black,
-                    RoundedCornerShape(roundedCornerAnimation)
+                    width = 1.dp,
+                    color = ProductXTheme.colorScheme.outline,
+                    shape = RoundedCornerShape(roundedCornerAnimation)
                 )
+                .clickable {
+                    onItemSelected(jobDetail.jobId, "origin")
+                }
         ) {
             BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
                 val constraints = if (minWidth < 600.dp) {

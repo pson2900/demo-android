@@ -83,8 +83,8 @@ fun AppScaffold(
     snackbarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },
     floatingActionButton: @Composable () -> Unit = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
-    backgroundColor: Color = ProductXTheme.backgroundTheme.color,
-    contentColor: Color = ProductXTheme.colors.secondary,
+    backgroundColor: Color = ProductXTheme.colorScheme.background,
+    contentColor: Color = ProductXTheme.colorScheme.onBackground,
     contentWindowInsets: WindowInsets = WindowInsets.safeContent,
     content: @Composable (PaddingValues) -> Unit
 ) {
@@ -131,7 +131,7 @@ fun AppPreviewWrapper(content: @Composable (Modifier) -> Unit) {
                     AppSurface(
                         modifier = modifier,
                         shape = RectangleShape,
-                        color = ProductXTheme.colors.background,
+                        color = ProductXTheme.colorScheme.background,
                         elevation = 0.dp,
                         content = {
                             content(modifier.fillMaxSize())

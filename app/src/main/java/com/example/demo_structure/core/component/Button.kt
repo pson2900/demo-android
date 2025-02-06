@@ -47,7 +47,7 @@ fun AppButton(
 @ThemePreviews
 fun AppButtonPreview(){
     AppPreviewWrapper {
-        AppButton(onClick = {}, background = ProductXTheme.colors.background, colorEffect = ProductXTheme.colors.onPrimary) {
+        AppButton(onClick = {}, background = ProductXTheme.colorScheme.background, colorEffect = ProductXTheme.colorScheme.onPrimary) {
             Text("OnClick Item")
         }
     }

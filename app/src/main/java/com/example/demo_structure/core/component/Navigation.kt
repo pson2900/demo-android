@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,7 +23,6 @@ import com.example.demo_structure.app.manager.theme.toIcon
 import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.core.navigation.rememberAppState
-import com.example.demo_structure.util.AlwaysOnlineNetworkMonitor
 
 /**
  * Created by Phạm Sơn at 16:24/10/1/25
@@ -37,8 +34,8 @@ import com.example.demo_structure.util.AlwaysOnlineNetworkMonitor
 @Composable
 fun BottomNavigationBar(
     modifier: Modifier,
-    containerColor: Color = ProductXTheme.colors.background,
-    contentColor: Color = ProductXTheme.colors.secondary,
+    containerColor: Color = ProductXTheme.colorScheme.background,
+    contentColor: Color = ProductXTheme.colorScheme.secondary,
     tonalElevation: Dp = 0.dp,
     windowInsets: WindowInsets = WindowInsets.navigationBars,
     content: @Composable RowScope.() -> Unit
@@ -54,7 +51,7 @@ fun BottomNavigationBar(
 }
 
 @Composable
-fun RowScope.initBottomMainScreen(appState: AppState) {
+fun RowScope.InitBottomMainScreen(appState: AppState) {
     val currentRoute = appState.navController.currentBackStackEntryAsState().value?.destination?.route
     Destinations.Main.getEntries().forEach { item ->
         NavigationBarItem(
@@ -64,11 +61,18 @@ fun RowScope.initBottomMainScreen(appState: AppState) {
                 appState.navigateToBottomBarRoute(item.route)
             },
             label = {
-                Row(horizontalArrangement = Arrangement.Center) {
+                Row(
+                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+//                    ProductXTheme.colorScheme.onTertiary
                     AppText(
                         text = item.title,
                         style = ProductXTheme.typography.RegularLabelSmall,
-                        color = if (currentRoute == item.route) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onTertiary,
+                        color = if (currentRoute == item.route)
+                            ProductXTheme.colorScheme.tertiary
+                        else
+                            ProductXTheme.colorScheme.onTertiary,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.testTag("Text_${item.title}")
@@ -82,10 +86,10 @@ fun RowScope.initBottomMainScreen(appState: AppState) {
             },
             alwaysShowLabel = true, // Consider showing labels only on selected items for better UX
             colors = NavigationBarItemDefaults.colors(
-                selectedIconColor = ProductXTheme.colors.tertiary,
-                selectedTextColor = ProductXTheme.colors.tertiary,
-                unselectedIconColor = ProductXTheme.colors.onTertiary,
-                unselectedTextColor = ProductXTheme.colors.onTertiary,
+                selectedIconColor = ProductXTheme.colorScheme.tertiary,
+                selectedTextColor = ProductXTheme.colorScheme.tertiary,
+                unselectedIconColor = ProductXTheme.colorScheme.onTertiary,
+                unselectedTextColor = ProductXTheme.colorScheme.onTertiary,
                 indicatorColor = Color.Transparent
             )
         )
@@ -96,12 +100,10 @@ fun RowScope.initBottomMainScreen(appState: AppState) {
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun BottomNavigationViewPreview() {
-    AppPreviewWrapper {
-        var appState = rememberAppState(networkMonitor = AlwaysOnlineNetworkMonitor())
-        BottomNavigationBar(
-            modifier = Modifier,
-        ) {
-            initBottomMainScreen(appState)
-        }
+    var appState = rememberAppState()
+    BottomNavigationBar(
+        modifier = Modifier,
+    ) {
+        InitBottomMainScreen(appState)
     }
 }
