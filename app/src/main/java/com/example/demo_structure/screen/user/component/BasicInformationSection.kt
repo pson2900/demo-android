@@ -27,8 +27,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.AppIcons
-import com.example.demo_structure.app.manager.theme.IconImage
 import com.example.demo_structure.app.manager.theme.ProductXTheme
+import com.example.demo_structure.app.manager.theme.generate
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppText
 import com.example.domain.model.BasicInformation
@@ -45,7 +45,7 @@ internal fun BasicInformationSection(list: List<BasicInformation>) {
         item {
             AppText(
                 text = "Thông tin hồ sơ", color = colorResource(R.color.black),
-                style = ProductXTheme.typography.SemiBoldLabelLarge
+                style = ProductXTheme.typography.SemiBold.Label.Large
             )
         }
         item { Spacer(Modifier.height(12.dp)) }
@@ -143,13 +143,13 @@ internal fun BasicInformationItem(profile: Profile, onNavigateToProfile: (Profil
                 .background(colorResource(R.color.cosmic_latte), shape = RoundedCornerShape(5.dp)),
             contentAlignment = Alignment.Center
         ) {
-            IconImage(imageResource = icon, contentDescription = null)
+            icon.generate()
         }
         AppText(
             text = title,
             textAlign = TextAlign.Start,
             color = Color.Black,
-            style = ProductXTheme.typography.RegularLabelLarge,
+            style = ProductXTheme.typography.Regular.Label.Large,
             maxLines = 1,
             modifier = Modifier
                 .padding(start = 5.dp)
@@ -165,9 +165,7 @@ internal fun BasicInformationItem(profile: Profile, onNavigateToProfile: (Profil
                     onNavigateToProfile.invoke(profile)
                 }
         ) {
-            IconImage(
-                imageResource = R.drawable.ic_arrow_right,
-                contentDescription = null,
+            AppIcons.arrowRightIcon.generate(
                 modifier = Modifier
                     .padding(end = 8.dp)
                     .size(16.dp)

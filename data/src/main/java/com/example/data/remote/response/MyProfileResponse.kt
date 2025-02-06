@@ -236,7 +236,8 @@ data class PreferenceResponse(
             desiredJobTitle,
             desiredLocationType.map { it.toDomain() },
             desiredSalary,
-            relocation)
+            relocation
+        )
     }
 }
 

@@ -50,7 +50,7 @@ fun SkillSection(skills: List<String>) {
             .fillMaxWidth()
     ) {
         AppText(
-            text = "Kỹ năng", style = ProductXTheme.typography.SemiBoldTitleLarge, color = Color.Black
+            text = "Kỹ năng", style = ProductXTheme.typography.SemiBold.Title.Large, color = Color.Black
         )
         Spacer(modifier = Modifier.height(8.dp))
         DynamicSkillFlowRow(skills = skills)
@@ -177,7 +177,7 @@ fun SkillChip(skill: String) {
     ) {
         AppText(
             text = skill, color = Color.Black,
-            style = ProductXTheme.typography.RegularLabelLarge
+            style = ProductXTheme.typography.Regular.Label.Large
         )
     }
 }

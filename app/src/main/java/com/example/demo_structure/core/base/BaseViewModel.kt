@@ -58,7 +58,7 @@ abstract class BaseViewModel(val savedStateHandle: SavedStateHandle) : ViewModel
     }
 
     protected inline fun <reified T> wrapperApiCall(
-        crossinline call: suspend () -> Flow<T>,
+        call: Flow<T>,
         state: MutableStateFlow<UIState<T>>,
         dataKey: String? = null,
     ) {
@@ -66,18 +66,17 @@ abstract class BaseViewModel(val savedStateHandle: SavedStateHandle) : ViewModel
         trace("wrapperApiCall") {
             Log.d(tag, "Starting API call for dataKey: $dataKey")
             viewModelScope.launch {
-                call()
-                    .onStart {
-                        Log.d(tag, "API flow started: $dataKey")
-                        val savedData = dataKey?.let { loadFromSavedState<T>(it) }
-                        if (savedData == null) {
-                            Log.d(tag, "No saved data for $dataKey, emitting loading state")
-                            emitLoading(state)
-                        } else {
-                            Log.d(tag, "Loaded data for $dataKey, emitting success")
-                            emitSuccess(state, savedData)
-                        }
+                call.onStart {
+                    Log.d(tag, "API flow started: $dataKey")
+                    val savedData = dataKey?.let { loadFromSavedState<T>(it) }
+                    if (savedData == null) {
+                        Log.d(tag, "No saved data for $dataKey, emitting loading state")
+                        emitLoading(state)
+                    } else {
+                        Log.d(tag, "Loaded data for $dataKey, emitting success")
+                        emitSuccess(state, savedData)
                     }
+                }
 
                     .catch {
                         if (it is CancellationException) {

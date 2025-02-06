@@ -1,5 +1,6 @@
 package com.example.demo_structure.screen.home
 
+import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -13,7 +14,6 @@ fun NavController.toHome(navOptions: NavOptions) =
     navigate(route = Destinations.Main.Home.route, navOptions)
 
 fun NavGraphBuilder.toHomeSreen(
-    windowSizeClass: WindowSizeClass,
     onNavigateToJobDetail: (Int, String) -> Unit,
 ) {
     this.apply {
@@ -26,7 +26,6 @@ fun NavGraphBuilder.toHomeSreen(
             ),
             content = { navBackStackEntry ->
                 HomeScreen(
-                    windowSizeClass = windowSizeClass,
                     viewModel = koinViewModel(),
                     onNavigateToJobDetail = onNavigateToJobDetail,
                 )

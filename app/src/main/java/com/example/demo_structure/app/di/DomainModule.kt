@@ -11,7 +11,7 @@ import org.koin.dsl.module
  * Email: son.pham@navigosgroup.com
  */
 val domainModule = module {
-    factory { GetClientUseCase(get()) }
-    factory { HomeUseCase(get()) }
-    factory { MyProfileUseCase(get()) }
+    factory<GetClientUseCase> { GetClientUseCase(get()) }
+    factory<HomeUseCase> { HomeUseCase(get()) }
+    factory<MyProfileUseCase> { MyProfileUseCase(get()) }
 }

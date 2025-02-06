@@ -22,7 +22,6 @@ import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -166,7 +165,7 @@ fun MainContent(
     val scaffoldState = rememberScaffoldState()
     val nestedNavigation = rememberAppState()
     val navBackStackEntry by nestedNavigation.navController.currentBackStackEntryAsState()
-    val adaptiveInfo = currentWindowAdaptiveInfo()
+
     val currentRoute = navBackStackEntry?.destination?.route
     val sharedTransitionScope = LocalSharedTransitionScope.current
         ?: throw IllegalStateException("No SharedElementScope found")
@@ -206,7 +205,6 @@ fun MainContent(
                     .padding(paddingValues = padding)
             ) {
                 MainNavHost(
-                    windowSizeClass = adaptiveInfo.windowSizeClass,
                     appState = nestedNavigation,
                     onNavigateToJobDetail = onNavigateToJobDetail,
                     onNavigateToLogin = onNavigateToLogin,

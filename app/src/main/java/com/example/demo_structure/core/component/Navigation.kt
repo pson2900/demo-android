@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.demo_structure.app.manager.theme.ProductXTheme
-import com.example.demo_structure.app.manager.theme.toIcon
+import com.example.demo_structure.app.manager.theme.generate
 import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.core.navigation.rememberAppState
@@ -68,7 +68,7 @@ fun RowScope.InitBottomMainScreen(appState: AppState) {
 //                    ProductXTheme.colorScheme.onTertiary
                     AppText(
                         text = item.title,
-                        style = ProductXTheme.typography.RegularLabelSmall,
+                        style = ProductXTheme.typography.Regular.Label.Small,
                         color = if (currentRoute == item.route)
                             ProductXTheme.colorScheme.tertiary
                         else
@@ -81,8 +81,8 @@ fun RowScope.InitBottomMainScreen(appState: AppState) {
 
             },
             icon = {
-                if (currentRoute == item.route) item.selectedIcon.toIcon()
-                else item.unselectedIcon.toIcon()
+                if (currentRoute == item.route) item.selectedIcon.generate()
+                else item.unselectedIcon.generate()
             },
             alwaysShowLabel = true, // Consider showing labels only on selected items for better UX
             colors = NavigationBarItemDefaults.colors(

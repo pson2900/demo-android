@@ -5,13 +5,12 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.demo_structure.util.DeviceWindowAdaptive
 
 /**
  * Created by Phạm Sơn at 13:40/21/1/25
@@ -23,22 +22,12 @@ val LocalNavAnimatedVisibilityScope = compositionLocalOf<AnimatedVisibilityScope
 @OptIn(ExperimentalSharedTransitionApi::class)
 val LocalSharedTransitionScope = compositionLocalOf<SharedTransitionScope?> { null }
 
-val LocalWindowAdaptiveInfo = staticCompositionLocalOf<WindowAdaptiveInfo?> { null }
-
-/**
- * A composition local for [GradientColors].
- */
-val LocalGradientColors = staticCompositionLocalOf { GradientColors() }
-
-/**
- * A composition local for [BackgroundTheme].
- */
-val LocalBackgroundTheme = staticCompositionLocalOf { BackgroundTheme(color = hexToColor("#F1F5F9")) }
+val LocalWindowAdaptiveInfo = staticCompositionLocalOf<DeviceWindowAdaptive?> { null }
 
 /**
  * A composition local for [AppTypography].
  */
-val LocalAppTypography = staticCompositionLocalOf { AppTypography() }
+internal val LocalAppTypography = staticCompositionLocalOf { AppTypography() }
 
 /**
  * A composition local for [CardTheme].
@@ -57,4 +46,20 @@ val LocalCardTheme = staticCompositionLocalOf {
 val LocalColorTheme = staticCompositionLocalOf<ColorScheme> {
     error("No ColorPalette provided")
 }
+
+val LocalPadding = staticCompositionLocalOf {
+    Padding()
+}
+val LocalMargin = staticCompositionLocalOf {
+    Margin()
+}
+val LocalCorner = staticCompositionLocalOf {
+    Corner()
+}
+val LocalTonalElevation = staticCompositionLocalOf {
+    TonalElevation()
+}
+
+
+
 

@@ -30,6 +30,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.WindowAdaptiveInfo
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -65,6 +67,8 @@ import com.example.demo_structure.core.component.AppTopBar
 import com.example.demo_structure.jobResult
 import com.example.demo_structure.screen.job_detail.nonSpatialExpressiveSpring
 import com.example.demo_structure.screen.job_detail.spatialExpressiveSpring
+import com.example.demo_structure.util.DeviceWindowAdaptive
+import com.example.demo_structure.util.deviceCurrentWindowAdaptive
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -95,7 +99,7 @@ internal fun LoadingState(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun HomeScreen(
-    windowSizeClass: WindowSizeClass,
+    deviceWindowAdaptive: DeviceWindowAdaptive = deviceCurrentWindowAdaptive(),
     clearUndoState: () -> Unit = {},
     viewModel: HomeViewModel = koinViewModel(),
     onNavigateToJobDetail: (Int, String) -> Unit,

@@ -61,7 +61,7 @@ fun NavGraphBuilder.composableWith(
 @Composable
 fun AppNavHost(
     modifier: Modifier,
-    appState: AppState,
+    appState: AppState
 ) {
     val navController = appState.navController
     logNavigation(navController)
@@ -86,7 +86,6 @@ fun AppNavHost(
 
 @Composable
 fun MainNavHost(
-    windowSizeClass: WindowSizeClass,
     appState: AppState,
     onNavigateToJobDetail: (Int, String) -> Unit,
     onNavigateToLogin: () -> Unit,
@@ -101,7 +100,6 @@ fun MainNavHost(
         exitTransition = { fadeOut(animationSpec = tween(500)) },
     ) {
         toHomeSreen(
-            windowSizeClass = windowSizeClass,
             onNavigateToJobDetail = onNavigateToJobDetail,
         )
         toEducationScreen(

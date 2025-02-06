@@ -24,8 +24,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.demo_structure.R
-import com.example.demo_structure.app.manager.theme.IconImage
+import com.example.demo_structure.app.manager.theme.AppIcons
+import com.example.demo_structure.app.manager.theme.ToImage
 import com.example.demo_structure.app.manager.theme.ProductXTheme
+import com.example.demo_structure.app.manager.theme.generate
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppText
 
@@ -39,7 +41,7 @@ fun OpportunitiesSection(modifier: Modifier = Modifier) {
     Column(modifier.padding(start = 16.dp, end = 16.dp)) {
         AppText(
             text = "Cơ hội", color = colorResource(R.color.black),
-            style = ProductXTheme.typography.SemiBoldTitleLarge
+            style = ProductXTheme.typography.SemiBold.Title.Large
         )
         Spacer(Modifier.height(12.dp))
         Row(modifier) {
@@ -105,7 +107,7 @@ fun OpportunitiesItem(modifier: Modifier = Modifier, icon: Int, title: String, s
                         start.linkTo(parent.start)
                     }
             ) {
-                IconImage(imageResource = icon, contentDescription = null)
+                icon.generate()
             }
             AppText(
                 modifier = Modifier
@@ -116,7 +118,7 @@ fun OpportunitiesItem(modifier: Modifier = Modifier, icon: Int, title: String, s
                         start.linkTo(parent.start)
                         bottom.linkTo(subtitleRef.top)
                     }, text = title, color = colorResource(R.color.slate_gray),
-                style = ProductXTheme.typography.RegularLabelLarge
+                style = ProductXTheme.typography.Regular.Label.Large
             )
 
             AppText(
@@ -127,7 +129,7 @@ fun OpportunitiesItem(modifier: Modifier = Modifier, icon: Int, title: String, s
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
                     }, text = subtitle, color = colorResource(R.color.black),
-                style = ProductXTheme.typography.SemiBoldHeadingSmall
+                style = ProductXTheme.typography.SemiBold.Heading.Small
             )
         }
     }

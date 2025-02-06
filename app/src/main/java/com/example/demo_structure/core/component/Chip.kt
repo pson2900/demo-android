@@ -28,7 +28,7 @@ fun ProductXFilterChip(
         selected = selected,
         onClick = { onSelectedChange(!selected) },
         label = {
-            ProvideTextStyle(value = ProductXTheme.typography.RegularLabelLarge) {
+            ProvideTextStyle(value = ProductXTheme.typography.Regular.Label.Large) {
                 label()
             }
         },

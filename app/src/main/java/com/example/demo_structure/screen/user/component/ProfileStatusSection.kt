@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.AppIcons
+import com.example.demo_structure.app.manager.theme.BaseFont
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppBox
 import com.example.demo_structure.core.component.AppButton
@@ -68,7 +69,7 @@ fun ProfileProgressContent(progress: Int, max: Int) {
         ) {
             AppText(
                 text = "Hoàn thiện hồ sơ - thu hút nhà tuyển dụng!",
-                style = ProductXTheme.typography.SemiBoldTitleMedium,
+                style = ProductXTheme.typography.SemiBold.Title.Medium,
                 color = Color.White
             )
             Spacer(Modifier.height(8.dp))
@@ -97,12 +98,12 @@ fun ProfileProgressAction(onClick: () -> Unit) {
                 ) {
                     AppText(
                         text = "+1 điểm hoàn thiện hồ sơ",
-                        style = ProductXTheme.typography.SemiBoldTitleSmall,
+                        style = ProductXTheme.typography.SemiBold.Title.Small,
                         color = colorResource(R.color.persian_green)
                     )
                     AppText(
                         text = "Bạn đã tham gia những hoạt động ngoại khoá nào?",
-                        style = ProductXTheme.typography.SemiBoldTitleMedium,
+                        style = ProductXTheme.typography.SemiBold.Title.Medium,
                         color = colorResource(R.color.black)
                     )
                 }
@@ -119,7 +120,7 @@ fun ProfileProgressAction(onClick: () -> Unit) {
                     )
                     AppText(
                         text = "Thêm ngay",
-                        style = ProductXTheme.typography.SemiBoldTitleMedium,
+                        style = ProductXTheme.typography.SemiBold.Title.Medium,
                         color = colorResource(R.color.violets_are_blue)
                     )
                 }
@@ -146,11 +147,11 @@ fun ProfileProgressBar(progress: Int, max: Int) {
                 .fillMaxWidth(progress.toFloat() / max)
                 .fillMaxHeight()
         ) {
-
+            
         }
         AppText(
             text = "$progress/$max",
-            style = ProductXTheme.typography.RegularLabelSmall, modifier = Modifier.align(Alignment.Center), color = Color.Black
+            style = ProductXTheme.typography.Regular.Label.Small, modifier = Modifier.align(Alignment.Center), color = Color.Black
         )
     }
 }

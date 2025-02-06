@@ -45,7 +45,7 @@ fun AppTab(
         modifier = modifier,
         enabled = enabled,
         text = {
-            val style = ProductXTheme.typography.SemiBoldLabelLarge.copy(textAlign = TextAlign.Center)
+            val style = ProductXTheme.typography.SemiBold.Label.Large.copy(textAlign = TextAlign.Center)
             ProvideTextStyle(
                 value = style,
                 content = {

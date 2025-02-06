@@ -33,8 +33,9 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.AppIcons
-import com.example.demo_structure.app.manager.theme.IconImage
+import com.example.demo_structure.app.manager.theme.ToImage
 import com.example.demo_structure.app.manager.theme.ProductXTheme
+import com.example.demo_structure.app.manager.theme.generate
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppSurface
 import com.example.demo_structure.core.component.AppText
@@ -89,7 +90,7 @@ fun HeaderSection(title: String, avatar: String) {
                     )
                     AppText(
                         modifier = Modifier, text = title,
-                        style = ProductXTheme.typography.SemiBoldHeadingMedium,
+                        style = ProductXTheme.typography.SemiBold.Heading.Medium,
                         color = Color.Black
                     )
                     Spacer(
@@ -113,7 +114,7 @@ fun HeaderSection(title: String, avatar: String) {
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            IconImage(Modifier.weight(1.5f), imageResource = AppIcons.advancementIcon, contentDescription = "IconAdvancement")
+                            AppIcons.advancementIcon.generate(modifier = Modifier.weight(1.5f))
                             Column(
                                 Modifier
                                     .weight(7f)
@@ -121,14 +122,14 @@ fun HeaderSection(title: String, avatar: String) {
                             ) {
                                 AppText(
                                     modifier = Modifier, text = "Bạn đang theo đuổi",
-                                    style = ProductXTheme.typography.RegularBodyMedium, color = Color.Gray
+                                    style = ProductXTheme.typography.Regular.Body.Medium, color = Color.Gray
                                 )
                                 AppText(
                                     modifier = Modifier, text = "Product Designer, Ux research",
-                                    style = ProductXTheme.typography.SemiBoldBodyLarge, color = Color.Black
+                                    style = ProductXTheme.typography.SemiBold.Body.Large, color = Color.Black
                                 )
                             }
-                            IconImage(Modifier.weight(1.5f), imageResource = AppIcons.arrowRightIcon, contentDescription = "IconArrowRight")
+                            AppIcons.arrowRightIcon.generate(modifier = Modifier.weight(1.5f))
                         }
                     }
                 })

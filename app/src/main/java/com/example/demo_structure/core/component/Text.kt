@@ -10,8 +10,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
-import com.example.demo_structure.app.manager.theme.AppFont
 import com.example.demo_structure.app.manager.theme.ProductXTheme
+import com.example.demo_structure.app.manager.theme.RegularFont
 
 /**
  * Created by Phạm Sơn at 13:11/3/2/25
@@ -20,7 +20,7 @@ import com.example.demo_structure.app.manager.theme.ProductXTheme
  */
 @Composable
 fun AppText(
-    modifier: Modifier = Modifier, text: String, style: TextStyle,
+    modifier: Modifier = Modifier, text: String, style: TextStyle = RegularFont.Label.Medium,
     color: Color = ProductXTheme.colorScheme.onPrimary,
     textDecoration: TextDecoration? = null,
     textAlign: TextAlign? = null,
@@ -49,5 +49,5 @@ fun AppText(
 
 @Composable
 fun a() {
-    AppText(text = "Hello", style = AppFont.Regular.Heading.Medium)
+    AppText(text = "Hello", style = RegularFont.Heading.Large)
 }

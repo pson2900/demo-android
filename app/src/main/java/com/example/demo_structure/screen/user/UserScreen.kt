@@ -1,7 +1,6 @@
 package com.example.demo_structure.screen.user
 
 import android.content.res.Configuration
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,11 +19,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.base.UiStateWrapper
@@ -104,7 +101,7 @@ internal fun UserContent(modifier: Modifier = Modifier, onNavigateToProfile: (Pr
     }
 }
 
-internal fun LazyListScope.myProfileBody(myProfile: MyProfile, onNavigateToProfile: (Profile) -> Unit ) {
+internal fun LazyListScope.myProfileBody(myProfile: MyProfile, onNavigateToProfile: (Profile) -> Unit) {
     val basicInformation = (myProfile.profiles.find { it is Profile.BasicProfile } as? Profile.BasicProfile)?.basic
     item { HeaderSection(title = "${basicInformation?.lastName} ${basicInformation?.firstName}", avatar = basicInformation?.photo ?: "") }
     item { Spacer(Modifier.size(24.dp)) }
@@ -122,7 +119,7 @@ internal fun LazyListScope.myProfileBody(myProfile: MyProfile, onNavigateToProfi
         AppText(
             text = "Thông tin hồ sơ", color = Color.Black,
             modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-            style = ProductXTheme.typography.SemiBoldTitleLarge
+            style = ProductXTheme.typography.SemiBold.Title.Large
         )
     }
     item { Spacer(Modifier.height(12.dp)) }

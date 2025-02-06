@@ -60,9 +60,9 @@ fun rememberAppState(
 class AppState(
     val navController: NavHostController,
     coroutineScope: CoroutineScope,
-    networkMonitor: NetworkMonitor,
+    val networkMonitor: NetworkMonitor,
     var context: Context,
-    timeZoneMonitor: TimeZoneMonitor,
+    val timeZoneMonitor: TimeZoneMonitor,
 ) {
     val isOffline = networkMonitor.isOnline
         .map(Boolean::not)

@@ -7,6 +7,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.LocalAbsoluteTonalElevation
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -16,6 +17,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.demo_structure.util.deviceCurrentWindowAdaptive
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 /**
@@ -94,9 +96,6 @@ val DarkDefaultColorScheme = darkColorScheme(
  */
 
 object ProductXTheme {
-    val backgroundTheme: BackgroundTheme
-        @Composable
-        get() = LocalBackgroundTheme.current
 
     val cardTheme: CardTheme
         @Composable
@@ -106,13 +105,25 @@ object ProductXTheme {
         @Composable
         get() = LocalColorTheme.current
 
-    val gradientColors: GradientColors
-        @Composable
-        get() = LocalGradientColors.current
-
-    val typography: AppTypography
+    internal val typography: AppTypography
         @Composable
         get() = LocalAppTypography.current
+
+    val padding: Padding
+        @Composable
+        get() = LocalPadding.current
+
+    val margin: Margin
+        @Composable
+        get() = LocalMargin.current
+
+    val corner: Corner
+        @Composable
+        get() = LocalCorner.current
+
+    val totalElevation: TonalElevation
+        @Composable
+        get() = LocalTonalElevation.current
 }
 
 
@@ -133,24 +144,6 @@ fun ApplicationTheme(
     // Color scheme
     val colorScheme = if (darkTheme) DarkDefaultColorScheme else LightDefaultColorScheme
 
-
-    // Gradient colors
-    val emptyGradientColors = GradientColors(container = colorScheme.surfaceColorAtElevation(2.dp))
-    val defaultGradientColors = GradientColors(
-        top = colorScheme.inverseOnSurface,
-        bottom = colorScheme.primaryContainer,
-        container = colorScheme.surface,
-    )
-
-    val gradientColors = when {
-        !disableDynamicTheming && supportsDynamicTheming() -> emptyGradientColors
-        else -> defaultGradientColors
-    }
-    // Background theme
-    val backgroundTheme = BackgroundTheme(
-        color = colorScheme.background,
-        tonalElevation = 2.dp,
-    )
     val cardTheme = CardTheme(
         background = colorScheme.surface,
         text = colorScheme.onSurface,
@@ -161,21 +154,24 @@ fun ApplicationTheme(
         border = BorderStroke(10.dp, Color.Unspecified),
     )
 
-    // Composition locals
-    CompositionLocalProvider(
-        LocalColorTheme provides colorScheme,
-        LocalGradientColors provides gradientColors,
-        LocalBackgroundTheme provides backgroundTheme,
-        LocalCardTheme provides cardTheme,
+    val deviceWindowAdaptive = deviceCurrentWindowAdaptive()
 
+    CompositionLocalProvider(
+        LocalAppTypography provides AppTypography(),
+        LocalWindowAdaptiveInfo provides deviceWindowAdaptive,
+        LocalColorTheme provides colorScheme,
+        LocalAbsoluteTonalElevation provides 0.dp,
+        LocalCardTheme provides cardTheme,
         content = {
             MaterialTheme(
+                typography = defaultTypography,
                 colorScheme = colorScheme,
                 content = content,
             )
 
         }
     )
+
 }
 
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
