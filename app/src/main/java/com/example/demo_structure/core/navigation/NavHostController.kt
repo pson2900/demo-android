@@ -81,11 +81,11 @@ fun AppNavHost(
             JobDetailNavGraph {
 
             }
-            toLoginScreen() {
+            toLoginScreen(appState) {
                 appState.upPress()
             }
             toVerifyEmailScreen(appState)
-            toVerifyOtpScreen()
+            toVerifyOtpScreen(appState)
             toCreatePinCodeScreen(appState)
         })
 }
@@ -96,7 +96,7 @@ fun MainNavHost(
     windowSizeClass: WindowSizeClass,
     appState: AppState,
     onNavigateToJobDetail: (Int, String) -> Unit,
-    onNavigateToLogin: () -> Unit,
+    onNavigateToLogin: (String) -> Unit,
     onNavigateToVerifyEmail: () -> Unit,
 ) {
     appState.navController

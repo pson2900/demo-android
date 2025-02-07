@@ -1,33 +1,44 @@
 package com.example.demo_structure.screen.create_pin
 
+import android.os.Build
+import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navDeepLink
+import androidx.navigation.navArgument
 import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.Destinations
-import com.example.demo_structure.screen.verify_email.VerifyEmailScreen
+import com.google.gson.Gson
 import org.koin.androidx.compose.koinViewModel
 
-fun NavController.toCreatePinCode(navOptions: NavOptions = androidx.navigation.navOptions {}) =
-    navigate(route = Destinations.CreatePin.route, navOptions)
+fun NavController.toCreatePinCode(route: String, navOptions: NavOptions = androidx.navigation.navOptions {}) =
+    navigate(route = route, navOptions)
 
 fun NavGraphBuilder.toCreatePinCodeScreen(appState: AppState) {
     this.apply {
         composable(
-            route = Destinations.CreatePin.route,
-            deepLinks = listOf(
-                navDeepLink {
-                    uriPattern = "Google.com"
+            route = "${Destinations.CreatePin.route}/{${Destinations.CreatePin.JSON}}?origin={${Destinations.OTP.ORIGIN}}",
+            arguments = listOf(
+                navArgument(Destinations.CreatePin.JSON) {
+                    type = NavType.StringType
+                },
+                navArgument(Destinations.CreatePin.ORIGIN) {
+                    type = NavType.StringType
+                    nullable = true
                 }
             ),
             content = { navBackStackEntry ->
-                VerifyEmailScreen(
-                    viewModel = koinViewModel(),
-                    onNavigateToVerifyOtp = { email, type -> appState.navigateToOTP(from = navBackStackEntry, email = email, origin = type) },
-                    onNavigateToLogin = { appState.navigateToLogin(from = navBackStackEntry) }
-                )
+                val arguments = requireNotNull(navBackStackEntry.arguments)
+                val pinJson = arguments.getString(Destinations.CreatePin.JSON)
+                val pin: PinArguments? = if (!pinJson.isNullOrEmpty()) {
+                    Gson().fromJson(pinJson, PinArguments::class.java)
+                } else {
+                    null
+                }
+                val origin = arguments.getString(Destinations.CreatePin.ORIGIN)?:""
+                PinCodeScreen(viewModel = koinViewModel(), arguments = pin, origin = origin)
             }
         )
     }

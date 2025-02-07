@@ -32,18 +32,20 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.demo_structure.R
+import kotlinx.coroutines.delay
 
 @Preview(showBackground = true)
 @Composable
 fun OTPInputPreview() {
     PassCodeTextField(modifier = Modifier, onValueChange = {
 
-    }, 6)
+    }, 6 )
 }
 
 @Composable
@@ -55,7 +57,7 @@ fun PassCodeTextField(
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() } // Create FocusRequester
-    val (text, setText) = remember {
+    var (text, setText) = remember {
         mutableStateOf(TextFieldValue(""))
     }
 
@@ -97,6 +99,7 @@ fun PassCodeTextField(
                         keyboardType = KeyboardType.NumberPassword,
                         imeAction = ImeAction.Done,
                     ),
+                    visualTransformation = PasswordVisualTransformation(),
                     textStyle = TextStyle(
                         color = Transparent,
                     ),
@@ -125,7 +128,7 @@ fun PassCodeTextField(
                 for (i in 0 until numDigits) {
                     if (!errorMessage.isNullOrEmpty()) {
                         Dot(colorResource(R.color.bridesmaid))
-                        setText(TextFieldValue(""))
+//                        setText(TextFieldValue(""))
                     } else
                         if (i < text.text.length) {
                             Dot(colorResource(R.color.tundora))
@@ -144,6 +147,7 @@ fun PassCodeTextField(
     }
     // LaunchedEffect outside clickable
     LaunchedEffect(key1 = focusRequester) {
+        delay(300)
         focusRequester.requestFocus()
     }
 }

@@ -19,6 +19,8 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.demo_structure.screen.create_pin.PinArguments
+import com.example.demo_structure.screen.create_pin.toCreatePinCode
 import com.example.demo_structure.screen.job_detail.toJobDetail
 import com.example.demo_structure.screen.login.toLogin
 import com.example.demo_structure.screen.otp.OTPType
@@ -26,6 +28,7 @@ import com.example.demo_structure.screen.otp.toVerifyOtp
 import com.example.demo_structure.screen.verify_email.toVerifyEmail
 import com.example.demo_structure.util.NetworkMonitor
 import com.example.demo_structure.util.TimeZoneMonitor
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -134,12 +137,14 @@ class AppState(
         }
     }
 
-    fun navigateToLogin(from: NavBackStackEntry) {
+    fun navigateToLogin(from: NavBackStackEntry,email: String,) {
         // In order to discard duplicated navigation events, we check the Lifecycle
         val route = Destinations.Login.route
         trace("Navigation : ${route}") {
             if (from.lifecycleIsResumed()) {
-                navController.toLogin()
+                navController.toLogin(Destinations.Login.createRoute(
+                    email = email
+                ))
             }
         }
     }
@@ -162,6 +167,22 @@ class AppState(
                 navController.toVerifyOtp(
                     Destinations.OTP.createRoute(
                         email = email,
+                        origin = origin
+                    )
+                )
+            }
+        }
+    }
+
+    fun navigateToPinCode(from: NavBackStackEntry,pinArguments: PinArguments, origin: String) {
+        // In order to discard duplicated navigation events, we check the Lifecycle
+          val pinJson = Gson().toJson(pinArguments)
+        val route = "${Destinations.CreatePin.route}/$pinJson?origin=$origin"
+        trace("Navigation : $route") {
+            if (from.lifecycleIsResumed()) {
+                navController.toCreatePinCode(
+                    Destinations.CreatePin.createRoute(
+                        pinJson = pinJson,
                         origin = origin
                     )
                 )

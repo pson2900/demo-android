@@ -11,7 +11,7 @@ import org.koin.androidx.compose.koinViewModel
 fun NavController.toUser(navOptions: NavOptions) =
     navigate(route = Destinations.Main.User.route, navOptions)
 
-fun NavGraphBuilder.UserNavGraph(onNavigateToLogin: () -> Unit) {
+fun NavGraphBuilder.UserNavGraph(onNavigateToLogin: (String) -> Unit) {
     this.apply {
         composable(
             route = Destinations.Main.User.route,

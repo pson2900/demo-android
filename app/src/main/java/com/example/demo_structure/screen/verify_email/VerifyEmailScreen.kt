@@ -97,8 +97,9 @@ fun VerifyEmailScreen(
 
     var emailError by remember { mutableStateOf("") }
     var isSuccess by remember { mutableStateOf(false) }
-    val isEnableButton = email.isNotEmpty() && isChecked
     var isLoading by remember { mutableStateOf(false) }
+    val isEnableButton = email.isNotEmpty() && isChecked && !isLoading
+
     val lifecycleOwner = LocalLifecycleOwner.current
 
 
@@ -136,6 +137,23 @@ fun VerifyEmailScreen(
         context.startActivity(intent)
     }
 
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                viewModel.clearEmailState()
+            }
+            if(event ==  Lifecycle.Event.ON_DESTROY){
+                viewModel.email = email
+                viewModel.isChecked = isChecked
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
     LaunchedEffect(key1 = emailState) {
         when (val state = emailState) {
             is EmailState.Loading -> {
@@ -155,24 +173,6 @@ fun VerifyEmailScreen(
                 isLoading = false
             }
             else -> Unit
-        }
-    }
-
-
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_STOP) {
-                viewModel.clearEmailState()
-            }
-            if(event ==  Lifecycle.Event.ON_DESTROY){
-                viewModel.email = email
-                viewModel.isChecked = isChecked
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 

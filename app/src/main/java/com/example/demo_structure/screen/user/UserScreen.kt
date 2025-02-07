@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,16 +53,16 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 internal fun UserScreen(
     modifier: Modifier = Modifier,
-    onNavigateToLogin: () -> Unit,
+    onNavigateToLogin: (String) -> Unit,
     clearUndoState: () -> Unit = {},
     userViewModel: UserViewModel = koinViewModel<UserViewModel>()
 ) {
     val myProfileState by userViewModel.myProfileState.collectAsStateWithLifecycle()
     val featureItemState by userViewModel.featureItemState.collectAsStateWithLifecycle()
-
     LaunchedEffect(userViewModel) {
         userViewModel.fetchMyProfile()
         userViewModel.fetchListItem()
+        userViewModel.getAuth()
 
     }
     DisposableEffect(userViewModel) {
@@ -81,7 +82,7 @@ internal fun UserScreen(
 
 
 @Composable
-fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: () -> Unit, myProfile: MyProfile) {
+fun UserContent(modifier: Modifier = Modifier, onNavigateToLogin: (String) -> Unit, myProfile: MyProfile) {
     val rememberHostState = remember { SnackbarHostState() }
     ApplicationTheme {
         AppScaffold(

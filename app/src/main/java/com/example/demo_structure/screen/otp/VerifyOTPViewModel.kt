@@ -1,5 +1,6 @@
 package com.example.demo_structure.screen.otp
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.demo_structure.core.base.BaseViewModel
@@ -18,7 +19,6 @@ class VerifyOTPViewModel(val authUseCase: AuthUseCase, savedStateHandle: SavedSt
     private val _otpUiState = MutableStateFlow<OtpState>(OtpState.Loading(false))
     val otplUiState: StateFlow<OtpState> = _otpUiState.asStateFlow()
 
-
     fun sendOtp(email: String) {
         viewModelScope.launch {
             _otpUiState.value = OtpState.Loading(true)
@@ -31,6 +31,7 @@ class VerifyOTPViewModel(val authUseCase: AuthUseCase, savedStateHandle: SavedSt
             }
         }
     }
+
     fun clearOTPState() {
         _otpUiState.value = OtpState.Idle
     }
@@ -45,6 +46,20 @@ class VerifyOTPViewModel(val authUseCase: AuthUseCase, savedStateHandle: SavedSt
                 _otpUiState.value = OtpState.Error(e.message.toString())
             }.collect { result ->
                 _otpUiState.value = OtpState.ForgetPasswordSuccess(result.isSuccess)
+            }
+        }
+    }
+
+
+    fun verifyOtp(email: String, otp: String) {
+        viewModelScope.launch {
+            _otpUiState.value = OtpState.Loading(true)
+            delay(1000)
+            val response = authUseCase.verifyOtp(email,otp)
+            response.catch { e->
+                _otpUiState.value = OtpState.Error(e.message.toString())
+            }.collect { result ->
+                _otpUiState.value = OtpState.VerifyOtpSuccess(result)
             }
         }
     }

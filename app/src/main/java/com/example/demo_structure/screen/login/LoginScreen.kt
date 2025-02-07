@@ -1,6 +1,8 @@
 package com.example.demo_structure.screen.login
 
 import android.content.res.Configuration
+import android.util.Log
+import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.animateFloatAsState
@@ -10,11 +12,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -57,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.demo_structure.R
 import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.AppPreviewWrapper
@@ -65,25 +67,12 @@ import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.core.component.AppBarIcon
 import com.example.demo_structure.core.component.TopAppBar
 import com.example.demo_structure.core.component.otp.PassCodeTextField
-import com.example.demo_structure.screen.home.LoadingState
-import org.koin.androidx.compose.koinViewModel
 
 /**
  * Created by Phạm Sơn at 15:17/3/1/25
  * Copyright (c) 2025 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-@Composable
-internal fun LoginRoute(
-    onNavigateLogin: (String) -> Unit,
-) {
-    val loginViewModel: LoginViewModel = koinViewModel()
-    val loginState by loginViewModel.menuUiState.collectAsStateWithLifecycle()
-    LoginScreen(
-        modifier = Modifier.fillMaxSize(),
-        state = loginState
-    )
-}
 
 /**
  * Displays the user's bookmarked articles. Includes support for loading and empty states.
@@ -92,16 +81,44 @@ internal fun LoginRoute(
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
 internal fun LoginScreen(
-    state: LoginState,
     modifier: Modifier = Modifier,
+    viewModel: LoginViewModel = viewModel(),
+    email: String,
+    onNavigateForgotPasswordOtp: (String) -> Unit
 ) {
 
+    val loginState by viewModel.loginUiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    var isLoading by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
+
+
     val rememberHostState = remember { SnackbarHostState() }
+    LaunchedEffect(key1 = loginState) {
+        when (val state = loginState) {
+            is LoginState.Loading -> {
+                if (state.isLoading) {
+                    isLoading = true
+                }
+            }
 
-    when (state) {
-        LoginState.Loading -> LoadingState(modifier)
-        LoginState.Success -> {
+            is LoginState.LoginSuccess -> {
+                errorMessage = ""
+                isLoading = false
+                if (state.authentication != null) {
+                    viewModel.saveAuth(state.authentication)
+                    Toast.makeText(context, "login success", Toast.LENGTH_SHORT).show()
+                } else {
+                    errorMessage = "Mã không đúng. Thử lại nhé!"
+                }
+            }
 
+            is LoginState.Error -> {
+                errorMessage = "Mã không đúng. Thử lại nhé!"
+                isLoading = false
+            }
+
+            else -> Unit
         }
     }
 
@@ -121,25 +138,43 @@ internal fun LoginScreen(
                             imageResource = R.drawable.ic_back_arrow
                         )
                     })
-                LoginContent(modifier = modifier)
+                LoginContent(
+                    modifier = modifier,
+                    isLoading = isLoading,
+                    errorMessage = errorMessage,
+                    onChangeError = { errorMessage = "" },
+                    onLogin = {
+                        viewModel.login(email, it)
+                    }, onForgotPassword = {
+                        onNavigateForgotPasswordOtp(email)
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-fun LoginContent(modifier: Modifier = Modifier) {
-    var otpError by remember { mutableStateOf("") }
-    var otpValue by remember { mutableStateOf("") }
+fun LoginContent(
+    modifier: Modifier = Modifier,
+    isLoading: Boolean,
+    errorMessage: String,
+    onChangeError: (String) -> Unit,
+    onLogin: (String) -> Unit,
+    onForgotPassword: () -> Unit
+) {
+    var passCode by remember { mutableStateOf("") }
     val maxLength = 6
+
+
     ConstraintLayout(
         modifier = modifier
-            .background(Color.White)
+            .fillMaxHeight()
             .statusBarsPadding()
             .navigationBarsPadding()
             .imePadding() // Add imePadding here
     ) {
-        val (logo, textView, passCode, columnBottom) = createRefs()
+        val (logo, textView, passCodeTextField, columnBottom, loadingView) = createRefs()
         Image(
             painter = painterResource(id = R.drawable.ic_rondy_stickers),
             contentDescription = "Image",
@@ -168,23 +203,19 @@ fun LoginContent(modifier: Modifier = Modifier) {
 
         PassCodeTextField(
             modifier = Modifier
-                .constrainAs(passCode) {
+                .constrainAs(passCodeTextField) {
                     top.linkTo(textView.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 },
             onValueChange = {
-                otpError = ""
-                otpValue = it
-                if(otpValue.length == maxLength){
-                    if(otpValue == "123456"){
-
-                    }else{
-                        otpError = "error"
-                    }
+                onChangeError("")
+                passCode = it
+                if (passCode.length == maxLength) {
+                    onLogin.invoke(passCode)
                 }
             },
-            maxLength, errorMessage = otpError
+            maxLength, errorMessage = errorMessage
         )
 
         Column(
@@ -194,22 +225,34 @@ fun LoginContent(modifier: Modifier = Modifier) {
                     bottom.linkTo(parent.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                }.padding(top = 8.dp),
+                }
+                .padding(top = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            ForgotPasswordText()
+            ForgotPasswordText {
+                onForgotPassword.invoke()
+            }
+        }
+
+        if (isLoading) {
+            LoadingState(Modifier.constrainAs(loadingView) {
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            })
         }
     }
 }
 
 @Composable
-fun ColumnScope.ForgotPasswordText() {
+fun ColumnScope.ForgotPasswordText(onClick: () -> Unit) {
     Text(
         text = "Quên mật khẩu",
         modifier = Modifier
             .clickable {
-                // Handle forgot password click
+                onClick.invoke()
             }
             .padding(vertical = 16.dp), // Add padding for better touch target
         style = TextStyle(
@@ -224,7 +267,9 @@ fun ColumnScope.ForgotPasswordText() {
 @Composable
 fun UserContentPreview() {
     AppPreviewWrapper { modifier ->
-        LoginContent(modifier)
+        LoginContent(modifier, isLoading = false, errorMessage = "", onChangeError = {}, onLogin = {
+
+        }, onForgotPassword = {})
     }
 }
 

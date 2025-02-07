@@ -1,13 +1,11 @@
 package com.example.demo_structure.screen.login
 
-sealed interface LoginState {
-    /**
-     * The feed is still loading.
-     */
-    data object Loading : LoginState
+import com.example.demo_structure.screen.create_pin.PinCodeState
+import com.example.domain.model.Authentication
 
-    /**
-     * The feed is loaded with the given list of news resources.
-     */
-    data object Success : LoginState
+sealed interface LoginState {
+    object Idle : LoginState
+    data class Loading(val isLoading: Boolean) : LoginState
+    data class LoginSuccess(val authentication: Authentication) : LoginState
+    data class Error(val msg: String): LoginState
 }

@@ -1,19 +1,21 @@
 package com.example.demo_structure.screen.otp
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -24,8 +26,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.SpanStyle
@@ -39,16 +42,20 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.R
+import com.example.demo_structure.app.manager.theme.ApplicationTheme
+import com.example.demo_structure.core.component.AppBarIcon
+import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.CountdownTextView
+import com.example.demo_structure.core.component.TopAppBar
 import com.example.demo_structure.core.component.otp.OTPTextField
 import com.example.demo_structure.core.component.otp.OtpTextFieldDefaults
+import com.example.demo_structure.screen.create_pin.PinArguments
 import com.example.demo_structure.screen.home.LoadingState
-
 import com.example.demo_structure.util.FormatText.buildClickableText
 
 @Preview(showBackground = true)
 @Composable
-fun OTPScreenPreview() {
+private fun OTPScreenPreview() {
     var screenState by remember { mutableStateOf(OTPScreenState()) }
     OTPScreenContent(
         viewModel = null,
@@ -64,26 +71,24 @@ fun OTPScreenPreview() {
 data class OTPScreenState(
     val sendOtpSuccess: Boolean = false,
     val isResend: Boolean = false,
-    val otp: String = "",
     val isError: Boolean = false,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val isValidOtp: Boolean = false,
+    val secret: String = ""
 )
 
-data class OtpStateChange(
-    val isSuccess: Boolean = false,
-    val isResend: Boolean = false,
-    val isLoading: Boolean = false
-)
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VerifyOTPScreen(
+    modifier: Modifier = Modifier,
     viewModel: VerifyOTPViewModel,
     email: String,
-    origin: String
+    origin: String,
+    onNavigatePinCode: (PinArguments, String) -> Unit,
 ) {
-    val context = LocalContext.current
     var screenState by remember { mutableStateOf(OTPScreenState()) }
     val lifecycleOwner = LocalLifecycleOwner.current
+    val rememberHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(viewModel) {
         if (origin == OTPType.REGISTER.type) {
@@ -92,6 +97,7 @@ fun VerifyOTPScreen(
             viewModel.forgetPassword(email)
         }
     }
+
 
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -106,27 +112,51 @@ fun VerifyOTPScreen(
         }
     }
 
-    HandleOtpState(viewModel = viewModel, onChangeLoading = {
-        screenState = screenState.copy(isLoading = it)
-    }) { newState ->
-        screenState = screenState.copy(
-            sendOtpSuccess = newState.isSuccess,
-            isResend = newState.isResend,
-            isLoading = false
-        )
-    }
+    HandleOtpState(viewModel = viewModel,
+        otpScreenState = screenState,
+        onStateChange = { newState ->
+            screenState = newState
+            if (screenState.isValidOtp) {
+                screenState = screenState.copy(isValidOtp = false)
+                onNavigatePinCode(
+                    PinArguments(
+                        type = origin,
+                        email = email,
+                        secret = screenState.secret
+                    ),"origin"
+                )
+            }
+        })
 
-
-
-    OTPScreenContent(
-        viewModel = viewModel,
-        email = email,
-        type = origin,
-        screenState = screenState,
-        onStateChange = { newScreenState ->
-            screenState = newScreenState
+    ApplicationTheme {
+        AppScaffold(
+            modifier = modifier,
+            snackBarHostState = rememberHostState
+        ) {
+            Column {
+                TopAppBar(title = {
+                    Text("")
+                },
+                    navigationIcon = {
+                        AppBarIcon(
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp),
+                            imageResource = R.drawable.ic_back_arrow
+                        )
+                    })
+                OTPScreenContent(
+                    modifier = modifier,
+                    viewModel = viewModel,
+                    email = email,
+                    type = origin,
+                    screenState = screenState,
+                    onStateChange = { newScreenState ->
+                        screenState = newScreenState
+                    }
+                )
+            }
         }
-    )
+    }
 }
 
 @Composable
@@ -138,12 +168,15 @@ private fun OTPScreenContent(
     screenState: OTPScreenState,
     onStateChange: (OTPScreenState) -> Unit
 ) {
+    val maxLength = 4
+    var otp by remember { mutableStateOf("") }
+    val focusRequester = remember { FocusRequester() }
     ConstraintLayout(
         modifier = modifier
-            .padding(top = 48.dp, start = 24.dp, end = 24.dp, bottom = 24.dp)
+            .padding(top = 24.dp, start = 24.dp, end = 24.dp, bottom = 24.dp)
             .fillMaxSize()
-            .statusBarsPadding()
             .navigationBarsPadding()
+            .imePadding()
     ) {
         val (emailTextview, textViewDescription, otpTextField, textViewError, columnBottom, loading) = createRefs()
         val annotatedString = buildClickableText(
@@ -180,14 +213,14 @@ private fun OTPScreenContent(
             text = "Hãy kiểm tra hộp thư Chính hoặc Spam trong mail của bạn nhé"
         )
 
-        fun checkOTP(otp: String) {
-            val isError = otp.length == 4 && otp != "1234"
-            onStateChange(screenState.copy(isError = isError, otp = otp))
-            if (!isError) {
-
+        fun verifyOtp(otp: String) {
+            if (otp.length == maxLength) {
+                viewModel?.verifyOtp(email, otp)
             }
         }
-
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
+        }
         OTPTextField(
             modifier = Modifier
                 .width(260.dp)
@@ -196,12 +229,15 @@ private fun OTPScreenContent(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }
-                .padding(top = 32.dp),
-            value = screenState.otp,
+                .padding(top = 32.dp)
+                .focusRequester(focusRequester),
+            value = otp,
             onTextChanged = {
-                checkOTP(it)
+                onStateChange(screenState.copy(isError = false))
+                otp = it
+                verifyOtp(it)
             },
-            numDigits = 4,
+            numDigits = maxLength,
             isMasked = false,
             digitContainerStyle = OtpTextFieldDefaults.outlinedContainer(size = 24.dp),
             textStyle = MaterialTheme.typography.titleLarge,
@@ -218,33 +254,23 @@ private fun OTPScreenContent(
                     }
                     .padding(top = 24.dp),
                 style = TextStyle(color = Color.Red, fontSize = 16.sp),
-                text = "Sai OTP"
+                text = "Mã không đúng. Thử lại nhé!"
             )
         }
-        Column(
+        ColumnBottom(
             modifier = Modifier
                 .fillMaxWidth()
                 .constrainAs(columnBottom) {
                     bottom.linkTo(parent.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                }
-                .navigationBarsPadding(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            if (screenState.sendOtpSuccess) {
-                if (screenState.isResend) {
-                    ResendOtpText(viewModel, email,type, onStateChange = {
-                        onStateChange(screenState.copy(sendOtpSuccess = false))
-                    })
-                } else {
-                    CountdownResendOtpText {
-                        onStateChange(screenState.copy(isResend = true))
-                    }
-                }
-            }
-        }
+                },
+            screenState = screenState,
+            email = email,
+            type = type,
+            onStateChange = onStateChange,
+            viewModel = viewModel
+        )
 
         if (screenState.isLoading) {
             LoadingState(
@@ -255,6 +281,35 @@ private fun OTPScreenContent(
                     end.linkTo(parent.end)
                 }
             )
+        }
+    }
+}
+
+@Composable
+private fun ColumnBottom(
+    modifier: Modifier = Modifier,
+    screenState: OTPScreenState,
+    email: String,
+    type: String,
+    onStateChange: (OTPScreenState) -> Unit,
+    viewModel: VerifyOTPViewModel?
+) {
+    Column(
+        modifier = modifier
+            .navigationBarsPadding(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Bottom
+    ) {
+        if (screenState.sendOtpSuccess) {
+            if (screenState.isResend) {
+                ResendOtpText(viewModel, email, type, onStateChange = {
+                    onStateChange(screenState.copy(sendOtpSuccess = false))
+                })
+            } else {
+                CountdownResendOtpText {
+                    onStateChange(screenState.copy(isResend = true))
+                }
+            }
         }
     }
 }
@@ -321,7 +376,7 @@ private fun CountdownResendOtpText(onCountdownFinished: () -> Unit) {
                 color = colorResource(R.color.boulder),
                 fontSize = 16.sp
             ),
-            minutesState = 0.2f,
+            minutesState = 1f,
             onCountdownFinished = {
                 onCountdownFinished.invoke()
             }
@@ -332,26 +387,56 @@ private fun CountdownResendOtpText(onCountdownFinished: () -> Unit) {
 @Composable
 fun HandleOtpState(
     viewModel: VerifyOTPViewModel,
-    onChangeLoading: (Boolean) -> Unit,
-    onStateChange: (OtpStateChange) -> Unit
+    otpScreenState: OTPScreenState,
+    onStateChange: (OTPScreenState) -> Unit
 ) {
     val otpState by viewModel.otplUiState.collectAsStateWithLifecycle()
     LaunchedEffect(key1 = otpState) {
         when (val state = otpState) {
             is OtpState.Loading -> {
-                onChangeLoading.invoke(state.isLoading)
+                onStateChange(otpScreenState.copy(isLoading = state.isLoading))
             }
 
             is OtpState.Success -> {
-                onStateChange(OtpStateChange(isSuccess = state.isSuccess, isResend = false))
+                onStateChange(
+                    otpScreenState.copy(
+                        sendOtpSuccess = state.isSuccess,
+                        isResend = false,
+                        isLoading = false
+                    )
+                )
             }
 
             is OtpState.ForgetPasswordSuccess -> {
-                onStateChange(OtpStateChange(isSuccess = state.isSuccess, isResend = false))
+                onStateChange(
+                    otpScreenState.copy(
+                        sendOtpSuccess = state.isSuccess,
+                        isResend = false,
+                        isLoading = false
+                    )
+                )
+            }
+
+            is OtpState.VerifyOtpSuccess -> {
+                onStateChange(
+                    otpScreenState.copy(
+                        isResend = false,
+                        isLoading = false,
+                        isValidOtp = state.verifyOtp.isValid,
+                        isError = state.verifyOtp.isValid == false,
+                        secret = state.verifyOtp.secret
+                    )
+                )
             }
 
             is OtpState.Error -> {
-                onStateChange(OtpStateChange(isSuccess = true, isResend = false))
+                onStateChange(
+                    otpScreenState.copy(
+                        isLoading = false,
+                        sendOtpSuccess = true,
+                        isResend = true
+                    )
+                )
             }
 
             is OtpState.Idle -> Unit

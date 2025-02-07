@@ -25,11 +25,11 @@ val presentationModule = module {
     viewModel { MainViewModel(savedStateHandle = get()) }
     viewModel { OpportunityViewModel(savedStateHandle = get()) }
     viewModel { CommunityViewModel(savedStateHandle = get()) }
-    viewModel { UserViewModel(myProfileUseCase = get(), stateHandle = get()) }
+    viewModel { UserViewModel(dataStoreManager = get(), myProfileUseCase = get(), stateHandle = get()) }
     viewModel { EducationViewModel(savedStateHandle = get()) }
     viewModel { JobDetailViewModel(savedStateHandle = get()) }
-    viewModel { LoginViewModel(savedStateHandle = get()) }
+    viewModel { LoginViewModel(dataStoreManager = get(), authUseCase = get(), savedStateHandle = get()) }
     viewModel { VerifyEmailViewModel(authUseCase = get(), savedStateHandle = get()) }
     viewModel { VerifyOTPViewModel(authUseCase = get(), savedStateHandle = get()) }
-    viewModel { PinCodeViewModel(authUseCase = get(), savedStateHandle = get()) }
+    viewModel { PinCodeViewModel(dataStoreManager = get(),authUseCase = get(), savedStateHandle = get()) }
 }

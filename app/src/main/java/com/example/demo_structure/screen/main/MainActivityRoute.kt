@@ -42,8 +42,8 @@ fun NavGraphBuilder.AppNavGraph(
             onNavigateToJobDetail = { jobId, origin ->
                 appState.navigateToJobDetail(jobId, origin, from = backStackEntry)
             },
-            onNavigateToLogin = {
-                appState.navigateToLogin(from = backStackEntry)
+            onNavigateToLogin = {email->
+                appState.navigateToLogin(from = backStackEntry, email = email)
             },
             onNavigateToVerifyEmail = {
                 appState.navigateToEmail(from = backStackEntry)

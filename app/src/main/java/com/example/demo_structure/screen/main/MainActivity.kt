@@ -158,7 +158,7 @@ class MainActivity : ComponentActivity() {
 fun MainContent(
     modifier: Modifier = Modifier,
     onNavigateToJobDetail: (Int, String) -> Unit,
-    onNavigateToLogin: () -> Unit,
+    onNavigateToLogin: (String) -> Unit,
     onNavigateToVerifyEmail: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()

@@ -1,6 +1,7 @@
 package com.example.demo_structure.core.navigation
 
 import com.example.demo_structure.app.manager.theme.AppIcons
+import com.example.demo_structure.screen.create_pin.PinArguments
 
 /**
  * Created by Phạm Sơn at 10:10/23/1/25
@@ -77,7 +78,12 @@ sealed class Destinations(val route: String) {
         }
     }
 
-    object Login : Destinations(route = "login")
+    object Login : Destinations(route = "login"){
+        const val EMAIL = "email"
+        fun createRoute(email: String): String {
+            return "login/$email"
+        }
+    }
     object Email : Destinations(route = "email")
 
     object OTP : Destinations(route = "verify_otp") {
@@ -89,10 +95,10 @@ sealed class Destinations(val route: String) {
     }
 
     object CreatePin : Destinations(route = "create_pin") {
+        const val JSON = "json"
         const val ORIGIN = "origin"
-        const val TYPE = "type"
-        fun createRoute(type: String, origin: String): String {
-            return "create_pin/$type?origin=${origin}"
+        fun createRoute(pinJson: String, origin: String): String {
+            return "create_pin/$pinJson?origin=${origin}"
         }
     }
 }

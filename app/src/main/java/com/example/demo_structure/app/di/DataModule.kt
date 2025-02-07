@@ -1,5 +1,6 @@
 package com.example.demo_structure.app.di
 
+import com.example.data.proto.DataStoreManager
 import com.example.data.repository.AuthRepositoryImpl
 import com.example.data.repository.HomeRepositoryImpl
 import com.example.data.repository.MyProfileRepositoryImpl
@@ -17,4 +18,5 @@ val dataModule = module {
     single<HomeRepository> { HomeRepositoryImpl(get()) }
     single<MyProfileRepository> { MyProfileRepositoryImpl(get()) }
     single<AuthRepository> { AuthRepositoryImpl(get()) }
+    single { DataStoreManager(get()) }
 }

@@ -7,6 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.core.navigation.composableWith
 import org.koin.androidx.compose.koinViewModel
@@ -14,7 +15,7 @@ import org.koin.androidx.compose.koinViewModel
 fun NavController.toVerifyOtp(route: String, navOptions: NavOptions = androidx.navigation.navOptions {}) =
     navigate(route = route, navOptions)
 
-fun NavGraphBuilder.toVerifyOtpScreen() {
+fun NavGraphBuilder.toVerifyOtpScreen(appState: AppState) {
     this.apply {
         composable(
             route = "${Destinations.OTP.route}/" +
@@ -34,7 +35,11 @@ fun NavGraphBuilder.toVerifyOtpScreen() {
                 val arguments = requireNotNull(navBackStackEntry.arguments)
                 val email = arguments.getString(Destinations.OTP.EMAIL) ?: ""
                 val origin = arguments.getString(Destinations.OTP.ORIGIN) ?: ""
-                VerifyOTPScreen(viewModel = koinViewModel(), email = email, origin = origin)
+                VerifyOTPScreen(viewModel = koinViewModel(), email = email,
+                    origin = origin,
+                    onNavigatePinCode = { arg,origin->
+                        appState.navigateToPinCode(navBackStackEntry,arg,origin)
+                })
             }
         )
     }

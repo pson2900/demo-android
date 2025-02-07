@@ -80,28 +80,28 @@ fun OTPTextField(
 ) {
     val focusManager = LocalFocusManager.current
 
-    val autoFillNode = AutofillNode(
-        autofillTypes = listOf(AutofillType.SmsOtpCode),
-        onFill = onTextChanged
-    )
-    val autoFill = LocalAutofill.current
-
-    LocalAutofillTree.current += autoFillNode
+//    val autoFillNode = AutofillNode(
+//        autofillTypes = listOf(AutofillType.SmsOtpCode),
+//        onFill = onTextChanged
+//    )
+//    val autoFill = LocalAutofill.current
+//
+//    LocalAutofillTree.current += autoFillNode
 
     BasicTextField(
         modifier = modifier
             .fillMaxWidth()
             .onGloballyPositioned {
-                autoFillNode.boundingBox = it.boundsInWindow()
+               // autoFillNode.boundingBox = it.boundsInWindow()
             }
             .onFocusChanged { focusState ->
-                autoFill?.run {
-                    if (focusState.isFocused) {
-                        requestAutofillForNode(autoFillNode)
-                    } else {
-                        cancelAutofillForNode(autoFillNode)
-                    }
-                }
+//                autoFill?.run {
+//                    if (focusState.isFocused) {
+//                        requestAutofillForNode(autoFillNode)
+//                    } else {
+//                        cancelAutofillForNode(autoFillNode)
+//                    }
+//                }
             },
         value = value,
         onValueChange = {

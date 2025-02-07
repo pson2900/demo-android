@@ -4,12 +4,8 @@ import android.util.Log
 import com.example.domain.model.MyProfile
 import com.example.domain.model.VerifyEmail
 
-data class VerifyEmailResponse(val  status: String?= null,val message: String?= null,val data: Data) {
+data class VerifyEmailResponse(val found: Boolean) {
     fun toDomain(): VerifyEmail {
-        return VerifyEmail(found = data.found)
+        return VerifyEmail(found = found)
     }
-}
-
-data class Data(val found: Boolean) {
-
 }

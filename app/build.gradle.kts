@@ -167,4 +167,6 @@ dependencies {
     implementation(libs.androidx.adaptive.navigation.suite) // Adaptive Navigation Suite for Compose
     //GlideImage jetpack
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
+    //Gson
+    implementation("com.google.code.gson:gson:2.12.1")
 }
