@@ -1,7 +1,7 @@
 package com.example.demo_structure.core.navigation
 
+import android.util.Log
 import com.example.demo_structure.app.manager.theme.AppIcons
-import com.example.demo_structure.screen.create_pin.PinArguments
 
 /**
  * Created by Phạm Sơn at 10:10/23/1/25
@@ -17,8 +17,15 @@ abstract class DestinationItem(route: String) : Destinations(route) {
 
 sealed class Destinations(val route: String) {
     class Main : Destinations(route = "main") {
+
+
         companion object {
+            val Tab = "tab"
             const val route: String = "main"
+            fun createRoute(tabRoute: DestinationItem): String {
+                Log.d("QQQ","createRoute tabRoute: ${tabRoute}")
+                return route+"?${Tab}=${tabRoute.route}"
+            }
             fun getEntries(): MutableList<DestinationItem> {
                 return mutableListOf<DestinationItem>().apply {
                     add(Home)

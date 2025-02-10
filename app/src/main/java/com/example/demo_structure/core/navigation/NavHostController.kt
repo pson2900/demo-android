@@ -65,7 +65,6 @@ fun AppNavHost(
     appState: AppState
 ) {
     val navController = appState.navController
-    logNavigation(navController)
     NavHost(
         navController = navController,
         startDestination = Destinations.Main.route,
@@ -74,7 +73,7 @@ fun AppNavHost(
         exitTransition = { fadeOut(animationSpec = tween(500)) },
         builder = {
             toMainScreen(appState = appState)
-            toJobDetailScreen {
+            toJobDetailScreen(appState = appState) {
 
             }
             toCreatePinCodeScreen(appState)
@@ -89,6 +88,7 @@ fun AppNavHost(
 @Composable
 fun MainNavHost(
     appState: AppState,
+    startDestination: DestinationItem,
     onNavigateToJobDetail: (Int, String) -> Unit,
     onNavigateToLogin: (String) -> Unit,
     onNavigateToVerifyEmail: () -> Unit,
@@ -96,7 +96,7 @@ fun MainNavHost(
     val navController = appState.navController
     NavHost(
         navController = navController,
-        startDestination = Destinations.Main.Home.route,
+        startDestination = startDestination.route,
         modifier = Modifier,
         enterTransition = { fadeIn(animationSpec = tween(500)) },
         exitTransition = { fadeOut(animationSpec = tween(500)) },
