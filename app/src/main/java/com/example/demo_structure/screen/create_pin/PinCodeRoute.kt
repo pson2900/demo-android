@@ -1,7 +1,5 @@
 package com.example.demo_structure.screen.create_pin
 
-import android.os.Build
-import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions

@@ -1,13 +1,14 @@
 package com.example.demo_structure.screen.main
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,14 +16,15 @@ import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,24 +45,23 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.demo_structure.app.InitializeApp
-import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
-import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppSnackBar
 import com.example.demo_structure.core.component.AppSurface
 import com.example.demo_structure.core.component.BottomNavigationBar
 import com.example.demo_structure.core.component.InitBottomMainScreen
-import com.example.demo_structure.core.component.rememberScaffoldState
 import com.example.demo_structure.core.navigation.DestinationItem
 import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.core.navigation.MainNavHost
 import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.util.extension.isSystemInDarkTheme
 import com.example.demo_structure.util.monitor.NetworkMonitor
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
+
 
 /**
  * The default light scrim, as defined by androidx and the platform:
@@ -164,26 +165,19 @@ fun MainContent(
     onNavigateToLogin: (String) -> Unit,
     onNavigateToVerifyEmail: () -> Unit
 ) {
-    val scaffoldState = rememberScaffoldState()
     val nestedNavigation = rememberAppState()
-    LaunchedEffect(nestedNavigation) {
-
-    }
-    val navBackStackEntry by nestedNavigation.navController.currentBackStackEntryAsState()
-
-    val currentRoute = navBackStackEntry?.destination?.route
-    Log.d("QQQ", "currentRoute: ${currentRoute}")
-    Log.d("QQQ", "startDestination: ${startDestination.route}")
+    Log.d("QQQ", "MainContent startDestination: ${startDestination.route}")
     AppScaffold(
         modifier = modifier
             .navigationBarsPadding()
-            .statusBarsPadding()
+//            .statusBarsPadding()
             .semantics {
                 testTagsAsResourceId = true
             },
         contentWindowInsets = ScaffoldDefaults
             .contentWindowInsets
             .exclude(WindowInsets.navigationBars)
+            .exclude(WindowInsets.statusBars)
             .exclude(WindowInsets.systemBars)
             .exclude(WindowInsets.ime),
         snackbarHost = {
@@ -193,12 +187,17 @@ fun MainContent(
                 snackbar = { snackbarData -> AppSnackBar(snackbarData) }
             )
         },
-        snackBarHostState = scaffoldState.snackBarHostState,
+//        snackBarHostState = scaffoldState.snackBarHostState,
+        snackBarHostState = SnackbarHostState(),
         bottomBar = {
             BottomNavigationBar(
                 modifier = modifier,
             ) {
-                InitBottomMainScreen(appState = nestedNavigation, currentRoute = startDestination)
+                InitBottomMainScreen(currentRoute = startDestination, onClick = {
+                    nestedNavigation.navigateToBottomBarRoute(it.route)
+                }, changeItem = {
+                    it.route == nestedNavigation.navController.currentBackStackEntryAsState().value?.destination?.route
+                })
             }
         },
         content = { padding ->

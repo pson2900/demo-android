@@ -17,14 +17,12 @@ abstract class DestinationItem(route: String) : Destinations(route) {
 
 sealed class Destinations(val route: String) {
     class Main : Destinations(route = "main") {
-
-
         companion object {
-            val Tab = "tab"
-            const val route: String = "main"
+            const val TAB = "tab"
+            const val ROUTE: String = "main"
             fun createRoute(tabRoute: DestinationItem): String {
                 Log.d("QQQ","createRoute tabRoute: ${tabRoute}")
-                return route+"?${Tab}=${tabRoute.route}"
+                return ROUTE+"?${TAB}=${tabRoute.route}"
             }
             fun getEntries(): MutableList<DestinationItem> {
                 return mutableListOf<DestinationItem>().apply {

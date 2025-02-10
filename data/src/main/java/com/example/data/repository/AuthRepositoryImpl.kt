@@ -14,7 +14,7 @@ import java.util.HashMap
 class AuthRepositoryImpl(val apiService: ApiService): AuthRepository {
     override suspend fun verifyEmail(email: String): Flow<VerifyEmail> {
         val body = HashMap<String, String>()
-        body.put("email", email)
+        body["email"] = email
         return flow {
             emit(apiService.verifyEmail(body).data.toDomain())
         }

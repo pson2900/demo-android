@@ -1,5 +1,6 @@
 package com.example.demo_structure.app
 
+import android.app.Activity
 import android.app.Application
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -12,14 +13,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.window.DialogProperties
-import androidx.work.Configuration
-import androidx.work.WorkManager
+import androidx.core.view.WindowCompat
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
@@ -27,7 +31,7 @@ import com.example.demo_structure.core.component.AppBackground
 import com.example.demo_structure.core.navigation.AppNavHost
 import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.screen.main.ThemeSettings
-import org.koin.android.ext.android.inject
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import org.koin.core.component.KoinComponent
 
 /**
@@ -41,12 +45,23 @@ class ProductApp : Application(), KoinComponent {
         super.onCreate()
         KoinSetup.init(this)
 
-      /*  val workerFactory: KoinWorkerFactory by inject()
-        val config = Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .build()
+        /*  val workerFactory: KoinWorkerFactory by inject()
+          val config = Configuration.Builder()
+              .setWorkerFactory(workerFactory)
+              .build()
 
-        WorkManager.initialize(this, config)*/
+          WorkManager.initialize(this, config)*/
+    }
+}
+
+@Composable
+fun StatusBarColor(color: Color) {
+    val view = LocalView.current
+    SideEffect {
+        val window = (view.context as Activity).window
+        window.statusBarColor = color.toArgb()
+
+        WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false // set to false for light icons
     }
 }
 
@@ -56,6 +71,8 @@ fun InitializeApp(
     modifier: Modifier = Modifier,
     themeSettings: ThemeSettings,
 ) {
+
+//    StatusBarColor(Color.Black)
     ApplicationTheme(
         darkTheme = isSystemInDarkTheme(),
         dynamicColor = themeSettings.disableDynamicTheming,

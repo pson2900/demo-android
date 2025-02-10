@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.flow
  */
 class MyProfileUseCase(private val myProfileRepository: MyProfileRepository) {
     suspend fun getMyProfile(): Flow<MyProfile> {
-        delay(3000L)
         return myProfileRepository.getMyProfile()
     }
 

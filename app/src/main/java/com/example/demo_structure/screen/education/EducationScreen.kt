@@ -1,7 +1,6 @@
 package com.example.demo_structure.screen.education
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,6 +26,7 @@ import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppSnackBar
 import com.example.demo_structure.core.component.ThemePreviews
+import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.rememberAppState
 import kotlinx.coroutines.launch
 
@@ -44,7 +44,6 @@ fun EducationScreen(viewModel: EducationViewModel, onNavigateToVerifyEmail: () -
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val appState = rememberAppState()
-
     val time = appState.currentTimeZone.collectAsStateWithLifecycle()
     val currentTime by appState.currentTime.collectAsState(initial = "")
     ApplicationTheme {
@@ -102,15 +101,10 @@ fun EducationScreen(viewModel: EducationViewModel, onNavigateToVerifyEmail: () -
 @Composable
 fun SearchResultScreenPreview() {
     AppPreviewWrapper {
-        EducationScreen(EducationViewModel(SavedStateHandle()),
+        EducationScreen(
+            viewModel = EducationViewModel(SavedStateHandle()),
             onNavigateToVerifyEmail = {},
             onTopicClick = {})
     }
 }
 
-@Composable
-fun HotKeyWord(modifier: Modifier) {
-    Box(modifier = modifier) {
-
-    }
-}

@@ -23,19 +23,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.AppIcons
-import com.example.demo_structure.app.manager.theme.ToImage
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.app.manager.theme.generate
+import com.example.demo_structure.app.manager.theme.hexToColor
+import com.example.demo_structure.core.component.AppCard
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppSurface
 import com.example.demo_structure.core.component.AppText
@@ -48,7 +51,7 @@ fun HeaderSection(title: String, avatar: String) {
             .fillMaxWidth()
             .wrapContentHeight()
     ) {
-        val (BorderLayout, AvataLayout, Setting) = createRefs()
+        val (BorderLayout, IconEdit, AvataLayout, Setting) = createRefs()
         Box(
             Modifier
                 .size(48.dp)
@@ -78,7 +81,11 @@ fun HeaderSection(title: String, avatar: String) {
             shape = RoundedCornerShape(30.dp, 30.dp, 0.dp, 0.dp)
         ) {
             Column(modifier = Modifier
-                .background(colorResource(R.color.anti_flash_white))
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(Color.White, colorResource(R.color.anti_flash_white))
+                    )
+                )
                 .padding(start = 16.dp, end = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top,
@@ -141,7 +148,7 @@ fun HeaderSection(title: String, avatar: String) {
                 .clip(CircleShape)
                 .shadow(5.dp)
                 .border(4.dp, Color.White, CircleShape)
-                .background(Color.DarkGray)
+                .background(hexToColor("#FDE0A0"))
                 .constrainAs(AvataLayout) {
                     top.linkTo(parent.top, margin = 50.dp)
                     start.linkTo(parent.start)
@@ -151,7 +158,7 @@ fun HeaderSection(title: String, avatar: String) {
             contentAlignment = Alignment.Center
         ) {
             Image(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_urgent),
+                painter = painterResource(R.drawable.img_avata),
                 modifier = Modifier
                     .width(100.dp)
                     .height(100.dp)
@@ -159,6 +166,35 @@ fun HeaderSection(title: String, avatar: String) {
                 contentDescription = null
             )
         }
+        AppCard(
+            modifier = Modifier
+                .size(24.dp)
+                .constrainAs(IconEdit) {
+                    bottom.linkTo(AvataLayout.bottom)
+                    end.linkTo(AvataLayout.end)
+
+                }
+                /*.clip(RoundedCornerShape(8.dp))
+                .shadow(5.dp)
+                .border(0.dp, Color.White, RoundedCornerShape(8.dp))
+                .background(Color.White)
+                .constrainAs(IconEdit) {
+                    bottom.linkTo(AvataLayout.bottom)
+                    end.linkTo(AvataLayout.end)
+
+                }*/,
+            shape = RoundedCornerShape(8.dp)
+        ) {
+            Image(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_edit),
+                modifier = Modifier
+                    .width(24.dp)
+                    .height(24.dp)
+                    .padding(4.dp),
+                contentDescription = null
+            )
+        }
+
     }
 
 

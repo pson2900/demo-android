@@ -19,7 +19,7 @@ import java.util.HashMap
  * Email: son.pham@navigosgroup.com
  */
 interface ApiService {
-    @GET("jobseeker/api/v1/jobseeker-info/profile")
+    @GET("/jobseeker/api/v1/profile")
     suspend fun getProfile(): BaseResponse<MyProfileResponse>
 
     @POST("/secure/js/verify-email")

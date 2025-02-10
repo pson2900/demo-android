@@ -40,9 +40,12 @@ import com.example.demo_structure.core.component.ThemePreviews
  */
 @Composable
 fun OpportunitiesSection(modifier: Modifier = Modifier) {
-    Column(modifier.padding(start = 16.dp, end = 16.dp)) {
+    Column(modifier
+        .background(ProductXTheme.colorScheme.background)
+        .padding(start = 16.dp, end = 16.dp)) {
         AppText(
             text = "Cơ hội",
+            color = ProductXTheme.colorScheme.onPrimary,
             style = ProductXTheme.typography.SemiBold.Title.Large
         )
         Spacer(Modifier.height(12.dp))

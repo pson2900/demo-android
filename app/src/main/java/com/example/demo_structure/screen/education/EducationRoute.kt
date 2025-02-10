@@ -5,7 +5,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
-import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.Destinations
 import org.koin.androidx.compose.koinViewModel
 
@@ -26,9 +25,11 @@ fun NavGraphBuilder.toEducationScreen(
                 }
             ),
             content = {
-                EducationScreen(viewModel = koinViewModel(),
+                EducationScreen(
+                    viewModel = koinViewModel(),
                     onNavigateToVerifyEmail = onNavigateToVerifyEmail,
-                    onTopicClick = onTopicClick)
+                    onTopicClick = onTopicClick
+                )
             }
         )
     }

@@ -63,8 +63,6 @@ import com.example.demo_structure.core.component.AppTopBar
 import com.example.demo_structure.jobResult
 import com.example.demo_structure.screen.job_detail.nonSpatialExpressiveSpring
 import com.example.demo_structure.screen.job_detail.spatialExpressiveSpring
-import com.example.demo_structure.util.monitor.DeviceWindowAdaptive
-import com.example.demo_structure.util.monitor.deviceCurrentWindowAdaptive
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -94,7 +92,6 @@ internal fun LoadingState(modifier: Modifier = Modifier) {
 
 @Composable
 internal fun HomeScreen(
-    deviceWindowAdaptive: DeviceWindowAdaptive = deviceCurrentWindowAdaptive(),
     clearUndoState: () -> Unit = {},
     viewModel: HomeViewModel = koinViewModel(),
     onNavigateToJobDetail: (Int, String) -> Unit,
