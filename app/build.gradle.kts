@@ -79,6 +79,9 @@ dependencies {
     // Mark: AndroidX Core
     implementation(libs.androidx.core.ktx)
 
+    // Mark: AndroidX Workers
+    implementation(libs.androidx.work.runtime.ktx)
+
     // Mark: AndroidX Lifecycle
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -142,11 +145,14 @@ dependencies {
     implementation(libs.androidx.animation.compose) // Compose animation library
     implementation(libs.androidx.navigation.compose) // Compose Navigation for screen transitions
     implementation(libs.androidx.material3.compose) // Material3 for Compose
+
     implementation(libs.androidx.material3.window.size) // Material3 Window Size Class
     implementation(libs.androidx.lifecycle.viewmodel.compose) // ViewModel for Compose
     implementation(libs.androidx.material)
     // Mark: Other dependencies
     implementation(libs.androidx.adaptive) // Adaptive UI for Compose
+    implementation(libs.androidx.adaptive.layout)
+    implementation(libs.androidx.adaptive.navigation)
     implementation(libs.androidx.adaptive.layout.android) // Adaptive layout for Android
 
     // Mark: Kotlinx library
@@ -159,7 +165,7 @@ dependencies {
     implementation(libs.accompanist.drawablepainter) // Drawable painter for Compose
     implementation(libs.accompanist.navigation.animation) // Navigation with animations for Compose
     implementation(libs.accompanist.permissions)
-
+    implementation(libs.accompanist.systemuicontroller)
     // Mark: Coil Compose
     implementation(libs.coil.compose)
 

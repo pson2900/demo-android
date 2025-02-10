@@ -11,7 +11,7 @@ import org.koin.androidx.compose.koinViewModel
 fun NavController.toOpportunity(navOptions: NavOptions) =
     navigate(route = Destinations.Main.Opportunity.route, navOptions)
 
-fun NavGraphBuilder.OpportunityNavGraph(
+fun NavGraphBuilder.toOpportunityScreen(
     onTopicClick: (String) -> Unit,
 ) {
     this.apply {

@@ -9,12 +9,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class VerifyEmailViewModel(savedStateHandle: SavedStateHandle)  : BaseViewModel(savedStateHandle) {
+class VerifyEmailViewModel(savedStateHandle: SavedStateHandle) : BaseViewModel(savedStateHandle) {
     val menuUiState: StateFlow<EmailState> = MutableStateFlow<EmailState>(EmailState.Loading).apply {
         viewModelScope.launch {
             delay(2000)
             value = EmailState.Success
         }
     }.asStateFlow()
-
 }

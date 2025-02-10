@@ -1,7 +1,5 @@
 package com.example.domain.model
 
-import com.example.domain.DictionaryType
-
 
 /**
  * Created by Phạm Sơn at 14:19/28/12/24
@@ -77,31 +75,4 @@ data class UserProfile(
         return ""
     }
 
-    fun toDictionaryType(): DictionaryType {
-        val list = mutableListOf<DictionaryType>()
-
-        val dictionaryType = DictionaryType()
-        dictionaryType["userId"] = userId
-        dictionaryType["resumeId"] = resumeId
-        dictionaryType["jobLevelId"] = jobLevelId
-        dictionaryType["jobTitle"] = jobTitle
-        dictionaryType["lastName"] = lastName
-        dictionaryType["yearsExperience"] = yearsExperience
-        dictionaryType["highestDegreeId"] = highestDegreeId
-        dictionaryType["currentIndustries"] = currentIndustries
-        dictionaryType["currentJobFunction"] = list
-        dictionaryType["firstName"] = firstName
-        dictionaryType["fullName"] = fullName
-        dictionaryType["highestDegreeId"] = highestDegreeId
-        dictionaryType["isDownload"] = isDownload
-        dictionaryType["currentSalary"] = currentSalary
-        dictionaryType["jobLevelId"] = jobLevelId
-
-        dictionaryType["jobTitle"] = jobTitle
-        dictionaryType["lastCompany"] = lastCompany
-        dictionaryType["lastName"] = lastName
-        dictionaryType["newGraduate"] = newGraduate
-        dictionaryType["yearsExperience"] = yearsExperience
-        return dictionaryType
-    }
 }

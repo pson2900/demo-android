@@ -12,7 +12,7 @@ import org.koin.androidx.compose.koinViewModel
 fun NavController.toJobDetail(route: String, navOptions: NavOptions = androidx.navigation.navOptions { }) =
     navigate(route = route, navOptions = navOptions)
 
-fun NavGraphBuilder.JobDetailNavGraph(onBackClick: () -> Unit) {
+fun NavGraphBuilder.toJobDetailScreen(onBackClick: () -> Unit) {
     composableWith(
         route = "${Destinations.JobDetail.route}/" +
                 "{${Destinations.JobDetail.JOB_DETAIL_ID}}" +

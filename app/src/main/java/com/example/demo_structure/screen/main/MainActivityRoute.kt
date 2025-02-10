@@ -11,9 +11,8 @@ import com.example.demo_structure.core.navigation.composableWith
 fun NavController.toMain(navOptions: NavOptions) =
     navigate(route = Destinations.Main.route, navOptions)
 
-fun NavGraphBuilder.AppNavGraph(
+fun NavGraphBuilder.toMainScreen(
     appState: AppState,
-    topicDestination: NavGraphBuilder.() -> Unit,
 ) {
     composableWith(
         route = Destinations.Main.route,
@@ -50,5 +49,4 @@ fun NavGraphBuilder.AppNavGraph(
             }
         )
     }
-    topicDestination()
 }

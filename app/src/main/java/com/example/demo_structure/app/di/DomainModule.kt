@@ -1,8 +1,9 @@
 package com.example.demo_structure.app.di
 
-import com.example.domain.usecase.GetClientUseCase
+import com.example.domain.usecase.ClientUseCase
 import com.example.domain.usecase.HomeUseCase
 import com.example.domain.usecase.MyProfileUseCase
+import com.example.domain.usecase.VersionUseCase
 import org.koin.dsl.module
 
 /**
@@ -11,7 +12,8 @@ import org.koin.dsl.module
  * Email: son.pham@navigosgroup.com
  */
 val domainModule = module {
-    factory { GetClientUseCase(get()) }
-    factory { HomeUseCase(get()) }
-    factory { MyProfileUseCase(get()) }
+    factory<ClientUseCase> { ClientUseCase(get()) }
+    factory<HomeUseCase> { HomeUseCase(get()) }
+    factory<MyProfileUseCase> { MyProfileUseCase(get()) }
+    factory<VersionUseCase> { VersionUseCase(get()) }
 }

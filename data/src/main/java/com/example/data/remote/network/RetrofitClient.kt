@@ -31,15 +31,11 @@ object RetrofitClient {
             .build()
     }
 
-    private val moshi by lazy {
-        Moshi.Builder().build()
-    }
 
     val networkApi: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-//            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()

@@ -20,7 +20,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,6 +40,7 @@ import coil3.compose.AsyncImagePainter.State.Error
 import coil3.compose.AsyncImagePainter.State.Loading
 import coil3.compose.rememberAsyncImagePainter
 import com.example.demo_structure.R
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 
 /**
  * A wrapper around [AsyncImage] which determines the colorFilter based on the theme
@@ -74,7 +74,7 @@ fun DynamicAsyncImage(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(80.dp),
-                color = MaterialTheme.colorScheme.tertiary,
+                color = ProductXTheme.colorScheme.tertiary,
             )
         }
         Image(

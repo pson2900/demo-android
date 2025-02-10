@@ -15,26 +15,22 @@ import kotlinx.coroutines.flow.StateFlow
  */
 class UserViewModel(private val myProfileUseCase: MyProfileUseCase, stateHandle: SavedStateHandle) : BaseViewModel(stateHandle) {
     private val _myProfileState: MutableStateFlow<UIState<MyProfile>> = MutableStateFlow(UIState.Loading)
-    val  myProfileState: StateFlow<UIState<MyProfile>> = _myProfileState
+    val myProfileState: StateFlow<UIState<MyProfile>> = _myProfileState
 
     private val _featureItemState: MutableStateFlow<UIState<List<String>>> = MutableStateFlow(UIState.Loading)
     val featureItemState: StateFlow<UIState<List<String>>> = _featureItemState
 
-    fun fetchMyProfile() {
-        wrapperApiCall(
-            call = {
-                myProfileUseCase.getMyProfile()
-            },
+    suspend fun fetchMyProfile() {
+        processApiCall(
+            call = myProfileUseCase.getMyProfile(),
             state = _myProfileState,
             dataKey = USER_PROFILE_KEY
         )
     }
 
-    fun fetchListItem() {
-        wrapperApiCall(
-            call = {
-                myProfileUseCase.getListItem()
-            },
+    suspend fun fetchListItem() {
+        processApiCall(
+            call = myProfileUseCase.getListItem(),
             state = _featureItemState,
             dataKey = ITEMS
         )

@@ -33,8 +33,17 @@ android {
 
 dependencies {
     implementation(kotlin("stdlib"))
+    // Mark: AndroidX
+    implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.com.google.material)
+
+    // Mark: KotlinX
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.datetime)
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

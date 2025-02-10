@@ -50,13 +50,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.core.content.getSystemService
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.R
 import com.example.demo_structure.core.component.EmailTextField
-import com.example.demo_structure.screen.education.EducationViewModel
-import com.example.demo_structure.util.FormatText.buildClickableText
-import org.koin.androidx.compose.koinViewModel
+import com.example.demo_structure.util.extension.buildClickableText
 
 
 @Preview(showBackground = true)

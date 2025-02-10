@@ -5,15 +5,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
-import androidx.window.core.layout.WindowSizeClass
 import com.example.demo_structure.core.navigation.Destinations
 import org.koin.androidx.compose.koinViewModel
 
 fun NavController.toHome(navOptions: NavOptions) =
     navigate(route = Destinations.Main.Home.route, navOptions)
 
-fun NavGraphBuilder.HomeNavGraph(
-    windowSizeClass: WindowSizeClass,
+fun NavGraphBuilder.toHomeScreen(
     onNavigateToJobDetail: (Int, String) -> Unit,
 ) {
     this.apply {
@@ -26,7 +24,6 @@ fun NavGraphBuilder.HomeNavGraph(
             ),
             content = { navBackStackEntry ->
                 HomeScreen(
-                    windowSizeClass = windowSizeClass,
                     viewModel = koinViewModel(),
                     onNavigateToJobDetail = onNavigateToJobDetail,
                 )

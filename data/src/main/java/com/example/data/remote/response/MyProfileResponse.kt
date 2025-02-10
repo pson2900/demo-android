@@ -236,7 +236,8 @@ data class PreferenceResponse(
             desiredJobTitle,
             desiredLocationType.map { it.toDomain() },
             desiredSalary,
-            relocation)
+            relocation
+        )
     }
 }
 
@@ -297,5 +298,4 @@ data class DesiredLocationTypeResponse(
     fun toDomain(): DesiredLocationType {
         return DesiredLocationType(id, name)
     }
-
 }

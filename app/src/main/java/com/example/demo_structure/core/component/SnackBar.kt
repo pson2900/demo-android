@@ -26,9 +26,9 @@ fun AppSnackBar(
     modifier: Modifier = Modifier,
     actionOnNewLine: Boolean = false,
     shape: Shape = MaterialTheme.shapes.small,
-    backgroundColor: Color = ProductXTheme.backgroundTheme.color,
-    contentColor: Color = ProductXTheme.colors.secondary,
-    actionColor: Color = ProductXTheme.colors.secondary
+    backgroundColor: Color = ProductXTheme.colorScheme.secondary,
+    contentColor: Color = ProductXTheme.colorScheme.onSecondary,
+    actionColor: Color = ProductXTheme.colorScheme.onSecondary
 ) {
     Snackbar(
         snackbarData = snackbarData,

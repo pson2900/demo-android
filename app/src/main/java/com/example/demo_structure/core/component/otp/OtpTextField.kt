@@ -46,6 +46,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 
 @Preview(showBackground = true)
 @Composable
@@ -204,7 +205,7 @@ private fun RowScope.OutlinedDigitContainer(
                         .align(Alignment.Center)
                         .size(8.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.onBackground)
+                        .background(ProductXTheme.colorScheme.onSurface)
                 )
         } else {
             Text(
