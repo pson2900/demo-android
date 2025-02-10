@@ -48,10 +48,11 @@ class PinCodeViewModel(val dataStoreManager: DataStoreManager ,  val authUseCase
         }
     }
 
-    fun clearRegisterState() {
+    fun clearState() {
         _registerUiState.value = PinCodeState.Idle
+        _loginUiState.value = PinCodeState.Idle
+        _updatePassWordUiState.value == PinCodeState.Idle
     }
-
 
     fun updatePassword(email: String, password: String, secret: String) {
         viewModelScope.launch {
@@ -59,9 +60,11 @@ class PinCodeViewModel(val dataStoreManager: DataStoreManager ,  val authUseCase
             delay(1000)
             val response = authUseCase.updatePassword(email, password, secret)
             response.catch { e ->
+                Log.e("Sang","UpdatePassword error $e")
                 _updatePassWordUiState.value = PinCodeState.Error(e.message.toString())
             }.collect { result ->
-                _updatePassWordUiState.value = PinCodeState.UpdatePasswordSuccess(result.isSuccess)
+                Log.e("Sang","UpdatePasswordSuccess $result")
+                _updatePassWordUiState.value = PinCodeState.UpdatePasswordSuccess(result.isSuccess, email,password)
             }
         }
     }
@@ -70,7 +73,7 @@ class PinCodeViewModel(val dataStoreManager: DataStoreManager ,  val authUseCase
     fun login(email: String, password: String) {
         viewModelScope.launch {
             _loginUiState.value = PinCodeState.Loading(true)
-            delay(1000)
+            delay(500)
             val response = authUseCase.login(email, password)
             response.catch { e ->
                 _loginUiState.value = PinCodeState.Error(e.message.toString())

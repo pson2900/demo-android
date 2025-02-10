@@ -1,5 +1,7 @@
 package com.example.demo_structure.screen.create_pin
 
+import android.content.Context
+import android.content.res.Configuration
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
@@ -18,14 +20,17 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -33,45 +38,50 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.core.component.AppBarIcon
+import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.otp.PassCodeTextField
 import com.example.demo_structure.screen.home.LoadingState
 import com.example.demo_structure.screen.otp.OTPType
+import com.example.domain.model.Authentication
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
-@Preview(showBackground = true)
+@Preview("Light Mode")
+@Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun PinCodeScreenPreview() {
-    PinCodeScreenContent(
-        modifier = Modifier,
-        label = "Tạo mã pin mới",
-        passCode = "",
-        confirmPasscode = "",
-        otpError = "",
-        maxLength = 6,
-        isLoading = false,
-        onPassCodeChange = {
+    AppPreviewWrapper { modifier ->
+        PinCodeScreenContent(
+            modifier = modifier,
+            label = "Tạo mã pin mới",
+            passCode = "",
+            otpError = "",
+            maxLength = 6,
+            isLoading = false,
+            onPassCodeChange = {
 
-        },
-        onConfirmPassCodeChange = {
+            },
+            onConfirmPassCodeChange = {
 
-        },
-        onResetError = {
+            },
+            onNextStep = {
 
-        },
-        onNextStep = {
+            },
+            onComplete = {
 
-        },
-        onComplete = {
-
-        }
-    )
+            }
+        )
+    }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,113 +89,49 @@ fun PinCodeScreen(
     modifier: Modifier = Modifier,
     viewModel: PinCodeViewModel = koinViewModel(),
     arguments: PinArguments? = null,
-    onNavigateHomeScreen: () -> Unit,
-    origin: String
+    onNavigateHomeScreen: () -> Unit
 ) {
     val context = LocalContext.current
+
     val registerState by viewModel.registerUiState.collectAsStateWithLifecycle()
     val updatePasswordState by viewModel.updatePassWordUiState.collectAsStateWithLifecycle()
     val loginState by viewModel.loginUiState.collectAsStateWithLifecycle()
 
-    var isLoading by remember { mutableStateOf(false) }
     val rememberHostState = remember { SnackbarHostState() }
-    var otpError by remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(false) }
+    var otpError   by remember { mutableStateOf("") }
     var isCompleteStep1 by remember { mutableStateOf(false) }
-
     val maxLength = 6
 
-    fun verifyPassCode(arguments: PinArguments) {
-        if (viewModel.passCode != viewModel.confirmPasscode) {
-            otpError = "sai pass code"
-        } else {
-            if (arguments.type == OTPType.REGISTER.type) {
-                viewModel.register(
-                    arguments.email ?: "",
-                    viewModel.passCode,
-                    arguments.secret ?: ""
-                )
-            } else {
-                viewModel.updatePassword(
-                    arguments.email ?: "",
-                    viewModel.passCode,
-                    arguments.secret ?: ""
-                )
-            }
-        }
-    }
-
-    fun autoLogin(email: String, passCode: String) {
-        viewModel.login(email, passCode)
-    }
-
-    fun loginSuccess() {
-        onNavigateHomeScreen.invoke()
-    }
+    ClearStateOnStop(viewModel = viewModel)
 
     LaunchedEffect(key1 = registerState) {
-        when (val state = registerState) {
-            is PinCodeState.Loading -> {
-                isLoading = state.isLoading
-            }
-
-            is PinCodeState.RegisterSuccess -> {
-                isLoading = false
-                delay(200)
-                if (state.isSuccess) {
-                    autoLogin(state.email, state.passCode)
-                }
-            }
-
-            is PinCodeState.Error -> {
-                Toast.makeText(context, state.msg, Toast.LENGTH_SHORT).show()
-                isLoading = false
-            }
-
-            else -> Unit
-        }
+        handleRegisterState(
+            state = registerState,
+            isLoading = { isLoading = it },
+            autoLogin = { email, passCode -> viewModel.login(email, passCode) },
+            context = context
+        )
     }
 
     LaunchedEffect(key1 = updatePasswordState) {
-        when (val state = registerState) {
-            is PinCodeState.Loading -> {
-                isLoading = state.isLoading
-            }
-
-            is PinCodeState.UpdatePasswordSuccess -> {
-                isLoading = false
-            }
-
-            is PinCodeState.Error -> {
-                Toast.makeText(context, state.msg, Toast.LENGTH_SHORT).show()
-                isLoading = false
-            }
-
-            else -> Unit
-        }
+        handleUpdatePasswordState(
+            state = updatePasswordState,
+            isLoading = { isLoading = it },
+            autoLogin = { email, passCode -> viewModel.login(email, passCode) },
+            context = context
+        )
     }
 
     LaunchedEffect(key1 = loginState) {
-        when (val state = loginState) {
-            is PinCodeState.Loading -> {
-                isLoading = state.isLoading
-            }
-
-            is PinCodeState.LoginSuccess -> {
-                isLoading = false
-                viewModel.saveAuth(state.authentication)
-            }
-
-            is PinCodeState.Error -> {
-                Toast.makeText(context, state.msg, Toast.LENGTH_SHORT).show()
-                isLoading = false
-                delay(500)
-                loginSuccess()
-            }
-
-            else -> Unit
-        }
+        handleLoginState(
+            state = loginState,
+            isLoading = { isLoading = it },
+            saveAuth = { viewModel.saveAuth(it) },
+            onNavigateHomeScreen = onNavigateHomeScreen,
+            context = context
+        )
     }
-
 
     ApplicationTheme {
         AppScaffold(
@@ -207,7 +153,6 @@ fun PinCodeScreen(
                     modifier = modifier,
                     label = if (!isCompleteStep1) "Tạo mã pin mới" else "Nhập lại mã pin",
                     passCode = viewModel.passCode,
-                    confirmPasscode = viewModel.confirmPasscode,
                     otpError = otpError,
                     maxLength = maxLength,
                     isLoading = isLoading,
@@ -216,16 +161,16 @@ fun PinCodeScreen(
                     },
                     onConfirmPassCodeChange = {
                         viewModel.confirmPasscode = it
-                    },
-                    onResetError = {
-                        otpError = it
+                        otpError = ""
                     },
                     onNextStep = {
                         isCompleteStep1 = true
                     },
                     onComplete = {
                         arguments?.let {
-                            verifyPassCode(it)
+                            verifyPassCode(it, viewModel, onChangeError = {
+                                otpError = it
+                            })
                         }
                     }
                 )
@@ -235,17 +180,143 @@ fun PinCodeScreen(
 }
 
 @Composable
+private fun ClearStateOnStop(
+    viewModel: PinCodeViewModel,
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+) {
+    // Safely update the current clearState function when it changes
+    val currentClearState by rememberUpdatedState(viewModel::clearState)
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                currentClearState()
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+}
+
+private fun verifyPassCode(arguments: PinArguments, viewModel: PinCodeViewModel, onChangeError: (String)-> Unit) {
+    if (viewModel.passCode != viewModel.confirmPasscode) {
+        onChangeError( "sai pass code")
+    } else {
+        if (arguments.type == OTPType.REGISTER.type) {
+            viewModel.register(
+                arguments.email ?: "",
+                viewModel.passCode,
+                arguments.secret ?: ""
+            )
+        } else {
+            viewModel.updatePassword(
+                arguments.email ?: "",
+                viewModel.passCode,
+                arguments.secret ?: ""
+            )
+        }
+    }
+}
+
+private suspend fun handleRegisterState(
+    state: PinCodeState,
+    isLoading: (Boolean) -> Unit,
+    autoLogin: (String, String) -> Unit,
+    context: Context
+) {
+    when (val registerState = state) {
+        is PinCodeState.Loading -> {
+            isLoading(registerState.isLoading)
+        }
+
+        is PinCodeState.RegisterSuccess -> {
+            isLoading(false)
+            delay(200)
+            if (registerState.isSuccess) {
+                autoLogin(registerState.email, registerState.passCode)
+            }
+        }
+
+        is PinCodeState.Error -> {
+            Toast.makeText(context, registerState.msg, Toast.LENGTH_SHORT).show()
+            isLoading(false)
+        }
+
+        else -> Unit
+    }
+}
+
+private suspend fun handleUpdatePasswordState(
+    state: PinCodeState,
+    isLoading: (Boolean) -> Unit,
+    autoLogin: (String, String) -> Unit,
+    context: Context
+) {
+    when (val updatePasswordState = state) {
+        is PinCodeState.Loading -> {
+            isLoading(updatePasswordState.isLoading)
+        }
+
+        is PinCodeState.UpdatePasswordSuccess -> {
+            isLoading(false)
+            if (updatePasswordState.isSuccess) {
+                autoLogin(updatePasswordState.email, updatePasswordState.passCode)
+            }
+        }
+
+        is PinCodeState.Error -> {
+            Toast.makeText(context, updatePasswordState.msg, Toast.LENGTH_SHORT).show()
+            isLoading(false)
+        }
+
+        else -> Unit
+    }
+}
+
+private suspend fun handleLoginState(
+    state: PinCodeState,
+    isLoading: (Boolean) -> Unit,
+    saveAuth: (Authentication) -> Unit,
+    onNavigateHomeScreen: () -> Unit,
+    context: Context
+) {
+    when (val loginState = state) {
+        is PinCodeState.Loading -> {
+            isLoading(loginState.isLoading)
+        }
+
+        is PinCodeState.LoginSuccess -> {
+            isLoading(false)
+            saveAuth(loginState.authentication)
+            delay(200)
+            onNavigateHomeScreen()
+        }
+
+        is PinCodeState.Error -> {
+            Toast.makeText(context, loginState.msg, Toast.LENGTH_SHORT).show()
+            isLoading(false)
+            delay(200)
+            onNavigateHomeScreen()
+        }
+
+        else -> Unit
+    }
+}
+
+@Composable
 private fun PinCodeScreenContent(
     modifier: Modifier = Modifier,
     label: String,
     passCode: String,
-    confirmPasscode: String,
     otpError: String,
     maxLength: Int,
     isLoading: Boolean,
     onPassCodeChange: (String) -> Unit,
     onConfirmPassCodeChange: (String) -> Unit,
-    onResetError: (String) -> Unit,
     onNextStep: () -> Unit,
     onComplete: () -> Unit
 ) {
@@ -302,7 +373,6 @@ private fun PinCodeScreenContent(
                     },
                 onValueChange = {
                     isEnableButton = it.length == maxLength && !isLoading
-                    onResetError("")
                     onConfirmPassCodeChange(it)
                 },
                 numDigits = maxLength,
@@ -316,6 +386,7 @@ private fun PinCodeScreenContent(
                     onNextStep()
                     isEnableButton = false
                 } else {
+                    isEnableButton = false
                     onComplete()
                 }
             },
@@ -329,7 +400,7 @@ private fun PinCodeScreenContent(
                 .height(56.dp),
             shape = RoundedCornerShape(8.dp),
             colors = buttonColors,
-            enabled = isEnableButton
+            enabled = isEnableButton && !isLoading
         ) {
             Text(text = buttonContent)
         }

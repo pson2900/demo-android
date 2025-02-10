@@ -7,7 +7,7 @@ sealed interface PinCodeState {
     object Idle : PinCodeState
     data class Loading(val isLoading: Boolean) : PinCodeState
     data class RegisterSuccess(val isSuccess: Boolean, val email: String,val passCode: String) : PinCodeState
-    data class UpdatePasswordSuccess(val isSuccess: Boolean) : PinCodeState
+    data class UpdatePasswordSuccess(val isSuccess: Boolean,val email: String,val passCode: String) : PinCodeState
     data class LoginSuccess(val authentication: Authentication) : PinCodeState
     data class Error(val msg: String): PinCodeState
 }

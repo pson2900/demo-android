@@ -86,7 +86,7 @@ fun VerifyOTPScreen(
     viewModel: VerifyOTPViewModel,
     email: String,
     origin: String,
-    onNavigatePinCode: (PinArguments, String) -> Unit,
+    onNavigatePinCode: (PinArguments) -> Unit,
 ) {
     var screenState by remember { mutableStateOf(OTPScreenState()) }
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -125,7 +125,7 @@ fun VerifyOTPScreen(
                         type = origin,
                         email = email,
                         secret = screenState.secret
-                    ),"origin"
+                    )
                 )
             }
         })

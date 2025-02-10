@@ -96,9 +96,8 @@ sealed class Destinations(val route: String) {
 
     object CreatePin : Destinations(route = "create_pin") {
         const val JSON = "json"
-        const val ORIGIN = "origin"
-        fun createRoute(pinJson: String, origin: String): String {
-            return "create_pin/$pinJson?origin=${origin}"
+        fun createRoute(pinJson: String): String {
+            return "create_pin/$pinJson"
         }
     }
 }

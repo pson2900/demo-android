@@ -98,14 +98,10 @@ internal fun LoginScreen(
             is LoginState.LoginSuccess -> {
                 errorMessage = ""
                 isLoading = false
-                if (state.authentication != null) {
-                    viewModel.saveAuth(state.authentication)
-                    Toast.makeText(context, "login success", Toast.LENGTH_SHORT).show()
-                    delay(500)
-                    onNavigateHomeScreen.invoke()
-                } else {
-                    errorMessage = "Mã không đúng. Thử lại nhé!"
-                }
+                viewModel.saveAuth(state.authentication)
+                Toast.makeText(context, "login success", Toast.LENGTH_SHORT).show()
+                delay(500)
+                onNavigateHomeScreen.invoke()
             }
 
             is LoginState.Error -> {

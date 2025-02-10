@@ -37,8 +37,8 @@ fun NavGraphBuilder.toVerifyOtpScreen(appState: AppState) {
                 val origin = arguments.getString(Destinations.OTP.ORIGIN) ?: ""
                 VerifyOTPScreen(viewModel = koinViewModel(), email = email,
                     origin = origin,
-                    onNavigatePinCode = { arg,origin->
-                        appState.navigateToPinCode(navBackStackEntry,arg,origin)
+                    onNavigatePinCode = { arg->
+                        appState.navigateToPinCode(navBackStackEntry,arg)
                 })
             }
         )

@@ -147,24 +147,26 @@ class AppState(
         }
     }
 
-    fun navigateToLogin(from: NavBackStackEntry,email: String,) {
+    fun navigateToLogin(from: NavBackStackEntry, email: String) {
         // In order to discard duplicated navigation events, we check the Lifecycle
         val route = Destinations.Login.route
         trace("Navigation : ${route}") {
             if (from.lifecycleIsResumed()) {
-                navController.toLogin(Destinations.Login.createRoute(
-                    email = email
-                ))
+                navController.toLogin(
+                    Destinations.Login.createRoute(
+                        email = email
+                    )
+                )
             }
         }
     }
 
-    fun navigateToMain (from: NavBackStackEntry) {
+    fun navigateToMain(from: NavBackStackEntry) {
         // In order to discard duplicated navigation events, we check the Lifecycle
         val route = Destinations.Main.route
         trace("Navigation : ${route}") {
             if (from.lifecycleIsResumed()) {
-                navController.toMain( androidx.navigation.navOptions {})
+                navController.toMain(androidx.navigation.navOptions {})
             }
         }
     }
@@ -194,17 +196,14 @@ class AppState(
         }
     }
 
-    fun navigateToPinCode(from: NavBackStackEntry,pinArguments: PinArguments, origin: String) {
+    fun navigateToPinCode(from: NavBackStackEntry, pinArguments: PinArguments) {
         // In order to discard duplicated navigation events, we check the Lifecycle
-          val pinJson = Gson().toJson(pinArguments)
-        val route = "${Destinations.CreatePin.route}/$pinJson?origin=$origin"
+        val pinJson = Gson().toJson(pinArguments)
+        val route = "${Destinations.CreatePin.route}/$pinJson"
         trace("Navigation : $route") {
             if (from.lifecycleIsResumed()) {
                 navController.toCreatePinCode(
-                    Destinations.CreatePin.createRoute(
-                        pinJson = pinJson,
-                        origin = origin
-                    )
+                    Destinations.CreatePin.createRoute(pinJson = pinJson)
                 )
             }
         }

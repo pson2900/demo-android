@@ -19,30 +19,23 @@ fun NavController.toCreatePinCode(route: String, navOptions: NavOptions = androi
 fun NavGraphBuilder.toCreatePinCodeScreen(appState: AppState) {
     this.apply {
         composable(
-            route = "${Destinations.CreatePin.route}/{${Destinations.CreatePin.JSON}}?origin={${Destinations.OTP.ORIGIN}}",
+            route = "${Destinations.CreatePin.route}/{${Destinations.CreatePin.JSON}}",
             arguments = listOf(
                 navArgument(Destinations.CreatePin.JSON) {
                     type = NavType.StringType
-                },
-                navArgument(Destinations.CreatePin.ORIGIN) {
-                    type = NavType.StringType
-                    nullable = true
                 }
             ),
             content = { navBackStackEntry ->
                 val arguments = requireNotNull(navBackStackEntry.arguments)
                 val pinJson = arguments.getString(Destinations.CreatePin.JSON)
-                val pin: PinArguments? = if (!pinJson.isNullOrEmpty()) {
+                val arg: PinArguments? = if (!pinJson.isNullOrEmpty()) {
                     Gson().fromJson(pinJson, PinArguments::class.java)
                 } else {
                     null
                 }
-                val origin = arguments.getString(Destinations.CreatePin.ORIGIN)?:""
-                PinCodeScreen(viewModel = koinViewModel(), arguments = pin, onNavigateHomeScreen = {
-                    Destinations.Main.getEntries().find { it.testTag == "HomeTag" }?.let {
-                       //appState.navigateToBottomBarRoute(Destinations.Home.)
-                    }
-                }, origin = origin)
+                PinCodeScreen(viewModel = koinViewModel(), arguments = arg, onNavigateHomeScreen = {
+                   appState.navigateToMain(navBackStackEntry)
+                })
             }
         )
     }
