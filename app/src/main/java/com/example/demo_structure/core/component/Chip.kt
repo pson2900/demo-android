@@ -1,14 +1,16 @@
 package com.example.demo_structure.core.component
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 
@@ -18,7 +20,7 @@ import com.example.demo_structure.app.manager.theme.ProductXTheme
  * Email: son.pham@navigosgroup.com
  */
 @Composable
-fun ProductXFilterChip(
+fun AppChip(
     selected: Boolean,
     onSelectedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -29,66 +31,56 @@ fun ProductXFilterChip(
         selected = selected,
         onClick = { onSelectedChange(!selected) },
         label = {
-            ProvideTextStyle(value = MaterialTheme.typography.labelSmall) {
+            ProvideTextStyle(value = ProductXTheme.typography.Regular.Label.Large) {
                 label()
             }
         },
         modifier = modifier,
         enabled = enabled,
-       /* leadingIcon = if (selected) {
-            {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_check),
-                    contentDescription = null,
-                )
-            }
-        } else {
-            null
-        },*/
         shape = CircleShape,
         border = FilterChipDefaults.filterChipBorder(
             enabled = enabled,
             selected = selected,
-            borderColor = ProductXTheme.colors.background,
-            selectedBorderColor = ProductXTheme.colors.background,
-            disabledBorderColor = ProductXTheme.colors.background.copy(
+            borderColor = ProductXTheme.colorScheme.outline,
+            selectedBorderColor = ProductXTheme.colorScheme.outline,
+            disabledBorderColor = ProductXTheme.colorScheme.surface.copy(
                 alpha = ChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
             ),
-            disabledSelectedBorderColor = ProductXTheme.colors.background.copy(
+            disabledSelectedBorderColor = ProductXTheme.colorScheme.surface.copy(
                 alpha = ChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
             ),
             selectedBorderWidth = ChipDefaults.ChipBorderWidth,
         ),
+
         colors = FilterChipDefaults.filterChipColors(
-            labelColor = ProductXTheme.colors.background,
-            iconColor = ProductXTheme.colors.background,
+            labelColor = ProductXTheme.colorScheme.onPrimary,
+            iconColor = ProductXTheme.colorScheme.onPrimary,
             disabledContainerColor = if (selected) {
-                ProductXTheme.colors.background.copy(
+                ProductXTheme.colorScheme.surface.copy(
                     alpha = ChipDefaults.DISABLED_CHIP_CONTAINER_ALPHA,
                 )
             } else {
                 Color.Transparent
             },
-            disabledLabelColor = ProductXTheme.colors.background.copy(
+            disabledLabelColor = ProductXTheme.colorScheme.surface.copy(
                 alpha = ChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
             ),
-            disabledLeadingIconColor = ProductXTheme.colors.background.copy(
+            disabledLeadingIconColor = ProductXTheme.colorScheme.surface.copy(
                 alpha = ChipDefaults.DISABLED_CHIP_CONTENT_ALPHA,
             ),
-            selectedContainerColor = ProductXTheme.colors.primary,
-            selectedLabelColor = ProductXTheme.colors.background,
-            selectedLeadingIconColor = ProductXTheme.colors.background,
+            selectedContainerColor = ProductXTheme.colorScheme.surface,
+            selectedLabelColor = ProductXTheme.colorScheme.primary,
+            selectedLeadingIconColor = ProductXTheme.colorScheme.primary,
         ),
     )
 }
 
-@ThemePreviews
 @Composable
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_NO)
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 fun ChipPreview() {
-    AppPreviewWrapper {
-        ProductXFilterChip(selected = true, onSelectedChange = {}) {
-            Text("Chip")
-        }
+    AppChip(selected = true, onSelectedChange = {}) {
+        Text("Chip")
     }
 }
 

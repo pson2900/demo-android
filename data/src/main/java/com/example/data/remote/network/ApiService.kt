@@ -8,6 +8,7 @@ import com.example.data.remote.response.SendOtpResponse
 import com.example.data.remote.response.VerifyEmailResponse
 import com.example.data.remote.response.VerifyOtpResponse
 import retrofit2.http.Body
+import com.example.domain.model.Version
 import retrofit2.http.GET
 import retrofit2.http.POST
 import java.util.HashMap
@@ -43,4 +44,9 @@ interface ApiService {
 
     @POST("/secure/js/login")
     suspend fun login(@Body body: HashMap<String, String>):  BaseResponse<LoginResponse>
+
+    suspend fun getLatestVersion(): String
+    suspend fun getDataVersion(): Version
+    suspend fun hasNewData(): Boolean
+
 }

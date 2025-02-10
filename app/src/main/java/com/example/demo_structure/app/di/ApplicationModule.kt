@@ -1,18 +1,15 @@
 package com.example.demo_structure.app.di
 
-import com.example.data.remote.network.ApiService
-import com.example.data.remote.network.RetrofitClient
 import com.example.demo_structure.app.AppDispatchers
-import com.example.demo_structure.util.ConnectivityManagerNetworkMonitor
-import com.example.demo_structure.util.NetworkMonitor
-import com.example.demo_structure.util.TimeZoneBroadcastMonitor
-import com.example.demo_structure.util.TimeZoneMonitor
+import com.example.demo_structure.util.monitor.ConnectivityManagerNetworkMonitor
+import com.example.demo_structure.util.monitor.NetworkMonitor
+import com.example.demo_structure.util.monitor.TimeZoneBroadcastMonitor
+import com.example.demo_structure.util.monitor.TimeZoneMonitor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.module.dsl.factoryOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -22,16 +19,16 @@ import org.koin.dsl.module
  * Email: son.pham@navigosgroup.com
  */
 
-val networkModule = module {
-    factory { CoroutineScope(get()) }
+val applicationModule = module {
+    factory<CoroutineScope> { CoroutineScope(get()) }
     // Dispatchers
-    single(named(AppDispatchers.Default.name)) { Dispatchers.Default }
-    single(named(AppDispatchers.IO.name)) { Dispatchers.IO }
+    single<CoroutineDispatcher>(named(AppDispatchers.Default.name)) { Dispatchers.Default }
+    single<CoroutineDispatcher>(named(AppDispatchers.IO.name)) { Dispatchers.IO }
     // Coroutine Scopes
-    single {
+    single<CoroutineScope> {
         CoroutineScope(SupervisorJob() + get<CoroutineDispatcher>(named(AppDispatchers.Default.name)))
     }
-    single<ApiService> { RetrofitClient.createService<ApiService>() }
+
     single<TimeZoneMonitor> {
         TimeZoneBroadcastMonitor(androidContext(), get(), get(named(AppDispatchers.IO.name)))
     }

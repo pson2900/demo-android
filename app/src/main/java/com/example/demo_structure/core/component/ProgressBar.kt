@@ -37,8 +37,8 @@ fun LinearProgress(modifier: Modifier = Modifier) {
         animationSpec = tween(durationMillis = progressAnimDuration, easing = FastOutSlowInEasing),
     )
     LinearProgressIndicator(
-//        color = ProductXTheme.colors.primary,
-//        trackColor = ProductXTheme.colors.onSurface,
+        color = ProductXTheme.colorScheme.primary,
+        trackColor = ProductXTheme.colorScheme.onSurface,
         strokeCap = StrokeCap.Round,
         progress = { progressAnimation },
         modifier = Modifier

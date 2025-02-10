@@ -28,9 +28,10 @@ import com.example.demo_structure.screen.main.toMain
 import com.example.demo_structure.screen.otp.OTPType
 import com.example.demo_structure.screen.otp.toVerifyOtp
 import com.example.demo_structure.screen.verify_email.toVerifyEmail
-import com.example.demo_structure.util.NetworkMonitor
-import com.example.demo_structure.util.TimeZoneMonitor
+
 import com.google.gson.Gson
+import com.example.demo_structure.util.monitor.NetworkMonitor
+import com.example.demo_structure.util.monitor.TimeZoneMonitor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -67,9 +68,9 @@ fun rememberAppState(
 class AppState(
     val navController: NavHostController,
     coroutineScope: CoroutineScope,
-    networkMonitor: NetworkMonitor,
+    val networkMonitor: NetworkMonitor,
     var context: Context,
-    timeZoneMonitor: TimeZoneMonitor,
+    val timeZoneMonitor: TimeZoneMonitor,
 ) {
     val isOffline = networkMonitor.isOnline
         .map(Boolean::not)
@@ -94,6 +95,13 @@ class AppState(
     }
 
     val currentTimeZone = timeZoneMonitor.currentTimeZone
+        .stateIn(
+            coroutineScope,
+            SharingStarted.WhileSubscribed(5_000),
+            TimeZone.currentSystemDefault(),
+        )
+
+    val currentTime = timeZoneMonitor.currentTime
         .stateIn(
             coroutineScope,
             SharingStarted.WhileSubscribed(5_000),
@@ -164,7 +172,7 @@ class AppState(
     fun navigateToEmail(from: NavBackStackEntry) {
         // In order to discard duplicated navigation events, we check the Lifecycle
         val route = Destinations.Email.route
-        trace("Navigation : ${route}") {
+        trace("Navigation : $route") {
             if (from.lifecycleIsResumed()) {
                 navController.toVerifyEmail()
             }

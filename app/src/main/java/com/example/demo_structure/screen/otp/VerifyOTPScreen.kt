@@ -29,6 +29,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import com.example.demo_structure.core.component.AppTopBar
+
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.SpanStyle
@@ -45,13 +47,13 @@ import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.core.component.AppBarIcon
 import com.example.demo_structure.core.component.AppScaffold
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.CountdownTextView
-import com.example.demo_structure.core.component.TopAppBar
 import com.example.demo_structure.core.component.otp.OTPTextField
 import com.example.demo_structure.core.component.otp.OtpTextFieldDefaults
 import com.example.demo_structure.screen.create_pin.PinArguments
 import com.example.demo_structure.screen.home.LoadingState
-import com.example.demo_structure.util.FormatText.buildClickableText
+import com.example.demo_structure.util.extension.buildClickableText
 
 @Preview(showBackground = true)
 @Composable
@@ -134,7 +136,7 @@ fun VerifyOTPScreen(
             snackBarHostState = rememberHostState
         ) {
             Column {
-                TopAppBar(title = {
+                AppTopBar(title = {
                     Text("")
                 },
                     navigationIcon = {
@@ -237,11 +239,11 @@ private fun OTPScreenContent(
                 otp = it
                 verifyOtp(it)
             },
-            numDigits = maxLength,
-            isMasked = false,
-            digitContainerStyle = OtpTextFieldDefaults.outlinedContainer(size = 24.dp),
-            textStyle = MaterialTheme.typography.titleLarge,
-            isError = screenState.isError
+            numDigits = maxLength, // Number of digits in OTP
+            isMasked = false, // Mask digits for security
+            digitContainerStyle = OtpTextFieldDefaults.outlinedContainer(size = 24.dp), // Choose style (outlined or underlined)
+            textStyle = ProductXTheme.typography.SemiBold.Title.Large, // Configure text style
+            isError = screenState.isError // Indicate whether the OTP field is in an error state
         )
 
         if (screenState.isError) {

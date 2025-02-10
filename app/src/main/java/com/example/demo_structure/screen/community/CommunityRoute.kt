@@ -11,7 +11,7 @@ import org.koin.androidx.compose.koinViewModel
 fun NavController.navigateToCommunity(navOptions: NavOptions) =
     navigate(route = Destinations.Main.Community.route, navOptions)
 
-fun NavGraphBuilder.CommunityNavGraph(
+fun NavGraphBuilder.toCommunityScreen(
     onTopicClick: (String) -> Unit,
 ) {
     this.apply {

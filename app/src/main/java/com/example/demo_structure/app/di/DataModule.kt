@@ -7,6 +7,8 @@ import com.example.data.repository.MyProfileRepositoryImpl
 import com.example.domain.repository.AuthRepository
 import com.example.domain.repository.HomeRepository
 import com.example.domain.repository.MyProfileRepository
+import com.example.data.repository.VersionCheckerRepositoryImpl
+import com.example.domain.repository.VersionRepository
 import org.koin.dsl.module
 
 /**
@@ -19,4 +21,5 @@ val dataModule = module {
     single<MyProfileRepository> { MyProfileRepositoryImpl(get()) }
     single<AuthRepository> { AuthRepositoryImpl(get()) }
     single { DataStoreManager(get()) }
+    single<VersionRepository> { VersionCheckerRepositoryImpl(get(), get()) }
 }

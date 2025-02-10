@@ -2,7 +2,7 @@ package com.example.demo_structure
 
 import com.example.demo_structure.app.di.dataModule
 import com.example.demo_structure.app.di.domainModule
-import com.example.demo_structure.app.di.networkModule
+import com.example.demo_structure.app.di.applicationModule
 import com.example.demo_structure.app.di.presentationModule
 import com.example.demo_structure.screen.home.HomeViewModel
 import org.junit.Test
@@ -21,7 +21,7 @@ class ExampleUnitTest : KoinComponent{
     fun `test Koin modules`() {
         startKoin {
             modules(
-                listOf(networkModule, dataModule, domainModule, presentationModule)
+                listOf(applicationModule, dataModule, domainModule, presentationModule)
             )
         }
 

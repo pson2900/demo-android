@@ -7,7 +7,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.demo_structure.core.component.otp.DigitContainerStyle
 
 object OtpTextFieldDefaults {
 

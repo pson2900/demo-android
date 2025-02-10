@@ -54,6 +54,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -62,7 +63,9 @@ import com.example.demo_structure.R
 import com.example.demo_structure.core.component.EmailTextField
 import com.example.demo_structure.screen.home.LoadingState
 import com.example.demo_structure.screen.otp.OTPType
-import com.example.demo_structure.util.FormatText.buildClickableText
+import com.example.demo_structure.util.extension.buildClickableText
+
+
 
 @Preview(showBackground = true)
 @Composable

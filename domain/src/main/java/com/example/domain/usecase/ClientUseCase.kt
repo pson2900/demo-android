@@ -8,5 +8,5 @@ import com.example.domain.repository.HomeRepository
  * Copyright (c) 2024 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-class GetClientUseCase (private val homeRepository: HomeRepository) {
+class ClientUseCase (private val homeRepository: HomeRepository) {
 }

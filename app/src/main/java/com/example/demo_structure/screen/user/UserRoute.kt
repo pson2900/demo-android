@@ -1,5 +1,6 @@
 package com.example.demo_structure.screen.user
 
+import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -11,7 +12,8 @@ import org.koin.androidx.compose.koinViewModel
 fun NavController.toUser(navOptions: NavOptions) =
     navigate(route = Destinations.Main.User.route, navOptions)
 
-fun NavGraphBuilder.UserNavGraph(onNavigateToLogin: (String) -> Unit) {
+fun NavGraphBuilder.toMyProfileScreen(onNavigateToLogin: (String) -> Unit) {
+
     this.apply {
         composable(
             route = Destinations.Main.User.route,
@@ -23,7 +25,10 @@ fun NavGraphBuilder.UserNavGraph(onNavigateToLogin: (String) -> Unit) {
             content = { navBackStackEntry ->
                 UserScreen(
                     onNavigateToLogin = onNavigateToLogin,
-                    userViewModel = koinViewModel()
+                    onNavigateToProfile = {
+                        Log.d("QQQ","Profile: $it")
+                    },
+                    userViewModel = koinViewModel<UserViewModel>()
                 )
             }
         )

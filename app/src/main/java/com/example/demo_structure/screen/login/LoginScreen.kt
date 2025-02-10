@@ -65,7 +65,7 @@ import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.core.component.AppBarIcon
-import com.example.demo_structure.core.component.TopAppBar
+import com.example.demo_structure.core.component.AppTopBar
 import com.example.demo_structure.core.component.otp.PassCodeTextField
 import kotlinx.coroutines.delay
 
@@ -132,7 +132,7 @@ internal fun LoginScreen(
             snackBarHostState = rememberHostState
         ) {
             Column {
-                TopAppBar(title = {
+                AppTopBar(title = {
                     Text("")
                 },
                     navigationIcon = {
@@ -269,7 +269,7 @@ fun ColumnScope.ForgotPasswordText(onClick: () -> Unit) {
 @Preview("Light Mode")
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun UserContentPreview() {
+fun LoginPreview() {
     AppPreviewWrapper { modifier ->
         LoginContent(modifier, isLoading = false, errorMessage = "", onChangeError = {}, onLogin = {
 

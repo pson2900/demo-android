@@ -61,7 +61,7 @@ sealed class Destinations(val route: String) {
             override val title: String = "Cộng đồng"
         }
 
-        object User : DestinationItem("user") {
+        object User : DestinationItem(route = "user") {
             override val selectedIcon: Int = AppIcons.userSelect
             override val unselectedIcon: Int = AppIcons.userUnselect
             override val testTag: String = "UserTag"
