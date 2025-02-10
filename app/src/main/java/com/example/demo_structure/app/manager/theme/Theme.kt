@@ -48,7 +48,7 @@ val lightColorScheme = lightColorScheme(
     errorContainer = hexToColor("#EC221F"), // Background color for containers containing errors
     onErrorContainer = hexToColor("#EC221F"), // Color for text/icons on the errorContainer
 
-    background = hexToColor("#94A3B8"), // Background color of the entire app
+    background = hexToColor("#F1F5F9"), // Background color of the entire app
     onBackground = hexToColor("#000000"), // Color for text/icons on the background
 
     surface = hexToColor("#F3F5FC"), // Color for surfaces like cards or bottom sheets
@@ -95,7 +95,7 @@ val darkColorScheme = darkColorScheme(
     errorContainer = hexToColor("#EC221F"), // Background color for containers containing errors (dark theme)
     onErrorContainer = hexToColor("#EC221F"), // Color for text/icons on the errorContainer (dark theme)
 
-    background = hexToColor("#94A3B8"), // Background color of the entire app
+    background = hexToColor("#F1F5F9"), // Background color of the entire app
     onBackground = Color.White, // Color for text/icons on the background
 
     surface = hexToColor("#000000"), // Color for surfaces like cards or bottom sheets

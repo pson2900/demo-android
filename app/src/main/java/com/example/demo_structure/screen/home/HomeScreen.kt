@@ -145,7 +145,7 @@ fun HomeContent(onItemSelected: (Int, String) -> Unit) {
         ) {
             LazyColumn(
                 modifier = Modifier
-                    .background(color = hexToColor("#94A3B8")),
+                    .background(color = hexToColor("#F1F5F9")),
                 state = columState,
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 10.dp)
