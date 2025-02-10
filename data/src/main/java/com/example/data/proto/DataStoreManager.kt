@@ -12,6 +12,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class DataStoreManager(private val context: Context) {
     private val USER_INFO_KEY = stringPreferencesKey("user_info")
@@ -52,16 +53,16 @@ class DataStoreManager(private val context: Context) {
             }
     }
 
-    fun clearSpecificKey(key: Preferences.Key<String>) {
-        runBlocking {
+    suspend fun clearSpecificKey(key: Preferences.Key<String>) {
+        withContext(kotlinx.coroutines.Dispatchers.IO) {
             context.preferencesDataStore.edit { preferences ->
                 preferences.remove(key)
             }
         }
     }
 
-    fun clearAll() {
-        runBlocking {
+    suspend fun clearAll() {
+        withContext(kotlinx.coroutines.Dispatchers.IO) {
             context.preferencesDataStore.edit { preferences ->
                 preferences.clear()
             }

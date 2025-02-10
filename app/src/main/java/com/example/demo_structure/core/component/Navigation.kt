@@ -21,6 +21,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.app.manager.theme.generate
 import com.example.demo_structure.core.navigation.AppState
+import com.example.demo_structure.core.navigation.DestinationItem
 import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.core.navigation.rememberAppState
 
@@ -38,7 +39,7 @@ fun BottomNavigationBar(
     contentColor: Color = ProductXTheme.colorScheme.onSurface,
     tonalElevation: Dp = 0.dp,
     windowInsets: WindowInsets = WindowInsets.navigationBars,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable() (RowScope.() -> Unit)
 ) {
     NavigationBar(
         modifier = modifier,
@@ -51,12 +52,12 @@ fun BottomNavigationBar(
 }
 
 @Composable
-fun RowScope.InitBottomMainScreen(appState: AppState) {
-    val currentRoute = appState.navController.currentBackStackEntryAsState().value?.destination?.route
+fun RowScope.InitBottomMainScreen(appState: AppState, currentRoute: DestinationItem) {
+//    val currentRoute = appState.navController.currentBackStackEntryAsState().value?.destination?.route
     Destinations.Main.getEntries().forEach { item ->
         NavigationBarItem(
             modifier = Modifier.testTag(item.testTag),
-            selected = currentRoute == item.route,
+            selected = currentRoute.route == item.route,
             onClick = {
                 appState.navigateToBottomBarRoute(item.route)
             },
@@ -65,11 +66,10 @@ fun RowScope.InitBottomMainScreen(appState: AppState) {
                     verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-//                    ProductXTheme.colorScheme.onTertiary
                     AppText(
                         text = item.title,
                         style = ProductXTheme.typography.Regular.Label.Small,
-                        color = if (currentRoute == item.route)
+                        color = if (currentRoute.route == item.route)
                             ProductXTheme.colorScheme.tertiary
                         else
                             ProductXTheme.colorScheme.onTertiary,
@@ -81,7 +81,7 @@ fun RowScope.InitBottomMainScreen(appState: AppState) {
 
             },
             icon = {
-                if (currentRoute == item.route) item.selectedIcon.generate()
+                if (currentRoute.route == item.route) item.selectedIcon.generate()
                 else item.unselectedIcon.generate()
             },
             alwaysShowLabel = true, // Consider showing labels only on selected items for better UX
@@ -103,7 +103,8 @@ fun BottomNavigationViewPreview() {
     var appState = rememberAppState()
     BottomNavigationBar(
         modifier = Modifier,
-    ) {
-        InitBottomMainScreen(appState)
-    }
+        content = {
+            InitBottomMainScreen(appState, Destinations.Main.Home)
+        },
+    )
 }

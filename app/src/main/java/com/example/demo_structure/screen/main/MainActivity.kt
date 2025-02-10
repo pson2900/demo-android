@@ -1,6 +1,7 @@
 package com.example.demo_structure.screen.main
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -21,6 +22,7 @@ import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,10 +52,12 @@ import com.example.demo_structure.core.component.AppSurface
 import com.example.demo_structure.core.component.BottomNavigationBar
 import com.example.demo_structure.core.component.InitBottomMainScreen
 import com.example.demo_structure.core.component.rememberScaffoldState
+import com.example.demo_structure.core.navigation.DestinationItem
+import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.core.navigation.MainNavHost
 import com.example.demo_structure.core.navigation.rememberAppState
-import com.example.demo_structure.util.monitor.NetworkMonitor
 import com.example.demo_structure.util.extension.isSystemInDarkTheme
+import com.example.demo_structure.util.monitor.NetworkMonitor
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -151,24 +155,25 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MainContent(
     modifier: Modifier = Modifier,
+    startDestination: DestinationItem,
     onNavigateToJobDetail: (Int, String) -> Unit,
     onNavigateToLogin: (String) -> Unit,
     onNavigateToVerifyEmail: () -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
     val nestedNavigation = rememberAppState()
+    LaunchedEffect(nestedNavigation) {
+
+    }
     val navBackStackEntry by nestedNavigation.navController.currentBackStackEntryAsState()
 
     val currentRoute = navBackStackEntry?.destination?.route
-    val sharedTransitionScope = LocalSharedTransitionScope.current
-        ?: throw IllegalStateException("No SharedElementScope found")
-    val animatedVisibilityScope = LocalNavAnimatedVisibilityScope.current
-        ?: throw IllegalStateException("No SharedElementScope found")
-
+    Log.d("QQQ", "currentRoute: ${currentRoute}")
+    Log.d("QQQ", "startDestination: ${startDestination.route}")
     AppScaffold(
         modifier = modifier
             .navigationBarsPadding()
@@ -193,7 +198,7 @@ fun MainContent(
             BottomNavigationBar(
                 modifier = modifier,
             ) {
-                InitBottomMainScreen(appState = nestedNavigation)
+                InitBottomMainScreen(appState = nestedNavigation, currentRoute = startDestination)
             }
         },
         content = { padding ->
@@ -204,6 +209,7 @@ fun MainContent(
             ) {
                 MainNavHost(
                     appState = nestedNavigation,
+                    startDestination = startDestination,
                     onNavigateToJobDetail = onNavigateToJobDetail,
                     onNavigateToLogin = onNavigateToLogin,
                     onNavigateToVerifyEmail = onNavigateToVerifyEmail
@@ -219,6 +225,7 @@ fun MainContentPreview() {
     AppPreviewWrapper {
         MainContent(
             it,
+            startDestination = Destinations.Main.Home,
             onNavigateToJobDetail = { _, _ -> },
             onNavigateToLogin = {},
             onNavigateToVerifyEmail = { },

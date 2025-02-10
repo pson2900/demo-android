@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.core.navigation.composableWith
 import org.koin.androidx.compose.koinViewModel
@@ -12,7 +13,7 @@ import org.koin.androidx.compose.koinViewModel
 fun NavController.toJobDetail(route: String, navOptions: NavOptions = androidx.navigation.navOptions { }) =
     navigate(route = route, navOptions = navOptions)
 
-fun NavGraphBuilder.toJobDetailScreen(onBackClick: () -> Unit) {
+fun NavGraphBuilder.toJobDetailScreen(appState: AppState, onBackClick: () -> Unit) {
     composableWith(
         route = "${Destinations.JobDetail.route}/" +
                 "{${Destinations.JobDetail.JOB_DETAIL_ID}}" +
@@ -33,7 +34,9 @@ fun NavGraphBuilder.toJobDetailScreen(onBackClick: () -> Unit) {
             JobDetailScreen(
                 jobId = jobId,
                 origin = origin ?: "",
-                onBackClick = onBackClick,
+                onBackClick = {
+                    appState.navigateToMain(navBackStackEntry, Destinations.Main.Community)
+                },
                 viewModel = koinViewModel()
             )
         }

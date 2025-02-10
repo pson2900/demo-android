@@ -45,7 +45,6 @@ import com.example.domain.usecase.MyProfileUseCase
  */
 @Composable
 internal fun UserScreen(
-
     onNavigateToLogin: (String) -> Unit,
     onNavigateToProfile: (Profile) -> Unit,
     clearUndoState: () -> Unit = {},

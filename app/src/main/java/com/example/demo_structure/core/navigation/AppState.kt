@@ -21,17 +21,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.demo_structure.screen.create_pin.PinArguments
 import com.example.demo_structure.screen.create_pin.toCreatePinCode
-import com.example.demo_structure.screen.home.toHome
 import com.example.demo_structure.screen.job_detail.toJobDetail
 import com.example.demo_structure.screen.login.toLogin
 import com.example.demo_structure.screen.main.toMain
-import com.example.demo_structure.screen.otp.OTPType
 import com.example.demo_structure.screen.otp.toVerifyOtp
 import com.example.demo_structure.screen.verify_email.toVerifyEmail
-
-import com.google.gson.Gson
 import com.example.demo_structure.util.monitor.NetworkMonitor
 import com.example.demo_structure.util.monitor.TimeZoneMonitor
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -72,6 +69,28 @@ class AppState(
     var context: Context,
     val timeZoneMonitor: TimeZoneMonitor,
 ) {
+    private val previousDestination = mutableStateOf<NavDestination?>(null)
+    /*val currentDestination: NavDestination?
+        @Composable get() {
+            // Collect the currentBackStackEntryFlow as a state
+            val currentEntry = navController.currentBackStackEntryFlow
+                .collectAsState(initial = null)
+
+            // Fallback to previousDestination if currentEntry is null
+            return currentEntry.value?.destination.also { destination ->
+                if (destination != null) {
+                    previousDestination.value = destination
+                }
+            } ?: previousDestination.value
+        }
+
+    val currentTopLevelDestination: Destinations?
+        @Composable get() {
+            return Destinations.Main.getEntries().firstOrNull { topLevelDestination ->
+                currentDestination?.hasRoute(route = topLevelDestination.route) == true
+            }
+        }*/
+
     val isOffline = networkMonitor.isOnline
         .map(Boolean::not)
         .stateIn(
@@ -161,12 +180,17 @@ class AppState(
         }
     }
 
-    fun navigateToMain(from: NavBackStackEntry) {
+
+    fun navigateToMain(from: NavBackStackEntry, startDestinations: DestinationItem) {
         // In order to discard duplicated navigation events, we check the Lifecycle
-        val route = Destinations.Main.route
+        val route = Destinations.Main.createRoute(
+            startDestinations
+        )
+        Log.d("QQQ", "navigateToMain startDestinations: ${route}")
         trace("Navigation : ${route}") {
             if (from.lifecycleIsResumed()) {
-                navController.toMain(androidx.navigation.navOptions {})
+                navController.toMain(route)
+
             }
         }
     }
@@ -200,6 +224,7 @@ class AppState(
         // In order to discard duplicated navigation events, we check the Lifecycle
         val pinJson = Gson().toJson(pinArguments)
         val route = "${Destinations.CreatePin.route}/$pinJson"
+
         trace("Navigation : $route") {
             if (from.lifecycleIsResumed()) {
                 navController.toCreatePinCode(
