@@ -76,4 +76,14 @@ class AuthRepositoryImpl(val apiService: ApiService): AuthRepository {
             emit(apiService.login(body).data.toDomain())
         }
     }
+
+    override suspend fun renewToken(
+        refreshToken: String
+    ): Flow<Authentication> {
+        val body = HashMap<String, String>()
+        body.put("refreshToken", refreshToken)
+        return flow {
+            emit(apiService.renewToken(body).data.toDomain())
+        }
+    }
 }

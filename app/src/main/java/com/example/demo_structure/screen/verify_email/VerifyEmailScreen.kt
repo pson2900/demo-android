@@ -75,13 +75,14 @@ import com.example.demo_structure.screen.home.LoadingState
 import com.example.demo_structure.screen.login.LoginContent
 import com.example.demo_structure.screen.otp.OTPType
 import com.example.demo_structure.util.extension.buildClickableText
+import com.example.demo_structure.util.extension.hideKeyboard
+import com.example.demo_structure.util.extension.hideKeyboardAndClearFocus
 
 
 @Preview("Light Mode")
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun VerifyEmailPreview() {
-    val rememberHostState = remember { SnackbarHostState() }
     AppPreviewWrapper { modifier ->
         VerifyEmailContent(
             email = "demo@hihi.com",
@@ -215,23 +216,7 @@ fun VerifyEmailScreen(
     }
 }
 
-fun hideKeyboardAndClearFocus(
-    context: Context,
-    focusManager: FocusManager,
-    keyboardController: SoftwareKeyboardController?
-) {
-    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    var view: View? = null
-    if (context is android.app.Activity) {
-        view = context.currentFocus
-    }
-    if (view == null) {
-        view = View(context)
-    }
-    imm.hideSoftInputFromWindow(view.windowToken, 0)
-    focusManager.clearFocus()
-    keyboardController?.hide()
-}
+
 
 @Composable
 fun VerifyEmailContent(
@@ -268,7 +253,8 @@ fun VerifyEmailContent(
             disabledContainerColor = colorResource(id = R.color.jumbo),
             disabledContentColor = colorResource(id = R.color.tuna),
         )
-        val color =  if(isEnableButton) colorResource(R.color.white) else colorResource(R.color.tuna)
+        val color =
+            if (isEnableButton) colorResource(R.color.white) else colorResource(R.color.tuna)
         val (logo, textview, emailTextField, columnBottom, loading) = createRefs()
 
         Image(
@@ -308,6 +294,9 @@ fun VerifyEmailContent(
             hint = "Email của bạn",
             value = email,
             onValueChange = onEmailChange,
+            onDone = {
+                hideKeyboardAndClearFocus(context, focusManager, keyboardController)
+            },
             error = emailError,
             onClose = { onEmailChange("") },
             isSuccess = isSuccess
@@ -365,7 +354,7 @@ fun VerifyEmailContent(
                     modifier = Modifier
                         .weight(1f)
                         .padding(start = 8.dp),
-                    style =  ProductXTheme.typography.Regular.Title.Medium,
+                    style = ProductXTheme.typography.Regular.Title.Medium,
                 )
             }
 
@@ -379,9 +368,11 @@ fun VerifyEmailContent(
                 colors = buttonColors,
                 enabled = isEnableButton,
             ) {
-                AppText(text = "Tiếp tục",
+                AppText(
+                    text = "Tiếp tục",
                     style = ProductXTheme.typography.SemiBold.Title.Medium,
-                    color = color)
+                    color = color
+                )
             }
         }
         if (isLoading) {

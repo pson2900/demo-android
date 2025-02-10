@@ -47,6 +47,7 @@ import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.core.component.AppBarIcon
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
+import com.example.demo_structure.core.component.AppTopBar
 import com.example.demo_structure.core.component.otp.PassCodeTextField
 import com.example.demo_structure.screen.home.LoadingState
 import com.example.demo_structure.screen.otp.OTPType
@@ -89,7 +90,8 @@ fun PinCodeScreen(
     modifier: Modifier = Modifier,
     viewModel: PinCodeViewModel = koinViewModel(),
     arguments: PinArguments? = null,
-    onNavigateHomeScreen: () -> Unit
+    onNavigateHomeScreen: () -> Unit,
+    onBack: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -99,9 +101,19 @@ fun PinCodeScreen(
 
     val rememberHostState = remember { SnackbarHostState() }
     var isLoading by remember { mutableStateOf(false) }
-    var otpError   by remember { mutableStateOf("") }
+    var otpError by remember { mutableStateOf("") }
     var isCompleteStep1 by remember { mutableStateOf(false) }
     val maxLength = 6
+
+    fun onBack() {
+        if (!isCompleteStep1) {
+            onBack.invoke()
+        } else {
+            isCompleteStep1 = false
+            viewModel.passCode = ""
+            viewModel.confirmPasscode = ""
+        }
+    }
 
     ClearStateOnStop(viewModel = viewModel)
 
@@ -139,14 +151,18 @@ fun PinCodeScreen(
             snackBarHostState = rememberHostState
         ) {
             Column {
-                TopAppBar(title = {
-                    Text("")
-                },
+                AppTopBar(modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                    title = {
+                        Text("")
+                    },
                     navigationIcon = {
                         AppBarIcon(
                             contentDescription = null,
                             modifier = Modifier.size(24.dp),
-                            imageResource = R.drawable.ic_back_arrow
+                            imageResource = R.drawable.ic_back_arrow,
+                            clickable = {
+                                onBack()
+                            }
                         )
                     })
                 PinCodeScreenContent(
@@ -158,6 +174,7 @@ fun PinCodeScreen(
                     isLoading = isLoading,
                     onPassCodeChange = {
                         viewModel.passCode = it
+                        otpError = ""
                     },
                     onConfirmPassCodeChange = {
                         viewModel.confirmPasscode = it
@@ -168,7 +185,8 @@ fun PinCodeScreen(
                     },
                     onComplete = {
                         arguments?.let {
-                            verifyPassCode(it, viewModel, onChangeError = {
+                            verifyPassCode(it, viewModel,
+                                onChangeError = {
                                 otpError = it
                             })
                         }
@@ -202,9 +220,13 @@ private fun ClearStateOnStop(
     }
 }
 
-private fun verifyPassCode(arguments: PinArguments, viewModel: PinCodeViewModel, onChangeError: (String)-> Unit) {
+private fun verifyPassCode(
+    arguments: PinArguments,
+    viewModel: PinCodeViewModel,
+    onChangeError: (String) -> Unit
+) {
     if (viewModel.passCode != viewModel.confirmPasscode) {
-        onChangeError( "sai pass code")
+        onChangeError("sai pass code")
     } else {
         if (arguments.type == OTPType.REGISTER.type) {
             viewModel.register(
@@ -320,6 +342,7 @@ private fun PinCodeScreenContent(
     onNextStep: () -> Unit,
     onComplete: () -> Unit
 ) {
+    val context = LocalContext.current
     var isEnableButton by remember { mutableStateOf(false) }
     val buttonContent = if (passCode.length == maxLength) "Hoàn tất" else "Tiếp tục"
     val isCompleteStep1 = passCode.length == maxLength
@@ -356,12 +379,13 @@ private fun PinCodeScreenContent(
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     },
+                context = context,
                 onValueChange = {
                     isEnableButton = it.length == maxLength && !isLoading
                     onPassCodeChange(it)
                 },
                 numDigits = maxLength,
-                errorMessage = otpError
+                errorMessage = ""
             )
         } else {
             PassCodeTextField(
@@ -371,6 +395,7 @@ private fun PinCodeScreenContent(
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     },
+                context = context,
                 onValueChange = {
                     isEnableButton = it.length == maxLength && !isLoading
                     onConfirmPassCodeChange(it)

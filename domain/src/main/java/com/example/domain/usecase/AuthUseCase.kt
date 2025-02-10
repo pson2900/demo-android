@@ -38,4 +38,8 @@ class AuthUseCase(private val authRepository: AuthRepository) {
     suspend fun login(email: String, password: String): Flow<Authentication> {
         return authRepository.login(email, password)
     }
+
+    suspend fun renewToken(refreshToken: String): Flow<Authentication> {
+        return authRepository.renewToken(refreshToken)
+    }
 }

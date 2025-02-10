@@ -13,7 +13,10 @@ import com.example.demo_structure.core.navigation.Destinations
 import com.google.gson.Gson
 import org.koin.androidx.compose.koinViewModel
 
-fun NavController.toCreatePinCode(route: String, navOptions: NavOptions = androidx.navigation.navOptions {}) =
+fun NavController.toCreatePinCode(
+    route: String,
+    navOptions: NavOptions = androidx.navigation.navOptions {}
+) =
     navigate(route = route, navOptions)
 
 fun NavGraphBuilder.toCreatePinCodeScreen(appState: AppState) {
@@ -33,11 +36,15 @@ fun NavGraphBuilder.toCreatePinCodeScreen(appState: AppState) {
                 } else {
                     null
                 }
-                PinCodeScreen(viewModel = koinViewModel(), arguments = arg, onNavigateHomeScreen = {
-                    Destinations.Main.getEntries().find { it.testTag == "HomeTag" }?.let { item->
-                        appState.navigateToMain(navBackStackEntry, Destinations.Main.Home)
-                    }
-                })
+                PinCodeScreen(viewModel = koinViewModel(), arguments = arg,
+                    onNavigateHomeScreen = {
+                        Destinations.Main.getEntries().find { it.testTag == "HomeTag" }
+                            ?.let { item ->
+                                appState.navigateToMain(navBackStackEntry, Destinations.Main.Home)
+                            }
+                    }, onBack = {
+                        appState.upPress()
+                    })
             }
         )
     }

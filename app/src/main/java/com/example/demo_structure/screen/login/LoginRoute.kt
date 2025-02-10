@@ -40,6 +40,8 @@ fun NavGraphBuilder.toLoginScreen(appState: AppState, onBackClick: () -> Unit) {
                     Destinations.Main.getEntries().find { it.testTag == "HomeTag" }?.let { item->
                         appState.navigateToMain(navBackStackEntry, Destinations.Main.Home)
                     }
+                }, onBack = {
+                    appState.upPress()
                 })
             }
         )
