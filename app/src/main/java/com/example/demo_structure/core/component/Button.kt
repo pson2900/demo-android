@@ -1,13 +1,15 @@
 package com.example.demo_structure.core.component
 
+import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 
 /**
@@ -19,11 +21,11 @@ import com.example.demo_structure.app.manager.theme.ProductXTheme
 fun AppButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    background: Color,
-    colorEffect: Color,
+    background: Color = ProductXTheme.colorScheme.primary,
+    contentColor: Color = ProductXTheme.colorScheme.onPrimary,
     enabled: Boolean = true,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable() (RowScope.() -> Unit)
 ) {
 
     Button(
@@ -33,22 +35,25 @@ fun AppButton(
         contentPadding = contentPadding,
         colors = ButtonDefaults.buttonColors(
             containerColor = background, // Background color
-            contentColor = colorEffect, // Text and icon color
-            disabledContainerColor = Color.DarkGray, // Background color when disabled
-            disabledContentColor = Color.DarkGray // Text and icon color when disabled
+            contentColor = contentColor, // Text and icon color
+            disabledContainerColor = ProductXTheme.colorScheme.surface,
+            disabledContentColor =  ProductXTheme.colorScheme.onSurface
         ),
         content = content
     )
 
 }
 
-
 @Composable
-@ThemePreviews
-fun AppButtonPreview(){
-    AppPreviewWrapper {
-        AppButton(onClick = {}, background = ProductXTheme.colorScheme.background, colorEffect = ProductXTheme.colorScheme.onPrimary) {
-            Text("OnClick Item")
-        }
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_NO)
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+fun AppButtonPreview() {
+    AppButton(
+        onClick = {},
+    ) {
+        AppText(
+            text = "OnClick Item",
+            color = ProductXTheme.colorScheme.onSurface
+        )
     }
 }

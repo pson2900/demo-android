@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -17,6 +18,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.DialogProperties
+import androidx.work.Configuration
+import androidx.work.WorkManager
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
@@ -24,6 +27,8 @@ import com.example.demo_structure.core.component.AppBackground
 import com.example.demo_structure.core.navigation.AppNavHost
 import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.screen.main.ThemeSettings
+import org.koin.android.ext.android.inject
+import org.koin.core.component.KoinComponent
 
 /**
  * Created by Phạm Sơn at 11:24/28/12/24
@@ -31,10 +36,17 @@ import com.example.demo_structure.screen.main.ThemeSettings
  * Email: son.pham@navigosgroup.com
  */
 
-class ProductApp : Application() {
+class ProductApp : Application(), KoinComponent {
     override fun onCreate() {
         super.onCreate()
         KoinSetup.init(this)
+
+      /*  val workerFactory: KoinWorkerFactory by inject()
+        val config = Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
+
+        WorkManager.initialize(this, config)*/
     }
 }
 
@@ -45,8 +57,8 @@ fun InitializeApp(
     themeSettings: ThemeSettings,
 ) {
     ApplicationTheme(
-        darkTheme = themeSettings.darkTheme,
-        disableDynamicTheming = themeSettings.disableDynamicTheming,
+        darkTheme = isSystemInDarkTheme(),
+        dynamicColor = themeSettings.disableDynamicTheming,
     ) {
         SharedTransitionLayout {
             AnimatedVisibility(visible = true) {
@@ -62,7 +74,7 @@ fun InitializeApp(
                         showDialog.value = isOffline
                     }
                     AppBackground(modifier = modifier) {
-                        OfflineAlertDialog(showDialog, onDismiss = { showDialog.value = isOffline })
+//                        OfflineAlertDialog(showDialog, onDismiss = { showDialog.value = isOffline })
                         AppNavHost(modifier = modifier, appState = appState)
                     }
                 }

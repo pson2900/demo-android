@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,6 +31,7 @@ import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.app.manager.theme.generate
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppText
+import com.example.demo_structure.core.component.ThemePreviews
 
 /**
  * Created by Phạm Sơn at 13:20/14/1/25
@@ -40,14 +42,14 @@ import com.example.demo_structure.core.component.AppText
 fun OpportunitiesSection(modifier: Modifier = Modifier) {
     Column(modifier.padding(start = 16.dp, end = 16.dp)) {
         AppText(
-            text = "Cơ hội", color = colorResource(R.color.black),
+            text = "Cơ hội",
             style = ProductXTheme.typography.SemiBold.Title.Large
         )
         Spacer(Modifier.height(12.dp))
         Row(modifier) {
             OpportunitiesItem(
                 modifier = Modifier
-                    .background(colorResource(R.color.white), shape = RoundedCornerShape(5.dp))
+                    .background(ProductXTheme.colorScheme.surface, shape = RoundedCornerShape(5.dp))
                     .clip(shape = RoundedCornerShape(5.dp))
                     .fillMaxWidth()
                     .clickable { }
@@ -61,7 +63,7 @@ fun OpportunitiesSection(modifier: Modifier = Modifier) {
             Spacer(Modifier.size(12.dp))
             OpportunitiesItem(
                 modifier = Modifier
-                    .background(colorResource(R.color.white), shape = RoundedCornerShape(5.dp))
+                    .background(ProductXTheme.colorScheme.surface, shape = RoundedCornerShape(5.dp))
                     .fillMaxWidth()
                     .clip(shape = RoundedCornerShape(5.dp))
                     .testTag("Opportunity_SaveJob")
@@ -79,7 +81,7 @@ fun OpportunitiesSection(modifier: Modifier = Modifier) {
                     .clip(shape = RoundedCornerShape(5.dp))
                     .clickable { }
                     .testTag("Opportunity_ApplyJob")
-                    .background(colorResource(R.color.white), shape = RoundedCornerShape(5.dp))
+                    .background(ProductXTheme.colorScheme.surface, shape = RoundedCornerShape(5.dp))
                     .height(150.dp)
                     .weight(1f),
                 icon = R.drawable.ic_my_profile_opprotunities_bag,
@@ -117,7 +119,8 @@ fun OpportunitiesItem(modifier: Modifier = Modifier, icon: Int, title: String, s
                         top.linkTo(iconRef.bottom)
                         start.linkTo(parent.start)
                         bottom.linkTo(subtitleRef.top)
-                    }, text = title, color = colorResource(R.color.slate_gray),
+                    }, text = title,
+                color = colorResource(R.color.slate_gray),
                 style = ProductXTheme.typography.Regular.Label.Large
             )
 
@@ -136,11 +139,10 @@ fun OpportunitiesItem(modifier: Modifier = Modifier, icon: Int, title: String, s
 }
 
 
-@Preview("Light Mode")
-@Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@ThemePreviews
 @Composable
 fun OpportunitiesSectionPreview() {
     AppPreviewWrapper {
-        OpportunitiesSection(Modifier)
+        OpportunitiesSection(Modifier.wrapContentSize())
     }
 }

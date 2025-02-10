@@ -34,8 +34,8 @@ import com.example.demo_structure.core.navigation.rememberAppState
 @Composable
 fun BottomNavigationBar(
     modifier: Modifier,
-    containerColor: Color = ProductXTheme.colorScheme.background,
-    contentColor: Color = ProductXTheme.colorScheme.secondary,
+    containerColor: Color = ProductXTheme.colorScheme.surface,
+    contentColor: Color = ProductXTheme.colorScheme.onSurface,
     tonalElevation: Dp = 0.dp,
     windowInsets: WindowInsets = WindowInsets.navigationBars,
     content: @Composable RowScope.() -> Unit

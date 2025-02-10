@@ -1,9 +1,7 @@
-package com.example.demo_structure.util
+package com.example.demo_structure.util.monitor
 
-import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
@@ -13,6 +11,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import com.example.demo_structure.util.extension.findActivity
 
 /**
  * Created by Phạm Sơn at 13:01/6/2/25

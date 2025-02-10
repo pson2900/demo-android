@@ -44,7 +44,7 @@ fun AppCheckBox(modifier: Modifier = Modifier) {
             interactionSource = remember { MutableInteractionSource() }
         )
         Text(
-            text = if (isChecked.value) "Checked" else "Unchecked",
+            text = if (isChecked.value) "AppCheckBox Checked" else "AppCheckBox Unchecked",
             modifier = Modifier.padding(top = 8.dp)
         )
     }

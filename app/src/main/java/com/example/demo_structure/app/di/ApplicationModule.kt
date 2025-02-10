@@ -1,10 +1,10 @@
 package com.example.demo_structure.app.di
 
 import com.example.demo_structure.app.AppDispatchers
-import com.example.demo_structure.util.ConnectivityManagerNetworkMonitor
-import com.example.demo_structure.util.NetworkMonitor
-import com.example.demo_structure.util.TimeZoneBroadcastMonitor
-import com.example.demo_structure.util.TimeZoneMonitor
+import com.example.demo_structure.util.monitor.ConnectivityManagerNetworkMonitor
+import com.example.demo_structure.util.monitor.NetworkMonitor
+import com.example.demo_structure.util.monitor.TimeZoneBroadcastMonitor
+import com.example.demo_structure.util.monitor.TimeZoneMonitor
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

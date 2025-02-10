@@ -22,8 +22,8 @@ import com.example.demo_structure.screen.job_detail.toJobDetail
 import com.example.demo_structure.screen.login.toLogin
 import com.example.demo_structure.screen.otp.toVerifyOtp
 import com.example.demo_structure.screen.verify_email.toVerifyEmail
-import com.example.demo_structure.util.NetworkMonitor
-import com.example.demo_structure.util.TimeZoneMonitor
+import com.example.demo_structure.util.monitor.NetworkMonitor
+import com.example.demo_structure.util.monitor.TimeZoneMonitor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map

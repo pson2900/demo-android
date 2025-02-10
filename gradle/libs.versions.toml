@@ -28,7 +28,7 @@ appcompatResources = "1.7.0"
 appcompat = "1.7.0"
 androidxConstraintlayout = "1.1.0"
 coreSplashscreen = "1.0.1"
-espressoCore = "3.5.1"
+espressoCore = "3.4.0"
 adaptiveAndroid = "1.0.0"
 
 # --- Material ---
@@ -58,11 +58,12 @@ coilCompose = "2.5.0"
 # --- Testing ---
 junit = "4.13.2"
 junitVersion = "1.2.1"
+workRuntimeKtx = "2.10.0"
 
 
 [libraries]
 # Mark: AndroidX
-
+androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workRuntimeKtx" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
@@ -86,6 +87,8 @@ androidx-material3 = { module = "androidx.compose.material3:material3", version.
 androidx-material3-window-size = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3" }
 androidx-adaptive-navigation-suite = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite-android", version.ref = "material3AdaptiveNavigationSuiteAndroid" }
 androidx-adaptive = { module = "androidx.compose.material3.adaptive:adaptive", version.ref = "adaptiveAndroid" }
+androidx-adaptive-layout = { module = "androidx.compose.material3.adaptive:adaptive-layout", version.ref = "adaptiveAndroid" }
+androidx-adaptive-navigation = { module = "androidx.compose.material3.adaptive:adaptive-navigation", version.ref = "adaptiveAndroid" }
 androidx-adaptive-layout-android = { module = "androidx.compose.material3.adaptive:adaptive-layout-android", version.ref = "adaptiveAndroid" }
 
 # Mark: Testing Libraries
@@ -140,6 +143,7 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
+
 
 
 [plugins]

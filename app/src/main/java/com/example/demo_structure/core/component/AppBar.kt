@@ -52,11 +52,11 @@ fun AppTopBar(
 ) {
     CenterAlignedTopAppBar(
         colors = TopAppBarColors(
-            containerColor = ProductXTheme.colorScheme.background,
+            containerColor = ProductXTheme.colorScheme.surface,
             scrolledContainerColor = Color.Transparent,
-            navigationIconContentColor = ProductXTheme.colorScheme.onBackground,
-            titleContentColor = ProductXTheme.colorScheme.onBackground,
-            actionIconContentColor = ProductXTheme.colorScheme.onBackground
+            navigationIconContentColor = ProductXTheme.colorScheme.onSurface,
+            titleContentColor = ProductXTheme.colorScheme.onSurface,
+            actionIconContentColor = ProductXTheme.colorScheme.onSurface
         ),
         modifier = modifier, navigationIcon = navigationIcon, title = title, actions = actions,
         scrollBehavior = scrollBehavior,

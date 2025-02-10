@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.BasicText
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,12 +30,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.demo_structure.R
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.CountdownTextView
 import com.example.demo_structure.core.component.otp.OTPTextField
 import com.example.demo_structure.core.component.otp.OtpTextFieldDefaults
 import com.example.demo_structure.screen.verify_email.VerifyEmailViewModel
-import com.example.demo_structure.util.FormatText.buildClickableText
+import com.example.demo_structure.util.extension.buildClickableText
 
 @Preview(showBackground = true)
 @Composable
@@ -132,7 +132,7 @@ private fun contentView(modifier: Modifier = Modifier, email: String, origin: St
             numDigits = 4, // Number of digits in OTP
             isMasked = false, // Mask digits for security
             digitContainerStyle = OtpTextFieldDefaults.outlinedContainer(size = 24.dp), // Choose style (outlined or underlined)
-            textStyle = MaterialTheme.typography.titleLarge, // Configure text style
+            textStyle = ProductXTheme.typography.SemiBold.Title.Large, // Configure text style
             isError = isError // Indicate whether the OTP field is in an error state
         )
 

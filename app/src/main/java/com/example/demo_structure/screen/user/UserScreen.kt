@@ -1,7 +1,6 @@
 package com.example.demo_structure.screen.user
 
-import android.content.res.Configuration
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -19,23 +18,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.demo_structure.app.manager.theme.ApplicationTheme
+import com.example.data.remote.network.RetrofitClient
+import com.example.data.repository.MyProfileRepositoryImpl
 import com.example.demo_structure.app.manager.theme.ProductXTheme
-import com.example.demo_structure.core.base.UiStateWrapper
+import com.example.demo_structure.core.base.DisplayUiStateContent
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppSnackBar
 import com.example.demo_structure.core.component.AppText
+import com.example.demo_structure.core.component.ThemePreviews
 import com.example.demo_structure.screen.user.component.BasicInformationItem
 import com.example.demo_structure.screen.user.component.HeaderSection
 import com.example.demo_structure.screen.user.component.OpportunitiesSection
 import com.example.demo_structure.screen.user.component.ProfileStatusSection
 import com.example.demo_structure.screen.user.component.SkillSection
+import com.example.domain.model.Basic
 import com.example.domain.model.MyProfile
 import com.example.domain.model.Profile
+import com.example.domain.usecase.MyProfileUseCase
 
 /**
  * Displays the user's bookmarked articles. Includes support for loading and empty states.
@@ -49,7 +52,7 @@ internal fun UserScreen(
 ) {
     val myProfileState by userViewModel.myProfileState.collectAsStateWithLifecycle()
     val featureItemState by userViewModel.featureItemState.collectAsStateWithLifecycle()
-
+    val rememberHostState = remember { SnackbarHostState() }
     LaunchedEffect(userViewModel) {
         userViewModel.fetchMyProfile()
         userViewModel.fetchListItem()
@@ -61,48 +64,50 @@ internal fun UserScreen(
         }
     }
 
-    UiStateWrapper(
-        uiState = myProfileState,
-        onSuccessContent = {
-            UserContent(
-                modifier = Modifier.fillMaxSize(),
-                onNavigateToProfile = onNavigateToProfile,
-                onNavigateToLogin = onNavigateToLogin,
-                myProfile = it
+    AppScaffold(
+        modifier = Modifier.fillMaxSize(),
+        snackBarHostState = rememberHostState,
+        snackbarHost = {
+            SnackbarHost(
+                hostState = it,
+                modifier = Modifier.systemBarsPadding(),
+                snackbar = { snackbarData -> AppSnackBar(snackbarData) }
             )
-        })
+        }
+    ) { paddingValue ->
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = androidx.compose.ui.Alignment.Center
+        ) {
+            DisplayUiStateContent(
+                uiState = myProfileState,
+                onSuccessContent = {
+                    MyProfileContent(
+                        myProfile = it,
+                        onNavigateToProfile = onNavigateToProfile,
+                    )
+                })
+        }
+    }
+
 }
 
 
 @Composable
-internal fun UserContent(modifier: Modifier = Modifier, onNavigateToProfile: (Profile) -> Unit, onNavigateToLogin: () -> Unit, myProfile: MyProfile) {
-    val rememberHostState = remember { SnackbarHostState() }
-    ApplicationTheme {
-        AppScaffold(
-            modifier = modifier.fillMaxSize(),
-            snackBarHostState = rememberHostState,
-            snackbarHost = {
-                SnackbarHost(
-                    hostState = it,
-                    modifier = Modifier.systemBarsPadding(),
-                    snackbar = { snackbarData -> AppSnackBar(snackbarData) }
-                )
-            }
-        ) { paddingValue ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                LazyColumn(Modifier) {
-                    myProfileBody(myProfile, onNavigateToProfile)
-                }
-            }
-        }
+internal fun MyProfileContent(myProfile: MyProfile, onNavigateToProfile: (Profile) -> Unit) {
+    val basicInformation = remember(myProfile.profiles) {
+        (myProfile.profiles.find { it is Profile.BasicProfile } as? Profile.BasicProfile)?.basic
+    }
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        myProfileBody(myProfile, basicInformation, onNavigateToProfile)
     }
 }
 
-internal fun LazyListScope.myProfileBody(myProfile: MyProfile, onNavigateToProfile: (Profile) -> Unit) {
-    val basicInformation = (myProfile.profiles.find { it is Profile.BasicProfile } as? Profile.BasicProfile)?.basic
+internal fun LazyListScope.myProfileBody(
+    myProfile: MyProfile,
+    basicInformation: Basic?,
+    onNavigateToProfile: (Profile) -> Unit
+) {
     item { HeaderSection(title = "${basicInformation?.lastName} ${basicInformation?.firstName}", avatar = basicInformation?.photo ?: "") }
     item { Spacer(Modifier.size(24.dp)) }
     item {
@@ -130,10 +135,19 @@ internal fun LazyListScope.myProfileBody(myProfile: MyProfile, onNavigateToProfi
 
 }
 
-@Preview("Light Mode")
-@Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@ThemePreviews
 @Composable
 fun UserContentPreview() {
     AppPreviewWrapper { modifier ->
+        UserScreen(
+            onNavigateToLogin = {},
+            onNavigateToProfile = { profile: Profile -> },
+            userViewModel = UserViewModel(
+                stateHandle = SavedStateHandle(),
+                myProfileUseCase = MyProfileUseCase(MyProfileRepositoryImpl(RetrofitClient.createService()))
+            ),
+            clearUndoState = {}
+        )
     }
+
 }

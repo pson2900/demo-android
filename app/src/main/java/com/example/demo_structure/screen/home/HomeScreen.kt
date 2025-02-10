@@ -17,9 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
@@ -30,8 +28,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.adaptive.WindowAdaptiveInfo
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -52,12 +48,12 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.window.core.layout.WindowSizeClass
 import com.example.demo_structure.JobDetail
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
 import com.example.demo_structure.app.manager.theme.ProductXTheme
+import com.example.demo_structure.app.manager.theme.hexToColor
 import com.example.demo_structure.core.component.AppCard
 import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.AppPreviewWrapper
@@ -67,8 +63,8 @@ import com.example.demo_structure.core.component.AppTopBar
 import com.example.demo_structure.jobResult
 import com.example.demo_structure.screen.job_detail.nonSpatialExpressiveSpring
 import com.example.demo_structure.screen.job_detail.spatialExpressiveSpring
-import com.example.demo_structure.util.DeviceWindowAdaptive
-import com.example.demo_structure.util.deviceCurrentWindowAdaptive
+import com.example.demo_structure.util.monitor.DeviceWindowAdaptive
+import com.example.demo_structure.util.monitor.deviceCurrentWindowAdaptive
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -143,15 +139,16 @@ fun HomeContent(onItemSelected: (Int, String) -> Unit) {
             AppTopBar(title = { Text("Home") })
         }
     ) {
-        AppSurface (
+        AppSurface(
             modifier = Modifier
                 .padding(top = it.calculateTopPadding())
         ) {
             LazyColumn(
-                modifier = Modifier.padding(top = 8.dp),
+                modifier = Modifier
+                    .background(color = hexToColor("#94A3B8")),
                 state = columState,
                 verticalArrangement = Arrangement.spacedBy(16.dp),
-                contentPadding = PaddingValues(start = 24.dp, end = 24.dp)
+                contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 10.dp)
             ) {
                 itemsIndexed(jobResult) { index, item ->
                     ItemResult(
@@ -189,8 +186,10 @@ fun ItemResultPreview() {
 @Composable
 fun HomeScreenPreview() {
     AppPreviewWrapper {
-        HomeContent() { jobId, str ->
+        Box(it) {
+            HomeContent { jobId, str ->
 
+            }
         }
     }
 }

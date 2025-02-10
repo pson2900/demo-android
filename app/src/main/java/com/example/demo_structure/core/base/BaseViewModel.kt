@@ -22,6 +22,7 @@ import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlin.coroutines.cancellation.CancellationException
@@ -57,27 +58,27 @@ abstract class BaseViewModel(val savedStateHandle: SavedStateHandle) : ViewModel
         state.value = UIState.Error(appException)
     }
 
-    protected inline fun <reified T> wrapperApiCall(
+    protected inline fun <reified T> processApiCall(
         call: Flow<T>,
         state: MutableStateFlow<UIState<T>>,
         dataKey: String? = null,
     ) {
-        val tag = "wrapperApiCall"
-        trace("wrapperApiCall") {
+        val tag = "processApiCall"
+        trace(tag) {
             Log.d(tag, "Starting API call for dataKey: $dataKey")
             viewModelScope.launch {
-                call.onStart {
-                    Log.d(tag, "API flow started: $dataKey")
-                    val savedData = dataKey?.let { loadFromSavedState<T>(it) }
-                    if (savedData == null) {
-                        Log.d(tag, "No saved data for $dataKey, emitting loading state")
-                        emitLoading(state)
-                    } else {
-                        Log.d(tag, "Loaded data for $dataKey, emitting success")
-                        emitSuccess(state, savedData)
+                call
+                    .onStart {
+                        Log.d(tag, "API flow started: $dataKey")
+                        val savedData = dataKey?.let { loadFromSavedState<T>(it) }
+                        if (savedData == null) {
+                            Log.d(tag, "No saved data for $dataKey, emitting loading state")
+                            emitLoading(state)
+                        } else {
+                            Log.d(tag, "Loaded data for $dataKey, emitting success")
+                            emitSuccess(state, savedData)
+                        }
                     }
-                }
-
                     .catch {
                         if (it is CancellationException) {
                             Log.d(tag, "API call canceled for dataKey: $dataKey in outer try-catch")
@@ -88,23 +89,20 @@ abstract class BaseViewModel(val savedStateHandle: SavedStateHandle) : ViewModel
                         }
 
                     }
-                    .collect { data ->
+                    .onEach { data ->
                         Log.d(tag, "API call success for $dataKey: $data")
                         dataKey?.let {
                             saveToSavedState(it, data)
                         }
-
                         emitSuccess(state, data)
                     }
             }
         }
-
     }
-
 }
 
 @Composable
-fun <T> UiStateWrapper(
+fun <T> DisplayUiStateContent(
     uiState: UIState<T>,
     onLoadingContent: @Composable () -> Unit = {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -113,7 +111,11 @@ fun <T> UiStateWrapper(
         Log.d("QQQ", "onLoadingContent")
     },
     onErrorContent: @Composable (message: String) -> Unit = { message ->
-        Box(modifier = Modifier.padding(start = 16.dp, end = 16.dp).fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp)
+                .fillMaxSize(), contentAlignment = Alignment.Center
+        ) {
             Text(text = "Error: $message", color = ProductXTheme.colorScheme.error)
         }
         Log.d("QQQ", "onErrorContent: ${message}")
@@ -128,16 +130,3 @@ fun <T> UiStateWrapper(
         is UIState.Error -> onErrorContent(uiState.appException.message ?: "Unknown error")
     }
 }
-
-/*
-@Preview("Light Mode")
-@Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun DataStateWrapperPreview() {
-    AppPreviewWrapper {
-        DataStateWrapper<JobDetail>(
-            state = UIState.Loading,
-            onSuccessContent = {}
-        )
-    }
-}*/

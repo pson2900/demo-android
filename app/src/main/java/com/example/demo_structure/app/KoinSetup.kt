@@ -3,9 +3,11 @@ package com.example.demo_structure.app
 import android.app.Application
 import com.example.demo_structure.app.di.applicationModule
 import com.example.demo_structure.app.di.dataModule
+import com.example.demo_structure.app.di.databaseModule
 import com.example.demo_structure.app.di.domainModule
 import com.example.demo_structure.app.di.presentationModule
 import com.example.demo_structure.app.di.remoteModule
+import com.example.demo_structure.app.di.workerModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -29,7 +31,8 @@ object KoinSetup {
             androidContext(application)
             printLogger(Level.DEBUG)
             modules(
-                listOf(applicationModule, remoteModule, dataModule, domainModule, presentationModule)
+                listOf(applicationModule, remoteModule, dataModule, domainModule, presentationModule, databaseModule, )
+//                        workerModule
             )
         }
     }

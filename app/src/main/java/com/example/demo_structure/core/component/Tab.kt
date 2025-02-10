@@ -20,17 +20,6 @@ import com.example.demo_structure.app.manager.theme.ProductXTheme
  * Copyright (c) 2025 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-
-/**
- * Now in Android tab. Wraps Material 3 [Tab] and shifts text label down.
- *
- * @param selected Whether this tab is selected or not.
- * @param onClick The callback to be invoked when this tab is selected.
- * @param modifier Modifier to be applied to the tab.
- * @param enabled Controls the enabled state of the tab. When `false`, this tab will not be
- * clickable and will appear disabled to accessibility services.
- * @param text The text label content.
- */
 @Composable
 fun AppTab(
     selected: Boolean,
@@ -58,14 +47,7 @@ fun AppTab(
     )
 }
 
-/**
- * Now in Android tab row. Wraps Material 3 [TabRow].
- *
- * @param selectedTabIndex The index of the currently selected tab.
- * @param modifier Modifier to be applied to the tab row.
- * @param tabs The tabs inside this tab row. Typically this will be multiple [NiaTab]s. Each element
- * inside this lambda will be measured and placed evenly across the row, each taking up equal space.
- */
+
 @Composable
 fun AppTabRow(
     selectedTabIndex: Int,
@@ -75,7 +57,7 @@ fun AppTabRow(
     TabRow(
         selectedTabIndex = selectedTabIndex,
         modifier = modifier,
-        containerColor = Color.Transparent,
+        containerColor = ProductXTheme.colorScheme.surface,
         contentColor = ProductXTheme.colorScheme.onSurface,
         indicator = { tabPositions ->
             TabRowDefaults.SecondaryIndicator(

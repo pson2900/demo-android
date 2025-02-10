@@ -16,11 +16,10 @@ import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.window.core.layout.WindowSizeClass
 import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.screen.community.toCommunityScreen
 import com.example.demo_structure.screen.education.toEducationScreen
-import com.example.demo_structure.screen.home.toHomeSreen
+import com.example.demo_structure.screen.home.toHomeScreen
 import com.example.demo_structure.screen.job_detail.toJobDetailScreen
 import com.example.demo_structure.screen.login.toLoginScreen
 import com.example.demo_structure.screen.main.toMainScreen
@@ -28,7 +27,7 @@ import com.example.demo_structure.screen.opportunity.toOpportunityScreen
 import com.example.demo_structure.screen.otp.toVerifyOtpScreen
 import com.example.demo_structure.screen.user.toMyProfileScreen
 import com.example.demo_structure.screen.verify_email.toVerifyEmailScreen
-import com.example.demo_structure.util.logNavigation
+import com.example.demo_structure.util.extension.logNavigation
 
 /**
  * Created by Phạm Sơn at 14:59/3/1/25
@@ -99,7 +98,7 @@ fun MainNavHost(
         enterTransition = { fadeIn(animationSpec = tween(500)) },
         exitTransition = { fadeOut(animationSpec = tween(500)) },
     ) {
-        toHomeSreen(
+        toHomeScreen(
             onNavigateToJobDetail = onNavigateToJobDetail,
         )
         toEducationScreen(

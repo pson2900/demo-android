@@ -1,8 +1,9 @@
-package com.example.demo_structure.util
+package com.example.demo_structure.util.extension
 
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import androidx.activity.ComponentActivity
 
 /**
  * Created by Phạm Sơn at 13:03/6/2/25
@@ -10,10 +11,10 @@ import android.content.ContextWrapper
  * Email: son.pham@navigosgroup.com
  */
 
-fun Context.findActivity(): Activity {
+fun Context.findActivity(): ComponentActivity {
     var context = this
     while (context is ContextWrapper) {
-        if (context is Activity) return context
+        if (context is ComponentActivity) return context
         context = context.baseContext
     }
     throw IllegalStateException("Activity is not found")

@@ -7,7 +7,6 @@ import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,10 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -49,13 +45,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.core.content.getSystemService
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.R
 import com.example.demo_structure.core.component.EmailTextField
-import com.example.demo_structure.screen.education.EducationViewModel
-import com.example.demo_structure.util.FormatText.buildClickableText
-import org.koin.androidx.compose.koinViewModel
+import com.example.demo_structure.util.extension.buildClickableText
 
 
 @Preview(showBackground = true)

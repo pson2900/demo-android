@@ -298,5 +298,4 @@ data class DesiredLocationTypeResponse(
     fun toDomain(): DesiredLocationType {
         return DesiredLocationType(id, name)
     }
-
 }

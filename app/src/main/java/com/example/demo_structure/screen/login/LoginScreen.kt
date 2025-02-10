@@ -143,7 +143,7 @@ fun LoginContent(modifier: Modifier) {
 @Preview("Light Mode")
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun UserContentPreview() {
+fun LoginPreview() {
     AppPreviewWrapper { modifier ->
         LoginContent(modifier)
     }

@@ -7,11 +7,14 @@ import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContent
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
@@ -24,6 +27,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
+import com.example.demo_structure.app.manager.theme.BaseFont
 import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
 import com.example.demo_structure.app.manager.theme.ProductXTheme
@@ -45,7 +49,6 @@ fun rememberScaffoldState(
 ): ScaffoldState = remember(snackBarHostState, snackBarManager, resources, coroutineScope) {
     ScaffoldState(snackBarHostState, snackBarManager, resources, coroutineScope)
 }
-
 
 class ScaffoldState(
     val snackBarHostState: SnackbarHostState,
@@ -74,6 +77,7 @@ class ScaffoldState(
 /**
  * Wrap Material [androidx.compose.material3.Scaffold] and set [ProductXTheme] colors.
  */
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun AppScaffold(
     modifier: Modifier = Modifier,
@@ -88,22 +92,37 @@ fun AppScaffold(
     contentWindowInsets: WindowInsets = WindowInsets.safeContent,
     content: @Composable (PaddingValues) -> Unit
 ) {
-    Scaffold(
-        modifier = modifier,
-        topBar = topBar,
-        bottomBar = bottomBar,
-        snackbarHost = {
-            snackbarHost(snackBarHostState)
-        },
-        floatingActionButton = floatingActionButton,
-        floatingActionButtonPosition = floatingActionButtonPosition,
-        containerColor = backgroundColor,
-        contentColor = contentColor,
-        contentWindowInsets = contentWindowInsets,
-        content = content
-    )
+    SharedTransitionLayout {
+        AnimatedVisibility(visible = true) {
+            CompositionLocalProvider(
+                LocalSharedTransitionScope provides this@SharedTransitionLayout,
+                LocalNavAnimatedVisibilityScope provides this,
+                content = {
+                    Scaffold(
+                        modifier = modifier,
+                        topBar = topBar,
+                        bottomBar = bottomBar,
+                        snackbarHost = {
+                            snackbarHost(snackBarHostState)
+                        },
+                        floatingActionButton = floatingActionButton,
+                        floatingActionButtonPosition = floatingActionButtonPosition,
+                        containerColor = backgroundColor,
+                        contentColor = contentColor,
+                        contentWindowInsets = contentWindowInsets,
+                        content = content
+                    )
+
+                }
+            )
+        }
+    }
 }
 
+/**
+ * A composable function that returns the [Resources]. It will be recomposed when `Configuration`
+ * gets updated.
+ */
 /**
  * A composable function that returns the [Resources]. It will be recomposed when `Configuration`
  * gets updated.
@@ -116,31 +135,19 @@ private fun resources(): Resources {
 }
 
 
-@OptIn(ExperimentalSharedTransitionApi::class)
-
 @Composable
 fun AppPreviewWrapper(content: @Composable (Modifier) -> Unit) {
     ApplicationTheme {
-        val modifier: Modifier = Modifier
-        SharedTransitionLayout {
-            AnimatedVisibility(visible = true) {
-                CompositionLocalProvider(
-                    LocalSharedTransitionScope provides this@SharedTransitionLayout,
-                    LocalNavAnimatedVisibilityScope provides this
-                ) {
-                    AppSurface(
-                        modifier = modifier,
-                        shape = RectangleShape,
-                        color = ProductXTheme.colorScheme.background,
-                        elevation = 0.dp,
-                        content = {
-                            content(modifier.fillMaxSize())
-                        }
-                    )
-
-                }
-            }
+        AppSurface(
+            modifier = Modifier,
+            shape = RectangleShape,
+            color = ProductXTheme.colorScheme.background,
+            contentColor = ProductXTheme.colorScheme.onBackground,
+            elevation = 0.dp
+        ) {
+            content(Modifier)
         }
     }
+
 }
 

@@ -53,7 +53,7 @@ annotation class ThemePreviews
 @ThemePreviews
 @Composable
 fun BackgroundDefault() {
-    ApplicationTheme(disableDynamicTheming = true) {
+    ApplicationTheme(dynamicColor = true) {
         AppBackground(Modifier.size(100.dp), content = {})
     }
 }
@@ -61,7 +61,7 @@ fun BackgroundDefault() {
 @ThemePreviews
 @Composable
 fun BackgroundDynamic() {
-    ApplicationTheme(disableDynamicTheming = false) {
+    ApplicationTheme(dynamicColor = false) {
         AppBackground(Modifier.size(100.dp), content = {})
     }
 }

@@ -44,7 +44,7 @@ internal fun BasicInformationSection(list: List<BasicInformation>) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item {
             AppText(
-                text = "Thông tin hồ sơ", color = colorResource(R.color.black),
+                text = "Thông tin hồ sơ",
                 style = ProductXTheme.typography.SemiBold.Label.Large
             )
         }

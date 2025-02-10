@@ -21,7 +21,7 @@ class UserViewModel(private val myProfileUseCase: MyProfileUseCase, stateHandle:
     val featureItemState: StateFlow<UIState<List<String>>> = _featureItemState
 
     suspend fun fetchMyProfile() {
-        wrapperApiCall(
+        processApiCall(
             call = myProfileUseCase.getMyProfile(),
             state = _myProfileState,
             dataKey = USER_PROFILE_KEY
@@ -29,7 +29,7 @@ class UserViewModel(private val myProfileUseCase: MyProfileUseCase, stateHandle:
     }
 
     suspend fun fetchListItem() {
-        wrapperApiCall(
+        processApiCall(
             call = myProfileUseCase.getListItem(),
             state = _featureItemState,
             dataKey = ITEMS

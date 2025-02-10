@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.demo_structure.util
+package com.example.demo_structure.util.monitor
 
 import android.content.Context
 import android.net.ConnectivityManager

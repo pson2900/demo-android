@@ -22,3 +22,7 @@ val jobResult by lazy {
         JobDetail(jobId = 10, jobTitle = "Cybersecurity Analyst", company = "SecureNet", logo = R.drawable.company_logo, salary = "2800 - 4000 USD")
     )
 }
+
+val myProfileData by lazy {
+
+}

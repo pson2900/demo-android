@@ -10,7 +10,7 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.demo_structure.util.DeviceWindowAdaptive
+import com.example.demo_structure.util.monitor.DeviceWindowAdaptive
 
 /**
  * Created by Phạm Sơn at 13:40/21/1/25
@@ -43,8 +43,8 @@ val LocalCardTheme = staticCompositionLocalOf {
 /**
  * A composition local for [BackgroundTheme].
  */
-val LocalColorTheme = staticCompositionLocalOf<ColorScheme> {
-    error("No ColorPalette provided")
+val LocalColorTheme = staticCompositionLocalOf {
+    lightColorScheme
 }
 
 val LocalPadding = staticCompositionLocalOf {
@@ -58,6 +58,9 @@ val LocalCorner = staticCompositionLocalOf {
 }
 val LocalTonalElevation = staticCompositionLocalOf {
     TonalElevation()
+}
+val LocalShapes = staticCompositionLocalOf {
+    defaultShapes
 }
 
 

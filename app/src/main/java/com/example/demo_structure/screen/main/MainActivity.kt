@@ -7,20 +7,18 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.material3.Button
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,7 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,7 +41,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.demo_structure.app.InitializeApp
-import com.example.demo_structure.app.manager.LanguageManager
 import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
 import com.example.demo_structure.core.component.AppPreviewWrapper
@@ -55,8 +52,8 @@ import com.example.demo_structure.core.component.InitBottomMainScreen
 import com.example.demo_structure.core.component.rememberScaffoldState
 import com.example.demo_structure.core.navigation.MainNavHost
 import com.example.demo_structure.core.navigation.rememberAppState
-import com.example.demo_structure.util.NetworkMonitor
-import com.example.demo_structure.util.isSystemInDarkTheme
+import com.example.demo_structure.util.monitor.NetworkMonitor
+import com.example.demo_structure.util.extension.isSystemInDarkTheme
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -65,13 +62,13 @@ import org.koin.compose.koinInject
  * The default light scrim, as defined by androidx and the platform:
  * https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:activity/activity/src/main/java/androidx/activity/EdgeToEdge.kt;l=35-38;drc=27e7d52e8604a080133e8b842db10c89b4482598
  */
-private val lightScrim = android.graphics.Color.argb(0xe6, 0xFF, 0xFF, 0xFF)
+private val lightScrim = Color.White
 
 /**
  * The default dark scrim, as defined by androidx and the platform:
  * https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:activity/activity/src/main/java/androidx/activity/EdgeToEdge.kt;l=40-44;drc=27e7d52e8604a080133e8b842db10c89b4482598
  */
-private val darkScrim = android.graphics.Color.argb(0x80, 0x1b, 0x1b, 0x1b)
+private val darkScrim = Color.Black
 
 /**
  * Class for the system theme settings.
@@ -91,8 +88,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         observeThemeSettings()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setupSplashScreen(splashScreen)
         setContent {
             val themeSettings by remember { mutableStateOf(getInitialThemeSettings()) }
@@ -137,8 +134,8 @@ class MainActivity : ComponentActivity() {
                     darkScrim = android.graphics.Color.TRANSPARENT,
                 ) { darkTheme },
                 navigationBarStyle = SystemBarStyle.auto(
-                    lightScrim = lightScrim,
-                    darkScrim = darkScrim,
+                    lightScrim = lightScrim.toArgb(),
+                    darkScrim = darkScrim.toArgb(),
                 ) { darkTheme },
             )
         }
@@ -174,6 +171,8 @@ fun MainContent(
 
     AppScaffold(
         modifier = modifier
+            .navigationBarsPadding()
+            .statusBarsPadding()
             .semantics {
                 testTagsAsResourceId = true
             },
@@ -201,7 +200,6 @@ fun MainContent(
             AppSurface(
                 modifier = Modifier
                     .fillMaxSize()
-
                     .padding(paddingValues = padding)
             ) {
                 MainNavHost(
@@ -219,42 +217,12 @@ fun MainContent(
 @Composable
 fun MainContentPreview() {
     AppPreviewWrapper {
-        val context = LocalContext.current
-        val appState = rememberAppState(networkMonitor = koinInject())
-        val snackbarHostState = SnackbarHostState()
-        AppScaffold(
-            modifier = Modifier,
-            snackbarHost = {
-                SnackbarHost(
-                    hostState = it,
-                    modifier = Modifier.systemBarsPadding(),
-                    snackbar = { snackbarData -> AppSnackBar(snackbarData) }
-                )
-            },
-            snackBarHostState = snackbarHostState,
-            bottomBar = {
-                BottomNavigationBar(Modifier) {
-                    InitBottomMainScreen(appState)
-                }
-            }
-        ) { padding ->
-            Box(modifier = Modifier.padding(padding)) {
-                Row {
-                    ConnectionStatus()
-                    Button(onClick = {
-                        LanguageManager.setLocale(context, "en")
-                    }) {
-                        Text("Change EN")
-
-                    }
-                    Button(onClick = {
-                        LanguageManager.setLocale(context, "vi")
-                    }) {
-                        Text("Change VI")
-                    }
-                }
-            }
-        }
+        MainContent(
+            it,
+            onNavigateToJobDetail = { _, _ -> },
+            onNavigateToLogin = {},
+            onNavigateToVerifyEmail = { },
+        )
     }
 }
 

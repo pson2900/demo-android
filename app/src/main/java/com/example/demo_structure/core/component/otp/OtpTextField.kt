@@ -192,7 +192,7 @@ private fun RowScope.OutlinedDigitContainer(
                 shape = digitBoxStyle.shape
             )
             .background(
-                color = digitBoxStyle.containerColor ?: ProductXTheme.colorScheme.background,
+                color = ProductXTheme.colorScheme.surface,
                 shape = digitBoxStyle.shape
             )
             .padding(2.dp),
@@ -205,7 +205,7 @@ private fun RowScope.OutlinedDigitContainer(
                         .align(Alignment.Center)
                         .size(8.dp)
                         .clip(CircleShape)
-                        .background(ProductXTheme.colorScheme.onBackground)
+                        .background(ProductXTheme.colorScheme.onSurface)
                 )
         } else {
             Text(

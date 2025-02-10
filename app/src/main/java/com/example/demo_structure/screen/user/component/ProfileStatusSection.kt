@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,12 +28,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.AppIcons
-import com.example.demo_structure.app.manager.theme.BaseFont
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppBox
 import com.example.demo_structure.core.component.AppButton
 import com.example.demo_structure.core.component.AppPreviewWrapper
-import com.example.demo_structure.core.component.AppSurface
 import com.example.demo_structure.core.component.AppText
 
 /**
@@ -44,16 +41,20 @@ import com.example.demo_structure.core.component.AppText
  */
 @Composable
 fun ProfileStatusSection(modifier: Modifier = Modifier, onClick: () -> Unit) {
-    AppSurface(
-        modifier = modifier.padding(start = 16.dp, end = 16.dp),
-        border = BorderStroke(2.dp, colorResource(R.color.pale_violet)),
-        shape = RoundedCornerShape(10.dp),
-
+    Box(
+        modifier = Modifier
+            .padding(start = 16.dp, end = 16.dp),
     ) {
-        Column {
-            ProfileProgressContent( 5, 30)
-            ProfileProgressAction( onClick)
+        AppBox(
+            shape = RoundedCornerShape(10.dp),
+            border = BorderStroke(2.dp, colorResource(R.color.pale_violet))
+        ) {
+            Column {
+                ProfileProgressContent(5, 30)
+                ProfileProgressAction(onClick)
+            }
         }
+
     }
 }
 
@@ -108,10 +109,11 @@ fun ProfileProgressAction(onClick: () -> Unit) {
                     )
                 }
             }
-            AppButton(modifier = Modifier.fillMaxWidth(),
-                background = colorResource(R.color.alice_blue),
-                colorEffect = colorResource(R.color.violets_are_blue),
-                onClick = onClick) {
+            AppButton(
+                onClick = onClick,
+                modifier = Modifier.fillMaxWidth(),
+                background = colorResource(R.color.alice_blue)
+            ) {
                 Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
                     Image(
                         imageVector = ImageVector.vectorResource(AppIcons.addIcon),
@@ -132,22 +134,22 @@ fun ProfileProgressAction(onClick: () -> Unit) {
 
 @Composable
 fun ProfileProgressBar(progress: Int, max: Int) {
-    Box(
+    AppBox(
+        shape = RoundedCornerShape(10.dp),
+        color = Color.White,
         modifier = Modifier
             .fillMaxWidth()
             .height(24.dp)
-            .background(color = Color.White, shape = RoundedCornerShape(10.dp))
     ) {
         AppBox(
+            color = colorResource(R.color.persian_green),
+            shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .padding(4.dp)
-                .background(
-                    color = colorResource(R.color.persian_green), shape = RoundedCornerShape(10.dp)
-                )
                 .fillMaxWidth(progress.toFloat() / max)
                 .fillMaxHeight()
         ) {
-            
+
         }
         AppText(
             text = "$progress/$max",
@@ -161,7 +163,7 @@ fun ProfileProgressBar(progress: Int, max: Int) {
 @Composable
 fun StatusSectionPreview() {
     AppPreviewWrapper {
-        ProfileStatusSection(Modifier.wrapContentHeight()) {
+        ProfileStatusSection {
 
         }
     }

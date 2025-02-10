@@ -16,7 +16,7 @@ import com.example.demo_structure.R
  * Copyright (c) 2025 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-enum class FontDefinition(val font: Int, val weight: FontWeight, val style: FontStyle) {
+internal enum class FontDefinition(val font: Int, val weight: FontWeight, val style: FontStyle) {
     Regular(R.font.nunito_regular, FontWeight.W400, FontStyle.Normal),
     RegularItalic(R.font.nunito_italic, FontWeight.W400, FontStyle.Italic),
 
@@ -34,7 +34,7 @@ enum class FontDefinition(val font: Int, val weight: FontWeight, val style: Font
 }
 
 
-internal abstract class BaseFont(private val font: FontDefinition) {
+internal class BaseFont(private val font: FontDefinition) {
 
     fun toTextStyle(size: TextUnit, lineHeight: TextUnit) =
         TextStyle(fontFamily = FontFamily(Font(font.font)), fontSize = size, lineHeight = lineHeight, fontWeight = font.weight, fontStyle = font.style)
@@ -122,48 +122,38 @@ internal abstract class BaseFont(private val font: FontDefinition) {
         Small(size = 12.sp, lineHeight = 16.sp),
         X_Small(size = 10.sp, lineHeight = 14.sp),
     }
-
 }
 
-internal object RegularFont : BaseFont(FontDefinition.Regular)
-internal object RegularItalicFont : BaseFont(FontDefinition.RegularItalic)
-internal object MediumFont : BaseFont(FontDefinition.Medium)
-internal object MediumItalicFont : BaseFont(FontDefinition.MediumItalic)
-internal object SemiBoldFont : BaseFont(FontDefinition.SemiBold)
-internal object SemiBoldItalicFont : BaseFont(FontDefinition.SemiBoldItalic)
-internal object BoldFont : BaseFont(FontDefinition.Bold)
-internal object BoldItalicFont : BaseFont(FontDefinition.BoldItalic)
-internal object ExtraBoldFont : BaseFont(FontDefinition.ExtraBold)
-internal object ExtraBoldItalicFont : BaseFont(FontDefinition.ExtraBoldItalic)
-
 val defaultTypography = Typography(
-    displayLarge = SemiBoldFont.Title.Large,
-    displayMedium = SemiBoldFont.Title.Medium,
-    displaySmall = SemiBoldFont.Title.Small,
-    headlineLarge = SemiBoldFont.Title.Large,
-    headlineMedium = SemiBoldFont.Title.Medium,
-    headlineSmall = SemiBoldFont.Title.Small,
-    titleLarge = BoldFont.Title.Large,
-    titleMedium = BoldFont.Title.Medium,
-    titleSmall = BoldFont.Title.Small,
-    bodyLarge = RegularFont.Title.Large,
-    bodyMedium = RegularFont.Title.Medium,
-    bodySmall = RegularFont.Title.Small,
-    labelLarge = MediumFont.Title.Large,
-    labelMedium = MediumFont.Title.Medium,
-    labelSmall = MediumFont.Title.Small,
+    displayLarge = BaseFont(FontDefinition.SemiBold).Title.Large,
+    displayMedium = BaseFont(FontDefinition.SemiBold).Title.Medium,
+    displaySmall = BaseFont(FontDefinition.SemiBold).Title.Small,
+    headlineLarge = BaseFont(FontDefinition.SemiBold).Title.Large,
+    headlineMedium = BaseFont(FontDefinition.SemiBold).Title.Medium,
+    headlineSmall = BaseFont(FontDefinition.SemiBold).Title.Small,
+    titleLarge = BaseFont(FontDefinition.Bold).Title.Large,
+    titleMedium = BaseFont(FontDefinition.Bold).Title.Medium,
+    titleSmall = BaseFont(FontDefinition.Bold).Title.Small,
+    bodyLarge = BaseFont(FontDefinition.Regular).Title.Large,
+    bodyMedium = BaseFont(FontDefinition.Regular).Title.Medium,
+    bodySmall = BaseFont(FontDefinition.Regular).Title.Small,
+    labelLarge = BaseFont(FontDefinition.Medium).Title.Large,
+    labelMedium = BaseFont(FontDefinition.Medium).Title.Medium,
+    labelSmall = BaseFont(FontDefinition.Medium).Title.Small,
 )
 
 @Immutable
 internal class AppTypography(
-    val Regular: BaseFont = RegularFont,
-    val RegularItalic: BaseFont = RegularItalicFont,
-    val Medium: BaseFont = MediumFont,
-    val MediumItalic: BaseFont = MediumItalicFont,
-    val SemiBold: BaseFont = SemiBoldFont,
-    val SemiBoldItalic: BaseFont = SemiBoldItalicFont,
-    val Bold: BaseFont = BoldFont,
-    val BoldItalic: BaseFont = BoldItalicFont,
-    val ExtraBold: BaseFont = ExtraBoldFont,
-    val ExtraBoldItalic: BaseFont = ExtraBoldItalicFont,
+    val Regular: BaseFont = BaseFont(FontDefinition.Regular),
+    val RegularItalic: BaseFont = BaseFont(FontDefinition.RegularItalic),
+    val Medium: BaseFont = BaseFont(FontDefinition.Medium),
+    val MediumItalic: BaseFont = BaseFont(FontDefinition.MediumItalic),
+    val SemiBold: BaseFont = BaseFont(FontDefinition.SemiBold),
+    val SemiBoldItalic: BaseFont = BaseFont(FontDefinition.SemiBoldItalic),
+    val Bold: BaseFont = BaseFont(FontDefinition.Bold),
+    val BoldItalic: BaseFont = BaseFont(FontDefinition.BoldItalic),
+    val ExtraBold: BaseFont = BaseFont(FontDefinition.ExtraBold),
+    val ExtraBoldItalic: BaseFont = BaseFont(FontDefinition.ExtraBoldItalic),
 )
+
+

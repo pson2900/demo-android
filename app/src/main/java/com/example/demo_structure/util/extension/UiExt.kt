@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.demo_structure.util
+package com.example.demo_structure.util.extension
 
 import android.content.res.Configuration
 import android.util.Log
