@@ -59,7 +59,7 @@ abstract class BaseViewModel(val savedStateHandle: SavedStateHandle) : ViewModel
     }
 
     protected inline fun <reified T> processApiCall(
-        call: Flow<T>,
+        crossinline call: suspend () -> Flow<T>,
         state: MutableStateFlow<UIState<T>>,
         dataKey: String? = null,
     ) {
@@ -67,7 +67,7 @@ abstract class BaseViewModel(val savedStateHandle: SavedStateHandle) : ViewModel
         trace(tag) {
             Log.d(tag, "Starting API call for dataKey: $dataKey")
             viewModelScope.launch {
-                call
+                call()
                     .onStart {
                         Log.d(tag, "API flow started: $dataKey")
                         val savedData = dataKey?.let { loadFromSavedState<T>(it) }
@@ -89,7 +89,7 @@ abstract class BaseViewModel(val savedStateHandle: SavedStateHandle) : ViewModel
                         }
 
                     }
-                    .onEach { data ->
+                    .collect { data ->
                         Log.d(tag, "API call success for $dataKey: $data")
                         dataKey?.let {
                             saveToSavedState(it, data)
