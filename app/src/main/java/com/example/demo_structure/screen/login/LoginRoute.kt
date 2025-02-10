@@ -1,5 +1,6 @@
 package com.example.demo_structure.screen.login
 
+import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -35,6 +36,10 @@ fun NavGraphBuilder.toLoginScreen(appState: AppState, onBackClick: () -> Unit) {
                         email = email,
                         origin = OTPType.FORGOT_PASSWORD.type
                     )
+                }, onNavigateHomeScreen = {
+                    Destinations.Main.getEntries().find { it.testTag == "HomeTag" }?.let { item->
+                        appState.navigateToMain(navBackStackEntry)
+                    }
                 })
             }
         )

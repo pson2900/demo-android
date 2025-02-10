@@ -21,8 +21,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.demo_structure.screen.create_pin.PinArguments
 import com.example.demo_structure.screen.create_pin.toCreatePinCode
+import com.example.demo_structure.screen.home.toHome
 import com.example.demo_structure.screen.job_detail.toJobDetail
 import com.example.demo_structure.screen.login.toLogin
+import com.example.demo_structure.screen.main.toMain
 import com.example.demo_structure.screen.otp.OTPType
 import com.example.demo_structure.screen.otp.toVerifyOtp
 import com.example.demo_structure.screen.verify_email.toVerifyEmail
@@ -145,6 +147,16 @@ class AppState(
                 navController.toLogin(Destinations.Login.createRoute(
                     email = email
                 ))
+            }
+        }
+    }
+
+    fun navigateToMain (from: NavBackStackEntry) {
+        // In order to discard duplicated navigation events, we check the Lifecycle
+        val route = Destinations.Main.route
+        trace("Navigation : ${route}") {
+            if (from.lifecycleIsResumed()) {
+                navController.toMain( androidx.navigation.navOptions {})
             }
         }
     }

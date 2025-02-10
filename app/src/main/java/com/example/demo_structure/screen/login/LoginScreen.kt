@@ -67,6 +67,7 @@ import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.core.component.AppBarIcon
 import com.example.demo_structure.core.component.TopAppBar
 import com.example.demo_structure.core.component.otp.PassCodeTextField
+import kotlinx.coroutines.delay
 
 /**
  * Created by Phạm Sơn at 15:17/3/1/25
@@ -84,7 +85,8 @@ internal fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = viewModel(),
     email: String,
-    onNavigateForgotPasswordOtp: (String) -> Unit
+    onNavigateForgotPasswordOtp: (String) -> Unit,
+    onNavigateHomeScreen: () -> Unit
 ) {
 
     val loginState by viewModel.loginUiState.collectAsStateWithLifecycle()
@@ -108,6 +110,8 @@ internal fun LoginScreen(
                 if (state.authentication != null) {
                     viewModel.saveAuth(state.authentication)
                     Toast.makeText(context, "login success", Toast.LENGTH_SHORT).show()
+                    delay(500)
+                    onNavigateHomeScreen.invoke()
                 } else {
                     errorMessage = "Mã không đúng. Thử lại nhé!"
                 }

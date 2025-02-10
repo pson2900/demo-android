@@ -38,7 +38,11 @@ fun NavGraphBuilder.toCreatePinCodeScreen(appState: AppState) {
                     null
                 }
                 val origin = arguments.getString(Destinations.CreatePin.ORIGIN)?:""
-                PinCodeScreen(viewModel = koinViewModel(), arguments = pin, origin = origin)
+                PinCodeScreen(viewModel = koinViewModel(), arguments = pin, onNavigateHomeScreen = {
+                    Destinations.Main.getEntries().find { it.testTag == "HomeTag" }?.let {
+                       //appState.navigateToBottomBarRoute(Destinations.Home.)
+                    }
+                }, origin = origin)
             }
         )
     }

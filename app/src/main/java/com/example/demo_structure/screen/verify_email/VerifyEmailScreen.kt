@@ -62,9 +62,7 @@ import com.example.demo_structure.R
 import com.example.demo_structure.core.component.EmailTextField
 import com.example.demo_structure.screen.home.LoadingState
 import com.example.demo_structure.screen.otp.OTPType
-import com.example.demo_structure.screen.otp.VerifyOTPViewModel
 import com.example.demo_structure.util.FormatText.buildClickableText
-import kotlinx.coroutines.CoroutineScope
 
 @Preview(showBackground = true)
 @Composable

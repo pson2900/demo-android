@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.data.proto.DataStoreManager
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.core.component.AppBarIcon
@@ -80,16 +79,19 @@ fun PinCodeScreen(
     modifier: Modifier = Modifier,
     viewModel: PinCodeViewModel = koinViewModel(),
     arguments: PinArguments? = null,
+    onNavigateHomeScreen: () -> Unit,
     origin: String
 ) {
     val context = LocalContext.current
     val registerState by viewModel.registerUiState.collectAsStateWithLifecycle()
     val updatePasswordState by viewModel.updatePassWordUiState.collectAsStateWithLifecycle()
     val loginState by viewModel.loginUiState.collectAsStateWithLifecycle()
+
     var isLoading by remember { mutableStateOf(false) }
     val rememberHostState = remember { SnackbarHostState() }
     var otpError by remember { mutableStateOf("") }
     var isCompleteStep1 by remember { mutableStateOf(false) }
+
     val maxLength = 6
 
     fun verifyPassCode(arguments: PinArguments) {
@@ -116,6 +118,9 @@ fun PinCodeScreen(
         viewModel.login(email, passCode)
     }
 
+    fun loginSuccess() {
+        onNavigateHomeScreen.invoke()
+    }
 
     LaunchedEffect(key1 = registerState) {
         when (val state = registerState) {
@@ -173,6 +178,8 @@ fun PinCodeScreen(
             is PinCodeState.Error -> {
                 Toast.makeText(context, state.msg, Toast.LENGTH_SHORT).show()
                 isLoading = false
+                delay(500)
+                loginSuccess()
             }
 
             else -> Unit
