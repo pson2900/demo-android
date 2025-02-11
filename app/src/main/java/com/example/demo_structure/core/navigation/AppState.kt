@@ -69,28 +69,6 @@ class AppState(
     var context: Context,
     val timeZoneMonitor: TimeZoneMonitor,
 ) {
-    private val previousDestination = mutableStateOf<NavDestination?>(null)
-    /*val currentDestination: NavDestination?
-        @Composable get() {
-            // Collect the currentBackStackEntryFlow as a state
-            val currentEntry = navController.currentBackStackEntryFlow
-                .collectAsState(initial = null)
-
-            // Fallback to previousDestination if currentEntry is null
-            return currentEntry.value?.destination.also { destination ->
-                if (destination != null) {
-                    previousDestination.value = destination
-                }
-            } ?: previousDestination.value
-        }
-
-    val currentTopLevelDestination: Destinations?
-        @Composable get() {
-            return Destinations.Main.getEntries().firstOrNull { topLevelDestination ->
-                currentDestination?.hasRoute(route = topLevelDestination.route) == true
-            }
-        }*/
-
     val isOffline = networkMonitor.isOnline
         .map(Boolean::not)
         .stateIn(

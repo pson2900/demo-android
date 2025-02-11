@@ -17,13 +17,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.app.manager.theme.generate
-import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.DestinationItem
 import com.example.demo_structure.core.navigation.Destinations
-import com.example.demo_structure.core.navigation.rememberAppState
 
 /**
  * Created by Phạm Sơn at 16:24/10/1/25
@@ -52,14 +49,14 @@ fun BottomNavigationBar(
 }
 
 @Composable
-fun RowScope.InitBottomMainScreen(appState: AppState, currentRoute: DestinationItem) {
+fun RowScope.InitBottomMainScreen(currentRoute: DestinationItem, onClick: (DestinationItem) -> Unit = {}, changeItem: @Composable (DestinationItem) -> Boolean) {
 //    val currentRoute = appState.navController.currentBackStackEntryAsState().value?.destination?.route
     Destinations.Main.getEntries().forEach { item ->
         NavigationBarItem(
             modifier = Modifier.testTag(item.testTag),
             selected = currentRoute.route == item.route,
             onClick = {
-                appState.navigateToBottomBarRoute(item.route)
+                onClick.invoke(item)
             },
             label = {
                 Row(
@@ -69,10 +66,12 @@ fun RowScope.InitBottomMainScreen(appState: AppState, currentRoute: DestinationI
                     AppText(
                         text = item.title,
                         style = ProductXTheme.typography.Regular.Label.Small,
-                        color = if (currentRoute.route == item.route)
-                            ProductXTheme.colorScheme.tertiary
-                        else
-                            ProductXTheme.colorScheme.onTertiary,
+                        /* color = if (currentRoute.route == item.route)
+                             ProductXTheme.colorScheme.tertiary
+                         else
+                             ProductXTheme.colorScheme.onTertiary,*/
+                        color = if (changeItem(item)) ProductXTheme.colorScheme.tertiary
+                        else ProductXTheme.colorScheme.onTertiary,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.testTag("Text_${item.title}")
@@ -81,7 +80,7 @@ fun RowScope.InitBottomMainScreen(appState: AppState, currentRoute: DestinationI
 
             },
             icon = {
-                if (currentRoute.route == item.route) item.selectedIcon.generate()
+                if (changeItem(item)) item.selectedIcon.generate()
                 else item.unselectedIcon.generate()
             },
             alwaysShowLabel = true, // Consider showing labels only on selected items for better UX
@@ -100,11 +99,10 @@ fun RowScope.InitBottomMainScreen(appState: AppState, currentRoute: DestinationI
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun BottomNavigationViewPreview() {
-    var appState = rememberAppState()
     BottomNavigationBar(
         modifier = Modifier,
         content = {
-            InitBottomMainScreen(appState, Destinations.Main.Home)
+            InitBottomMainScreen(Destinations.Main.Home, onClick = { _ -> }, changeItem = { _ -> true })
         },
     )
 }

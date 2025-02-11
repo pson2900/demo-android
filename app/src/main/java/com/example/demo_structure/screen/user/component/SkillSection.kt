@@ -42,12 +42,9 @@ fun SkillSection(skills: List<String>) {
             .padding(start = 16.dp, end = 16.dp)
             .fillMaxWidth()
     ) {
-        AppText(
-            text = "Kỹ năng", style = ProductXTheme.typography.SemiBold.Title.Large, color = Color.Black
-        )
+        AppText(text = "Kỹ năng", style = ProductXTheme.typography.SemiBold.Title.Large, color = Color.Black)
         Spacer(modifier = Modifier.height(8.dp))
         DynamicSkillFlowRow(skills = skills)
-
     }
 }
 
@@ -108,7 +105,7 @@ fun SkillSectionPreview() {
     AppPreviewWrapper {
         SkillSection(
             skills = listOf(
-                "Skill 1", "Skill 2", "Skill 3",
+                "IT", "Highly skilled Software Engineer with 5 years of experience", "Skill 3",
                 "Skill 4", "Skill 5", "Skill 6",
                 "Skill 7", "Skill 8", "Skill 9"
             )
