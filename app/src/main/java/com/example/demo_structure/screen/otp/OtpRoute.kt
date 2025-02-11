@@ -1,6 +1,5 @@
 package com.example.demo_structure.screen.otp
 
-import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -9,7 +8,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.Destinations
-import com.example.demo_structure.core.navigation.composableWith
 import org.koin.androidx.compose.koinViewModel
 
 fun NavController.toVerifyOtp(

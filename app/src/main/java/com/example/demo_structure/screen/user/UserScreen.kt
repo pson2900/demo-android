@@ -19,13 +19,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.data.remote.network.RetrofitClient
-import com.example.data.repository.MyProfileRepositoryImpl
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.base.DisplayUiStateContent
-import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppSnackBar
 import com.example.demo_structure.core.component.AppText
@@ -38,7 +34,6 @@ import com.example.demo_structure.screen.user.component.SkillSection
 import com.example.domain.model.Basic
 import com.example.domain.model.MyProfile
 import com.example.domain.model.Profile
-import com.example.domain.usecase.MyProfileUseCase
 
 /**
  * Displays the user's bookmarked articles. Includes support for loading and empty states.
