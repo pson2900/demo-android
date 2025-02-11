@@ -145,7 +145,7 @@ fun ProfileProgressBar(progress: Int, max: Int) {
             color = colorResource(R.color.persian_green),
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
-                .padding(4.dp)
+                .padding(2.dp)
                 .fillMaxWidth(progress.toFloat() / max)
                 .fillMaxHeight()
         ) {

@@ -173,16 +173,7 @@ fun HeaderSection(title: String, avatar: String) {
                     bottom.linkTo(AvataLayout.bottom)
                     end.linkTo(AvataLayout.end)
 
-                }
-                /*.clip(RoundedCornerShape(8.dp))
-                .shadow(5.dp)
-                .border(0.dp, Color.White, RoundedCornerShape(8.dp))
-                .background(Color.White)
-                .constrainAs(IconEdit) {
-                    bottom.linkTo(AvataLayout.bottom)
-                    end.linkTo(AvataLayout.end)
-
-                }*/,
+                },
             shape = RoundedCornerShape(8.dp)
         ) {
             Image(

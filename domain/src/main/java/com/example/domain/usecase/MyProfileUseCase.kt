@@ -23,4 +23,10 @@ class MyProfileUseCase(private val myProfileRepository: MyProfileRepository) {
             emit(items)
         }
     }
+
+    fun validateFirstName(firstName: String) {}
+    fun validateLastName(lastName: String) {}
+    fun validatePhoneNumber(phoneNumber: String) {}
+    fun validateEmail(email: String) {}
+    fun validatePhoto(url: String) {}
 }
