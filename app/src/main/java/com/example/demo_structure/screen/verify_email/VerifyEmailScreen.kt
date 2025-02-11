@@ -8,6 +8,7 @@ import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -152,6 +153,10 @@ fun VerifyEmailScreen(
 
     fun onLinkClick() {
         context.startActivity(intent)
+    }
+
+    BackHandler(enabled = true) {
+        //block back verify email
     }
 
     DisposableEffect(lifecycleOwner) {

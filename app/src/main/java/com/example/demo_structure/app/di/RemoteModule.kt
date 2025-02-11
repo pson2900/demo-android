@@ -1,6 +1,8 @@
 package com.example.demo_structure.app.di
 
 import com.example.data.remote.network.ApiService
+import com.example.data.remote.network.AuthInterceptor
+import com.example.data.remote.network.HeaderInterceptor
 import com.example.data.remote.network.RetrofitClient
 import org.koin.dsl.module
 
@@ -11,5 +13,5 @@ import org.koin.dsl.module
  */
 
 val remoteModule = module {
-    single<ApiService> { RetrofitClient.createService<ApiService>() }
+    single<ApiService> { RetrofitClient(get()).createService<ApiService>() }
 }

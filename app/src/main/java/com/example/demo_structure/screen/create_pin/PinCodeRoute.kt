@@ -36,7 +36,8 @@ fun NavGraphBuilder.toCreatePinCodeScreen(appState: AppState) {
                 } else {
                     null
                 }
-                PinCodeScreen(viewModel = koinViewModel(), arguments = arg,
+                PinCodeScreen(viewModel = koinViewModel(),
+                    arguments = arg,
                     onNavigateHomeScreen = {
                         Destinations.Main.getEntries().find { it.testTag == "HomeTag" }
                             ?.let { item ->

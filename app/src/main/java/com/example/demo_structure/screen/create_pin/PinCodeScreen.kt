@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.res.Configuration
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +27,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -53,6 +56,7 @@ import com.example.demo_structure.screen.home.LoadingState
 import com.example.demo_structure.screen.otp.OTPType
 import com.example.domain.model.Authentication
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Preview("Light Mode")
@@ -105,7 +109,7 @@ fun PinCodeScreen(
     var isCompleteStep1 by remember { mutableStateOf(false) }
     val maxLength = 6
 
-    fun onBack() {
+    fun onBackPressed() {
         if (!isCompleteStep1) {
             onBack.invoke()
         } else {
@@ -113,6 +117,10 @@ fun PinCodeScreen(
             viewModel.passCode = ""
             viewModel.confirmPasscode = ""
         }
+    }
+
+    BackHandler(enabled = true) {
+        onBackPressed()
     }
 
     ClearStateOnStop(viewModel = viewModel)
@@ -161,7 +169,7 @@ fun PinCodeScreen(
                             modifier = Modifier.size(24.dp),
                             imageResource = R.drawable.ic_back_arrow,
                             clickable = {
-                                onBack()
+                                onBackPressed()
                             }
                         )
                     })
@@ -272,7 +280,7 @@ private suspend fun handleRegisterState(
     }
 }
 
-private suspend fun handleUpdatePasswordState(
+private fun handleUpdatePasswordState(
     state: PinCodeState,
     isLoading: (Boolean) -> Unit,
     autoLogin: (String, String) -> Unit,

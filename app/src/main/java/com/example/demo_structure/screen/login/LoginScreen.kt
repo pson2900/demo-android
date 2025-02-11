@@ -199,9 +199,11 @@ fun LoginContent(
             context = context,
             onValueChange = {
                 onChangeError("")
-                passCode = it
-                if (passCode.length == maxLength) {
-                    onLogin.invoke(passCode)
+                if (it != passCode) {
+                    passCode = it
+                    if (passCode.length == maxLength) {
+                        onLogin.invoke(passCode)
+                    }
                 }
             },
             maxLength, errorMessage = errorMessage
@@ -256,9 +258,12 @@ fun ColumnScope.ForgotPasswordText(onClick: () -> Unit) {
 @Composable
 fun LoginPreview() {
     AppPreviewWrapper { modifier ->
-        LoginContent(modifier, isLoading = false, errorMessage = "", onChangeError = {}, onLogin = {
+        LoginContent(modifier, isLoading = true,
+            errorMessage = "demo error",
+            onChangeError = {},
+            onLogin = {
 
-        }, onForgotPassword = {})
+            }, onForgotPassword = {})
     }
 }
 
