@@ -58,7 +58,10 @@ fun AppTopBar(
             titleContentColor = ProductXTheme.colorScheme.onSurface,
             actionIconContentColor = ProductXTheme.colorScheme.onSurface
         ),
-        modifier = modifier, navigationIcon = navigationIcon, title = title, actions = actions,
+        modifier = modifier,
+        navigationIcon = navigationIcon,
+        title = title,
+        actions = actions,
         scrollBehavior = scrollBehavior,
     )
 }
@@ -67,7 +70,8 @@ fun AppTopBar(
 fun AppBarIcon(
     modifier: Modifier = Modifier,
     contentDescription: String?,
-    imageResource: Int
+    imageResource: Int,
+    clickable: ()-> Unit
 ) {
     val semantics = if (contentDescription != null) {
         Modifier.semantics {
@@ -79,9 +83,12 @@ fun AppBarIcon(
     }
     Box(modifier = modifier.then(semantics)) {
         Icon(
+            modifier = modifier.clickable {
+                clickable.invoke()
+            },
             painter = painterResource(imageResource),
             contentDescription = null,
-            tint = Color.Black
+            tint = Color.Black,
         )
     }
 }
@@ -149,7 +156,10 @@ fun AppBarPreviewDark() {
                     AppBarIcon(
                         contentDescription = null,
                         modifier = Modifier.size(24.dp),
-                        imageResource = R.drawable.ic_back_arrow
+                        imageResource = R.drawable.ic_back_arrow,
+                        clickable = {
+
+                        }
                     )
                 })
             TopSearchAppBar(

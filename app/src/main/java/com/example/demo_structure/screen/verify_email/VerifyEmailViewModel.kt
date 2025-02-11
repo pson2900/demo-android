@@ -33,13 +33,11 @@ class VerifyEmailViewModel(
     fun verifyEmail(email: String) {
         viewModelScope.launch {
             _emailUiState.value = EmailState.Loading(true)
-            delay(1000)
+            delay(200)
             val response = authUseCase.verifyEmail(email)
             response.catch { e ->
-                Log.e("Sang", "Error verifying email: ${e.message}")
                 _emailUiState.value = EmailState.Error("Error fetching data: ${e.message}")
             }.collect { result ->
-                Log.e("Sang", "response $result")
                 _emailUiState.value = EmailState.Success(result.found)
             }
         }

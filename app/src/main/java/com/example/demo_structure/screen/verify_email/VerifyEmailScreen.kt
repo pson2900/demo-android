@@ -8,6 +8,7 @@ import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -64,38 +65,44 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppBarIcon
+import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
+import com.example.demo_structure.core.component.AppText
 import com.example.demo_structure.core.component.AppTopBar
 import com.example.demo_structure.core.component.EmailTextField
 import com.example.demo_structure.screen.home.LoadingState
 import com.example.demo_structure.screen.login.LoginContent
 import com.example.demo_structure.screen.otp.OTPType
 import com.example.demo_structure.util.extension.buildClickableText
-
+import com.example.demo_structure.util.extension.hideKeyboard
+import com.example.demo_structure.util.extension.hideKeyboardAndClearFocus
 
 
 @Preview("Light Mode")
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun VerifyEmailPreview() {
-    VerifyEmailContent(
-        email = "demo@hihi.com",
-        emailError = "",
-        isEnableButton = true,
-        isChecked = false,
-        isSuccess = false,
-        isLoading = false,
-        onEmailChange = {},
-        onCheckboxChange = {},
-        onButtonClick = {},
-        onLinkClick = {}
-    )
+    AppPreviewWrapper { modifier ->
+        VerifyEmailContent(
+            email = "demo@hihi.com",
+            emailError = "",
+            isEnableButton = true,
+            isChecked = false,
+            isSuccess = false,
+            isLoading = false,
+            onEmailChange = {},
+            onCheckboxChange = {},
+            onButtonClick = {},
+            onLinkClick = {}
+        )
+    }
 }
 
 @Composable
 fun VerifyEmailScreen(
-    modifier : Modifier= Modifier,
+    modifier: Modifier = Modifier,
     viewModel: VerifyEmailViewModel = viewModel(),
     onNavigateToVerifyOtp: (String, String) -> Unit,
     onNavigateToLogin: (String) -> Unit
@@ -113,7 +120,6 @@ fun VerifyEmailScreen(
     val isEnableButton = email.isNotEmpty() && isChecked && !isLoading
 
     val lifecycleOwner = LocalLifecycleOwner.current
-
 
 
     val intent =
@@ -142,11 +148,15 @@ fun VerifyEmailScreen(
     }
 
     fun onButtonClick() {
-       verifyEmail()
+        verifyEmail()
     }
 
     fun onLinkClick() {
         context.startActivity(intent)
+    }
+
+    BackHandler(enabled = true) {
+        //block back verify email
     }
 
     DisposableEffect(lifecycleOwner) {
@@ -154,7 +164,7 @@ fun VerifyEmailScreen(
             if (event == Lifecycle.Event.ON_STOP) {
                 viewModel.clearEmailState()
             }
-            if(event ==  Lifecycle.Event.ON_DESTROY){
+            if (event == Lifecycle.Event.ON_DESTROY) {
                 viewModel.email = email
                 viewModel.isChecked = isChecked
             }
@@ -183,7 +193,9 @@ fun VerifyEmailScreen(
 
             is EmailState.Error -> {
                 isLoading = false
+                Toast.makeText(context, state.msg, Toast.LENGTH_SHORT).show()
             }
+
             else -> Unit
         }
     }
@@ -209,23 +221,7 @@ fun VerifyEmailScreen(
     }
 }
 
-fun hideKeyboardAndClearFocus(
-    context: Context,
-    focusManager: FocusManager,
-    keyboardController: SoftwareKeyboardController?
-) {
-    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    var view: View? = null
-    if (context is android.app.Activity) {
-        view = context.currentFocus
-    }
-    if (view == null) {
-        view = View(context)
-    }
-    imm.hideSoftInputFromWindow(view.windowToken, 0)
-    focusManager.clearFocus()
-    keyboardController?.hide()
-}
+
 
 @Composable
 fun VerifyEmailContent(
@@ -260,9 +256,10 @@ fun VerifyEmailContent(
             containerColor = colorResource(id = R.color.royal_blue),
             contentColor = Color.White,
             disabledContainerColor = colorResource(id = R.color.jumbo),
-            disabledContentColor = colorResource(id = R.color.tuna)
+            disabledContentColor = colorResource(id = R.color.tuna),
         )
-
+        val color =
+            if (isEnableButton) colorResource(R.color.white) else colorResource(R.color.tuna)
         val (logo, textview, emailTextField, columnBottom, loading) = createRefs()
 
         Image(
@@ -278,7 +275,7 @@ fun VerifyEmailContent(
                     end.linkTo(parent.end)
                 }
         )
-        Text(
+        AppText(
             text = "Khám phá con đường sự nghiệp của riêng bạn",
             modifier = Modifier
                 .constrainAs(textview) {
@@ -287,7 +284,7 @@ fun VerifyEmailContent(
                     end.linkTo(parent.end)
                 }
                 .padding(start = 24.dp, end = 24.dp),
-            style = TextStyle(fontSize = 24.sp),
+            style = ProductXTheme.typography.SemiBold.Heading.Small,
             textAlign = TextAlign.Center
         )
 
@@ -302,6 +299,9 @@ fun VerifyEmailContent(
             hint = "Email của bạn",
             value = email,
             onValueChange = onEmailChange,
+            onDone = {
+                hideKeyboardAndClearFocus(context, focusManager, keyboardController)
+            },
             error = emailError,
             onClose = { onEmailChange("") },
             isSuccess = isSuccess
@@ -355,14 +355,11 @@ fun VerifyEmailContent(
                     })
 
                 BasicText(
-                    text = annotatedString, Modifier
+                    text = annotatedString,
+                    modifier = Modifier
                         .weight(1f)
                         .padding(start = 8.dp),
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight(400),
-                        lineHeight = 24.sp
-                    )
+                    style = ProductXTheme.typography.Regular.Title.Medium,
                 )
             }
 
@@ -374,9 +371,13 @@ fun VerifyEmailContent(
                     .height(56.dp),
                 shape = RoundedCornerShape(8.dp),
                 colors = buttonColors,
-                enabled = isEnableButton
+                enabled = isEnableButton,
             ) {
-                Text(text = "Tiếp tục")
+                AppText(
+                    text = "Tiếp tục",
+                    style = ProductXTheme.typography.SemiBold.Title.Medium,
+                    color = color
+                )
             }
         }
         if (isLoading) {

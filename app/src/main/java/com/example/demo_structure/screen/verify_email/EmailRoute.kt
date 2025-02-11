@@ -1,5 +1,7 @@
 package com.example.demo_structure.screen.verify_email
 
+import android.util.Log
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions

@@ -1,5 +1,6 @@
 package com.example.demo_structure.core.component.otp
 
+import android.content.Context
 import androidx.annotation.IntRange
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
@@ -38,12 +40,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.demo_structure.R
+import com.example.demo_structure.util.extension.hideKeyboard
 import kotlinx.coroutines.delay
 
 @Preview(showBackground = true)
 @Composable
 fun OTPInputPreview() {
-    PassCodeTextField(modifier = Modifier, onValueChange = {
+    PassCodeTextField(modifier = Modifier, context = LocalContext.current, onValueChange = {
 
     }, 6 )
 }
@@ -51,6 +54,7 @@ fun OTPInputPreview() {
 @Composable
 fun PassCodeTextField(
     modifier: Modifier = Modifier,
+    context: Context,
     onValueChange: (String) -> Unit,
     @IntRange(from = 4, to = 6) numDigits: Int = 4,
     errorMessage: String? = null
@@ -66,6 +70,7 @@ fun PassCodeTextField(
     ) {
         if (text.text.length == numDigits) {
             focusManager.clearFocus()
+            hideKeyboard(context, focusManager)
         }
     }
 

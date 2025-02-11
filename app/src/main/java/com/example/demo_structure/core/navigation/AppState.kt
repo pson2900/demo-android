@@ -158,6 +158,7 @@ class AppState(
         }
     }
 
+
     fun navigateToMain(from: NavBackStackEntry, startDestinations: DestinationItem) {
         // In order to discard duplicated navigation events, we check the Lifecycle
         val route = Destinations.Main.createRoute(
@@ -167,6 +168,7 @@ class AppState(
         trace("Navigation : ${route}") {
             if (from.lifecycleIsResumed()) {
                 navController.toMain(route)
+
             }
         }
     }
@@ -196,17 +198,15 @@ class AppState(
         }
     }
 
-    fun navigateToPinCode(from: NavBackStackEntry, pinArguments: PinArguments, origin: String) {
+    fun navigateToPinCode(from: NavBackStackEntry, pinArguments: PinArguments) {
         // In order to discard duplicated navigation events, we check the Lifecycle
         val pinJson = Gson().toJson(pinArguments)
-        val route = "${Destinations.CreatePin.route}/$pinJson?origin=$origin"
+        val route = "${Destinations.CreatePin.route}/$pinJson"
+
         trace("Navigation : $route") {
             if (from.lifecycleIsResumed()) {
                 navController.toCreatePinCode(
-                    Destinations.CreatePin.createRoute(
-                        pinJson = pinJson,
-                        origin = origin
-                    )
+                    Destinations.CreatePin.createRoute(pinJson = pinJson)
                 )
             }
         }

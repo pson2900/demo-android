@@ -26,7 +26,7 @@ val presentationModule = module {
     viewModel { OpportunityViewModel(savedStateHandle = get()) }
     viewModel { CommunityViewModel(savedStateHandle = get()) }
     viewModel { UserViewModel(dataStoreManager = get(), myProfileUseCase = get(), stateHandle = get()) }
-    viewModel { EducationViewModel(savedStateHandle = get()) }
+    viewModel { EducationViewModel(dataStoreManager = get(),savedStateHandle = get()) }
     viewModel { JobDetailViewModel(savedStateHandle = get()) }
     viewModel { LoginViewModel(dataStoreManager = get(), authUseCase = get(), savedStateHandle = get()) }
     viewModel { VerifyEmailViewModel(authUseCase = get(), savedStateHandle = get()) }

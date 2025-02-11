@@ -16,9 +16,15 @@
 
 package com.example.demo_structure.util.extension
 
+import android.app.Activity
+import android.content.Context
 import android.content.res.Configuration
 import android.util.Log
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.core.util.Consumer
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -59,4 +65,33 @@ fun logNavigation(navController: NavHostController) {
         }
 
     }
+}
+
+fun hideKeyboard(context: Context, focusManager: FocusManager) {
+    val inputMethodManager =
+        context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    val view: View? = (context as? Activity)?.currentFocus
+    if (view != null) {
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    } else {
+        focusManager.clearFocus()
+    }
+}
+
+fun hideKeyboardAndClearFocus(
+    context: Context,
+    focusManager: FocusManager,
+    keyboardController: SoftwareKeyboardController?
+) {
+    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    var view: View? = null
+    if (context is android.app.Activity) {
+        view = context.currentFocus
+    }
+    if (view == null) {
+        view = View(context)
+    }
+    imm.hideSoftInputFromWindow(view.windowToken, 0)
+    focusManager.clearFocus()
+    keyboardController?.hide()
 }

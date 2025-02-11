@@ -6,8 +6,11 @@ package com.example.data.remote.network
  * Email: son.pham@navigosgroup.com
  */
 
+import android.content.Context
+import com.example.data.proto.DataStoreManager
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -15,12 +18,15 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
-object RetrofitClient {
+class RetrofitClient(private val dataStoreManager: DataStoreManager) {
 
-    private const val BASE_URL = "https://api.xstaging.navigosgroup.site/"
+    private val BASE_URL = "https://api.xstaging.navigosgroup.site/"
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
+
+    private val headerInterceptor = HeaderInterceptor(dataStoreManager)
+    private val authInterceptor = AuthInterceptor(dataStoreManager)
 
     private val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
@@ -28,6 +34,8 @@ object RetrofitClient {
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor)
+            .addInterceptor(headerInterceptor)
+            .addInterceptor(authInterceptor)
             .build()
     }
 

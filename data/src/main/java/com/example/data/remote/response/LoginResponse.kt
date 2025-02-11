@@ -12,6 +12,7 @@ data  class LoginResponse(val accessToken: String? = null,
         return Authentication(accessToken  = accessToken,
             refreshToken = refreshToken,
             expiresIn = expiresIn,
+            refreshExpiresIn = refreshExpiresIn,
             tokenType = "Bearer ")
     }
 }

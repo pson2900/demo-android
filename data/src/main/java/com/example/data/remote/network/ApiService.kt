@@ -33,17 +33,21 @@ interface ApiService {
 
 
     @POST("/secure/js/verify-otp")
-    suspend fun verifyOtp(@Body body: HashMap<String, String>):  BaseResponse<VerifyOtpResponse>
+    suspend fun verifyOtp(@Body body: HashMap<String, String>): BaseResponse<VerifyOtpResponse>
 
 
     @POST("/secure/js/register")
-    suspend fun register(@Body body: HashMap<String, String>):  RegisterResponse
+    suspend fun register(@Body body: HashMap<String, String>): RegisterResponse
 
     @POST("/secure/js/update-password")
-    suspend fun updatePassword(@Body body: HashMap<String, String>):  RegisterResponse
+    suspend fun updatePassword(@Body body: HashMap<String, String>): RegisterResponse
 
     @POST("/secure/js/login")
-    suspend fun login(@Body body: HashMap<String, String>):  BaseResponse<LoginResponse>
+    suspend fun login(@Body body: HashMap<String, String>): BaseResponse<LoginResponse>
+
+    @POST("/secure/js/renew-token")
+    suspend fun renewToken(@Body body: HashMap<String, String>): BaseResponse<LoginResponse>
+
 
     suspend fun getLatestVersion(): String
     suspend fun getDataVersion(): Version

@@ -86,7 +86,8 @@ fun VerifyOTPScreen(
     viewModel: VerifyOTPViewModel,
     email: String,
     origin: String,
-    onNavigatePinCode: (PinArguments, String) -> Unit,
+    onNavigatePinCode: (PinArguments) -> Unit,
+    onBack: () -> Unit
 ) {
     var screenState by remember { mutableStateOf(OTPScreenState()) }
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -125,7 +126,7 @@ fun VerifyOTPScreen(
                         type = origin,
                         email = email,
                         secret = screenState.secret
-                    ),"origin"
+                    )
                 )
             }
         })
@@ -136,14 +137,16 @@ fun VerifyOTPScreen(
             snackBarHostState = rememberHostState
         ) {
             Column {
-                AppTopBar(title = {
-                    Text("")
-                },
+                AppTopBar(modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                    title = { Text("") },
                     navigationIcon = {
                         AppBarIcon(
                             contentDescription = null,
                             modifier = Modifier.size(24.dp),
-                            imageResource = R.drawable.ic_back_arrow
+                            imageResource = R.drawable.ic_back_arrow,
+                            clickable = {
+                                onBack.invoke()
+                            }
                         )
                     })
                 OTPScreenContent(

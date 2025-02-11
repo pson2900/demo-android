@@ -1,5 +1,6 @@
 package com.example.demo_structure.screen.education
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -12,14 +13,20 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewModelScope
+import com.example.data.proto.DataStoreManager
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.core.component.AppBox
 import com.example.demo_structure.core.component.AppPreviewWrapper
@@ -28,7 +35,11 @@ import com.example.demo_structure.core.component.AppSnackBar
 import com.example.demo_structure.core.component.ThemePreviews
 import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.rememberAppState
+import com.example.demo_structure.screen.login.LoginState
+import com.example.demo_structure.screen.otp.OTPType
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.get
 
 /**
  * Created by Phạm Sơn at 23:25/8/1/25
@@ -37,8 +48,15 @@ import kotlinx.coroutines.launch
  */
 
 @Composable
-fun EducationScreen(viewModel: EducationViewModel, onNavigateToVerifyEmail: () -> Unit, onTopicClick: (String) -> Unit) {
+fun EducationScreen(
+    viewModel: EducationViewModel,
+    onNavigateToVerifyEmail: () -> Unit,
+    onTopicClick: (String) -> Unit
+) {
     val modifier: Modifier = Modifier.fillMaxSize()
+
+    val authUiState by viewModel.authUiState.collectAsStateWithLifecycle()
+    var isLogin by remember { mutableStateOf(false) }
 
     val state = viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -46,6 +64,29 @@ fun EducationScreen(viewModel: EducationViewModel, onNavigateToVerifyEmail: () -
     val appState = rememberAppState()
     val time = appState.currentTimeZone.collectAsStateWithLifecycle()
     val currentTime by appState.currentTime.collectAsState(initial = "")
+
+    LaunchedEffect(viewModel) {
+       viewModel.getAuth()
+    }
+
+    LaunchedEffect(key1 = authUiState) {
+        when (val state = authUiState) {
+            is EducationState.Loading -> {
+
+            }
+
+            is EducationState.AuthSuccess -> {
+                isLogin = true
+            }
+
+            is EducationState.AuthError -> {
+                isLogin = false
+            }
+
+            else -> Unit
+        }
+    }
+
     ApplicationTheme {
         AppScaffold(
             modifier = modifier,
@@ -83,10 +124,17 @@ fun EducationScreen(viewModel: EducationViewModel, onNavigateToVerifyEmail: () -
                 ) {
                     Column {
                         Text("EducationScreen: ${time.value}\ncurrentTime: $currentTime")
+                        val textContent = if (!isLogin) "Login" else "Logout"
                         Button(onClick = {
-                            onNavigateToVerifyEmail.invoke()
+                           // onNavigateToVerifyEmail.invoke()
+                            if (!isLogin) {
+                                onNavigateToVerifyEmail.invoke()
+                            } else {
+                                isLogin = false
+                                viewModel.logout()
+                            }
                         }) {
-                            Text(modifier = Modifier, text = "Login")
+                            Text(modifier = Modifier, text = textContent)
                         }
                     }
                 }
@@ -102,7 +150,8 @@ fun EducationScreen(viewModel: EducationViewModel, onNavigateToVerifyEmail: () -
 fun SearchResultScreenPreview() {
     AppPreviewWrapper {
         EducationScreen(
-            viewModel = EducationViewModel(SavedStateHandle()),
+            viewModel = EducationViewModel(DataStoreManager(LocalContext.current),SavedStateHandle()),
+
             onNavigateToVerifyEmail = {},
             onTopicClick = {})
     }

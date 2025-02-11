@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,6 +30,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,114 +47,19 @@ private fun EmailTextFieldPreview() {
         hint = "Enter email",
         value = email,
         onValueChange = { email = it },
+        onDone = {},
         error = "error",
         onClose = { email = "" }
     )
 }
 
-//@Composable
-//fun EmailTextField(
-//    modifier: Modifier = Modifier,
-//    hint: String,
-//    value: String,
-//    onValueChange: (String) -> Unit,
-//    onClose: () -> Unit,
-//    isSuccess: Boolean = false,
-//    error: String? = null
-//) {
-//
-//    val isFocused by remember { mutableStateOf(false) }
-//    val paddingTop = if (isFocused) 0.dp else 6.dp
-//    Column(modifier = modifier.fillMaxWidth()) {
-//        TextField(
-//            value = value,
-//            onValueChange = onValueChange,
-//            label = {
-//                Text(
-//                    modifier = Modifier.padding(top = paddingTop),
-//                    style = TextStyle(
-//                        fontSize = 16.sp
-//                    ), text = hint, color = Color.Gray
-//                )
-//            },
-//            colors =  TextFieldDefaults.colors(
-//                focusedTextColor = Color.Black, // For focused text color
-//                unfocusedTextColor = Color.Gray, // For unfocused text color
-//                disabledTextColor = Color.LightGray, // For disabled text color
-//                focusedIndicatorColor = Color.Transparent, // For focused indicator color
-//                unfocusedIndicatorColor = Color.Transparent, // For unfocused indicator color
-//                disabledIndicatorColor = Color.Transparent, // For disabled indicator color
-//                errorIndicatorColor = Color.Transparent, // For error indicator color
-//                cursorColor = Color.Gray, // For cursor color
-//                errorCursorColor = Color.Gray, // For error cursor color
-//                errorContainerColor = Color.Transparent,
-//                focusedContainerColor = Color.Transparent,
-//                unfocusedContainerColor = Color.Transparent,
-//            ),
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(64.dp)
-//                    .border(
-//                        width = 2.dp,
-//                        color = when {
-//                            isFocused -> colorResource(R.color.portage) // Focused state
-//                            !error.isNullOrEmpty() -> Color.Red // Error state
-//                            else -> Color.Gray // Default state
-//                        },
-//                        shape = RoundedCornerShape(12.dp)
-//                    ),
-//                trailingIcon = {
-//                    if (value.isNotEmpty()) {
-//                        IconButton(
-//                            onClick = onClose,
-//                            enabled = !isSuccess
-//                        ) {
-//                            Icon(
-//                                modifier = Modifier
-//                                    .width(20.dp)
-//                                    .height(20.dp),
-//                                imageVector = if (isSuccess) ImageVector.vectorResource(R.drawable.ic_success) else ImageVector.vectorResource(R.drawable.ic_close),
-//                                // Change icon
-//                                contentDescription = "Close",
-//                                tint = if (isSuccess) Color.Green else Color.Gray// Change icon color
-//                            )
-//                        }
-//                    }
-//                },
-//                isError = error?.isNotEmpty() == true // Set isError for visual feedback
-//            )
-//
-//            if (error?.isNotEmpty() == true) {
-//                Row(
-//                    modifier = Modifier
-//                        .padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically
-//                ) {
-//                    Icon(
-//                        modifier = Modifier
-//                            .width(16.dp)
-//                            .height(16.dp),
-//                        painter = painterResource(id = R.drawable.ic_error), // Replace with your error icon
-//                        contentDescription = "Error",
-//                        tint = Color.Red
-//                    )
-//                    Text(
-//                        text = error,
-//                        color = Color.Red,
-//                        style = TextStyle(
-//                            fontSize = 12.sp
-//                        ),
-//                        modifier = Modifier.padding(start = 4.dp)
-//                    )
-//                }
-//            }
-//    }
-//}
 @Composable
 fun EmailTextField(
     modifier: Modifier = Modifier,
     hint: String,
     value: String,
     onValueChange: (String) -> Unit,
+    onDone:()-> Unit,
     onClose: () -> Unit,
     isSuccess: Boolean = false,
     error: String? = null
@@ -214,7 +121,9 @@ fun EmailTextField(
                             modifier = Modifier
                                 .width(20.dp)
                                 .height(20.dp),
-                            imageVector = if (isSuccess) ImageVector.vectorResource(R.drawable.ic_success) else ImageVector.vectorResource(R.drawable.ic_close),
+                            imageVector = if (isSuccess) ImageVector.vectorResource(R.drawable.ic_success) else ImageVector.vectorResource(
+                                R.drawable.ic_close
+                            ),
                             contentDescription = "Close",
                             tint = if (isSuccess) Color.Green else Color.Gray
                         )
@@ -222,7 +131,16 @@ fun EmailTextField(
                 }
             },
             isError = error?.isNotEmpty() == true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    onDone.invoke()
+                }
+            )
         )
 
         if (error?.isNotEmpty() == true) {
