@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -29,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.AppIcons
 import com.example.demo_structure.app.manager.theme.ProductXTheme
+import com.example.demo_structure.app.manager.theme.hexToColor
 import com.example.demo_structure.core.component.AppBox
 import com.example.demo_structure.core.component.AppButton
 import com.example.demo_structure.core.component.AppPreviewWrapper
@@ -47,6 +50,7 @@ fun ProfileStatusSection(modifier: Modifier = Modifier, onClick: () -> Unit) {
     ) {
         AppBox(
             shape = RoundedCornerShape(10.dp),
+            color = Color.White,
             border = BorderStroke(2.dp, colorResource(R.color.pale_violet))
         ) {
             Column {
@@ -85,11 +89,15 @@ fun ProfileProgressAction(onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp)
             .background(colorResource(R.color.white)),
         contentAlignment = Alignment.Center
     ) {
-        Column(modifier = Modifier.align(Alignment.Center)) {
+        Column(
+            modifier = Modifier
+                .padding(12.dp)
+                .background(Color.White)
+                .align(Alignment.Center)
+        ) {
             Row {
                 Image(modifier = Modifier.weight(2f), painter = painterResource(AppIcons.shoppingForSportsEquipmentIcon), contentDescription = "IconShoppingForSportsEquipment")
                 Column(
@@ -109,9 +117,13 @@ fun ProfileProgressAction(onClick: () -> Unit) {
                     )
                 }
             }
+            Spacer(Modifier.height(8.dp))
             AppButton(
                 onClick = onClick,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .background(hexToColor("#F3F5FC"), RoundedCornerShape(8.dp))
+                    .clip(RoundedCornerShape(8.dp))
+                    .fillMaxWidth(),
                 background = colorResource(R.color.alice_blue)
             ) {
                 Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
