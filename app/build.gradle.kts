@@ -110,7 +110,10 @@ dependencies {
     // Mark: Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.runner)
+    androidTestImplementation(libs.androidx.rules)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.espresso.contrib)
 
     // Mark: Google Material Components
     implementation(libs.com.google.material) // Material Components for UI elements
@@ -121,6 +124,7 @@ dependencies {
     implementation(libs.koin.android) // Koin for Android DI
     implementation(libs.koin.compose) // Koin integration with Compose
     implementation(libs.koin.androidx.compose) // Koin for AndroidX Compose
+    testImplementation(libs.koin.test) // Koin test
 
     // Mark: Retrofit
     implementation(libs.retrofit) // Retrofit for network requests
@@ -168,6 +172,7 @@ dependencies {
     implementation(libs.accompanist.systemuicontroller)
     // Mark: Coil Compose
     implementation(libs.coil.compose)
+
 
     // Mark: AndroidX Material3 Adaptive Navigation Suite for Compose
     implementation(libs.androidx.adaptive.navigation.suite) // Adaptive Navigation Suite for Compose

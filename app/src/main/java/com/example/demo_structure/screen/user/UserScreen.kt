@@ -22,10 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.base.DisplayUiStateContent
+import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppSnackBar
 import com.example.demo_structure.core.component.AppText
 import com.example.demo_structure.core.component.ThemePreviews
+import com.example.demo_structure.myProfileData
 import com.example.demo_structure.screen.user.component.BasicInformationItem
 import com.example.demo_structure.screen.user.component.HeaderSection
 import com.example.demo_structure.screen.user.component.OpportunitiesSection
@@ -135,16 +137,12 @@ internal fun LazyListScope.myProfileBody(
 @ThemePreviews
 @Composable
 fun UserContentPreview() {
-//    AppPreviewWrapper { modifier ->
-//        UserScreen(
-//            onNavigateToLogin = {},
-//            onNavigateToProfile = { profile: Profile -> },
-//            userViewModel = UserViewModel(
-//                stateHandle = SavedStateHandle(),
-//                myProfileUseCase = MyProfileUseCase( MyProfileRepositoryImpl(RetrofitClient.createService()))
-//            ),
-//            clearUndoState = {}
-//        )
-//    }
+    AppPreviewWrapper { modifier ->
+        val onNavigateToProfile = { profile: Profile -> }
+        MyProfileContent(
+            myProfile = myProfileData.toDomain(),
+            onNavigateToProfile = onNavigateToProfile,
+        )
 
+    }
 }

@@ -2,9 +2,12 @@
 #  ---  Android ---
 
 agp = "8.8.0"
+androidxJunit = "1.2.1"
 coilComposeVersion = "3.0.4"
 converterMoshi = "2.11.0"
 datastorePreferences = "1.1.2"
+espressoContrib = "3.5.1"
+junitJunit = "4.13.2"
 materialVersion = "1.7.7"
 moshi = "1.15.2"
 
@@ -20,6 +23,8 @@ kotlinxSerializationJson = "1.8.0"
 coreKtx = "1.15.0"
 activityCompose = "1.10.0"
 lifecycleRuntimeKtx = "2.8.7"
+rules = "1.6.1"
+runner = "1.6.2"
 viewModelKtx = "2.8.7"
 viewModelComposeKtx = "2.8.7"
 roomKtx = "2.6.1"
@@ -76,7 +81,7 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx"
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomKtx" }
 androidx-navigation-ktx = { group = "androidx.navigation", name = "navigation-common-ktx", version.ref = "navigationCommonKtx" }
 androidx-core-splash = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
-androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
+
 androidx-appcompat-resources = { module = "androidx.appcompat:appcompat-resources", version.ref = "appcompatResources" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "androidxConstraintlayout" }
@@ -92,15 +97,21 @@ androidx-adaptive-navigation = { module = "androidx.compose.material3.adaptive:a
 androidx-adaptive-layout-android = { module = "androidx.compose.material3.adaptive:adaptive-layout-android", version.ref = "adaptiveAndroid" }
 
 # Mark: Testing Libraries
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+junit = { module = "junit:junit", version.ref = "junitJunit" }
+androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
+androidx-espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "espressoContrib" }
+androidx-rules = { module = "androidx.test:rules", version.ref = "rules" }
+androidx-runner = { module = "androidx.test:runner", version.ref = "runner" }
+androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidxJunit" }
 
 # Mark: Dependency Injection - Koin
+
 koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koinBom" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose" }
 koin-compose = { module = "io.insert-koin:koin-compose" }
 koin-core = { module = "io.insert-koin:koin-core" }
 koin-android = { module = "io.insert-koin:koin-android" }
+koin-test = { module = "io.insert-koin:koin-test" }
 koin-androidx-navigation = { module = "io.insert-koin:koin-androidx-navigation" }
 
 # Mark: ACCOMPANIST Libraries

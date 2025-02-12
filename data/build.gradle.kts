@@ -37,9 +37,12 @@ dependencies {
     implementation(project(":domain"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.com.google.material)
-    testImplementation(libs.junit)
+    // Mark: Testing
     androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.runner)
+    androidTestImplementation(libs.androidx.rules)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.espresso.contrib)
     // Mark: Retrofit
     implementation(libs.retrofit) // Retrofit for network requests
     implementation(libs.retrofit.converter.moshi)

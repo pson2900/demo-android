@@ -6,8 +6,9 @@ import com.example.domain.model.SendOtp
 import com.example.domain.model.VerifyEmail
 import com.example.domain.model.VerifyOtp
 import com.example.domain.repository.AuthRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flow
 
 class AuthUseCase(private val authRepository: AuthRepository) {
 

@@ -32,7 +32,6 @@ object KoinSetup {
             printLogger(Level.DEBUG)
             modules(
                 listOf(applicationModule, remoteModule, dataModule, domainModule, presentationModule, databaseModule, )
-//                        workerModule
             )
         }
     }

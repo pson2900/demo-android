@@ -112,6 +112,7 @@ fun ProfileProgressAction(onClick: () -> Unit) {
                     )
                     AppText(
                         text = "Bạn đã tham gia những hoạt động ngoại khoá nào?",
+                        maxLines = 2,
                         style = ProductXTheme.typography.SemiBold.Title.Medium,
                         color = colorResource(R.color.black)
                     )

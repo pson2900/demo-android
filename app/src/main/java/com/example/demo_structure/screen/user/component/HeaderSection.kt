@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.AppIcons
@@ -108,35 +109,44 @@ fun HeaderSection(title: String, avatar: String) {
                     Box(
                         modifier = Modifier
                             .background(colorResource(R.color.white), shape = RoundedCornerShape(16.dp))
-//                            .fillMaxWidth()
-
                             .clip(shape = RoundedCornerShape(16.dp))
                             .testTag("HeaderSection_Job")
-//                            .height(72.dp)
                             .clickable { },
                         contentAlignment = Alignment.Center
                     ) {
                         Row(
-                            modifier = Modifier,
+                            modifier = Modifier    .padding(12.dp),
                             horizontalArrangement = Arrangement.Start,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            AppIcons.advancementIcon.generate(modifier = Modifier.weight(1.5f))
+                            Box(
+                                Modifier
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(hexToColor("#EEEBFF"), RoundedCornerShape(8.dp))
+                                    .height(48.dp)
+                                    .width(48.dp)
+                                    .weight(1.5f),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                AppIcons.advancementIcon.generate(modifier = Modifier)
+                            }
+
+                            Spacer(Modifier.width(12.dp))
                             Column(
                                 Modifier
-                                    .weight(7f)
-                                    .padding(8.dp)
+                                    .weight(7.5f)
                             ) {
                                 AppText(
                                     modifier = Modifier, text = "Bạn đang theo đuổi",
                                     style = ProductXTheme.typography.Regular.Body.Medium, color = Color.Gray
                                 )
                                 AppText(
-                                    modifier = Modifier, text = "Product Designer, Ux research",
+                                    modifier = Modifier, text = "Product Designer, Ux research Product Designer, Ux research",
+                                    maxLines = 1,
                                     style = ProductXTheme.typography.SemiBold.Body.Large, color = Color.Black
                                 )
                             }
-                            AppIcons.arrowRightIcon.generate(modifier = Modifier.weight(1.5f))
+                            AppIcons.arrowRightIcon.generate(modifier = Modifier.weight(1f))
                         }
                     }
                 })
