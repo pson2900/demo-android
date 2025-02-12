@@ -259,7 +259,7 @@ private fun OTPScreenContent(
                     }
                     .padding(top = 24.dp),
                 style = TextStyle(color = Color.Red, fontSize = 16.sp),
-                text = "Mã không đúng. Thử lại nhé!"
+                text = "Mã xác nhận chưa đúng. Nhập lại hoặc chọn gửi lại mã khác."
             )
         }
         ColumnBottom(

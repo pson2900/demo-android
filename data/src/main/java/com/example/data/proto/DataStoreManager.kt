@@ -18,6 +18,7 @@ class DataStoreManager(private val context: Context) {
     private val USER_INFO_KEY = stringPreferencesKey("user_info")
     private val AUTH_KEY = stringPreferencesKey("navigos_auth_key")
 
+
     private val Context.preferencesDataStore: DataStore<Preferences> by preferencesDataStore(
         name = "user_preferences"
     )

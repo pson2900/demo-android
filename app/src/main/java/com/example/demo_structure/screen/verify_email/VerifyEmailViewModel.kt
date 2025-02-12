@@ -27,24 +27,24 @@ class VerifyEmailViewModel(
         get() = savedStateHandle.get<Boolean>(IS_CHECKED_KEY) ?: false
         set(value) = savedStateHandle.set(IS_CHECKED_KEY, value)
 
-    private val _emailUiState = MutableStateFlow<EmailState>(EmailState.Loading(false))
-    val emailUiState: StateFlow<EmailState> = _emailUiState.asStateFlow()
+    private val _uiState = MutableStateFlow<EmailState>(EmailState.Idle)
+    val uiState: StateFlow<EmailState> = _uiState
 
     fun verifyEmail(email: String) {
         viewModelScope.launch {
-            _emailUiState.value = EmailState.Loading(true)
+            _uiState.value = EmailState.Loading(true)
             delay(200)
             val response = authUseCase.verifyEmail(email)
             response.catch { e ->
-                _emailUiState.value = EmailState.Error("Error fetching data: ${e.message}")
+                _uiState.value = EmailState.Error("Error fetching data: ${e.message}")
             }.collect { result ->
-                _emailUiState.value = EmailState.Success(result.found)
+                _uiState.value = EmailState.Success(result.found)
             }
         }
     }
 
     fun clearEmailState() {
-        _emailUiState.value = EmailState.Idle
+        _uiState.value = EmailState.Idle
     }
 
     companion object {

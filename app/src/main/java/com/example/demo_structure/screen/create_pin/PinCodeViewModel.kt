@@ -5,8 +5,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.data.proto.DataStoreManager
 import com.example.demo_structure.core.base.BaseViewModel
-import com.example.demo_structure.screen.otp.OtpState
-import com.example.demo_structure.screen.verify_email.VerifyEmailViewModel.Companion.EMAIL_KEY
 import com.example.domain.model.Authentication
 import com.example.domain.usecase.AuthUseCase
 import kotlinx.coroutines.delay
@@ -16,19 +14,23 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class PinCodeViewModel(val dataStoreManager: DataStoreManager ,  val authUseCase: AuthUseCase, savedStateHandle: SavedStateHandle) :
+class PinCodeViewModel(
+    val dataStoreManager: DataStoreManager,
+    val authUseCase: AuthUseCase,
+    savedStateHandle: SavedStateHandle
+) :
     BaseViewModel(savedStateHandle) {
     var passCode: String = ""
     var confirmPasscode: String = ""
 
-    private val _registerUiState = MutableStateFlow<PinCodeState>(PinCodeState.Loading(false))
+    private val _registerUiState = MutableStateFlow<PinCodeState>(PinCodeState.Idle)
     val registerUiState: StateFlow<PinCodeState> = _registerUiState.asStateFlow()
 
-    private val _updatePassWordUiState = MutableStateFlow<PinCodeState>(PinCodeState.Loading(false))
+    private val _updatePassWordUiState = MutableStateFlow<PinCodeState>(PinCodeState.Idle)
     val updatePassWordUiState: StateFlow<PinCodeState> = _updatePassWordUiState.asStateFlow()
 
 
-    private val _loginUiState = MutableStateFlow<PinCodeState>(PinCodeState.Loading(false))
+    private val _loginUiState = MutableStateFlow<PinCodeState>(PinCodeState.Idle)
     val loginUiState: StateFlow<PinCodeState> = _loginUiState.asStateFlow()
 
     fun register(email: String, password: String, secret: String) {
@@ -60,11 +62,12 @@ class PinCodeViewModel(val dataStoreManager: DataStoreManager ,  val authUseCase
             delay(1000)
             val response = authUseCase.updatePassword(email, password, secret)
             response.catch { e ->
-                Log.e("Sang","UpdatePassword error $e")
+                Log.e("Sang", "UpdatePassword error $e")
                 _updatePassWordUiState.value = PinCodeState.Error(e.message.toString())
             }.collect { result ->
-                Log.e("Sang","UpdatePasswordSuccess $result")
-                _updatePassWordUiState.value = PinCodeState.UpdatePasswordSuccess(result.isSuccess, email,password)
+                Log.e("Sang", "UpdatePasswordSuccess $result")
+                _updatePassWordUiState.value =
+                    PinCodeState.UpdatePasswordSuccess(result.isSuccess, email, password)
             }
         }
     }
@@ -82,6 +85,7 @@ class PinCodeViewModel(val dataStoreManager: DataStoreManager ,  val authUseCase
             }
         }
     }
+
 
 
     fun saveAuth(authentication: Authentication) {

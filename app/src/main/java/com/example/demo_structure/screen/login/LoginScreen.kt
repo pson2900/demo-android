@@ -94,7 +94,7 @@ internal fun LoginScreen(
                 errorMessage = ""
                 isLoading = false
                 viewModel.saveAuth(state.authentication)
-                Toast.makeText(context, "login success", Toast.LENGTH_SHORT).show()
+               // Toast.makeText(context, "login success", Toast.LENGTH_SHORT).show()
                 delay(500)
                 onNavigateHomeScreen.invoke()
             }

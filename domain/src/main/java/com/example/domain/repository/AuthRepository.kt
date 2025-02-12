@@ -21,6 +21,4 @@ interface AuthRepository {
     suspend fun updatePassword(email: String,password: String, secret: String): Flow<Register>
 
     suspend fun login(email: String,password: String): Flow<Authentication>
-
-    suspend fun renewToken(refreshToken: String): Flow<Authentication>
 }

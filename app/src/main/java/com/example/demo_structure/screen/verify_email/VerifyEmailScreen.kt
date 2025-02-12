@@ -108,7 +108,7 @@ fun VerifyEmailScreen(
     onNavigateToLogin: (String) -> Unit
 ) {
     val context = LocalContext.current
-    val emailState by viewModel.emailUiState.collectAsStateWithLifecycle()
+    val emailState by viewModel.uiState.collectAsStateWithLifecycle()
     val rememberHostState = remember { SnackbarHostState() }
 
     var email by rememberSaveable { mutableStateOf(viewModel.email) }
@@ -123,7 +123,7 @@ fun VerifyEmailScreen(
 
 
     val intent =
-        remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://staging.vietnamworks.com/")) }
+        remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://www.vietnamworks.com/quy-dinh-bao-mat?utm_source_navi=footer")) }
 
     fun isValidEmail(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
@@ -131,7 +131,7 @@ fun VerifyEmailScreen(
 
     fun verifyEmail() {
         emailError =
-            if (email.isEmpty() || !isValidEmail(email)) "Invalid email format" else ""
+            if (email.isEmpty() || !isValidEmail(email)) "Vui lòng nhập địa chỉ email hợp lệ" else ""
         if (emailError.isEmpty()) {
             viewModel.verifyEmail(email)
         }

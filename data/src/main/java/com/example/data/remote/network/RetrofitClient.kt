@@ -8,8 +8,11 @@ package com.example.data.remote.network
 
 import android.content.Context
 import com.example.data.proto.DataStoreManager
+import com.example.data.remote.network.ApiService
+import com.example.domain.repository.AuthRepository
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
+import kotlinx.coroutines.CoroutineScope
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -18,7 +21,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
-class RetrofitClient(private val dataStoreManager: DataStoreManager) {
+class RetrofitClient(
+    val dataStoreManager: DataStoreManager,
+    val isInterceptor: Boolean? = false) {
 
     private val BASE_URL = "https://api.xstaging.navigosgroup.site/"
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
@@ -26,17 +31,20 @@ class RetrofitClient(private val dataStoreManager: DataStoreManager) {
     }
 
     private val headerInterceptor = HeaderInterceptor(dataStoreManager)
-    private val authInterceptor = AuthInterceptor(dataStoreManager)
+    private var authInterceptor = AuthInterceptor(dataStoreManager)
 
     private val okHttpClient: OkHttpClient by lazy {
-        OkHttpClient.Builder()
+        val httpClient = OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor)
-            .addInterceptor(headerInterceptor)
-            .addInterceptor(authInterceptor)
-            .build()
+
+        if (isInterceptor == true) {
+            httpClient.addInterceptor(headerInterceptor)
+            httpClient.addInterceptor(authInterceptor)
+        }
+        httpClient.build()
     }
 
 
