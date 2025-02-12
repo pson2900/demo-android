@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,6 +42,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.data.remote.UIState
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.core.component.AppBarIcon
@@ -395,56 +395,75 @@ fun HandleOtpState(
     otpScreenState: OTPScreenState,
     onStateChange: (OTPScreenState) -> Unit
 ) {
-    val otpState by viewModel.otplUiState.collectAsStateWithLifecycle()
+    val otpState by viewModel.otpUiState.collectAsStateWithLifecycle()
+    val verifyOtpState by viewModel.verifyOtpUiState.collectAsStateWithLifecycle()
+    val pwState by viewModel.forgetPwUiState.collectAsStateWithLifecycle()
     LaunchedEffect(key1 = otpState) {
         when (val state = otpState) {
-            is OtpState.Loading -> {
-                onStateChange(otpScreenState.copy(isLoading = state.isLoading))
-            }
-
-            is OtpState.Success -> {
-                onStateChange(
-                    otpScreenState.copy(
-                        sendOtpSuccess = state.isSuccess,
-                        isResend = false,
-                        isLoading = false
-                    )
+            is UIState.Loading -> onStateChange(otpScreenState.copy(isLoading = true))
+            is UIState.Success -> onStateChange(
+                otpScreenState.copy(
+                    sendOtpSuccess = state.data.isSuccess,
+                    isResend = false,
+                    isLoading = false
                 )
-            }
+            )
 
-            is OtpState.ForgetPasswordSuccess -> {
-                onStateChange(
-                    otpScreenState.copy(
-                        sendOtpSuccess = state.isSuccess,
-                        isResend = false,
-                        isLoading = false
-                    )
+            is UIState.Error -> onStateChange(
+                otpScreenState.copy(
+                    isLoading = false,
+                    sendOtpSuccess = true,
+                    isResend = true
                 )
-            }
+            )
 
-            is OtpState.VerifyOtpSuccess -> {
-                onStateChange(
+            is UIState.Idle -> Unit
+        }
+    }
+
+    LaunchedEffect(key1 = pwState) {
+        when (val state = pwState) {
+            is UIState.Loading -> onStateChange(otpScreenState.copy(isLoading = true))
+            is UIState.Success -> onStateChange(
+                otpScreenState.copy(
+                    sendOtpSuccess = state.data.isSuccess,
+                    isResend = false,
+                    isLoading = false
+                )
+            )
+
+            is UIState.Error -> onStateChange(
+                otpScreenState.copy(
+                    isLoading = false,
+                    sendOtpSuccess = true,
+                    isResend = true
+                )
+            )
+            is UIState.Idle -> Unit
+        }
+    }
+
+    LaunchedEffect(key1 = verifyOtpState) {
+        when (val state = verifyOtpState) {
+            is UIState.Loading -> onStateChange(otpScreenState.copy(isLoading = true))
+            is UIState.Success ->  onStateChange(
                     otpScreenState.copy(
                         isResend = false,
                         isLoading = false,
-                        isValidOtp = state.verifyOtp.isValid,
-                        isError = state.verifyOtp.isValid == false,
-                        secret = state.verifyOtp.secret
+                        isValidOtp = state.data.isValid,
+                        isError = state.data.isValid == false,
+                        secret = state.data.secret
                     )
                 )
-            }
 
-            is OtpState.Error -> {
-                onStateChange(
-                    otpScreenState.copy(
-                        isLoading = false,
-                        sendOtpSuccess = true,
-                        isResend = true
-                    )
+            is UIState.Error -> onStateChange(
+                otpScreenState.copy(
+                    isLoading = false,
+                    sendOtpSuccess = true,
+                    isResend = true
                 )
-            }
-
-            is OtpState.Idle -> Unit
+            )
+            is UIState.Idle -> Unit
         }
     }
 }

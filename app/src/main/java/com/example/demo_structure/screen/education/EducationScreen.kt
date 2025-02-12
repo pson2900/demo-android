@@ -35,7 +35,6 @@ import com.example.demo_structure.core.component.AppSnackBar
 import com.example.demo_structure.core.component.ThemePreviews
 import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.rememberAppState
-import com.example.demo_structure.screen.login.LoginState
 import com.example.demo_structure.screen.otp.OTPType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

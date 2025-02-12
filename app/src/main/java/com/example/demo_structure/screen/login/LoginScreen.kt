@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.data.remote.UIState
 import com.example.demo_structure.R
 import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.AppPreviewWrapper
@@ -76,30 +77,23 @@ internal fun LoginScreen(
 ) {
 
     val loginState by viewModel.loginUiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
-
 
     val rememberHostState = remember { SnackbarHostState() }
     LaunchedEffect(key1 = loginState) {
         when (val state = loginState) {
-            is LoginState.Loading -> {
-                if (state.isLoading) {
-                    isLoading = true
-                }
-            }
-
-            is LoginState.LoginSuccess -> {
+            is UIState.Loading -> isLoading = true
+            is UIState.Success -> {
                 errorMessage = ""
                 isLoading = false
-                viewModel.saveAuth(state.authentication)
+                viewModel.saveAuth(state.data)
                // Toast.makeText(context, "login success", Toast.LENGTH_SHORT).show()
                 delay(500)
                 onNavigateHomeScreen.invoke()
             }
 
-            is LoginState.Error -> {
+            is UIState.Error -> {
                 errorMessage = "Mã không đúng. Thử lại nhé!"
                 isLoading = false
             }

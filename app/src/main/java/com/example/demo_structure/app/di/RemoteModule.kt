@@ -13,5 +13,5 @@ import org.koin.dsl.module
  */
 
 val remoteModule = module {
-    single<ApiService> { RetrofitClient(get(),true,get()).createService<ApiService>() }
+    single<ApiService> { RetrofitClient(get(),true).createService<ApiService>() }
 }
