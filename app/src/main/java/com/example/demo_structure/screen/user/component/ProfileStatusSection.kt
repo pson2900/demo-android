@@ -49,7 +49,7 @@ fun ProfileStatusSection(modifier: Modifier = Modifier, onClick: () -> Unit) {
             .padding(start = 16.dp, end = 16.dp),
     ) {
         AppBox(
-            shape = RoundedCornerShape(10.dp),
+            shape = RoundedCornerShape(16.dp),
             color = Color.White,
             border = BorderStroke(2.dp, colorResource(R.color.pale_violet))
         ) {
@@ -148,7 +148,7 @@ fun ProfileProgressAction(onClick: () -> Unit) {
 @Composable
 fun ProfileProgressBar(progress: Int, max: Int) {
     AppBox(
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(16.dp),
         color = Color.White,
         modifier = Modifier
             .fillMaxWidth()
@@ -156,7 +156,7 @@ fun ProfileProgressBar(progress: Int, max: Int) {
     ) {
         AppBox(
             color = colorResource(R.color.persian_green),
-            shape = RoundedCornerShape(10.dp),
+            shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .padding(2.dp)
                 .fillMaxWidth(progress.toFloat() / max)

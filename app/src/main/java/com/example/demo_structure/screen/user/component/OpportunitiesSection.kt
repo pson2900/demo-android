@@ -119,32 +119,13 @@ fun OpportunitiesItem(modifier: Modifier = Modifier, icon: Int, title: String, s
                     Modifier
                         .background(colorBackGround, RoundedCornerShape(8.dp))
                         .padding(4.dp)
-                        .size(30.dp)
+                        .size(24.dp)
                 )
             }
-            /* Box(
-                 Modifier
-                     .fillMaxWidth()
- //                    .height(48.dp)
-                     .constrainAs(titleRef) {
-                         top.linkTo(iconRef.bottom)
-                         start.linkTo(parent.start)
-                         bottom.linkTo(subtitleRef.top)
-                     },
-                 contentAlignment = Alignment.TopStart
-             ) {
-                 AppText(
-                     text = title,
-                     color = colorResource(R.color.slate_gray),
-                     style = ProductXTheme.typography.Regular.Label.Large
-                 )
-             }*/
-
             AppText(
                 Modifier
                     .padding(top = 3.dp)
                     .fillMaxWidth()
-//                    .height(48.dp)
                     .constrainAs(titleRef) {
                         top.linkTo(iconRef.bottom)
                         start.linkTo(parent.start)
