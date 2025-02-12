@@ -168,7 +168,7 @@ internal fun BasicInformationItem(profile: Profile, onNavigateToProfile: (Profil
         ) {
             AppIcons.arrowRightIcon.generate(
                 modifier = Modifier
-                    .padding(end = 8.dp)
+                    .padding(end = 12.dp)
                     .size(8.dp)
                     .align(Alignment.CenterEnd)
             )
