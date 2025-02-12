@@ -34,7 +34,6 @@ class LoginViewModel(val dataStoreManager: DataStoreManager , val authUseCase: A
 
     fun saveAuth(authentication: Authentication) {
         viewModelScope.launch {
-            Log.e("Sang", "save $authentication")
             dataStoreManager.saveAuth(authentication)
         }
     }

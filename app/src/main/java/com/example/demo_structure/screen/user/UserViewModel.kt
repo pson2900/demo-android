@@ -48,9 +48,7 @@ class UserViewModel(
 
     suspend fun getAuth() {
         dataStoreManager.getAuth().catch {
-            Log.e("Sang", "Auth error $it")
         }.collect { result ->
-            Log.e("Sang", "Auth $result")
         }
     }
 

@@ -33,19 +33,18 @@ class RetrofitClient(
     private val headerInterceptor = HeaderInterceptor(dataStoreManager)
     private var authInterceptor = AuthInterceptor(dataStoreManager)
 
-    private val okHttpClient: OkHttpClient by lazy {
-        val httpClient = OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .addInterceptor(loggingInterceptor)
-
-        if (isInterceptor == true) {
-            httpClient.addInterceptor(headerInterceptor)
-            httpClient.addInterceptor(authInterceptor)
+    private val okHttpClient: OkHttpClient = OkHttpClient.Builder()
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
+        .apply {
+            if (isInterceptor==true) {
+                addInterceptor(headerInterceptor)
+                addInterceptor(authInterceptor)
+            }
+            addInterceptor(loggingInterceptor)
         }
-        httpClient.build()
-    }
+        .build()
 
 
     val networkApi: Retrofit by lazy {

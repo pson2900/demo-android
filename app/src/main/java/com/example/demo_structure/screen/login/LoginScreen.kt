@@ -104,7 +104,7 @@ internal fun LoginScreen(
 
     ApplicationTheme {
         AppScaffold(
-            modifier = modifier.background(Color.White),
+            modifier = modifier,
             snackBarHostState = rememberHostState
         ) {
             Column {

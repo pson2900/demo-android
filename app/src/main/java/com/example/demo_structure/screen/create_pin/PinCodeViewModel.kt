@@ -41,36 +41,39 @@ class PinCodeViewModel(
 
 
     fun register(secret: String) {
-        viewModelScope.launch{
+        viewModelScope.launch {
             processApiCall(
-                call = {   authUseCase.register(email, passCode, secret)},
+                call = { authUseCase.register(email, passCode, secret) },
                 state = _registerUiState,
-                dataKey = REGISTER)
+                dataKey = REGISTER
+            )
         }
     }
 
 
     fun clearState() {
-        _registerUiState.value =  UIState.Idle
+        _registerUiState.value = UIState.Idle
         _loginUiState.value = UIState.Idle
         _updatePWUiState.value = UIState.Idle
     }
 
     fun updatePassword(secret: String) {
-        viewModelScope.launch{
+        viewModelScope.launch {
             processApiCall(
-                call = {   authUseCase.updatePassword(email, passCode, secret) },
+                call = { authUseCase.updatePassword(email, passCode, secret) },
                 state = _updatePWUiState,
-                dataKey = UPDATE_PASSWORD)
+                dataKey = UPDATE_PASSWORD
+            )
         }
     }
 
     fun login() {
-        viewModelScope.launch{
+        viewModelScope.launch {
             processApiCall(
-                call = {  authUseCase.login(email, passCode) },
+                call = { authUseCase.login(email, passCode) },
                 state = _loginUiState,
-                dataKey = LOGIN)
+                dataKey = LOGIN
+            )
         }
     }
 

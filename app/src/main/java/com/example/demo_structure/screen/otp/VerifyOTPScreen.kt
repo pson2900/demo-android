@@ -1,6 +1,7 @@
 package com.example.demo_structure.screen.otp
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -48,6 +49,7 @@ import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.core.component.AppBarIcon
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.app.manager.theme.ProductXTheme
+import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.CountdownTextView
 import com.example.demo_structure.core.component.otp.OTPTextField
 import com.example.demo_structure.core.component.otp.OtpTextFieldDefaults
@@ -59,15 +61,17 @@ import com.example.demo_structure.util.extension.buildClickableText
 @Composable
 private fun OTPScreenPreview() {
     var screenState by remember { mutableStateOf(OTPScreenState()) }
-    OTPScreenContent(
-        viewModel = null,
-        email = "demo@gmail.com",
-        type = "",
-        screenState = screenState,
-        onStateChange = { newScreenState ->
-            screenState = newScreenState
-        }
-    )
+    AppPreviewWrapper { modifier ->
+        OTPScreenContent(
+            viewModel = null,
+            email = "demo@gmail.com",
+            type = "",
+            screenState = screenState,
+            onStateChange = { newScreenState ->
+                screenState = newScreenState
+            }
+        )
+    }
 }
 
 data class OTPScreenState(
@@ -137,7 +141,9 @@ fun VerifyOTPScreen(
             snackBarHostState = rememberHostState
         ) {
             Column {
-                AppTopBar(modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                AppTopBar(modifier = Modifier
+                    .padding(start = 8.dp, end = 8.dp)
+                    .background(Color.Transparent),
                     title = { Text("") },
                     navigationIcon = {
                         AppBarIcon(
@@ -439,6 +445,7 @@ fun HandleOtpState(
                     isResend = true
                 )
             )
+
             is UIState.Idle -> Unit
         }
     }
@@ -446,15 +453,15 @@ fun HandleOtpState(
     LaunchedEffect(key1 = verifyOtpState) {
         when (val state = verifyOtpState) {
             is UIState.Loading -> onStateChange(otpScreenState.copy(isLoading = true))
-            is UIState.Success ->  onStateChange(
-                    otpScreenState.copy(
-                        isResend = false,
-                        isLoading = false,
-                        isValidOtp = state.data.isValid,
-                        isError = state.data.isValid == false,
-                        secret = state.data.secret
-                    )
+            is UIState.Success -> onStateChange(
+                otpScreenState.copy(
+                    isResend = false,
+                    isLoading = false,
+                    isValidOtp = state.data.isValid,
+                    isError = state.data.isValid == false,
+                    secret = state.data.secret
                 )
+            )
 
             is UIState.Error -> onStateChange(
                 otpScreenState.copy(
@@ -463,6 +470,7 @@ fun HandleOtpState(
                     isResend = true
                 )
             )
+
             is UIState.Idle -> Unit
         }
     }

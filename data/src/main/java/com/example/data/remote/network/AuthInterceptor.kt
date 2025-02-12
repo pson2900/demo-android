@@ -2,6 +2,7 @@ package com.example.data.remote.network
 
 import android.util.Log
 import com.example.data.proto.DataStoreManager
+import com.example.data.remote.network.HeaderInterceptor.Companion.AUTHORIZATION
 import com.example.data.remote.response.BaseResponse
 import com.example.data.remote.response.LoginResponse
 import com.example.domain.model.Authentication
@@ -12,8 +13,10 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Protocol
 import okhttp3.Response
 import okhttp3.ResponseBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Call
 import retrofit2.Callback
+import java.net.HttpURLConnection
 import java.util.Calendar
 import java.util.concurrent.CountDownLatch
 
@@ -24,13 +27,17 @@ class AuthInterceptor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
+        //case 401
+//        if(response.code == HttpURLConnection.HTTP_UNAUTHORIZED){
+//            Log.d(TAG, "HTTP UNAUTHORIZED")
+//        }
+        //check token
         val authentication = runBlocking { dataStoreManager.getAuth().firstOrNull() }
-
         if (authentication != null) {
             val currentTime = Calendar.getInstance().timeInMillis
             val expiresTime = authentication.expiresTime
             val refreshExpiresTime = authentication.refreshExpiresTime
-
+            //case refresh token
             if (refreshExpiresTime < currentTime) {
                 // Refresh token has expired, stop the request and return an error response
                 Log.d(TAG, "Refresh token expired. Stopping request.")
@@ -43,12 +50,12 @@ class AuthInterceptor(
                 return Response.Builder()
                     .request(request)
                     .protocol(Protocol.HTTP_1_1)
-                    .code(401)
+                    .code(HttpURLConnection.HTTP_UNAUTHORIZED)
                     .message("Refresh token expired")
                     .body(errorResponseBody)
                     .build()
             }
-
+            //case expired token
             if (expiresTime < currentTime) {
                 Log.d(TAG, "Token expired!")
                 val newAuth = refreshToken() // Refresh the token
@@ -57,7 +64,7 @@ class AuthInterceptor(
                     val nearerToken = newAuth.getBearerToken()
                     if (!nearerToken.isNullOrEmpty()) {
                         val newRequest = request.newBuilder()
-                            .header("Authorization", nearerToken)
+                            .header(AUTHORIZATION, nearerToken)
                             .build()
                         // Return the response from the new request
                         return chain.proceed(newRequest)
@@ -66,15 +73,6 @@ class AuthInterceptor(
                     Log.d(TAG, "Token refresh failed!")
                     // Return the original request if refresh failed
                     return chain.proceed(request)
-                }
-            } else {
-                val nearerToken = authentication.getBearerToken()
-                if (!nearerToken.isNullOrEmpty()) {
-                    val newRequest = request.newBuilder()
-                        .header("Authorization", nearerToken)
-                        .build()
-                    // Return the response from the new request
-                    return chain.proceed(newRequest)
                 }
             }
         }
@@ -139,9 +137,6 @@ class AuthInterceptor(
 
     fun createErrorResponseBody(errorCode: String): ResponseBody {
         val jsonString = "{\"errorCode\": \"$errorCode\"}"
-        return ResponseBody.create(
-            "application/json; charset=utf-8".toMediaTypeOrNull(),
-            jsonString
-        )
+        return jsonString.toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
     }
 }
