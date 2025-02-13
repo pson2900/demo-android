@@ -1,5 +1,6 @@
 package com.example.data.remote.network
 
+import android.telecom.Call
 import com.example.data.remote.response.BaseResponse
 import com.example.data.remote.response.LoginResponse
 import com.example.data.remote.response.MyProfileResponse
@@ -44,8 +45,7 @@ interface ApiService {
     suspend fun login(@Body body: HashMap<String, String>): BaseResponse<LoginResponse>
 
     @POST("/secure/js/renew-token")
-    suspend fun renewToken(@Body body: HashMap<String, String>): BaseResponse<LoginResponse>
-
+    fun renewToken(@Body body: HashMap<String, String>): retrofit2.Call<BaseResponse<LoginResponse>>
 
     suspend fun getLatestVersion(): String
     suspend fun getDataVersion(): Version

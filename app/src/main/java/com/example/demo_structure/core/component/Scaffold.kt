@@ -81,7 +81,7 @@ class ScaffoldState(
 @Composable
 fun AppScaffold(
     modifier: Modifier = Modifier,
-    snackBarHostState: SnackbarHostState,
+    snackBarHostState: SnackbarHostState = remember { SnackbarHostState() },
     topBar: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
     snackbarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },

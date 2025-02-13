@@ -74,6 +74,14 @@ fun PassCodeTextField(
         }
     }
 
+
+    LaunchedEffect(key1 = errorMessage) {
+        if (!errorMessage.isNullOrEmpty()) {
+            delay(300)
+            focusRequester.requestFocus()
+        }
+    }
+
     Column(
         modifier = modifier.focusRequester(focusRequester),
         verticalArrangement = Arrangement.Center,
@@ -133,7 +141,7 @@ fun PassCodeTextField(
                 for (i in 0 until numDigits) {
                     if (!errorMessage.isNullOrEmpty()) {
                         Dot(colorResource(R.color.bridesmaid))
-//                        setText(TextFieldValue(""))
+                        setText(TextFieldValue(""))
                     } else
                         if (i < text.text.length) {
                             Dot(colorResource(R.color.tundora))

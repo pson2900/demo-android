@@ -6,6 +6,7 @@ package com.example.data.remote.network
  * Email: son.pham@navigosgroup.com
  */
 
+import com.example.data.proto.DataStoreManager
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -13,23 +14,31 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class RetrofitClient{
-//    (headerInterceptor: HeaderInterceptor, authInterceptor: AuthInterceptor)
+class RetrofitClient(
+    val dataStoreManager: DataStoreManager,
+    private val isInterceptor: Boolean? = false
+) {
 
     private val BASE_URL = "https://api.xstaging.navigosgroup.site/"
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
+    private val headerInterceptor = HeaderInterceptor(dataStoreManager)
+    private var authInterceptor = AuthInterceptor(dataStoreManager)
+
     private val okHttpClient: OkHttpClient by lazy {
-        OkHttpClient.Builder()
+        val httpClient = OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor)
-//            .addInterceptor(headerInterceptor)
-//            .addInterceptor(authInterceptor)
-            .build()
+
+        if (isInterceptor == true) {
+            httpClient.addInterceptor(headerInterceptor)
+            httpClient.addInterceptor(authInterceptor)
+        }
+        httpClient.build()
     }
 
 

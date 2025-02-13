@@ -23,6 +23,8 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.core.util.Consumer
@@ -32,6 +34,8 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 
 /**
  * Convenience wrapper for dark mode checking
@@ -95,3 +99,5 @@ fun hideKeyboardAndClearFocus(
     focusManager.clearFocus()
     keyboardController?.hide()
 }
+
+

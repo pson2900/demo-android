@@ -1,6 +1,5 @@
 package com.example.demo_structure.screen.user
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import com.example.data.proto.DataStoreManager
@@ -26,7 +25,7 @@ class UserViewModel(val dataStoreManager: DataStoreManager, val myProfileUseCase
 
     suspend fun fetchMyProfile() {
         processApiCall(
-            call ={ myProfileUseCase.getMyProfile()},
+            call = { myProfileUseCase.getMyProfile() },
             state = _myProfileState,
             dataKey = USER_PROFILE_KEY
         )
@@ -34,14 +33,14 @@ class UserViewModel(val dataStoreManager: DataStoreManager, val myProfileUseCase
 
     suspend fun fetchListItem() {
         processApiCall(
-            call ={myProfileUseCase.getListItem()} ,
+            call = { myProfileUseCase.getListItem() },
             state = _featureItemState,
             dataKey = ITEMS
         )
     }
 
-    suspend fun getAuth(){
-        dataStoreManager.getAuth().catch{
+    suspend fun getAuth() {
+        dataStoreManager.getAuth().catch {
             Log.e("Sang", "Auth error $it")
         }.collect { result ->
             Log.e("Sang", "Auth $result")

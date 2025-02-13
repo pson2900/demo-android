@@ -28,7 +28,6 @@ class MyProfileUseCase(private val myProfileRepository: MyProfileRepository) {
         val trimmedFirstName = firstName.trim()
         if (trimmedFirstName.length !in 1..numberValidate) return false
 
-        // This regex allows letters, numbers, ', -, ., spaces, Vietnamese chars, BUT EXCLUDES emojis
         val regex = "^\\p{L}\\p{N}'\\-\\.\\s\\u00C0-\\u1FFF&&[^\\p{So}\\p{Sk}]+$".toRegex()
         return trimmedFirstName.matches(regex)
         return true //OK

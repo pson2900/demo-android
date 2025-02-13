@@ -79,7 +79,6 @@ class ValidationUtilsTest : KoinTest {
         assertFalse(myProfileUseCase.validateBasicPhoneNumber("+3998059010000") ) // to many values
     }
 
-
     @Test
     fun `validateBasicEmail`() {
         myProfileUseCase.apply {

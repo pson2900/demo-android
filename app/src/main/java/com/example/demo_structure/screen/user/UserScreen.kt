@@ -1,5 +1,6 @@
 package com.example.demo_structure.screen.user
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,9 +34,13 @@ import com.example.demo_structure.screen.user.component.HeaderSection
 import com.example.demo_structure.screen.user.component.OpportunitiesSection
 import com.example.demo_structure.screen.user.component.ProfileStatusSection
 import com.example.demo_structure.screen.user.component.SkillSection
+import com.example.domain.ifNotEmpty
+import com.example.domain.ifNotNull
 import com.example.domain.model.Basic
 import com.example.domain.model.MyProfile
 import com.example.domain.model.Profile
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 
 /**
  * Displays the user's bookmarked articles. Includes support for loading and empty states.
@@ -49,6 +54,7 @@ internal fun UserScreen(
 ) {
     val myProfileState by userViewModel.myProfileState.collectAsStateWithLifecycle()
     val featureItemState by userViewModel.featureItemState.collectAsStateWithLifecycle()
+
     val rememberHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(userViewModel) {
@@ -82,7 +88,7 @@ internal fun UserScreen(
                 uiState = myProfileState,
                 onSuccessContent = {
                     MyProfileContent(
-                        myProfile = it,
+                        myProfile = myProfileData.toDomain(),
                         onNavigateToProfile = onNavigateToProfile,
                     )
                 })
@@ -107,30 +113,47 @@ internal fun LazyListScope.myProfileBody(
     basicInformation: Basic?,
     onNavigateToProfile: (Profile) -> Unit
 ) {
-    item { HeaderSection(title = "${basicInformation?.lastName} ${basicInformation?.firstName}", avatar = basicInformation?.photo ?: "") }
-    item { Spacer(Modifier.size(24.dp)) }
+    basicInformation.ifNotNull {
+        item {
+            HeaderSection(
+                title = "${it.lastName} ${it.firstName}",
+                avatar = it.photo ?: ""
+            )
+        }
+        item { Spacer(Modifier.size(24.dp)) }
+    }
+
     item {
         ProfileStatusSection(onClick = {
 
         })
     }
+
     item { Spacer(Modifier.height(24.dp)) }
     item { OpportunitiesSection() }
     item { Spacer(Modifier.height(24.dp)) }
-    item { SkillSection(myProfile.skill.map { it.name ?: "" }) }
-    item { Spacer(Modifier.height(24.dp)) }
-    item {
-        AppText(
-            text = "Thông tin hồ sơ", color = Color.Black,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-            style = ProductXTheme.typography.SemiBold.Title.Large
-        )
+
+    myProfile.skill.ifNotEmpty {
+        item { SkillSection(it.map { it.name ?: "" }) }
+        item { Spacer(Modifier.height(24.dp)) }
     }
-    item { Spacer(Modifier.height(12.dp)) }
-    items(myProfile.profiles.size) { index ->
-        BasicInformationItem(myProfile.profiles[index], onNavigateToProfile)
+
+    myProfile.profiles.ifNotEmpty {
+        Log.d("QQQ","Size: ${it.size}")
+        item {
+            AppText(
+                text = "Thông tin hồ sơ", color = Color.Black,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                style = ProductXTheme.typography.SemiBold.Title.Large
+            )
+        }
+        item { Spacer(Modifier.height(12.dp)) }
+        items(it.size) { index ->
+            BasicInformationItem(it[index], onNavigateToProfile)
+        }
+        item { Spacer(Modifier.height(12.dp)) }
     }
-    item { Spacer(Modifier.height(12.dp)) }
+
 
 }
 
@@ -143,6 +166,5 @@ fun UserContentPreview() {
             myProfile = myProfileData.toDomain(),
             onNavigateToProfile = onNavigateToProfile,
         )
-
     }
 }
