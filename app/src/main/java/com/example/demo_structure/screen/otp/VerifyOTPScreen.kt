@@ -80,7 +80,8 @@ data class OTPScreenState(
     val isError: Boolean = false,
     val isLoading: Boolean = false,
     val isValidOtp: Boolean = false,
-    val secret: String = ""
+    val secret: String = "",
+    val message: String = "",
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -189,7 +190,7 @@ private fun OTPScreenContent(
             .navigationBarsPadding()
             .imePadding()
     ) {
-        val (emailTextview, textViewDescription, otpTextField, textViewError, columnBottom, loading) = createRefs()
+        val (emailTextview, textViewDescription, otpTextField, textViewError, textViewMessage, columnBottom, loading) = createRefs()
         val annotatedString = buildClickableText(
             text = "Mã xác nhận đã được gửi qua email $email",
             clickableText = email,
@@ -265,7 +266,23 @@ private fun OTPScreenContent(
                     }
                     .padding(top = 24.dp),
                 style = TextStyle(color = Color.Red, fontSize = 16.sp),
-                text = "Mã xác nhận chưa đúng. Nhập lại hoặc chọn gửi lại mã khác."
+                text = "Mã xác nhận chưa đúng. Nhập lại hoặc chọn gửi lại mã khác.",
+                textAlign = TextAlign.Center
+            )
+        }
+
+        if(screenState.message.isNotEmpty()){
+            val otp  = "Mã OTP là: ${extractLastNumber(screenState.message)}"
+            Text(
+                modifier = Modifier
+                    .constrainAs(textViewMessage) {
+                        top.linkTo(otpTextField.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                    .padding(top = 70.dp),
+                style = TextStyle(color = Color.DarkGray, fontSize = 20.sp),
+                text = otp
             )
         }
         ColumnBottom(
@@ -296,6 +313,17 @@ private fun OTPScreenContent(
     }
 }
 
+fun extractLastNumber(inputString: String): String? {
+    val words = inputString.split(" ")
+    for (i in words.size - 1 downTo 0) {
+        val word = words[i]
+        if (word.all { it.isDigit() }) {
+            return word
+        }
+    }
+    return null
+}
+
 @Composable
 private fun ColumnBottom(
     modifier: Modifier = Modifier,
@@ -318,7 +346,7 @@ private fun ColumnBottom(
                 })
             } else {
                 CountdownResendOtpText {
-                    onStateChange(screenState.copy(isResend = true))
+                    onStateChange(screenState.copy(isResend = true, message = ""))
                 }
             }
         }
@@ -407,13 +435,16 @@ fun HandleOtpState(
     LaunchedEffect(key1 = otpState) {
         when (val state = otpState) {
             is UIState.Loading -> onStateChange(otpScreenState.copy(isLoading = true))
-            is UIState.Success -> onStateChange(
-                otpScreenState.copy(
-                    sendOtpSuccess = state.data.isSuccess,
-                    isResend = false,
-                    isLoading = false
+            is UIState.Success ->{
+                onStateChange(
+                    otpScreenState.copy(
+                        sendOtpSuccess = state.data.isSuccess,
+                        isResend = false,
+                        isLoading = false,
+                        message = state.data.message
+                    )
                 )
-            )
+            }
 
             is UIState.Error -> onStateChange(
                 otpScreenState.copy(

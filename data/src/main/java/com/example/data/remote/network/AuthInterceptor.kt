@@ -87,7 +87,7 @@ class AuthInterceptor(
             return null
         }
         Log.d(TAG, "oldToken: $oldToken")
-        val apiService = RetrofitClient(dataStoreManager, false).createService<ApiService>()
+        val apiService = RetrofitClient(dataStoreManager).createService<ApiService>()
         val latch = CountDownLatch(1)
         var result: Authentication? = null
         val body = HashMap<String, String>()

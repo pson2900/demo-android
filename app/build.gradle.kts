@@ -175,4 +175,6 @@ dependencies {
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
     //Gson
     implementation("com.google.code.gson:gson:2.12.1")
+    //
+    implementation("com.posthog:posthog-android:3.11.2")
 }

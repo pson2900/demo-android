@@ -57,6 +57,7 @@ import com.example.demo_structure.screen.home.LoadingState
 import com.example.demo_structure.screen.otp.OTPType
 import com.example.domain.model.Authentication
 import com.example.domain.model.Register
+import com.example.domain.model.UserProfile
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
@@ -149,7 +150,10 @@ fun PinCodeScreen(
         handleLoginState(
             state = loginState,
             isLoading = { isLoading = it },
-            saveAuth = { viewModel.saveAuth(it) },
+            saveAuth = {
+                viewModel.saveAuth(it)
+                viewModel.saveUserInfo(UserProfile())
+                       },
             onNavigateHomeScreen = onNavigateHomeScreen,
             context = context
         )

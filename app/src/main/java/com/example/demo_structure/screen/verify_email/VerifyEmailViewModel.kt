@@ -33,8 +33,7 @@ class VerifyEmailViewModel(
          viewModelScope.launch{
              processApiCall(
                  call = { authUseCase.verifyEmail(email) },
-                 state = _uiState,
-                 dataKey = ITEMS)
+                 state = _uiState)
          }
     }
 
@@ -45,6 +44,5 @@ class VerifyEmailViewModel(
     companion object {
         const val EMAIL_KEY = "email"
         const val IS_CHECKED_KEY = "isChecked"
-        private const val ITEMS = "items_verify_email"
     }
 }

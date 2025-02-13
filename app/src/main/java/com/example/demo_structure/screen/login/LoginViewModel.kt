@@ -7,6 +7,7 @@ import com.example.data.proto.DataStoreManager
 import com.example.data.remote.UIState
 import com.example.demo_structure.core.base.BaseViewModel
 import com.example.domain.model.Authentication
+import com.example.domain.model.UserProfile
 import com.example.domain.usecase.AuthUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,14 +28,19 @@ class LoginViewModel(val dataStoreManager: DataStoreManager , val authUseCase: A
         viewModelScope.launch{
             processApiCall(
                 call = {  authUseCase.login(email, password) },
-                state = _loginUiState,
-                dataKey = "LOGIN")
+                state = _loginUiState)
         }
     }
 
     fun saveAuth(authentication: Authentication) {
         viewModelScope.launch {
             dataStoreManager.saveAuth(authentication)
+        }
+    }
+
+    fun saveUserInfo(userProfile: UserProfile){
+        viewModelScope.launch{
+            dataStoreManager.saveUserProfile(userProfile)
         }
     }
 }

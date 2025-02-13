@@ -23,24 +23,22 @@ import java.util.concurrent.TimeUnit
 
 class RetrofitClient(
     val dataStoreManager: DataStoreManager,
-    val isInterceptor: Boolean? = false) {
+    val isInterceptor: Boolean? = false
+) {
 
     private val BASE_URL = "https://api.xstaging.navigosgroup.site/"
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
-    private val headerInterceptor = HeaderInterceptor(dataStoreManager)
-    private var authInterceptor = AuthInterceptor(dataStoreManager)
-
     private val okHttpClient: OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .writeTimeout(30, TimeUnit.SECONDS)
         .apply {
-            if (isInterceptor==true) {
-                addInterceptor(headerInterceptor)
-                addInterceptor(authInterceptor)
+            if (isInterceptor == true) {
+                addInterceptor(HeaderInterceptor(dataStoreManager))
+                addInterceptor(AuthInterceptor(dataStoreManager))
             }
             addInterceptor(loggingInterceptor)
         }

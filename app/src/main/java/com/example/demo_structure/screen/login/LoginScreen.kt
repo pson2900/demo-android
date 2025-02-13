@@ -53,6 +53,7 @@ import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.core.component.AppBarIcon
 import com.example.demo_structure.core.component.AppTopBar
 import com.example.demo_structure.core.component.otp.PassCodeTextField
+import com.example.domain.model.UserProfile
 import kotlinx.coroutines.delay
 
 /**
@@ -88,6 +89,7 @@ internal fun LoginScreen(
                 errorMessage = ""
                 isLoading = false
                 viewModel.saveAuth(state.data)
+                viewModel.saveUserInfo(UserProfile(email=email, fullName = "Tung Be De"))
                // Toast.makeText(context, "login success", Toast.LENGTH_SHORT).show()
                 delay(500)
                 onNavigateHomeScreen.invoke()

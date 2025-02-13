@@ -28,25 +28,11 @@ class VerifyOTPViewModel(val authUseCase: AuthUseCase, savedStateHandle: SavedSt
         MutableStateFlow(UIState.Idle)
     val forgetPwUiState: StateFlow<UIState<SendOtp>> = _forgetPwUiState
 
-//    fun sendOtp(email: String) {
-//        viewModelScope.launch {
-//            _otpUiState.value = OtpState.Loading(true)
-//            delay(1000)
-//            val response = authUseCase.sendOtp(email)
-//            response.catch { e->
-//                _otpUiState.value = OtpState.Error(e.message.toString())
-//            }.collect { result ->
-//                _otpUiState.value = OtpState.Success(result.isSuccess)
-//            }
-//        }
-//    }
-
     fun sendOtp(email: String) {
         viewModelScope.launch {
             processApiCall(
                 call = { authUseCase.sendOtp(email) },
-                state = _otpUiState,
-                dataKey = ITEM_SEND_OTP
+                state = _otpUiState
             )
         }
     }
@@ -55,25 +41,11 @@ class VerifyOTPViewModel(val authUseCase: AuthUseCase, savedStateHandle: SavedSt
         _otpUiState.value = UIState.Idle
     }
 
-
-    //    fun forgetPassword(email: String) {
-//        viewModelScope.launch {
-//            _otpUiState.value = OtpState.Loading(true)
-//            delay(1000)
-//            val response = authUseCase.forgetPassword(email)
-//            response.catch { e->
-//                _otpUiState.value = OtpState.Error(e.message.toString())
-//            }.collect { result ->
-//                _otpUiState.value = OtpState.ForgetPasswordSuccess(result.isSuccess)
-//            }
-//        }
-//    }
     fun forgetPassword(email: String) {
         viewModelScope.launch {
             processApiCall(
                 call = { authUseCase.forgetPassword(email) },
-                state = _forgetPwUiState,
-                dataKey = ITEM_FORGOT_PASS
+                state = _forgetPwUiState
             )
         }
     }
@@ -82,29 +54,8 @@ class VerifyOTPViewModel(val authUseCase: AuthUseCase, savedStateHandle: SavedSt
         viewModelScope.launch {
             processApiCall(
                 call = { authUseCase.verifyOtp(email, otp) },
-                state = _verifyOtpUiState,
-                dataKey = ITEM_VERIFY_OTP
+                state = _verifyOtpUiState
             )
         }
-    }
-
-
-//    fun verifyOtp(email: String, otp: String) {
-//        viewModelScope.launch {
-//            _otpUiState.value = OtpState.Loading(true)
-//            delay(1000)
-//            val response = authUseCase.verifyOtp(email,otp)
-//            response.catch { e->
-//                _otpUiState.value = OtpState.Error(e.message.toString())
-//            }.collect { result ->
-//                _otpUiState.value = OtpState.VerifyOtpSuccess(result)
-//            }
-//        }
-//    }
-
-    companion object {
-        private const val ITEM_SEND_OTP = "item_send_otp"
-        private const val ITEM_VERIFY_OTP = "item_verify_otp"
-        private const val ITEM_FORGOT_PASS = "item_forgot_password"
     }
 }

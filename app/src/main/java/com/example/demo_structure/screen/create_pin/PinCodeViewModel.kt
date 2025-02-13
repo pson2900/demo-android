@@ -8,6 +8,7 @@ import com.example.data.remote.UIState
 import com.example.demo_structure.core.base.BaseViewModel
 import com.example.domain.model.Authentication
 import com.example.domain.model.Register
+import com.example.domain.model.UserProfile
 import com.example.domain.usecase.AuthUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,8 +45,7 @@ class PinCodeViewModel(
         viewModelScope.launch {
             processApiCall(
                 call = { authUseCase.register(email, passCode, secret) },
-                state = _registerUiState,
-                dataKey = REGISTER
+                state = _registerUiState
             )
         }
     }
@@ -61,9 +61,7 @@ class PinCodeViewModel(
         viewModelScope.launch {
             processApiCall(
                 call = { authUseCase.updatePassword(email, passCode, secret) },
-                state = _updatePWUiState,
-                dataKey = UPDATE_PASSWORD
-            )
+                state = _updatePWUiState)
         }
     }
 
@@ -71,8 +69,7 @@ class PinCodeViewModel(
         viewModelScope.launch {
             processApiCall(
                 call = { authUseCase.login(email, passCode) },
-                state = _loginUiState,
-                dataKey = LOGIN
+                state = _loginUiState
             )
         }
     }
@@ -83,9 +80,11 @@ class PinCodeViewModel(
         }
     }
 
-    companion object {
-        private const val LOGIN = "item_login"
-        private const val UPDATE_PASSWORD = "item_update_password"
-        private const val REGISTER = "item_register"
+    fun saveUserInfo(userProfile: UserProfile){
+        viewModelScope.launch{
+            userProfile.email = email
+            userProfile.fullName = "Tung Be De"
+            dataStoreManager.saveUserProfile(userProfile)
+        }
     }
 }
