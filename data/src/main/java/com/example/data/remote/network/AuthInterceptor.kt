@@ -1,11 +1,13 @@
 package com.example.data.remote.network
 
+import android.os.Message
 import android.util.Log
 import com.example.data.proto.DataStoreManager
 import com.example.data.remote.network.HeaderInterceptor.Companion.AUTHORIZATION
 import com.example.data.remote.response.BaseResponse
 import com.example.data.remote.response.LoginResponse
 import com.example.domain.model.Authentication
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -27,10 +29,6 @@ class AuthInterceptor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
-        //case 401
-//        if(response.code == HttpURLConnection.HTTP_UNAUTHORIZED){
-//            Log.d(TAG, "HTTP UNAUTHORIZED")
-//        }
         //check token
         val authentication = runBlocking { dataStoreManager.getAuth().firstOrNull() }
         if (authentication != null) {
@@ -46,14 +44,12 @@ class AuthInterceptor(
                     dataStoreManager.clearAll()
                 }
                 // return chain.proceed(request.newBuilder().build())
-                val errorResponseBody = createErrorResponseBody("login")
-                return Response.Builder()
-                    .request(request)
-                    .protocol(Protocol.HTTP_1_1)
+                val errorResponseBody = createErrorResponseBody("login", "Refresh token expired")
+                val response = Response.Builder().request(request).protocol(Protocol.HTTP_1_1)
                     .code(HttpURLConnection.HTTP_UNAUTHORIZED)
-                    .message("Refresh token expired")
-                    .body(errorResponseBody)
-                    .build()
+                    .message(errorResponseBody.string())
+                    .body(errorResponseBody).build()
+                return response
             }
             //case expired token
             if (expiresTime < currentTime) {
@@ -63,9 +59,8 @@ class AuthInterceptor(
                     // Retry the request with the new token
                     val nearerToken = newAuth.getBearerToken()
                     if (!nearerToken.isNullOrEmpty()) {
-                        val newRequest = request.newBuilder()
-                            .header(AUTHORIZATION, nearerToken)
-                            .build()
+                        val newRequest =
+                            request.newBuilder().header(AUTHORIZATION, nearerToken).build()
                         // Return the response from the new request
                         return chain.proceed(newRequest)
                     }
@@ -135,8 +130,8 @@ class AuthInterceptor(
         return result
     }
 
-    fun createErrorResponseBody(errorCode: String): ResponseBody {
-        val jsonString = "{\"errorCode\": \"$errorCode\"}"
+    fun createErrorResponseBody(errorCode: String, message: String): ResponseBody {
+        val jsonString = "{\"errorCode\": \"$errorCode\", \"message\": \"$message\"}"
         return jsonString.toResponseBody("application/json; charset=utf-8".toMediaTypeOrNull())
     }
 }
