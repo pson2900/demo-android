@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -49,7 +50,7 @@ fun CommunityScreen(viewModel: CommunityViewModel, onTopicClick: (String) -> Uni
         backgroundColor = Color.Transparent
     ){
         AppSurface(
-            modifier = it.fillMaxSize(),
+            modifier = Modifier.padding(it).fillMaxSize(),
             backgroundColor = Color.White
         ) {
             Text(text = "CommunityScreen",

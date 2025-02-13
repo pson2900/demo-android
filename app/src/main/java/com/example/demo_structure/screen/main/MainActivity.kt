@@ -7,7 +7,9 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -27,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.util.trace
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -80,7 +83,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         observeThemeSettings()
 
-//        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setupSplashScreen(splashScreen)
         setContent {
             val themeSettings by remember { mutableStateOf(getInitialThemeSettings()) }
@@ -188,13 +191,16 @@ fun MainContent(
         },
 //        content = { padding ->
         content = {
-            MainNavHost(
-                appState = nestedNavigation,
-                startDestination = startDestination,
-                onNavigateToJobDetail = onNavigateToJobDetail,
-                onNavigateToLogin = onNavigateToLogin,
-                onNavigateToVerifyEmail = onNavigateToVerifyEmail
-            )
+//            .padding(bottom = it.calculateBottomPadding())
+            Box(Modifier.fillMaxSize()){
+                MainNavHost(
+                    appState = nestedNavigation,
+                    startDestination = startDestination,
+                    onNavigateToJobDetail = onNavigateToJobDetail,
+                    onNavigateToLogin = onNavigateToLogin,
+                    onNavigateToVerifyEmail = onNavigateToVerifyEmail
+                )
+            }
         }
     )
 }

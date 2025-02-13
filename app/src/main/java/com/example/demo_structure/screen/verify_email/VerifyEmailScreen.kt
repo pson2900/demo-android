@@ -52,7 +52,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.data.remote.UIState
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppPreviewWrapper
@@ -63,6 +65,7 @@ import com.example.demo_structure.screen.home.LoadingState
 import com.example.demo_structure.screen.otp.OTPType
 import com.example.demo_structure.util.extension.buildClickableText
 import com.example.demo_structure.util.extension.hideKeyboardAndClearFocus
+import kotlinx.coroutines.launch
 
 
 @Preview("Light Mode")
@@ -106,7 +109,9 @@ fun VerifyEmailScreen(
 
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    LaunchedEffect(viewModel) {
 
+    }
     val intent =
         remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://www.vietnamworks.com/quy-dinh-bao-mat?utm_source_navi=footer")) }
 
@@ -163,22 +168,22 @@ fun VerifyEmailScreen(
 
     LaunchedEffect(key1 = emailState) {
         when (val state = emailState) {
-            is EmailState.Loading -> {
-                isLoading = state.isLoading
+            is UIState.Loading -> {
+                isLoading = true
             }
 
-            is EmailState.Success -> {
+            is UIState.Success -> {
                 isLoading = false
-                if (state.found == true) {
+                if (state.data.found == true) {
                     onNavigateToLogin(email)
                 } else {
                     onNavigateToVerifyOtp(email, OTPType.REGISTER.type)
                 }
             }
 
-            is EmailState.Error -> {
+            is UIState.Error -> {
                 isLoading = false
-                Toast.makeText(context, state.msg, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, state.appException.message, Toast.LENGTH_SHORT).show()
             }
 
             else -> Unit

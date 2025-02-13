@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.data.remote.UIState
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppBarIcon
@@ -75,30 +76,23 @@ internal fun LoginScreen(
 ) {
 
     val loginState by viewModel.loginUiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
-
 
     val rememberHostState = remember { SnackbarHostState() }
     LaunchedEffect(key1 = loginState) {
         when (val state = loginState) {
-            is LoginState.Loading -> {
-                if (state.isLoading) {
-                    isLoading = true
-                }
-            }
-
-            is LoginState.LoginSuccess -> {
+            is UIState.Loading -> isLoading = true
+            is UIState.Success -> {
                 errorMessage = ""
                 isLoading = false
-                viewModel.saveAuth(state.authentication)
-                // Toast.makeText(context, "login success", Toast.LENGTH_SHORT).show()
+                viewModel.saveAuth(state.data)
+               // Toast.makeText(context, "login success", Toast.LENGTH_SHORT).show()
                 delay(500)
                 onNavigateHomeScreen.invoke()
             }
 
-            is LoginState.Error -> {
+            is UIState.Error -> {
                 errorMessage = "Mã không đúng. Thử lại nhé!"
                 isLoading = false
             }
@@ -126,7 +120,7 @@ internal fun LoginScreen(
         snackBarHostState = rememberHostState,
         backgroundColor = ProductXTheme.colorScheme.background_1,
     ) {
-        Column(it.fillMaxSize()) {
+        Column(Modifier.padding(it).fillMaxSize()) {
 
             LoginContent(
                 modifier = modifier,

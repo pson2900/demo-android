@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
@@ -136,11 +137,13 @@ fun HomeContent(onItemSelected: (Int, String) -> Unit) {
         }
     ) {
         LazyColumn(
-            modifier = it.fillMaxSize()
-                .background(color = hexToColor("#F1F5F9")),
+            modifier = Modifier.padding(it).navigationBarsPadding().fillMaxSize(),
             state = columState,
+            horizontalAlignment = Alignment.CenterHorizontally,
+
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 10.dp)
+            contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 10.dp, bottom = it.calculateBottomPadding())
+//            contentPadding = it
         ) {
             itemsIndexed(jobResult) { index, item ->
                 ItemResult(

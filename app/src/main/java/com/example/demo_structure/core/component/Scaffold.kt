@@ -5,11 +5,18 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.exclude
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -84,8 +91,9 @@ fun AppScaffold(
     floatingActionButton: @Composable () -> Unit = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     backgroundColor: Color,
+//    contentWindowInsets: WindowInsets = WindowInsets.safeDrawing,
     contentColor: Color = ProductXTheme.colorScheme.onSurface,
-    content: @Composable (Modifier) -> Unit
+    content: @Composable (PaddingValues) -> Unit
 ) {
     ApplicationTheme {
         SharedTransitionLayout {
@@ -106,20 +114,21 @@ fun AppScaffold(
                             containerColor = backgroundColor,
                             contentColor = contentColor,
                             contentWindowInsets = WindowInsets.safeDrawing,
-                            /*contentWindowInsets = ScaffoldDefaults
+                          /*  contentWindowInsets = ScaffoldDefaults
                                 .contentWindowInsets
+                                .exclude(WindowInsets.systemBars)
+                                .exclude(WindowInsets.ime)
                                 .exclude(WindowInsets.navigationBars)
                                 .exclude(WindowInsets.statusBars)
-                                .exclude(WindowInsets.safeDrawing)
-                                .exclude(WindowInsets.systemBars)
-                                .exclude(WindowInsets.ime),*/
-                            content = {
+                                .exclude(WindowInsets.safeDrawing),*/
+                            /*content = {
                                 content(
                                     Modifier
                                         .padding(it)
                                         .background(backgroundColor)
                                 )
-                            }
+                            }*/
+                            content = content
                         )
                         /*{
                             Box(modifier = Modifier.padding(it)) {

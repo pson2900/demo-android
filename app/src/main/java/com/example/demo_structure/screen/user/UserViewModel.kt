@@ -20,7 +20,8 @@ class UserViewModel(val dataStoreManager: DataStoreManager, val myProfileUseCase
     private val _myProfileState: MutableStateFlow<UIState<MyProfile>> = MutableStateFlow(UIState.Loading)
     val myProfileState: StateFlow<UIState<MyProfile>> = _myProfileState
 
-    private val _featureItemState: MutableStateFlow<UIState<List<String>>> = MutableStateFlow(UIState.Loading)
+    private val _featureItemState: MutableStateFlow<UIState<List<String>>> =
+        MutableStateFlow(UIState.Loading)
     val featureItemState: StateFlow<UIState<List<String>>> = _featureItemState
 
     suspend fun fetchMyProfile() {
@@ -41,9 +42,7 @@ class UserViewModel(val dataStoreManager: DataStoreManager, val myProfileUseCase
 
     suspend fun getAuth() {
         dataStoreManager.getAuth().catch {
-            Log.e("Sang", "Auth error $it")
         }.collect { result ->
-            Log.e("Sang", "Auth $result")
         }
     }
 

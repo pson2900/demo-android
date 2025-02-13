@@ -1,5 +1,6 @@
 package com.example.demo_structure.screen.otp
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,11 +40,13 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.data.remote.UIState
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppBarIcon
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppTopBar
+import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.CountdownTextView
 import com.example.demo_structure.core.component.otp.OTPTextField
 import com.example.demo_structure.core.component.otp.OtpTextFieldDefaults
@@ -55,16 +58,17 @@ import com.example.demo_structure.util.extension.buildClickableText
 @Composable
 private fun OTPScreenPreview() {
     var screenState by remember { mutableStateOf(OTPScreenState()) }
-    OTPScreenContent(
-        viewModel = null,
-        email = "demo@gmail.com",
-        type = "",
-        screenState = screenState,
-        onStateChange = { newScreenState ->
-            screenState = newScreenState
-        }
-    )
-
+    AppPreviewWrapper { modifier ->
+        OTPScreenContent(
+            viewModel = null,
+            email = "demo@gmail.com",
+            type = "",
+            screenState = screenState,
+            onStateChange = { newScreenState ->
+                screenState = newScreenState
+            }
+        )
+    }
 }
 
 data class OTPScreenState(
@@ -391,56 +395,77 @@ fun HandleOtpState(
     otpScreenState: OTPScreenState,
     onStateChange: (OTPScreenState) -> Unit
 ) {
-    val otpState by viewModel.otplUiState.collectAsStateWithLifecycle()
+    val otpState by viewModel.otpUiState.collectAsStateWithLifecycle()
+    val verifyOtpState by viewModel.verifyOtpUiState.collectAsStateWithLifecycle()
+    val pwState by viewModel.forgetPwUiState.collectAsStateWithLifecycle()
     LaunchedEffect(key1 = otpState) {
         when (val state = otpState) {
-            is OtpState.Loading -> {
-                onStateChange(otpScreenState.copy(isLoading = state.isLoading))
-            }
-
-            is OtpState.Success -> {
-                onStateChange(
-                    otpScreenState.copy(
-                        sendOtpSuccess = state.isSuccess,
-                        isResend = false,
-                        isLoading = false
-                    )
+            is UIState.Loading -> onStateChange(otpScreenState.copy(isLoading = true))
+            is UIState.Success -> onStateChange(
+                otpScreenState.copy(
+                    sendOtpSuccess = state.data.isSuccess,
+                    isResend = false,
+                    isLoading = false
                 )
-            }
+            )
 
-            is OtpState.ForgetPasswordSuccess -> {
-                onStateChange(
-                    otpScreenState.copy(
-                        sendOtpSuccess = state.isSuccess,
-                        isResend = false,
-                        isLoading = false
-                    )
+            is UIState.Error -> onStateChange(
+                otpScreenState.copy(
+                    isLoading = false,
+                    sendOtpSuccess = true,
+                    isResend = true
                 )
-            }
+            )
 
-            is OtpState.VerifyOtpSuccess -> {
-                onStateChange(
-                    otpScreenState.copy(
-                        isResend = false,
-                        isLoading = false,
-                        isValidOtp = state.verifyOtp.isValid,
-                        isError = state.verifyOtp.isValid == false,
-                        secret = state.verifyOtp.secret
-                    )
+            is UIState.Idle -> Unit
+        }
+    }
+
+    LaunchedEffect(key1 = pwState) {
+        when (val state = pwState) {
+            is UIState.Loading -> onStateChange(otpScreenState.copy(isLoading = true))
+            is UIState.Success -> onStateChange(
+                otpScreenState.copy(
+                    sendOtpSuccess = state.data.isSuccess,
+                    isResend = false,
+                    isLoading = false
                 )
-            }
+            )
 
-            is OtpState.Error -> {
-                onStateChange(
-                    otpScreenState.copy(
-                        isLoading = false,
-                        sendOtpSuccess = true,
-                        isResend = true
-                    )
+            is UIState.Error -> onStateChange(
+                otpScreenState.copy(
+                    isLoading = false,
+                    sendOtpSuccess = true,
+                    isResend = true
                 )
-            }
+            )
 
-            is OtpState.Idle -> Unit
+            is UIState.Idle -> Unit
+        }
+    }
+
+    LaunchedEffect(key1 = verifyOtpState) {
+        when (val state = verifyOtpState) {
+            is UIState.Loading -> onStateChange(otpScreenState.copy(isLoading = true))
+            is UIState.Success -> onStateChange(
+                otpScreenState.copy(
+                    isResend = false,
+                    isLoading = false,
+                    isValidOtp = state.data.isValid,
+                    isError = state.data.isValid == false,
+                    secret = state.data.secret
+                )
+            )
+
+            is UIState.Error -> onStateChange(
+                otpScreenState.copy(
+                    isLoading = false,
+                    sendOtpSuccess = true,
+                    isResend = true
+                )
+            )
+
+            is UIState.Idle -> Unit
         }
     }
 }

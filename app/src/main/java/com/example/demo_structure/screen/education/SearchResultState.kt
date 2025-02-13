@@ -1,7 +1,6 @@
 package com.example.demo_structure.screen.education
 
 import com.example.demo_structure.SearchJob
-import com.example.demo_structure.screen.login.LoginState
 import com.example.domain.model.Authentication
 
 

@@ -41,6 +41,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.data.remote.UIState
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppBarIcon
@@ -51,6 +52,7 @@ import com.example.demo_structure.core.component.otp.PassCodeTextField
 import com.example.demo_structure.screen.home.LoadingState
 import com.example.demo_structure.screen.otp.OTPType
 import com.example.domain.model.Authentication
+import com.example.domain.model.Register
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
@@ -95,7 +97,7 @@ fun PinCodeScreen(
     val context = LocalContext.current
 
     val registerState by viewModel.registerUiState.collectAsStateWithLifecycle()
-    val updatePasswordState by viewModel.updatePassWordUiState.collectAsStateWithLifecycle()
+    val updatePasswordState by viewModel.updatePWUiState.collectAsStateWithLifecycle()
     val loginState by viewModel.loginUiState.collectAsStateWithLifecycle()
 
     val rememberHostState = remember { SnackbarHostState() }
@@ -103,6 +105,7 @@ fun PinCodeScreen(
     var otpError by remember { mutableStateOf("") }
     var isCompleteStep1 by remember { mutableStateOf(false) }
     val maxLength = 6
+    viewModel.email = arguments?.email ?: ""
 
     fun onBackPressed() {
         if (!isCompleteStep1) {
@@ -124,7 +127,7 @@ fun PinCodeScreen(
         handleRegisterState(
             state = registerState,
             isLoading = { isLoading = it },
-            autoLogin = { email, passCode -> viewModel.login(email, passCode) },
+            autoLogin = { viewModel.login() },
             context = context
         )
     }
@@ -133,7 +136,7 @@ fun PinCodeScreen(
         handleUpdatePasswordState(
             state = updatePasswordState,
             isLoading = { isLoading = it },
-            autoLogin = { email, passCode -> viewModel.login(email, passCode) },
+            autoLogin = { viewModel.login() },
             context = context
         )
     }
@@ -169,7 +172,7 @@ fun PinCodeScreen(
         snackBarHostState = rememberHostState,
         backgroundColor = ProductXTheme.colorScheme.background_1
     ) {
-        Column(it.fillMaxSize()) {
+        Column(Modifier.padding(it).fillMaxSize()) {
             PinCodeScreenContent(
                 modifier = modifier,
                 label = if (!isCompleteStep1) "Tạo mã pin mới" else "Nhập lại mã pin",
@@ -233,42 +236,31 @@ private fun verifyPassCode(
         onChangeError("sai pass code")
     } else {
         if (arguments.type == OTPType.REGISTER.type) {
-            viewModel.register(
-                arguments.email ?: "",
-                viewModel.passCode,
-                arguments.secret ?: ""
-            )
+            viewModel.register(arguments.secret ?: "")
         } else {
-            viewModel.updatePassword(
-                arguments.email ?: "",
-                viewModel.passCode,
-                arguments.secret ?: ""
-            )
+            viewModel.updatePassword(arguments.secret ?: "")
         }
     }
 }
 
 private suspend fun handleRegisterState(
-    state: PinCodeState,
+    state: UIState<Register>,
     isLoading: (Boolean) -> Unit,
-    autoLogin: (String, String) -> Unit,
+    autoLogin: () -> Unit,
     context: Context
 ) {
     when (val registerState = state) {
-        is PinCodeState.Loading -> {
-            isLoading(registerState.isLoading)
-        }
-
-        is PinCodeState.RegisterSuccess -> {
+        is UIState.Loading -> isLoading(true)
+        is UIState.Success -> {
             isLoading(false)
             delay(200)
-            if (registerState.isSuccess) {
-                autoLogin(registerState.email, registerState.passCode)
+            if (registerState.data.isSuccess) {
+                autoLogin()
             }
         }
 
-        is PinCodeState.Error -> {
-            Toast.makeText(context, registerState.msg, Toast.LENGTH_SHORT).show()
+        is UIState.Error -> {
+            Toast.makeText(context, registerState.appException.message, Toast.LENGTH_SHORT).show()
             isLoading(false)
         }
 
@@ -277,25 +269,23 @@ private suspend fun handleRegisterState(
 }
 
 private fun handleUpdatePasswordState(
-    state: PinCodeState,
+    state: UIState<Register>,
     isLoading: (Boolean) -> Unit,
-    autoLogin: (String, String) -> Unit,
+    autoLogin: () -> Unit,
     context: Context
 ) {
     when (val updatePasswordState = state) {
-        is PinCodeState.Loading -> {
-            isLoading(updatePasswordState.isLoading)
-        }
-
-        is PinCodeState.UpdatePasswordSuccess -> {
+        is UIState.Loading -> isLoading(true)
+        is UIState.Success -> {
             isLoading(false)
-            if (updatePasswordState.isSuccess) {
-                autoLogin(updatePasswordState.email, updatePasswordState.passCode)
+            if (updatePasswordState.data.isSuccess) {
+                autoLogin()
             }
         }
 
-        is PinCodeState.Error -> {
-            Toast.makeText(context, updatePasswordState.msg, Toast.LENGTH_SHORT).show()
+        is UIState.Error -> {
+            Toast.makeText(context, updatePasswordState.appException.message, Toast.LENGTH_SHORT)
+                .show()
             isLoading(false)
         }
 
@@ -304,26 +294,23 @@ private fun handleUpdatePasswordState(
 }
 
 private suspend fun handleLoginState(
-    state: PinCodeState,
+    state: UIState<Authentication>,
     isLoading: (Boolean) -> Unit,
     saveAuth: (Authentication) -> Unit,
     onNavigateHomeScreen: () -> Unit,
     context: Context
 ) {
     when (val loginState = state) {
-        is PinCodeState.Loading -> {
-            isLoading(loginState.isLoading)
-        }
-
-        is PinCodeState.LoginSuccess -> {
+        is UIState.Loading -> isLoading(true)
+        is UIState.Success -> {
             isLoading(false)
-            saveAuth(loginState.authentication)
+            saveAuth(loginState.data)
             delay(200)
             onNavigateHomeScreen()
         }
 
-        is PinCodeState.Error -> {
-            Toast.makeText(context, loginState.msg, Toast.LENGTH_SHORT).show()
+        is UIState.Error -> {
+            Toast.makeText(context, loginState.appException.message, Toast.LENGTH_SHORT).show()
             isLoading(false)
             delay(200)
             onNavigateHomeScreen()

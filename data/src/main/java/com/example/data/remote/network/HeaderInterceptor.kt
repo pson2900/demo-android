@@ -11,25 +11,27 @@ class HeaderInterceptor(private val dataStoreManager: DataStoreManager) : Interc
     override fun intercept(chain: Interceptor.Chain): Response {
         val token: String = runBlocking {
             try {
-               val token = dataStoreManager.getAuth().first()?.getBearerToken()?:""
-                Log.d("Sang","getting auth token: $token")
+                val token = dataStoreManager.getAuth().first()?.getBearerToken() ?: ""
+                Log.e("Sang", "getting auth token: $token")
                 token
             } catch (e: Exception) {
-                Log.d("Sang","Error getting auth token: ${e.message}")
-                "" // Return an empty string in case of error
+                Log.e("Sang", "Error getting auth token: ${e.message}")
+                ""
             }
         }
 
         val originalRequest = chain.request()
         val newRequest = originalRequest.newBuilder()
-            .apply {
-                if(token.isNotEmpty()){
-                    addHeader("Authorization", token)
-                }
-            }
-            .addHeader("Content-Type", "application/json")
-            .addHeader("Accept", "application/json")
-            .build()
-        return chain.proceed(newRequest)
+        if (token.isNotEmpty()) {
+            newRequest.addHeader(AUTHORIZATION, token)
+        }
+        newRequest.addHeader(CONTENT_TYPE, "application/json")
+
+        return chain.proceed(newRequest.build())
+    }
+
+    companion object {
+         const val CONTENT_TYPE = "Content-Type"
+         const val AUTHORIZATION = "Authorization"
     }
 }

@@ -30,7 +30,6 @@ sealed class AppException(message: String, cause: Throwable? = null) : RuntimeEx
     class ClientException(message: String, cause: Throwable? = null) : AppException(message, cause)
     class ServerUnavailableException(message: String, cause: Throwable? = null): AppException(message, cause)
     class BadGatewayException(message: String, cause: Throwable? = null): AppException(message, cause)
-
     // Data Errors
     class DataParsingException(message: String, cause: Throwable? = null) : AppException(message, cause)
     class NoDataException(message: String = "No data", cause: Throwable? = null) : AppException(message, cause)

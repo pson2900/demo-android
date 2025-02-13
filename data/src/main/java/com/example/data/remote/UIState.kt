@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.onStart
  * Email: son.pham@navigosgroup.com
  */
 interface UIState<out T> {
+    object Idle : UIState<Nothing>
     data class Success<out T>(val data: T) : UIState<T>
     data class Error(val appException: AppException) : UIState<Nothing>
     object Loading : UIState<Nothing>

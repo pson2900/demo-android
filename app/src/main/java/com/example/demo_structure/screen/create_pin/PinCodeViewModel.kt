@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.data.proto.DataStoreManager
+import com.example.data.remote.UIState
 import com.example.demo_structure.core.base.BaseViewModel
 import com.example.domain.model.Authentication
+import com.example.domain.model.Register
 import com.example.domain.usecase.AuthUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,75 +24,68 @@ class PinCodeViewModel(
     BaseViewModel(savedStateHandle) {
     var passCode: String = ""
     var confirmPasscode: String = ""
+    var email: String = ""
 
-    private val _registerUiState = MutableStateFlow<PinCodeState>(PinCodeState.Idle)
-    val registerUiState: StateFlow<PinCodeState> = _registerUiState.asStateFlow()
-
-    private val _updatePassWordUiState = MutableStateFlow<PinCodeState>(PinCodeState.Idle)
-    val updatePassWordUiState: StateFlow<PinCodeState> = _updatePassWordUiState.asStateFlow()
+    private val _registerUiState: MutableStateFlow<UIState<Register>> =
+        MutableStateFlow(UIState.Idle)
+    val registerUiState: StateFlow<UIState<Register>> = _registerUiState
 
 
-    private val _loginUiState = MutableStateFlow<PinCodeState>(PinCodeState.Idle)
-    val loginUiState: StateFlow<PinCodeState> = _loginUiState.asStateFlow()
+    private val _updatePWUiState: MutableStateFlow<UIState<Register>> =
+        MutableStateFlow(UIState.Idle)
+    val updatePWUiState: StateFlow<UIState<Register>> = _updatePWUiState
 
-    fun register(email: String, password: String, secret: String) {
+    private val _loginUiState: MutableStateFlow<UIState<Authentication>> =
+        MutableStateFlow(UIState.Idle)
+    val loginUiState: StateFlow<UIState<Authentication>> = _loginUiState
+
+
+    fun register(secret: String) {
         viewModelScope.launch {
-            _registerUiState.value = PinCodeState.Loading(true)
-            delay(1000)
-            val response = authUseCase.register(email, password, secret)
-            response.catch { e ->
-                _registerUiState.value = PinCodeState.Error(e.message.toString())
-            }.collect { result ->
-                _registerUiState.value = PinCodeState.RegisterSuccess(
-                    result.isSuccess,
-                    email = email,
-                    passCode = password
-                )
-            }
+            processApiCall(
+                call = { authUseCase.register(email, passCode, secret) },
+                state = _registerUiState,
+                dataKey = REGISTER
+            )
         }
     }
+
 
     fun clearState() {
-        _registerUiState.value = PinCodeState.Idle
-        _loginUiState.value = PinCodeState.Idle
-        _updatePassWordUiState.value == PinCodeState.Idle
+        _registerUiState.value = UIState.Idle
+        _loginUiState.value = UIState.Idle
+        _updatePWUiState.value = UIState.Idle
     }
 
-    fun updatePassword(email: String, password: String, secret: String) {
+    fun updatePassword(secret: String) {
         viewModelScope.launch {
-            _updatePassWordUiState.value = PinCodeState.Loading(true)
-            delay(1000)
-            val response = authUseCase.updatePassword(email, password, secret)
-            response.catch { e ->
-                Log.e("Sang", "UpdatePassword error $e")
-                _updatePassWordUiState.value = PinCodeState.Error(e.message.toString())
-            }.collect { result ->
-                Log.e("Sang", "UpdatePasswordSuccess $result")
-                _updatePassWordUiState.value =
-                    PinCodeState.UpdatePasswordSuccess(result.isSuccess, email, password)
-            }
+            processApiCall(
+                call = { authUseCase.updatePassword(email, passCode, secret) },
+                state = _updatePWUiState,
+                dataKey = UPDATE_PASSWORD
+            )
         }
     }
 
-
-    fun login(email: String, password: String) {
+    fun login() {
         viewModelScope.launch {
-            _loginUiState.value = PinCodeState.Loading(true)
-            delay(500)
-            val response = authUseCase.login(email, password)
-            response.catch { e ->
-                _loginUiState.value = PinCodeState.Error(e.message.toString())
-            }.collect { result ->
-                _loginUiState.value = PinCodeState.LoginSuccess(result)
-            }
+            processApiCall(
+                call = { authUseCase.login(email, passCode) },
+                state = _loginUiState,
+                dataKey = LOGIN
+            )
         }
     }
-
-
 
     fun saveAuth(authentication: Authentication) {
         viewModelScope.launch {
             dataStoreManager.saveAuth(authentication)
         }
+    }
+
+    companion object {
+        private const val LOGIN = "item_login"
+        private const val UPDATE_PASSWORD = "item_update_password"
+        private const val REGISTER = "item_register"
     }
 }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Button
@@ -27,6 +28,7 @@ import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppSnackBar
 import com.example.demo_structure.core.component.ThemePreviews
 import com.example.demo_structure.core.navigation.rememberAppState
+
 import kotlinx.coroutines.launch
 import kotlinx.datetime.TimeZone
 
@@ -80,7 +82,7 @@ fun EducationContent(time: TimeZone, currentTime: String, isLogin: Boolean, onNa
 //        content = { padding ->
         content = {
             AppBox(
-                modifier = it.fillMaxSize()
+                modifier = Modifier.padding(it).fillMaxSize()
                     .clickable {
                         coroutineScope.launch {
                             val result = snackbarHostState.showSnackbar(

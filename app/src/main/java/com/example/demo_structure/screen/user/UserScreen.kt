@@ -82,7 +82,7 @@ internal fun UserScreen(
 //    ) { paddingValue ->
     ) {
         Box(
-            modifier = it.fillMaxSize(),
+            modifier = Modifier.padding(it).fillMaxSize(),
             contentAlignment = androidx.compose.ui.Alignment.Center
         ) {
             DisplayUiStateContent(
