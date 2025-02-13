@@ -15,7 +15,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TextFieldDefaults.colors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,9 +39,9 @@ import com.example.demo_structure.R
 
 @Preview(showBackground = true)
 @Composable
-private fun EmailTextFieldPreview() {
+private fun AppTextFieldPreview() {
     var email by remember { mutableStateOf("") }
-    EmailTextField(
+    AppTextField(
         modifier = Modifier.padding(16.dp),
         hint = "Enter email",
         value = email,
@@ -54,7 +53,7 @@ private fun EmailTextFieldPreview() {
 }
 
 @Composable
-fun EmailTextField(
+fun AppTextField(
     modifier: Modifier = Modifier,
     hint: String,
     value: String,
@@ -65,7 +64,6 @@ fun EmailTextField(
     error: String? = null
 ) {
     var isFocused by remember { mutableStateOf(false) }
-    val paddingTop = 4.dp
 
     Column(modifier = modifier.fillMaxWidth()) {
         TextField(
@@ -73,7 +71,7 @@ fun EmailTextField(
             onValueChange = onValueChange,
             label = {
                 Text(
-                    modifier = Modifier.padding(top = paddingTop),
+                    modifier = Modifier.padding(top =  4.dp),
                     style = TextStyle(
                         fontSize = 14.sp
                     ),

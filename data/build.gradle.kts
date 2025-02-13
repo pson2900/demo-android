@@ -39,8 +39,8 @@ dependencies {
     implementation(libs.com.google.material)
     // Mark: Testing
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.runner)
-    androidTestImplementation(libs.androidx.rules)
+//    androidTestImplementation(libs.androidx.runner)
+//    androidTestImplementation(libs.androidx.rules)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.espresso.contrib)
     // Mark: Retrofit

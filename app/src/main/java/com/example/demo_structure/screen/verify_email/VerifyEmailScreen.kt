@@ -52,7 +52,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.data.remote.UIState
 import com.example.demo_structure.R
@@ -60,12 +59,11 @@ import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppText
-import com.example.demo_structure.core.component.EmailTextField
+import com.example.demo_structure.core.component.AppTextField
 import com.example.demo_structure.screen.home.LoadingState
 import com.example.demo_structure.screen.otp.OTPType
 import com.example.demo_structure.util.extension.buildClickableText
 import com.example.demo_structure.util.extension.hideKeyboardAndClearFocus
-import kotlinx.coroutines.launch
 
 
 @Preview("Light Mode")
@@ -276,7 +274,7 @@ fun VerifyEmailContent(
             textAlign = TextAlign.Center
         )
 
-        EmailTextField(
+        AppTextField(
             modifier = Modifier
                 .padding(24.dp)
                 .constrainAs(emailTextField) {

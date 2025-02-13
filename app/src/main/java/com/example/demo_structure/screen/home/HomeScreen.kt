@@ -129,7 +129,6 @@ fun HomeContent(onItemSelected: (Int, String) -> Unit) {
     val itemAnimationSpecFade = nonSpatialExpressiveSpring<Float>()
     val itemPlacementSpec = spatialExpressiveSpring<IntOffset>()
     AppScaffold(
-//        contentWindowInsets = WindowInsets.systemBars,
         snackBarHostState = rememberSnackbarHostState,
         backgroundColor = ProductXTheme.colorScheme.background_2,
         topBar = {

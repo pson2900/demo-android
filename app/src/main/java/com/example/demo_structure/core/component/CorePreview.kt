@@ -936,8 +936,8 @@ fun ComponentShowcase() {
     }
 }*/
 
-//@Preview(showBackground = true)
-@ThemePreviews
+@Preview(showBackground = true)
+//@ThemePreviews
 @Composable
 fun DefaultColorSchemePreview() {
     AppPreviewWrapper {
