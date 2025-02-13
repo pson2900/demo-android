@@ -1,30 +1,18 @@
 package com.example.demo_structure.screen.main
 
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.ime
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,7 +27,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.util.trace
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -48,7 +35,6 @@ import com.example.demo_structure.app.InitializeApp
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppSnackBar
-import com.example.demo_structure.core.component.AppSurface
 import com.example.demo_structure.core.component.BottomNavigationBar
 import com.example.demo_structure.core.component.InitBottomMainScreen
 import com.example.demo_structure.core.navigation.DestinationItem
@@ -57,7 +43,6 @@ import com.example.demo_structure.core.navigation.MainNavHost
 import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.util.extension.isSystemInDarkTheme
 import com.example.demo_structure.util.monitor.NetworkMonitor
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -94,7 +79,8 @@ class MainActivity : ComponentActivity() {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         observeThemeSettings()
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+//        WindowCompat.setDecorFitsSystemWindows(window, false)
         setupSplashScreen(splashScreen)
         setContent {
             val themeSettings by remember { mutableStateOf(getInitialThemeSettings()) }
@@ -168,18 +154,18 @@ fun MainContent(
     val nestedNavigation = rememberAppState()
     Log.d("QQQ", "MainContent startDestination: ${startDestination.route}")
     AppScaffold(
+        backgroundColor = Color.Transparent,
         modifier = modifier
-            .navigationBarsPadding()
 //            .statusBarsPadding()
             .semantics {
                 testTagsAsResourceId = true
             },
-        contentWindowInsets = ScaffoldDefaults
-            .contentWindowInsets
-            .exclude(WindowInsets.navigationBars)
-            .exclude(WindowInsets.statusBars)
-            .exclude(WindowInsets.systemBars)
-            .exclude(WindowInsets.ime),
+//        contentWindowInsets = ScaffoldDefaults
+//            .contentWindowInsets
+//            .exclude(WindowInsets.navigationBars)
+//            .exclude(WindowInsets.statusBars)
+//            .exclude(WindowInsets.systemBars)
+//            .exclude(WindowInsets.ime),
         snackbarHost = {
             SnackbarHost(
                 hostState = it,
@@ -200,20 +186,15 @@ fun MainContent(
                 })
             }
         },
-        content = { padding ->
-            AppSurface(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues = padding)
-            ) {
-                MainNavHost(
-                    appState = nestedNavigation,
-                    startDestination = startDestination,
-                    onNavigateToJobDetail = onNavigateToJobDetail,
-                    onNavigateToLogin = onNavigateToLogin,
-                    onNavigateToVerifyEmail = onNavigateToVerifyEmail
-                )
-            }
+//        content = { padding ->
+        content = {
+            MainNavHost(
+                appState = nestedNavigation,
+                startDestination = startDestination,
+                onNavigateToJobDetail = onNavigateToJobDetail,
+                onNavigateToLogin = onNavigateToLogin,
+                onNavigateToVerifyEmail = onNavigateToVerifyEmail
+            )
         }
     )
 }

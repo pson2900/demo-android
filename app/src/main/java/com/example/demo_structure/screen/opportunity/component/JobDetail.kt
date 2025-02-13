@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.app.manager.theme.AppIcons
@@ -36,6 +37,7 @@ fun JobDetailSection() {
                 Image(
                     modifier = Modifier.weight(0.3f).size(48.dp),
                     painter = painterResource(AppIcons.avatarLogo),
+                    contentScale = ContentScale.Fit,
                     contentDescription = null)
             }
         }
@@ -44,8 +46,6 @@ fun JobDetailSection() {
 
         }
     }
-}
-
 }
 
 @Composable

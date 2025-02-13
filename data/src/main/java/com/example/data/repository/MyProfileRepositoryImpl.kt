@@ -15,7 +15,6 @@ class MyProfileRepositoryImpl(val apiService: ApiService) : MyProfileRepository 
     override suspend fun getMyProfile(): Flow<MyProfile> {
         return flow {
             emit(apiService.getProfile().data.toDomain())
-//            emit(apiService.getProfile().data.toDomain())
         }
     }
 }

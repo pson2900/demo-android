@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
-import com.example.demo_structure.app.manager.theme.ProductXTheme
 
 /**
  * Created by Phạm Sơn at 10:49/21/1/25
@@ -26,7 +25,7 @@ import com.example.demo_structure.app.manager.theme.ProductXTheme
 @Composable
 fun AppBox(
     modifier: Modifier = Modifier,
-    color: Color = ProductXTheme.colorScheme.background,
+    backgroundColor: Color,
     shape: Shape = RectangleShape,
     border: BorderStroke? = null,
     contentAlignment: Alignment = Alignment.CenterStart,
@@ -40,7 +39,7 @@ fun AppBox(
             .clip(shape)
             .then(if (border != null) modifier.border(border, shape) else Modifier)
             .background(
-                color = color,
+                color = backgroundColor,
                 shape = shape
             ),
         contentAlignment = contentAlignment,
@@ -53,7 +52,7 @@ fun AppBox(
 @ThemePreviews
 fun AppBoxPreview() {
     AppPreviewWrapper {
-        AppBox {
+        AppBox(backgroundColor = Color.White) {
             Text("OnClick Item")
         }
     }

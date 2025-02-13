@@ -46,8 +46,8 @@ val lightColorScheme = lightColorScheme(
     errorContainer = hexToColor("#EC221F"), // Background color for containers containing errors
     onErrorContainer = hexToColor("#EC221F"), // Color for text/icons on the errorContainer
 
-    background = hexToColor("#F1F5F9"), // Background color of the entire app
-    onBackground = hexToColor("#000000"), // Color for text/icons on the background
+//    background = hexToColor("#F1F5F9"), // Background color of the entire app
+//    onBackground = hexToColor("#000000"), // Color for text/icons on the background
 
     surface = hexToColor("#FFFFFF"), // Color for surfaces like cards or bottom sheets
     surfaceContainer = hexToColor("#FFFFFF"),
@@ -66,6 +66,8 @@ val lightColorScheme = lightColorScheme(
 
     outline = hexToColor("#000000"), // Color for borders, dividers or outlines
     outlineVariant = hexToColor("#000000"), // Color for borders, dividers or outlines on surfaces
+
+
 )
 
 /**
@@ -93,8 +95,8 @@ val darkColorScheme = darkColorScheme(
     errorContainer = hexToColor("#EC221F"), // Background color for containers containing errors
     onErrorContainer = hexToColor("#EC221F"), // Color for text/icons on the errorContainer
 
-    background = hexToColor("#F1F5F9"), // Background color of the entire app
-    onBackground = hexToColor("#000000"), // Color for text/icons on the background
+//    background = hexToColor("#F1F5F9"), // Background color of the entire app
+//    onBackground = hexToColor("#000000"), // Color for text/icons on the background
 
     surface = hexToColor("#FFFFFF"), // Color for surfaces like cards or bottom sheets
     surfaceContainer = hexToColor("#FFFFFF"),
@@ -114,48 +116,6 @@ val darkColorScheme = darkColorScheme(
     outline = hexToColor("#000000"), // Color for borders, dividers or outlines
     outlineVariant = hexToColor("#000000"), // Color for borders, dividers or outlines on surfaces
 
-
-    /*
-    Dark Mode
-    primary = hexToColor("#775AFF"), // The primary color of the app (dark theme version)
-    onPrimary = hexToColor("#FFFFFF"), // Color for text/icons on the primary color (dark theme)
-    primaryContainer = hexToColor("#775AFF"), // Background color for containers based on primary (dark theme)
-    onPrimaryContainer = hexToColor("#FFFFFF"), // Color for text/icons on the primaryContainer (dark theme)
-
-    secondary = hexToColor("#000000"), // Secondary color (dark theme)
-    onSecondary = hexToColor("#FFFFFF"), // Color for text/icons on the secondary color (dark theme)
-    secondaryContainer = hexToColor("#000000"), // Background color for containers based on secondary (dark theme)
-    onSecondaryContainer = hexToColor("#FFFFFF"), // Color for text/icons on the secondaryContainer (dark theme)
-
-    tertiary = hexToColor("#775AFF"), // Tertiary color (dark theme)
-    onTertiary = hexToColor("#94A3B8"), // Color for text/icons on the tertiary color (dark theme)
-    tertiaryContainer = hexToColor("#775AFF"), // Background color for containers based on tertiary (dark theme)
-    onTertiaryContainer = hexToColor("#FFFFFF"), // Color for text/icons on the tertiaryContainer (dark theme)
-
-    error = hexToColor("#EC221F"), // Color for errors (dark theme)
-    onError = hexToColor("#EC221F"), // Color for text/icons on the error color (dark theme)
-    errorContainer = hexToColor("#EC221F"), // Background color for containers containing errors (dark theme)
-    onErrorContainer = hexToColor("#EC221F"), // Color for text/icons on the errorContainer (dark theme)
-
-    background = hexToColor("#F1F5F9"), // Background color of the entire app
-    onBackground = Color.White, // Color for text/icons on the background
-
-    surface = hexToColor("#000000"), // Color for surfaces like cards or bottom sheets
-    surfaceContainer = hexToColor("#000000"),
-    surfaceContainerLow = hexToColor("#000000"),
-    surfaceContainerLowest = hexToColor("#000000"),
-    surfaceContainerHigh = hexToColor("#000000"),
-    surfaceContainerHighest = hexToColor("#000000"),
-
-    onSurface = hexToColor("#FFFFFF"), // Color for text/icons on the surface
-    surfaceVariant = hexToColor("#000000"), // Variation of the surface color (dark theme)
-    onSurfaceVariant = hexToColor("#FFFFFF"), // Color for text/icons on the surfaceVariant (dark theme)
-    inverseSurface = hexToColor("#000000"), // Color for inverted elements (light text on dark backgrounds) (dark theme)
-    inverseOnSurface = hexToColor("#FFFFFF"), // Color for text/icons on the inverseSurface (dark theme)
-    inversePrimary = hexToColor("#775AFF"),
-
-    outline = hexToColor("#FFFFFF"), // Color for borders, dividers or outlines (dark theme)
-    outlineVariant = hexToColor("#FFFFFF"), // Color for borders, dividers or outlines on surfaces*/
 )
 
 /**
@@ -171,7 +131,7 @@ object ProductXTheme {
         @Composable
         get() = LocalCardTheme.current
 
-    val colorScheme: ColorScheme
+    val colorScheme: ColorTheme
         @Composable
         get() = LocalColorTheme.current
 
@@ -214,6 +174,8 @@ fun ApplicationTheme(
                   darkIcons = false
               )
       }*/
+    val background_1 = if (darkTheme) Color.Black else hexToColor("#FFFFFF")
+    val background_2 = if (darkTheme) Color.DarkGray else hexToColor("#F1F5F9")
 
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
@@ -236,7 +198,7 @@ fun ApplicationTheme(
 
     CompositionLocalProvider(
         LocalAppTypography provides AppTypography(),
-        LocalColorTheme provides colorScheme,
+        LocalColorTheme provides colorScheme.toColorTheme(background_1, background_2),
         LocalPadding provides Padding(),
         LocalMargin provides Margin(),
         LocalCorner provides Corner(),
@@ -247,7 +209,7 @@ fun ApplicationTheme(
             MaterialTheme(
                 shapes = defaultShapes,
                 typography = defaultTypography,
-                colorScheme = lightColorScheme,
+                colorScheme = colorScheme,
                 content = content,
             )
         }

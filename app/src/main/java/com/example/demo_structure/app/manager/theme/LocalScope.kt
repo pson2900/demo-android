@@ -44,7 +44,7 @@ val LocalCardTheme = staticCompositionLocalOf {
  * A composition local for [BackgroundTheme].
  */
 val LocalColorTheme = staticCompositionLocalOf {
-    lightColorScheme
+    defaultColorScheme.toColorTheme(background_1 = hexToColor("#FFFFFF"), background_2 = hexToColor("#F1F5F9"))
 }
 
 val LocalPadding = staticCompositionLocalOf {

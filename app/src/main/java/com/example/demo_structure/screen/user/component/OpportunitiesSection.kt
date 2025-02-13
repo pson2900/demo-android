@@ -39,7 +39,6 @@ import com.example.demo_structure.core.component.ThemePreviews
 fun OpportunitiesSection(modifier: Modifier = Modifier) {
     Column(
         modifier
-            .background(ProductXTheme.colorScheme.background)
             .padding(start = 16.dp, end = 16.dp)
     ) {
         AppText(

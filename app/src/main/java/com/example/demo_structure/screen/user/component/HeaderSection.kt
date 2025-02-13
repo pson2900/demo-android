@@ -69,7 +69,7 @@ fun HeaderSection(title: String, avatar: String) {
             Image(ImageVector.vectorResource(R.drawable.ic_setting), contentDescription = null)
         }
         val iconMargin = 50.dp
-        AppSurface(
+        AppCard(
             modifier = Modifier
 
                 .background(color = colorResource(R.color.anti_flash_white), shape = RoundedCornerShape(30.dp, 30.dp, 0.dp, 0.dp))

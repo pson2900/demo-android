@@ -53,7 +53,7 @@ fun AppCard(
 @Composable
 private fun CardPreview() {
     AppPreviewWrapper {
-        AppSurface(Modifier, shape = CircleShape) {
+        AppSurface(Modifier, shape = CircleShape, backgroundColor = Color.White) {
             Image(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_setting),
                 contentDescription = "ic_setting",

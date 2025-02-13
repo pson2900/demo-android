@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,7 +49,7 @@ fun ProfileStatusSection(modifier: Modifier = Modifier, onClick: () -> Unit) {
     ) {
         AppBox(
             shape = RoundedCornerShape(16.dp),
-            color = Color.White,
+            backgroundColor = Color.White,
             border = BorderStroke(2.dp, colorResource(R.color.pale_violet))
         ) {
             Column {
@@ -149,13 +148,13 @@ fun ProfileProgressAction(onClick: () -> Unit) {
 fun ProfileProgressBar(progress: Int, max: Int) {
     AppBox(
         shape = RoundedCornerShape(16.dp),
-        color = Color.White,
+        backgroundColor = Color.White,
         modifier = Modifier
             .fillMaxWidth()
             .height(24.dp)
     ) {
         AppBox(
-            color = colorResource(R.color.persian_green),
+            backgroundColor = colorResource(R.color.persian_green),
             shape = RoundedCornerShape(16.dp),
             modifier = Modifier
                 .padding(2.dp)

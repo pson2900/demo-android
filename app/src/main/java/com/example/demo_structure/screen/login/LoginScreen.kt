@@ -1,8 +1,6 @@
 package com.example.demo_structure.screen.login
 
 import android.content.res.Configuration
-import android.util.Log
-import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.Image
@@ -12,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
@@ -45,11 +44,11 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.demo_structure.R
+import com.example.demo_structure.app.manager.theme.ProductXTheme
+import com.example.demo_structure.core.component.AppBarIcon
 import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
-import com.example.demo_structure.app.manager.theme.ApplicationTheme
-import com.example.demo_structure.core.component.AppBarIcon
 import com.example.demo_structure.core.component.AppTopBar
 import com.example.demo_structure.core.component.otp.PassCodeTextField
 import kotlinx.coroutines.delay
@@ -94,7 +93,7 @@ internal fun LoginScreen(
                 errorMessage = ""
                 isLoading = false
                 viewModel.saveAuth(state.authentication)
-               // Toast.makeText(context, "login success", Toast.LENGTH_SHORT).show()
+                // Toast.makeText(context, "login success", Toast.LENGTH_SHORT).show()
                 delay(500)
                 onNavigateHomeScreen.invoke()
             }
@@ -108,36 +107,38 @@ internal fun LoginScreen(
         }
     }
 
-    ApplicationTheme {
-        AppScaffold(
-            modifier = modifier.background(Color.White),
-            snackBarHostState = rememberHostState
-        ) {
-            Column {
-                AppTopBar(modifier = Modifier.padding(start = 8.dp, end = 8.dp),
-                    title = { Text("") },
-                    navigationIcon = {
-                        AppBarIcon(
-                            contentDescription = null,
-                            modifier = Modifier.size(24.dp),
-                            imageResource = R.drawable.ic_back_arrow,
-                            clickable = {
-                                onBack.invoke()
-                            }
-                        )
-                    })
-                LoginContent(
-                    modifier = modifier,
-                    isLoading = isLoading,
-                    errorMessage = errorMessage,
-                    onChangeError = { errorMessage = "" },
-                    onLogin = {
-                        viewModel.login(email, it)
-                    }, onForgotPassword = {
-                        onNavigateForgotPasswordOtp(email)
-                    }
-                )
-            }
+    AppScaffold(
+        modifier = modifier.background(Color.White),
+        topBar = {
+            AppTopBar(modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                title = { Text("") },
+                navigationIcon = {
+                    AppBarIcon(
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                        imageResource = R.drawable.ic_back_arrow,
+                        clickable = {
+                            onBack.invoke()
+                        }
+                    )
+                })
+        },
+        snackBarHostState = rememberHostState,
+        backgroundColor = ProductXTheme.colorScheme.background_1,
+    ) {
+        Column(it.fillMaxSize()) {
+
+            LoginContent(
+                modifier = modifier,
+                isLoading = isLoading,
+                errorMessage = errorMessage,
+                onChangeError = { errorMessage = "" },
+                onLogin = {
+                    viewModel.login(email, it)
+                }, onForgotPassword = {
+                    onNavigateForgotPasswordOtp(email)
+                }
+            )
         }
     }
 }

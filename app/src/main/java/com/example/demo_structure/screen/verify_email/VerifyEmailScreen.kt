@@ -1,12 +1,9 @@
 package com.example.demo_structure.screen.verify_email
 
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.util.Patterns
-import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -19,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,7 +25,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -40,43 +35,33 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.demo_structure.R
-import com.example.demo_structure.app.manager.theme.ApplicationTheme
 import com.example.demo_structure.app.manager.theme.ProductXTheme
-import com.example.demo_structure.core.component.AppBarIcon
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppText
-import com.example.demo_structure.core.component.AppTopBar
 import com.example.demo_structure.core.component.EmailTextField
 import com.example.demo_structure.screen.home.LoadingState
-import com.example.demo_structure.screen.login.LoginContent
 import com.example.demo_structure.screen.otp.OTPType
 import com.example.demo_structure.util.extension.buildClickableText
-import com.example.demo_structure.util.extension.hideKeyboard
 import com.example.demo_structure.util.extension.hideKeyboardAndClearFocus
 
 
@@ -200,27 +185,25 @@ fun VerifyEmailScreen(
         }
     }
 
-    ApplicationTheme {
-        AppScaffold(
-            modifier = modifier,
-            snackBarHostState = rememberHostState
-        ) {
-            VerifyEmailContent(
-                email = email,
-                emailError = emailError,
-                isEnableButton = isEnableButton,
-                isChecked = isChecked,
-                isSuccess = isSuccess,
-                isLoading = isLoading,
-                onEmailChange = ::onEmailChange,
-                onCheckboxChange = ::onCheckboxChange,
-                onButtonClick = ::onButtonClick,
-                onLinkClick = ::onLinkClick
-            )
-        }
+    AppScaffold(
+        modifier = modifier,
+        snackBarHostState = rememberHostState,
+        backgroundColor = ProductXTheme.colorScheme.background_1,
+    ) {
+        VerifyEmailContent(
+            email = email,
+            emailError = emailError,
+            isEnableButton = isEnableButton,
+            isChecked = isChecked,
+            isSuccess = isSuccess,
+            isLoading = isLoading,
+            onEmailChange = ::onEmailChange,
+            onCheckboxChange = ::onCheckboxChange,
+            onButtonClick = ::onButtonClick,
+            onLinkClick = ::onLinkClick
+        )
     }
 }
-
 
 
 @Composable

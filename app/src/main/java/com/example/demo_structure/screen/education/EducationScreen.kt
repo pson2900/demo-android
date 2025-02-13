@@ -17,14 +17,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.data.proto.DataStoreManager
-import com.example.demo_structure.app.manager.theme.ApplicationTheme
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppBox
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
@@ -69,65 +65,65 @@ fun EducationContent(time: TimeZone, currentTime: String, isLogin: Boolean, onNa
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
-    ApplicationTheme {
-        AppScaffold(
-            modifier = modifier,
-            contentWindowInsets = WindowInsets.systemBars,
-            snackbarHost = {
-                SnackbarHost(
-                    hostState = it,
-                    modifier = Modifier.systemBarsPadding(),
-                    snackbar = { snackbarData -> AppSnackBar(snackbarData) }
-                )
-            },
+    AppScaffold(
+        modifier = Modifier,
+//        contentWindowInsets = WindowInsets.systemBars,
+        snackbarHost = {
+            SnackbarHost(
+                hostState = it,
+                modifier = Modifier.systemBarsPadding(),
+                snackbar = { snackbarData -> AppSnackBar(snackbarData) }
+            )
+        },
+        backgroundColor = ProductXTheme.colorScheme.background_2,
+        snackBarHostState = snackbarHostState,
+//        content = { padding ->
+        content = {
+            AppBox(
+                modifier = it.fillMaxSize()
+                    .clickable {
+                        coroutineScope.launch {
+                            val result = snackbarHostState.showSnackbar(
+                                message = "Message",
+                                actionLabel = "Action",
+                            )
+                            when (result) {
+                                SnackbarResult.ActionPerformed -> {
+                                    println("Action clicked")
+                                }
 
-            snackBarHostState = snackbarHostState,
-            content = { padding ->
-                AppBox(
-                    modifier = modifier
-                        .clickable {
-                            coroutineScope.launch {
-                                val result = snackbarHostState.showSnackbar(
-                                    message = "Message",
-                                    actionLabel = "Action",
-                                )
-                                when (result) {
-                                    SnackbarResult.ActionPerformed -> {
-                                        println("Action clicked")
-                                    }
-
-                                    SnackbarResult.Dismissed -> {
-                                        println("Dismissed")
-                                    }
+                                SnackbarResult.Dismissed -> {
+                                    println("Dismissed")
                                 }
                             }
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column {
-                        Text("EducationScreen: ${time}\ncurrentTime: $currentTime")
-                        val textContent = if (!isLogin) "Login" else "Logout"
-                        Text("EducationScreen: ${time}\ncurrentTime: $currentTime")
-                        Button(onClick = {
-                            onNavigateLogin.invoke(isLogin)
-                            // onNavigateToVerifyEmail.invoke()
-
-                        }) {
-                            Text(modifier = Modifier, text = textContent)
                         }
+                    },
+                backgroundColor = ProductXTheme.colorScheme.background_2,
+                contentAlignment = Alignment.Center
+            ) {
+                Column {
+                    Text("EducationScreen: ${time}\ncurrentTime: $currentTime")
+                    val textContent = if (!isLogin) "Login" else "Logout"
+                    Text("EducationScreen: ${time}\ncurrentTime: $currentTime")
+                    Button(onClick = {
+                        onNavigateLogin.invoke(isLogin)
+                        // onNavigateToVerifyEmail.invoke()
+
+                    }) {
+                        Text(modifier = Modifier, text = textContent)
                     }
                 }
-
             }
-        )
-    }
+
+        }
+    )
 }
 
 @ThemePreviews
 @Composable
 fun SearchResultScreenPreview() {
     AppPreviewWrapper {
-        EducationContent(time = TimeZone.currentSystemDefault(), currentTime = "hehe", isLogin = false,){
+        EducationContent(time = TimeZone.currentSystemDefault(), currentTime = "hehe", isLogin = false) {
 
         }
     }

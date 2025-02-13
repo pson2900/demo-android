@@ -68,10 +68,10 @@ internal fun UserScreen(
             clearUndoState()
         }
     }
-
     AppScaffold(
         modifier = Modifier.fillMaxSize(),
         snackBarHostState = rememberHostState,
+        backgroundColor = ProductXTheme.colorScheme.background_2,
         snackbarHost = {
             SnackbarHost(
                 hostState = it,
@@ -79,9 +79,10 @@ internal fun UserScreen(
                 snackbar = { snackbarData -> AppSnackBar(snackbarData) }
             )
         }
-    ) { paddingValue ->
+//    ) { paddingValue ->
+    ) {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = it.fillMaxSize(),
             contentAlignment = androidx.compose.ui.Alignment.Center
         ) {
             DisplayUiStateContent(
@@ -94,6 +95,8 @@ internal fun UserScreen(
                 })
         }
     }
+
+
 
 }
 

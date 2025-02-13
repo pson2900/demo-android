@@ -1,6 +1,5 @@
 package com.example.demo_structure.screen.otp
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,8 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import com.example.demo_structure.core.component.AppTopBar
-
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.SpanStyle
@@ -44,10 +40,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.R
-import com.example.demo_structure.app.manager.theme.ApplicationTheme
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppBarIcon
 import com.example.demo_structure.core.component.AppScaffold
-import com.example.demo_structure.app.manager.theme.ProductXTheme
+import com.example.demo_structure.core.component.AppTopBar
 import com.example.demo_structure.core.component.CountdownTextView
 import com.example.demo_structure.core.component.otp.OTPTextField
 import com.example.demo_structure.core.component.otp.OtpTextFieldDefaults
@@ -132,35 +128,34 @@ fun VerifyOTPScreen(
             }
         })
 
-    ApplicationTheme {
-        AppScaffold(
-            modifier = modifier,
-            snackBarHostState = rememberHostState
-        ) {
-            Column {
-                AppTopBar(modifier = Modifier.padding(start = 8.dp, end = 8.dp),
-                    title = { Text("") },
-                    navigationIcon = {
-                        AppBarIcon(
-                            contentDescription = null,
-                            modifier = Modifier.size(24.dp),
-                            imageResource = R.drawable.ic_back_arrow,
-                            clickable = {
-                                onBack.invoke()
-                            }
-                        )
-                    })
-                OTPScreenContent(
-                    modifier = modifier,
-                    viewModel = viewModel,
-                    email = email,
-                    type = origin,
-                    screenState = screenState,
-                    onStateChange = { newScreenState ->
-                        screenState = newScreenState
-                    }
-                )
-            }
+    AppScaffold(
+        backgroundColor = ProductXTheme.colorScheme.background_1,
+        modifier = modifier,
+        snackBarHostState = rememberHostState
+    ) {
+        Column {
+            AppTopBar(modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                title = { Text("") },
+                navigationIcon = {
+                    AppBarIcon(
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                        imageResource = R.drawable.ic_back_arrow,
+                        clickable = {
+                            onBack.invoke()
+                        }
+                    )
+                })
+            OTPScreenContent(
+                modifier = modifier,
+                viewModel = viewModel,
+                email = email,
+                type = origin,
+                screenState = screenState,
+                onStateChange = { newScreenState ->
+                    screenState = newScreenState
+                }
+            )
         }
     }
 }

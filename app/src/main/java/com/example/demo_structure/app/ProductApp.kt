@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.view.WindowCompat
 import com.example.demo_structure.app.manager.theme.ApplicationTheme
@@ -31,7 +32,6 @@ import com.example.demo_structure.core.component.AppBackground
 import com.example.demo_structure.core.navigation.AppNavHost
 import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.screen.main.ThemeSettings
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import org.koin.core.component.KoinComponent
 
 /**
@@ -90,10 +90,12 @@ fun InitializeApp(
                     LaunchedEffect(isOffline) {
                         showDialog.value = isOffline
                     }
-                    AppBackground(modifier = modifier) {
-//                        OfflineAlertDialog(showDialog, onDismiss = { showDialog.value = isOffline })
-                        AppNavHost(modifier = modifier, appState = appState)
-                    }
+                    AppBackground(modifier = modifier,
+                        background = Color.Transparent,
+                        elevation = 0.dp,
+                        content = {
+                            AppNavHost(modifier = modifier, appState = appState)
+                        })
                 }
             }
         }
