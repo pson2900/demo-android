@@ -14,6 +14,7 @@ fun NavController.toHome(navOptions: NavOptions = navOptions {}) =
 
 fun NavGraphBuilder.toHomeScreen(
     onNavigateToJobDetail: (Int, String) -> Unit,
+    onNavigateToVerifyEmail: () -> Unit
 ) {
     this.apply {
         composable(
@@ -27,6 +28,7 @@ fun NavGraphBuilder.toHomeScreen(
                 HomeScreen(
                     viewModel = koinViewModel(),
                     onNavigateToJobDetail = onNavigateToJobDetail,
+                    onNavigateToVerifyEmail =onNavigateToVerifyEmail
                 )
             }
         )

@@ -51,7 +51,15 @@ fun NavGraphBuilder.composableWith(
     popExitTransition: (AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?)? = exitTransition,
     content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit
 ) {
-    composable(route, arguments, deepLinks, enterTransition, exitTransition, popEnterTransition, popExitTransition) {
+    composable(
+        route,
+        arguments,
+        deepLinks,
+        enterTransition,
+        exitTransition,
+        popEnterTransition,
+        popExitTransition
+    ) {
         CompositionLocalProvider(LocalNavAnimatedVisibilityScope provides this@composable) {
             content(it)
         }
@@ -102,6 +110,7 @@ fun MainNavHost(
     ) {
         toHomeScreen(
             onNavigateToJobDetail = onNavigateToJobDetail,
+            onNavigateToVerifyEmail = onNavigateToVerifyEmail
         )
         toEducationScreen(
             onTopicClick = {},

@@ -1,5 +1,6 @@
 package com.example.domain.usecase
 
+import android.util.Patterns
 import com.example.domain.model.Authentication
 import com.example.domain.model.Register
 import com.example.domain.model.SendOtp
@@ -8,6 +9,7 @@ import com.example.domain.model.VerifyOtp
 import com.example.domain.repository.AuthRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import javax.security.auth.callback.Callback
 
 class AuthUseCase(private val authRepository: AuthRepository) {
 
@@ -37,5 +39,17 @@ class AuthUseCase(private val authRepository: AuthRepository) {
 
     suspend fun login(email: String, password: String): Flow<Authentication> {
         return authRepository.login(email, password)
+    }
+
+
+    fun isValidEmail(email: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    fun isValidVietnamesePhoneNumber(phoneNumber: String): Boolean {
+        // Regular expression pattern for Vietnamese phone numbers
+        val vietnamesePhoneNumberPattern = """^(?:\+84|0)(?:\d{9,10})$""".toRegex()
+
+        return vietnamesePhoneNumberPattern.matches(phoneNumber)
     }
 }

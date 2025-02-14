@@ -29,6 +29,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -95,8 +96,14 @@ internal fun HomeScreen(
     clearUndoState: () -> Unit = {},
     viewModel: HomeViewModel = koinViewModel(),
     onNavigateToJobDetail: (Int, String) -> Unit,
+    onNavigateToVerifyEmail: () -> Unit
 ) {
-    val state by viewModel.homeUiState.collectAsStateWithLifecycle()
+    LaunchedEffect(viewModel) {
+        viewModel.getAuth()
+    }
+
+
+    val state by viewModel.authUiState.collectAsStateWithLifecycle()
     LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
         clearUndoState()
     }
@@ -107,7 +114,7 @@ internal fun HomeScreen(
         }
 
         is HomeState.Error -> {
-
+            onNavigateToVerifyEmail.invoke()
         }
 
         is HomeState.Loading -> {

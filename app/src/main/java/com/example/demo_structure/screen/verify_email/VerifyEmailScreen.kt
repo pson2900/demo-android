@@ -78,6 +78,7 @@ import com.example.demo_structure.screen.home.LoadingState
 import com.example.demo_structure.screen.login.LoginContent
 import com.example.demo_structure.screen.otp.OTPType
 import com.example.demo_structure.util.extension.buildClickableText
+import com.example.demo_structure.util.extension.findActivity
 import com.example.demo_structure.util.extension.hideKeyboard
 import com.example.demo_structure.util.extension.hideKeyboardAndClearFocus
 import kotlinx.coroutines.launch
@@ -130,13 +131,9 @@ fun VerifyEmailScreen(
     val intent =
         remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://www.vietnamworks.com/quy-dinh-bao-mat?utm_source_navi=footer")) }
 
-    fun isValidEmail(email: String): Boolean {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
 
     fun verifyEmail() {
-        emailError =
-            if (email.isEmpty() || !isValidEmail(email)) "Vui lòng nhập địa chỉ email hợp lệ" else ""
+        emailError = if (email.isEmpty() || !viewModel.authUseCase.isValidEmail(email)) "Vui lòng nhập địa chỉ email hợp lệ" else ""
         if (emailError.isEmpty()) {
             viewModel.verifyEmail(email)
         }
@@ -145,7 +142,7 @@ fun VerifyEmailScreen(
     fun onEmailChange(newEmail: String) {
         email = newEmail
         emailError = ""
-        isSuccess = newEmail.isNotEmpty() && isValidEmail(newEmail)
+        isSuccess = newEmail.isNotEmpty() && viewModel.authUseCase.isValidEmail(newEmail)
     }
 
     fun onCheckboxChange(newChecked: Boolean) {
@@ -161,7 +158,7 @@ fun VerifyEmailScreen(
     }
 
     BackHandler(enabled = true) {
-        //block back verify email
+        context.findActivity()?.finish()
     }
 
     DisposableEffect(lifecycleOwner) {
@@ -205,24 +202,22 @@ fun VerifyEmailScreen(
         }
     }
 
-    ApplicationTheme {
-        AppScaffold(
-            modifier = modifier,
-            snackBarHostState = rememberHostState
-        ) {
-            VerifyEmailContent(
-                email = email,
-                emailError = emailError,
-                isEnableButton = isEnableButton,
-                isChecked = isChecked,
-                isSuccess = isSuccess,
-                isLoading = isLoading,
-                onEmailChange = ::onEmailChange,
-                onCheckboxChange = ::onCheckboxChange,
-                onButtonClick = ::onButtonClick,
-                onLinkClick = ::onLinkClick
-            )
-        }
+    AppScaffold(
+        modifier = modifier,
+        snackBarHostState = rememberHostState
+    ) {
+        VerifyEmailContent(
+            email = email,
+            emailError = emailError,
+            isEnableButton = isEnableButton,
+            isChecked = isChecked,
+            isSuccess = isSuccess,
+            isLoading = isLoading,
+            onEmailChange = ::onEmailChange,
+            onCheckboxChange = ::onCheckboxChange,
+            onButtonClick = ::onButtonClick,
+            onLinkClick = ::onLinkClick
+        )
     }
 }
 

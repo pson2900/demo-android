@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class VerifyEmailViewModel(
-    private val authUseCase: AuthUseCase,
+     val authUseCase: AuthUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel(savedStateHandle) {
 

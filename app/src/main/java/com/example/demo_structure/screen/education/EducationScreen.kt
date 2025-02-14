@@ -131,6 +131,7 @@ fun EducationScreen(
                             } else {
                                 isLogin = false
                                 viewModel.logout()
+                                onNavigateToVerifyEmail.invoke()
                             }
                         }) {
                             Text(modifier = Modifier, text = textContent)

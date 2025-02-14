@@ -81,7 +81,6 @@ data class OTPScreenState(
     val isLoading: Boolean = false,
     val isValidOtp: Boolean = false,
     val secret: String = "",
-    val message: String = "",
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -136,37 +135,35 @@ fun VerifyOTPScreen(
             }
         })
 
-    ApplicationTheme {
-        AppScaffold(
-            modifier = modifier,
-            snackBarHostState = rememberHostState
-        ) {
-            Column {
-                AppTopBar(modifier = Modifier
-                    .padding(start = 8.dp, end = 8.dp)
-                    .background(Color.Transparent),
-                    title = { Text("") },
-                    navigationIcon = {
-                        AppBarIcon(
-                            contentDescription = null,
-                            modifier = Modifier.size(24.dp),
-                            imageResource = R.drawable.ic_back_arrow,
-                            clickable = {
-                                onBack.invoke()
-                            }
-                        )
-                    })
-                OTPScreenContent(
-                    modifier = modifier,
-                    viewModel = viewModel,
-                    email = email,
-                    type = origin,
-                    screenState = screenState,
-                    onStateChange = { newScreenState ->
-                        screenState = newScreenState
-                    }
-                )
-            }
+    AppScaffold(
+        modifier = modifier,
+        snackBarHostState = rememberHostState,
+    ) {
+        Column {
+            AppTopBar(modifier = Modifier
+                .padding(start = 8.dp, end = 8.dp)
+                .background(Color.Transparent),
+                title = { Text("") },
+                navigationIcon = {
+                    AppBarIcon(
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                        imageResource = R.drawable.ic_back_arrow,
+                        clickable = {
+                            onBack.invoke()
+                        }
+                    )
+                })
+            OTPScreenContent(
+                modifier = modifier,
+                viewModel = viewModel,
+                email = email,
+                type = origin,
+                screenState = screenState,
+                onStateChange = { newScreenState ->
+                    screenState = newScreenState
+                }
+            )
         }
     }
 }
@@ -271,20 +268,6 @@ private fun OTPScreenContent(
             )
         }
 
-        if(screenState.message.isNotEmpty()){
-            val otp  = "Mã OTP là: ${extractLastNumber(screenState.message)}"
-            Text(
-                modifier = Modifier
-                    .constrainAs(textViewMessage) {
-                        top.linkTo(otpTextField.bottom)
-                        start.linkTo(parent.start)
-                        end.linkTo(parent.end)
-                    }
-                    .padding(top = 70.dp),
-                style = TextStyle(color = Color.DarkGray, fontSize = 20.sp),
-                text = otp
-            )
-        }
         ColumnBottom(
             modifier = Modifier
                 .fillMaxWidth()
@@ -313,17 +296,6 @@ private fun OTPScreenContent(
     }
 }
 
-fun extractLastNumber(inputString: String): String? {
-    val words = inputString.split(" ")
-    for (i in words.size - 1 downTo 0) {
-        val word = words[i]
-        if (word.all { it.isDigit() }) {
-            return word
-        }
-    }
-    return null
-}
-
 @Composable
 private fun ColumnBottom(
     modifier: Modifier = Modifier,
@@ -346,7 +318,7 @@ private fun ColumnBottom(
                 })
             } else {
                 CountdownResendOtpText {
-                    onStateChange(screenState.copy(isResend = true, message = ""))
+                    onStateChange(screenState.copy(isResend = true))
                 }
             }
         }
@@ -440,8 +412,7 @@ fun HandleOtpState(
                     otpScreenState.copy(
                         sendOtpSuccess = state.data.isSuccess,
                         isResend = false,
-                        isLoading = false,
-                        message = state.data.message
+                        isLoading = false
                     )
                 )
             }

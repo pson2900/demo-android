@@ -21,7 +21,7 @@ import org.koin.dsl.module
  * Email: son.pham@navigosgroup.com
  */
 val presentationModule = module {
-    viewModel { HomeViewModel(savedStateHandle = get()) }
+    viewModel { HomeViewModel(dataStoreManager = get(), savedStateHandle = get()) }
     viewModel { MainViewModel(savedStateHandle = get()) }
     viewModel { OpportunityViewModel(savedStateHandle = get()) }
     viewModel { CommunityViewModel(savedStateHandle = get()) }
