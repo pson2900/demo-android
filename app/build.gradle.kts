@@ -106,14 +106,20 @@ dependencies {
 
     // Mark: AndroidX Constraint Layout
     implementation(libs.androidx.constraintlayout.compose)
+    implementation(libs.androidx.monitor)
 
     // Mark: Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
 //    androidTestImplementation(libs.androidx.runner)
 //    androidTestImplementation(libs.androidx.rules)
+    androidTestImplementation("androidx.test.ext:junit:1.1.5") // Thay thế androidx.test:runner
+    androidTestImplementation("androidx.test:core-ktx:1.5.0") // Thay thế một phần của androidx.test:rules
+    androidTestImplementation("androidx.test.ext:junit-ktx:1.1.5") // Thay thế một phần của androidx.test:rules
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.espresso.contrib)
+    testImplementation(libs.mockk)
+    androidTestImplementation(libs.mockk.android)
 
     // Mark: Google Material Components
     implementation(libs.com.google.material) // Material Components for UI elements
@@ -180,4 +186,6 @@ dependencies {
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
     //Gson
     implementation("com.google.code.gson:gson:2.12.1")
+
+
 }

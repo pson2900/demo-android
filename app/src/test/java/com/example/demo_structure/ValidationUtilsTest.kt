@@ -1,5 +1,9 @@
 package com.example.demo_structure
 
+import android.content.Context
+import androidx.test.platform.app.InstrumentationRegistry
+import com.example.data.remote.network.RetrofitClient
+import com.example.data.repository.MyProfileRepositoryImpl
 import com.example.demo_structure.app.di.applicationModule
 import com.example.demo_structure.app.di.dataModule
 import com.example.demo_structure.app.di.databaseModule
@@ -12,13 +16,15 @@ import junit.framework.TestCase.assertTrue
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
+import org.koin.androidx.compose.KoinAndroidContext
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.core.logger.Level
 import org.koin.test.KoinTest
 import org.koin.test.inject
-
+import io.mockk.mockk
 /**
  * Created by Phạm Sơn at 11:17/11/2/25
  * Copyright (c) 2025 Navigos Group. All rights reserved.
@@ -33,6 +39,7 @@ class ValidationUtilsTest : KoinTest {
         startKoin {
             androidLogger(Level.DEBUG)
             printLogger(Level.DEBUG)
+            androidContext(mockk<Context>(relaxed = true))
             modules(
                 listOf(applicationModule, remoteModule, dataModule, domainModule, presentationModule, databaseModule)
             )

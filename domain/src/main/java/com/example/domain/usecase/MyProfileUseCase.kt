@@ -24,13 +24,13 @@ class MyProfileUseCase(private val myProfileRepository: MyProfileRepository) {
         }
     }
 
-    fun validateBasicFirstName(firstName: String, numberValidate: Int): Boolean {
-        val trimmedFirstName = firstName.trim()
+    fun validateBasicFirstName(name: String, numberValidate: Int): Boolean {
+        val trimmedFirstName = name.trim()
         if (trimmedFirstName.length !in 1..numberValidate) return false
 
-        val regex = "^\\p{L}\\p{N}'\\-\\.\\s\\u00C0-\\u1FFF&&[^\\p{So}\\p{Sk}]+$".toRegex()
+//        val regex = "^\\p{L}\\p{N}'\\-\\.\\s\\u00C0-\\u1FFF&&[^\\p{So}\\p{Sk}]+$".toRegex()
+        val regex = "^[\\p{L}\\p{N}'\\-\\.\\s\\u00C0-\\u1FFF]*$".toRegex()
         return trimmedFirstName.matches(regex)
-        return true //OK
     }
 
     fun validateBasicLastName(lastName: String): Boolean {

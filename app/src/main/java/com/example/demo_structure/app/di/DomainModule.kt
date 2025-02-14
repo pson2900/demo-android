@@ -1,5 +1,6 @@
 package com.example.demo_structure.app.di
 
+import com.example.domain.repository.MyProfileRepository
 import com.example.domain.usecase.AuthUseCase
 import com.example.domain.usecase.ClientUseCase
 import com.example.domain.usecase.HomeUseCase
@@ -15,6 +16,6 @@ import org.koin.dsl.module
 val domainModule = module {
     factory<ClientUseCase> { ClientUseCase(get()) }
     factory<HomeUseCase> { HomeUseCase(get()) }
-    factory<MyProfileUseCase> { MyProfileUseCase(get()) }
+    factory<MyProfileUseCase> { MyProfileUseCase(get<MyProfileRepository>()) }
     factory<VersionUseCase> { VersionUseCase(get()) }
 }

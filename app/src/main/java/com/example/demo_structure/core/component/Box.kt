@@ -14,10 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +29,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.app.manager.theme.ProductXTheme
+import com.example.demo_structure.screen.opportunity.component.SearchBar
 
 /**
  * Created by Phạm Sơn at 10:49/21/1/25
@@ -68,16 +66,13 @@ fun AppBoxForce(
     modifier: Modifier = Modifier,
     backgroundColor: Color,
     contentAlignment: Alignment = Alignment.CenterStart,
-    content: @Composable BoxScope.(Boolean) -> Unit
+    content: @Composable BoxScope.(Boolean, (Boolean) -> Unit) -> Unit
 ) {
     val (isForce, setForce) = remember { mutableStateOf(true) }
     val colorSelect = ProductXTheme.colorScheme.primary
     val colorUnSelect = ProductXTheme.colorScheme.outline
     val interactionSource = remember { MutableInteractionSource() }
     val shape = RoundedCornerShape(5.dp)
-    val rippleColor = remember(colorSelect, colorUnSelect) {
-        derivedStateOf { if (isForce) colorSelect else colorUnSelect }
-    }
     Box(
         modifier = modifier
             .shadow(elevation = 0.dp, shape = shape)
@@ -89,8 +84,8 @@ fun AppBoxForce(
             )
 
             .clickable(
-//                interactionSource = interactionSource,
-//                indication = rememberRipple(color = rippleColor.value)
+                interactionSource = interactionSource,
+                indication = null
             ) {
                 setForce(!isForce)
             },
@@ -98,7 +93,9 @@ fun AppBoxForce(
         propagateMinConstraints = false,
         content = {
             Box(Modifier.padding(8.dp)) {
-                content(isForce)
+                content(isForce){isTextFocus ->
+                    setForce(isTextFocus)
+                }
             }
         }
     )
@@ -113,33 +110,24 @@ fun AppBoxPreview() {
              Text("OnClick Item")
          }*/
 
-        AppBoxForce(backgroundColor = Color.White) {
-//            Text("OnClick Item: $it")
+        AppBoxForce(backgroundColor = Color.White) { isFocus, textFieldFocus ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 // Back Button
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    modifier = Modifier.clickable {
+                        // Handle back navigation here
+                    }
+                )
 
+                SearchBar(true, {
 
-                // Search Bar
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .weight(1f) // Take up remaining space
-                        .background(Color.White, RoundedCornerShape(8.dp))
-                        .padding(8.dp)
-
-                ) {
-                    Icon(imageVector = Icons.Filled.Search, contentDescription = "Search")
-                    Text(text = "Product Designer co...")
-                }
-
-                // Search Button (Tìm bằng CV)
-                Button(onClick = { /*TODO*/ }, shape = RoundedCornerShape(8.dp)) {
-                    Text("Tìm bằng CV")
-                }
+                })
             }
         }
     }

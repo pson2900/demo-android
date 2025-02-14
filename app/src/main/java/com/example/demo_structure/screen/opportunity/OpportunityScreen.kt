@@ -8,7 +8,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppBox
@@ -17,6 +16,7 @@ import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppSnackBar
 import com.example.demo_structure.core.component.ThemePreviews
 import com.example.demo_structure.core.navigation.rememberAppState
+import com.example.demo_structure.screen.opportunity.component.SearchBarSection
 
 /**
  * Created by Phạm Sơn at 23:25/8/1/25
@@ -46,10 +46,12 @@ fun OpportunityScreen(viewModel: OpportunityViewModel) {
 }
 
 @Composable
-fun OpportunityContent() {
+fun OpportunityContent(onBackClick: () -> Unit, onTextChange: (String) -> Unit, onSearch: () -> Unit, isFilter: Boolean = false) {
     AppScaffold(
         modifier = Modifier.fillMaxSize(),
-//        contentWindowInsets = WindowInsets.systemBars,
+        topBar = {
+            SearchBarSection(onTextChange, onSearch, isFilter)
+        },
         backgroundColor = ProductXTheme.colorScheme.background_2,
         snackbarHost = {
             SnackbarHost(
@@ -58,8 +60,7 @@ fun OpportunityContent() {
                 snackbar = { snackbarData -> AppSnackBar(snackbarData) }
             )
         },
-//        content = { padding ->
-            content = {
+        content = {
             AppBox(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -93,8 +94,6 @@ fun OpportunityContent() {
 @Composable
 fun OpportunityScreenPreview() {
     AppPreviewWrapper {
-        OpportunityScreen(
-            viewModel = OpportunityViewModel(SavedStateHandle())
-        )
+        OpportunityContent(onBackClick = {}, onTextChange = {}, onSearch = {})
     }
 }

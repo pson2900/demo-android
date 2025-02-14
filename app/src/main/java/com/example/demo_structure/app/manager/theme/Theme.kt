@@ -6,7 +6,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
@@ -15,9 +14,11 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 /**
  * Light default theme color scheme
@@ -167,15 +168,25 @@ fun ApplicationTheme(
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit,
 ) {
-    /*  val systemUiController = rememberSystemUiController()
+      val systemUiController = rememberSystemUiController()
       LaunchedEffect(systemUiController) {
+          if (darkTheme){
               systemUiController.setStatusBarColor(
                   color = Color.Black,
                   darkIcons = false
               )
-      }*/
-    val background_1 = if (darkTheme) Color.Black else hexToColor("#FFFFFF")
-    val background_2 = if (darkTheme) Color.DarkGray else hexToColor("#F1F5F9")
+          } else {
+              systemUiController.setStatusBarColor(
+                  color = Color.Black,
+                  darkIcons = false
+              )
+          }
+
+      }
+//    val background_1 = if (darkTheme) Color.Black else hexToColor("#FFFFFF")
+    val background_1 = hexToColor("#FFFFFF")
+//    val background_2 = if (darkTheme) Color.DarkGray else hexToColor("#F1F5F9")
+    val background_2 = hexToColor("#F1F5F9")
 
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
