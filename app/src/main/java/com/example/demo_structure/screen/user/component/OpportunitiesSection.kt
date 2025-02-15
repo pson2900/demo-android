@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.ProductXTheme
-import com.example.demo_structure.app.manager.theme.generate
+import com.example.demo_structure.app.manager.theme.Generate
 import com.example.demo_structure.app.manager.theme.hexToColor
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppText
@@ -114,7 +114,7 @@ fun OpportunitiesItem(modifier: Modifier = Modifier, icon: Int, title: String, s
                         start.linkTo(parent.start)
                     }
             ) {
-                icon.generate(
+                icon.Generate(
                     Modifier
                         .background(colorBackGround, RoundedCornerShape(8.dp))
                         .padding(4.dp)

@@ -22,5 +22,19 @@ class OpportunityViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
         }
     }.asStateFlow()
 
+
+    fun onTextChange(text: String){
+        if (text.isNullOrEmpty()){
+
+        }
+    }
+
+    fun onSearch(){
+
+    }
+
+    fun onSearchWithCV(){
+
+    }
 }
 

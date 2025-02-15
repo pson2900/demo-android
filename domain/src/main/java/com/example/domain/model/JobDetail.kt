@@ -6,7 +6,8 @@ package com.example.domain.model
  * Email: son.pham@navigosgroup.com
  */
 class JobDetail(
-    val jobTile: String, val companyTitle: String, val companyLogo: String, val jobType: String,
-    val salary: String, val location: String, val description: String
+    val jobId: Int, val jobTitle: String, val companyTitle: String,
+    val salary: String, val location: String, val companyLogo: Int,
+    val description: String
 ) {
 }

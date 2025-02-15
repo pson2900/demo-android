@@ -3,7 +3,9 @@ package com.example.demo_structure.app.manager.theme
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
@@ -19,16 +21,26 @@ import com.example.demo_structure.R
 fun ToImage(
     modifier: Modifier = Modifier,
     imageResource: Int,
-    color: Color = Color.Transparent,
+    color: Color? = null,
     contentScale: ContentScale = ContentScale.Fit
 ) {
-    Image(
-        modifier = modifier.testTag("ToImage:$imageResource"),
-        imageVector = ImageVector.vectorResource(imageResource),
-        contentDescription = imageResource.toString(),
-        contentScale = contentScale,
-//        colorFilter = ColorFilter.tint(color = color, BlendMode.SrcIn),
-    )
+    if (color != null) {
+        Image(
+            modifier = modifier.testTag("ToImage:$imageResource"),
+            imageVector = ImageVector.vectorResource(imageResource),
+            contentDescription = imageResource.toString(),
+            contentScale = contentScale,
+            colorFilter = ColorFilter.tint(color = color, BlendMode.SrcIn),
+        )
+    } else {
+        Image(
+            modifier = modifier.testTag("ToImage:$imageResource"),
+            imageVector = ImageVector.vectorResource(imageResource),
+            contentDescription = imageResource.toString(),
+            contentScale = contentScale,
+        )
+    }
+
 }
 
 
@@ -61,11 +73,16 @@ object AppIcons {
     val referenceIcon = R.drawable.ic_reference
     val hobbyIcon = R.drawable.ic_hobby
 
+    val arrowLeftIcon = R.drawable.ic_arrow_left
+    val searchIcon = R.drawable.ic_search
     val avatarLogo = R.drawable.company_logo
+    val OpportunityHeart = R.drawable.ic_my_profile_opprotunities_heart
+    val OpportunityCrow = R.drawable.ic_my_profile_opprotunities_crow
+    val OpportunityBag = R.drawable.ic_my_profile_opprotunities_bag
 
 }
 
 @Composable
-fun Int.generate(modifier: Modifier = Modifier) {
-    ToImage(modifier= modifier ,imageResource = this)
+fun Int.Generate(modifier: Modifier = Modifier, color: Color? = null) {
+    ToImage(modifier = modifier, imageResource = this, color = color)
 }

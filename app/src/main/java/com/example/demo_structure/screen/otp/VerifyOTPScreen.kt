@@ -1,6 +1,5 @@
 package com.example.demo_structure.screen.otp
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -144,7 +143,7 @@ fun VerifyOTPScreen(
                     AppBarIcon(
                         contentDescription = null,
                         modifier = Modifier.size(24.dp),
-                        imageResource = R.drawable.ic_back_arrow,
+                        imageResource = R.drawable.ic_arrow_left,
                         clickable = {
                             onBack.invoke()
                         }

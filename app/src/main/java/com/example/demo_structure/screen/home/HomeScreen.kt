@@ -12,14 +12,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -49,20 +47,19 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.demo_structure.JobDetail
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
 import com.example.demo_structure.app.manager.theme.ProductXTheme
-import com.example.demo_structure.app.manager.theme.hexToColor
 import com.example.demo_structure.core.component.AppCard
 import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppTopBar
-import com.example.demo_structure.jobResult
+import com.example.demo_structure.jobList
 import com.example.demo_structure.screen.job_detail.nonSpatialExpressiveSpring
 import com.example.demo_structure.screen.job_detail.spatialExpressiveSpring
+import com.example.domain.model.JobDetail
 import org.koin.androidx.compose.koinViewModel
 
 /**
@@ -144,7 +141,7 @@ fun HomeContent(onItemSelected: (Int, String) -> Unit) {
             contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 10.dp, bottom = it.calculateBottomPadding())
 //            contentPadding = it
         ) {
-            itemsIndexed(jobResult) { index, item ->
+            itemsIndexed(jobList) { index, item ->
                 ItemResult(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -169,7 +166,7 @@ fun HomeContent(onItemSelected: (Int, String) -> Unit) {
 @Composable
 fun ItemResultPreview() {
     AppPreviewWrapper {
-        ItemResult(Modifier, jobResult[0], onItemSelected = { jobId, str ->
+        ItemResult(Modifier, jobList[0], onItemSelected = { jobId, str ->
 
         })
     }
@@ -207,7 +204,7 @@ fun ItemResult(modifier: Modifier = Modifier, jobDetail: JobDetail, onItemSelect
             elevation = 0.dp,
             shape = RoundedCornerShape(roundedCornerAnimation),
             modifier = Modifier
-                .testTag("Tag: ${jobDetail.jobTitle}")
+                .testTag("Tag: ${jobDetail.jobId}")
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
 
@@ -259,7 +256,7 @@ fun ItemResult(modifier: Modifier = Modifier, jobDetail: JobDetail, onItemSelect
                             .padding(0.dp, 0.dp, 5.dp, 0.dp)
                     )
                     Text(
-                        text = jobDetail.company,
+                        text = jobDetail.companyTitle,
                         modifier = Modifier.layoutId("companyTitle")
                     )
                     Box(

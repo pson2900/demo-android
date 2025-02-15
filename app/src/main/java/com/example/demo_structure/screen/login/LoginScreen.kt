@@ -110,7 +110,7 @@ internal fun LoginScreen(
                     AppBarIcon(
                         contentDescription = null,
                         modifier = Modifier.size(24.dp),
-                        imageResource = R.drawable.ic_back_arrow,
+                        imageResource = R.drawable.ic_arrow_left,
                         clickable = {
                             onBack.invoke()
                         }

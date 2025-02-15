@@ -1,5 +1,6 @@
 package com.example.demo_structure.screen.opportunity.component
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,13 +17,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,14 +35,16 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.demo_structure.app.manager.theme.AppIcons
+import com.example.demo_structure.app.manager.theme.Generate
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppBoxForce
-import com.example.demo_structure.core.component.AppChip
+import com.example.demo_structure.core.component.AppPreviewWrapper
+import com.example.demo_structure.core.component.AppScaffold
 
 /**
  * Created by Phạm Sơn at 09:57/13/2/25
@@ -51,68 +52,67 @@ import com.example.demo_structure.core.component.AppChip
  * Email: son.pham@navigosgroup.com
  */
 @Composable
-fun SearchBarSection(onTextChange: (String) -> Unit, onSearch: () -> Unit, isFilter: Boolean = false) {
-    val visibilityFilter by remember { mutableStateOf(isFilter) }
+fun SearchBarSection(focusRequester: FocusRequester, onTextChange: (String) -> Unit, onSearch: () -> Unit, isFilter:  (Boolean) -> Unit, isSuggestion:  (Boolean) -> Unit) {
+
     Column(
         modifier = Modifier
-            .background(Color.White) // Assuming a white background
-            .padding(horizontal = 16.dp, vertical = 8.dp) // Add some padding
+            .background(Color.White),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
+            modifier = Modifier
+                .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxWidth()
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // Back Button
-            Icon(
-                imageVector = Icons.Filled.ArrowBack,
-                contentDescription = "Back",
+            AppIcons.arrowLeftIcon.Generate(
                 modifier = Modifier
-                    .size(24.dp)
+                    .size(32.dp)
+                    .padding(8.dp)
                     .clickable {
                         // Handle back navigation here
-                    }
+                    },
+                color = Color.Black
             )
 
-            AppBoxForce(backgroundColor = Color.White) { isFocus, textFieldFocus ->
-                SearchBar(isFocus, textFieldFocus)
+            AppBoxForce(
+                focusRequester = focusRequester,
+                backgroundColor = Color.White
+            ) { focusRequester, isFocus, textFieldFocus ->
+                SearchBar(focusRequester, onTextChange = {
+                    onTextChange.invoke(it)
+                    Log.d("QQQ", "Text change: $it")
+                    if (it.isEmpty()) {
+                        isFilter.invoke (false)
+                        isSuggestion.invoke(true)
+                    } else {
+                        isFilter.invoke(true)
+                        isSuggestion.invoke(false)
+                    }
+                }, isFocus, textFieldFocus)
             }
-        }
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.padding(top = 8.dp)
-        ) {
-            AppChip(selected = true, onSelectedChange = {}) {
-                Text("IT")
-            }
-            AppChip(selected = true, onSelectedChange = {}) {
-                Text("Khong can exp")
-            }
-            AppChip(selected = true, onSelectedChange = {}) {
-                Text("Chip")
-            }
         }
     }
 }
 
 @Composable
-fun SearchBar(isFocus: Boolean, textFieldFocus: (Boolean) -> Unit) {
-    val focusRequester = remember { FocusRequester() }
-    val focusManager = LocalFocusManager.current
-    var isTextFieldFocused by remember { mutableStateOf(false) }
-    var (getText, setTextState) = remember { mutableStateOf(TextFieldValue("Product Designer")) }
+fun SearchBar(focusRequester: FocusRequester, onTextChange: (String) -> Unit, isFocus: Boolean, textFieldFocus: (Boolean) -> Unit) {
+    var getText by remember { mutableStateOf(TextFieldValue("")) }
     LaunchedEffect(isFocus) {
         if (isFocus) {
             focusRequester.requestFocus()
-        } else {
-            focusManager.clearFocus()
         }
+    }
+    LaunchedEffect(getText) {
+        onTextChange.invoke(getText.text)
     }
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(IntrinsicSize.Min),
+            .padding(8.dp)
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
@@ -122,48 +122,53 @@ fun SearchBar(isFocus: Boolean, textFieldFocus: (Boolean) -> Unit) {
                 .background(Color.White, RoundedCornerShape(8.dp))
 
         ) {
-            Icon(imageVector = Icons.Filled.Search, contentDescription = "Search", modifier = Modifier.size(16.dp))
+            Icon(
+                imageVector = Icons.Filled.Search, contentDescription = "Search",
+                modifier = Modifier
+                    .size(24.dp)
+                    .padding(start = 8.dp)
+            )
             Spacer(Modifier.width(4.dp))
-            TextField(
+            BasicTextField(
                 value = getText,
                 onValueChange = {
-                    setTextState(it)
+                    getText = it
                 },
+                textStyle = ProductXTheme.typography.Regular.Label.Medium,
                 modifier = Modifier
                     .focusRequester(focusRequester)
-                    .onFocusChanged {
-                        isTextFieldFocused = it.isFocused
-                        textFieldFocus(isTextFieldFocused)
-                        if (it.isFocused) {
-                            setTextState(
-                                getText.copy(
-                                    selection = TextRange(getText.text.length)
-                                )
+                    .onFocusChanged { focusState ->
+                        textFieldFocus(focusState.isFocused)
+                        if (focusState.isFocused) {
+                            getText = getText.copy(
+                                selection = TextRange(getText.text.length)
                             )
-
                         }
                     },
-                colors = TextFieldDefaults.colors(
-//                    backgroundColor = Color.Transparent, // Clear TextField's background
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,  // Remove focus indicator
-                    unfocusedIndicatorColor = Color.Transparent, //Remove focus indicator
-                    disabledIndicatorColor = Color.Transparent //Remove focus indicator
-                ),
-            )
+                decorationBox = @Composable { innerTextField ->
+                    Box(
+                        Modifier
+                            .background(Color.Transparent), // Clear TextField's background
+                    ) {
+                        innerTextField()
+                    }
+
+                })
         }
 
-        // Search Button (Tìm bằng CV)
         Box(
             modifier = Modifier
+                .padding(end = 8.dp)
                 .height(IntrinsicSize.Min)
                 .weight(0.35f)
                 .clip(shape = RoundedCornerShape(8.dp))
-                .background(color = ProductXTheme.colorScheme.primary, shape = RoundedCornerShape(8.dp)),
+                .background(color = ProductXTheme.colorScheme.primary, shape = RoundedCornerShape(8.dp))
         ) {
             Text(
-                "Tìm bằng CV", Modifier
+                text = "Tìm bằng CV",
+                style = ProductXTheme.typography.Regular.Label.Medium,
+                color = Color.White,
+                modifier = Modifier
                     .padding(8.dp)
                     .align(Alignment.Center)
             )
@@ -183,9 +188,15 @@ fun SearchFilterSection() {
 @Composable
 @Preview
 fun SearchBarSectionPreview() {
-    SearchBarSection(
-        onTextChange = {},
-        onSearch = {}
-
-    )
+    AppPreviewWrapper {
+        AppScaffold(backgroundColor = Color.White) {
+            SearchBarSection(
+                focusRequester = FocusRequester(),
+                onTextChange = {},
+                onSearch = {},
+                isFilter = {},
+                isSuggestion = {}
+            )
+        }
+    }
 }
