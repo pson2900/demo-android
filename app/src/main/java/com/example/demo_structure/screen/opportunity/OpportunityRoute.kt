@@ -28,8 +28,6 @@ fun NavGraphBuilder.toOpportunityScreen(
                     uriPattern = "Google.com"
                 }
             ),
-            enterTransition = { fadeIn(animationSpec = tween(300)) },
-            exitTransition = { fadeOut(animationSpec = tween(300)) },
             content = { navBackStackEntry ->
 
                 OpportunityScreen(viewModel = koinViewModel(), onJobClick = {

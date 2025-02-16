@@ -104,7 +104,7 @@ fun ScreenB(onNavigate: () -> Unit) {
     }
 }
 @Composable
-fun JobDetailScreen1(job: JobDetail, onBack: () -> Unit) {
+fun JobDetailScreen1(job: JobDetail, onBackClick    : () -> Unit) {
     Surface(modifier = Modifier
         .fillMaxSize()
         .clip(RoundedCornerShape(12.dp))
@@ -113,7 +113,7 @@ fun JobDetailScreen1(job: JobDetail, onBack: () -> Unit) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-            IconButton(onClick = onBack) {
+            IconButton(onClick = onBackClick) {
                 Icon(Icons.Filled.ArrowBack, "Back")
             }
             Text(text = "Job Details for ${job.jobTitle}")

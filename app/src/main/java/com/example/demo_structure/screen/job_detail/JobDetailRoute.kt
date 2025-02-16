@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -25,37 +26,20 @@ fun NavGraphBuilder.toJobDetailScreen(appState: AppState, onBackClick: () -> Uni
         route = "${Destinations.JobDetail.route}/" +
                 "{${Destinations.JobDetail.JOB_DETAIL_ID}}",
         arguments = listOf(
-//            navArgument(Destinations.JobDetail.JOB_DETAIL_ID) {
-//                type = NavType.IntType
-//            },
-
             navArgument(Destinations.JobDetail.JOB_DETAIL_ID) {
                 type = NavType.StringType
             },
 
-
         ),
-        enterTransition = { fadeIn(animationSpec = tween(300)) },
-        exitTransition = { fadeOut(animationSpec = tween(300)) },
         content = { navBackStackEntry ->
             val arguments = requireNotNull(navBackStackEntry.arguments)
-            val parseJobDetail = arguments.getString(Destinations.JobDetail.JOB_DETAIL_ID)
-            val job = Gson().fromJson(parseJobDetail, JobDetail::class.java)
-//            val jobId = arguments.getInt(Destinations.JobDetail.JOB_DETAIL_ID)
-
-            /* JobDetailScreen(
-                 jobId = jobId,
-                 onBackClick = {
-                     appState.navigateToMain(navBackStackEntry, Destinations.Main.Community)
-                 },
-                 viewModel = koinViewModel()
-             )*/
-            job?.let {
+            val jobDetailJson = arguments.getString(Destinations.JobDetail.JOB_DETAIL_ID)
+            val jobDetail = remember { Gson().fromJson(jobDetailJson, JobDetail::class.java) }
+            jobDetail?.let {
                 JobDetailScreen1(
-
                     job = it,
-                    onBack = {
-                        appState.navigateToMain(navBackStackEntry, Destinations.Main.Community)
+                    onBackClick = {
+                        appState.navigateToMain(navBackStackEntry, Destinations.Main.Opportunity)
                     },
                 )
             }

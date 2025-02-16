@@ -2,6 +2,7 @@ package com.example.demo_structure.core.navigation
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.util.Log
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -37,6 +38,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.datetime.TimeZone
 import org.koin.compose.koinInject
+import java.net.URLEncoder
 
 /**
  * Created by Phạm Sơn at 10:55/10/1/25
@@ -146,16 +148,10 @@ class AppState(
     }
 
     fun navigateToJobDetail(jobDetail: JobDetail, from: NavBackStackEntry) {
-        // In order to discard duplicated navigation events, we check the Lifecycle
-        val jobDetailJson = Gson().toJson(jobDetail)
-        val route = "${Destinations.JobDetail.route}/$jobDetailJson"
-        trace("Navigation : ${route}") {
+        val route = "${Destinations.JobDetail.route}/${jobDetail.jobId}"
+        trace("Navigation : $route") {
             if (from.lifecycleIsResumed()) {
-                navController.toJobDetail(
-                    Destinations.JobDetail.createRoute(
-                        jobDetailJson.toString(),
-                    )
-                )
+                navController.toJobDetail(Destinations.JobDetail.createRoute(jobDetail))
             }
         }
     }

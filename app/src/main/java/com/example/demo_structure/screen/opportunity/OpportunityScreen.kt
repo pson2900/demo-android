@@ -181,7 +181,6 @@ fun JobRecommendSection() {
 @Composable
 fun JobResultSection(lazyItem: LazyPagingItems<JobDetail>, onJobClick: (JobDetail) -> Unit) {
     val focusManager = LocalFocusManager.current
-    var selectedJob: JobDetail? by remember { mutableStateOf(null) }
 
     AppBox(
         modifier = Modifier
@@ -195,36 +194,14 @@ fun JobResultSection(lazyItem: LazyPagingItems<JobDetail>, onJobClick: (JobDetai
         contentAlignment = Alignment.Center,
         backgroundColor = ProductXTheme.colorScheme.background_2,
     ) {
-        AnimatedContent(
-            targetState = selectedJob,
-            transitionSpec = {
-                val enter = slideInVertically(animationSpec = tween(durationMillis = 500)) { height -> height } + fadeIn(animationSpec = tween(durationMillis = 500))
-                val exit = slideOutVertically(animationSpec = tween(durationMillis = 500)) { height -> -height } + fadeOut(animationSpec = tween(durationMillis = 500))
-                if (targetState == null) {
-                    enter with exit
-                } else {
-                    enter with exit
-                }.using(SizeTransform(clip = false))
-            }, label = ""
-        ){ targetPhoto ->
-            if (targetPhoto == null) {
-                JobList(
-                    lazyPagingItems = lazyItem,
-                    selectedJob = null,
-                    onJobClick = {
-                        selectedJob = it
-//                            onJobClick.invoke(it)
-                    },
-                    onBackClick = {
+        JobList(
+            lazyPagingItems = lazyItem,
+            selectedJob = null,
+            onJobClick =onJobClick,
+            onBackClick = {
 
-                    }
-                )
-            } else {
-                JobDetailScreen1 (job = targetPhoto, onBack = {
-                    selectedJob = null
-                })
             }
-        }
+        )
 
     }
 }

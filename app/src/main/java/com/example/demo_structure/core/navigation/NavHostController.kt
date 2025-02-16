@@ -110,7 +110,8 @@ fun MainNavHost(
             onNavigateToVerifyEmail = onNavigateToVerifyEmail
         )
         toOpportunityScreen(
-            appState,onNavigateToJobDetail
+            appState = appState,
+            onNavigateToJobDetail = onNavigateToJobDetail
         )
         toCommunityScreen(
             onTopicClick = {
