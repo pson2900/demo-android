@@ -46,6 +46,7 @@ import com.example.demo_structure.core.navigation.MainNavHost
 import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.util.extension.isSystemInDarkTheme
 import com.example.demo_structure.util.monitor.NetworkMonitor
+import com.example.domain.model.JobDetail
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -150,7 +151,7 @@ class MainActivity : ComponentActivity() {
 fun MainContent(
     modifier: Modifier = Modifier,
     startDestination: DestinationItem,
-    onNavigateToJobDetail: (Int, String) -> Unit,
+    onNavigateToJobDetail: (JobDetail) -> Unit,
     onNavigateToLogin: (String) -> Unit,
     onNavigateToVerifyEmail: () -> Unit
 ) {
@@ -212,7 +213,7 @@ fun MainContentPreview() {
         MainContent(
             it,
             startDestination = Destinations.Main.Home,
-            onNavigateToJobDetail = { _, _ -> },
+            onNavigateToJobDetail = { _ -> },
             onNavigateToLogin = {},
             onNavigateToVerifyEmail = { },
         )

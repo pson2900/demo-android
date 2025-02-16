@@ -16,6 +16,16 @@
 
 package com.example.demo_structure.util
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.ui.unit.IntSize
+
 data class SharedElementKey(
     val jobId: Int,
     val origin: String,
@@ -31,3 +41,26 @@ enum class SharedElementType {
 }
 
 object FilterSharedElementKey
+
+
+fun getEnterTransition(initialSize: IntSize, targetSize: IntSize): EnterTransition {
+    var enterTransition: EnterTransition = fadeIn(animationSpec = tween(300))
+    if(initialSize != IntSize.Zero && targetSize != IntSize.Zero) {
+        enterTransition = enterTransition + scaleIn(
+            animationSpec = tween(durationMillis = 300, easing = LinearOutSlowInEasing),
+            initialScale = 0.3f
+        )
+    }
+    return enterTransition
+}
+
+fun getExitTransition(initialSize: IntSize, targetSize: IntSize): ExitTransition {
+    var exitTransition: ExitTransition = fadeOut(animationSpec = tween(300))
+    if(initialSize != IntSize.Zero && targetSize != IntSize.Zero) {
+        exitTransition = exitTransition + scaleOut(
+            animationSpec = tween(durationMillis = 300, easing = LinearOutSlowInEasing),
+            targetScale = 0.3f
+        )
+    }
+    return exitTransition
+}

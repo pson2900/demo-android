@@ -45,8 +45,8 @@ fun NavGraphBuilder.toMainScreen(
         Log.d("QQQ", "selectedTab: $selectedTab")
         MainContent(
             startDestination = selectedTab,
-            onNavigateToJobDetail = { jobId, origin ->
-                appState.navigateToJobDetail(jobId, origin, from = backStackEntry)
+            onNavigateToJobDetail = { jobDetail ->
+                appState.navigateToJobDetail(jobDetail, from = backStackEntry)
             },
             onNavigateToLogin = { email ->
                 appState.navigateToLogin(from = backStackEntry, email = email)

@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.compose.compiler)
     id("kotlinx-serialization")
-
+    id("kotlin-parcelize")
 }
 
 
@@ -76,35 +76,22 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
 
-    // Mark: AndroidX Core
     implementation(libs.androidx.core.ktx)
-
-    // Mark: AndroidX Workers
     implementation(libs.androidx.work.runtime.ktx)
-
-    // Mark: AndroidX Lifecycle
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose.ktx)
 
-    // Mark: AndroidX Room
+    // Mark: AndroidX
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
-
-    // Mark: AndroidX Navigation
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.paging.runtime.ktx)
     implementation(libs.androidx.navigation.ktx)
-
-    // Mark: AndroidX Activity Compose
     implementation(libs.androidx.activity.compose)
-
-    // Mark: AndroidX Core Splashscreen
     implementation(libs.androidx.core.splash)
-
-    // Mark: AndroidX Appcompat
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.appcompat.resources)
-
-    // Mark: AndroidX Constraint Layout
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.androidx.monitor)
 
@@ -122,6 +109,7 @@ dependencies {
     androidTestImplementation(libs.mockk.android)
 
     // Mark: Google Material Components
+    implementation(libs.com.google.gson)
     implementation(libs.com.google.material) // Material Components for UI elements
 
     // Mark: Dependency Injection - Koin
@@ -184,8 +172,13 @@ dependencies {
     implementation(libs.androidx.adaptive.navigation.suite) // Adaptive Navigation Suite for Compose
     //GlideImage jetpack
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
-    //Gson
-    implementation("com.google.code.gson:gson:2.12.1")
+    // Compose Animation Core (cần thiết cho ContainerTransform)
+    implementation(libs.androidx.animation.core)
+
+    // Accompanist Navigation Material (cho ContainerTransform với Navigation)
+    implementation(libs.accompanist.navigation.material)
+
+
 
 
 }

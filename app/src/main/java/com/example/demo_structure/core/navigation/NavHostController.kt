@@ -29,6 +29,7 @@ import com.example.demo_structure.screen.opportunity.toOpportunityScreen
 import com.example.demo_structure.screen.otp.toVerifyOtpScreen
 import com.example.demo_structure.screen.user.toMyProfileScreen
 import com.example.demo_structure.screen.verify_email.toVerifyEmailScreen
+import com.example.domain.model.JobDetail
 
 /**
  * Created by Phạm Sơn at 14:59/3/1/25
@@ -70,6 +71,7 @@ fun AppNavHost(
         modifier = modifier,
         enterTransition = { fadeIn(animationSpec = tween(500)) },
         exitTransition = { fadeOut(animationSpec = tween(500)) },
+
         builder = {
             toMainScreen(appState = appState)
             toJobDetailScreen(appState = appState) {
@@ -88,7 +90,7 @@ fun AppNavHost(
 fun MainNavHost(
     appState: AppState,
     startDestination: DestinationItem,
-    onNavigateToJobDetail: (Int, String) -> Unit,
+    onNavigateToJobDetail: (JobDetail) -> Unit,
     onNavigateToLogin: (String) -> Unit,
     onNavigateToVerifyEmail: () -> Unit,
 ) {
@@ -108,9 +110,7 @@ fun MainNavHost(
             onNavigateToVerifyEmail = onNavigateToVerifyEmail
         )
         toOpportunityScreen(
-            onTopicClick = {
-
-            },
+            appState,onNavigateToJobDetail
         )
         toCommunityScreen(
             onTopicClick = {

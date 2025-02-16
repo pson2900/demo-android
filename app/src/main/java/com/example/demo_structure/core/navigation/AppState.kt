@@ -29,6 +29,7 @@ import com.example.demo_structure.screen.otp.toVerifyOtp
 import com.example.demo_structure.screen.verify_email.toVerifyEmail
 import com.example.demo_structure.util.monitor.NetworkMonitor
 import com.example.demo_structure.util.monitor.TimeZoneMonitor
+import com.example.domain.model.JobDetail
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -130,15 +131,29 @@ class AppState(
         }
     }
 
-    fun navigateToJobDetail(jobId: Int, origin: String, from: NavBackStackEntry) {
+    fun navigateToJobDetail(jobId: Int, from: NavBackStackEntry) {
         // In order to discard duplicated navigation events, we check the Lifecycle
-        val route = "${Destinations.JobDetail.route}/$jobId?origin=$origin"
+        val route = "${Destinations.JobDetail.route}/$jobId"
         trace("Navigation : ${route}") {
             if (from.lifecycleIsResumed()) {
                 navController.toJobDetail(
                     Destinations.JobDetail.createRoute(
                         jobId.toString(),
-                        origin
+                    )
+                )
+            }
+        }
+    }
+
+    fun navigateToJobDetail(jobDetail: JobDetail, from: NavBackStackEntry) {
+        // In order to discard duplicated navigation events, we check the Lifecycle
+        val jobDetailJson = Gson().toJson(jobDetail)
+        val route = "${Destinations.JobDetail.route}/$jobDetailJson"
+        trace("Navigation : ${route}") {
+            if (from.lifecycleIsResumed()) {
+                navController.toJobDetail(
+                    Destinations.JobDetail.createRoute(
+                        jobDetailJson.toString(),
                     )
                 )
             }

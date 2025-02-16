@@ -1,6 +1,7 @@
 package com.example.demo_structure.screen.opportunity.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -34,7 +36,7 @@ import com.example.domain.model.JobDetail
  * Email: son.pham@navigosgroup.com
  */
 @Composable
-fun JobCardSection(item: JobDetail) {
+fun JobItemSection(job: JobDetail, onClick: (JobDetail) -> Unit ) {
     Surface (
         shape = RoundedCornerShape(20.dp),
         color = Color.White, // Assuming white background for the item
@@ -43,7 +45,11 @@ fun JobCardSection(item: JobDetail) {
             .padding(8.dp) // Add padding around the item
     ) {
         Column(
-            modifier = Modifier.padding(16.dp) // Add padding inside the item
+            modifier = Modifier
+                .padding(16.dp)
+                .clip(RoundedCornerShape(20.dp))
+
+                .clickable(onClick = { onClick(job) }),
         ) {
             // Row 1: Title and Grab Logo
             Row(
@@ -53,19 +59,19 @@ fun JobCardSection(item: JobDetail) {
             ) {
                 Column {
                     Text(
-                        text = item.jobTitle,
+                        text = job.jobTitle,
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         color = Color.Black // Adjust color
                     )
                     Text(
-                        text = item.description,
+                        text = job.description,
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         color = Color.Black // Adjust color
                     )
                     Text(
-                        text = item.companyTitle,
+                        text = job.companyTitle,
                         fontSize = 14.sp,
                         color = Color.Gray // Adjust color
                     )
@@ -85,7 +91,7 @@ fun JobCardSection(item: JobDetail) {
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(text = "$", color = Color.Gray) // Adjust color
-                Text(text = item.salary, color = Color.Gray) // Adjust color
+                Text(text = job.salary, color = Color.Gray) // Adjust color
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -100,7 +106,7 @@ fun JobCardSection(item: JobDetail) {
                     contentDescription = "Location",
                     tint = Color.Gray // Adjust color
                 )
-                Text(text = item.location, color = Color.Gray) // Adjust color
+                Text(text = job.location, color = Color.Gray) // Adjust color
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -157,5 +163,6 @@ fun JobCardSection(item: JobDetail) {
 @Composable
 @Preview
 fun JobCardSectionPreview(){
-    JobCardSection(jobList[0])
+    JobItemSection(jobList[0]){ jobDetail ->
+    }
 }

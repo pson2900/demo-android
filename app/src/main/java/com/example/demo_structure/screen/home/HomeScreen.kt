@@ -91,7 +91,7 @@ internal fun LoadingState(modifier: Modifier = Modifier) {
 internal fun HomeScreen(
     clearUndoState: () -> Unit = {},
     viewModel: HomeViewModel = koinViewModel(),
-    onNavigateToJobDetail: (Int, String) -> Unit,
+    onNavigateToJobDetail: (JobDetail) -> Unit,
 ) {
     val state by viewModel.homeUiState.collectAsStateWithLifecycle()
     LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
@@ -112,7 +112,7 @@ internal fun HomeScreen(
         }
     }
     HomeContent { jobId, str ->
-        onNavigateToJobDetail(jobId, str)
+//        onNavigateToJobDetail(jobId)
     }
 
 

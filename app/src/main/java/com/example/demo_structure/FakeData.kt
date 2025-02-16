@@ -23,6 +23,11 @@ val jobList = listOf(
     JobDetail(8, "AI Researcher", "OpenAI", "$170k", "San Francisco", android.R.drawable.ic_menu_share, "Description 8")
 )
 
+const val ITEM_COUNT = 10000
+val ITEMS = (1..ITEM_COUNT).map {
+    JobDetail(it, "Software Engineer $it", "Google $it", "$120k", "Mountain View", android.R.drawable.ic_menu_call, "Description $it")
+}
+
 val myProfileData: MyProfileResponse by lazy {
     val data = """
         {
