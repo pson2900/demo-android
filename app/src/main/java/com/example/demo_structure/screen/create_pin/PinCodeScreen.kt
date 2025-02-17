@@ -47,6 +47,7 @@ import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppBarIcon
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
+import com.example.demo_structure.core.component.AppText
 import com.example.demo_structure.core.component.AppTopBar
 import com.example.demo_structure.core.component.otp.PassCodeTextField
 import com.example.demo_structure.screen.home.LoadingState
@@ -166,7 +167,7 @@ fun PinCodeScreen(
                     AppBarIcon(
                         contentDescription = null,
                         modifier = Modifier.size(24.dp),
-                        imageResource = R.drawable.ic_back_arrow,
+                        imageResource = R.drawable.ic_back_black,
                         clickable = {
                             onBackPressed()
                         }
@@ -350,14 +351,14 @@ private fun PinCodeScreenContent(
     ) {
         val (textViewLabel, pinCode, pinCode2, columnBottom, loading) = createRefs()
 
-        Text(modifier = Modifier
+        AppText(modifier = Modifier
             .constrainAs(textViewLabel) {
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             }
             .padding(bottom = 8.dp),
-            style = TextStyle(fontSize = 24.sp),
+            style = ProductXTheme.typography.Regular.Heading.Small, color = colorResource(R.color.cod_gray),
             text = label,
             textAlign = TextAlign.Center)
         if (!isCompleteStep1) {
@@ -416,7 +417,7 @@ private fun PinCodeScreenContent(
             colors = buttonColors,
             enabled = isEnableButton && !isLoading
         ) {
-            Text(text = buttonContent)
+            Text(text = buttonContent, style = TextStyle(fontSize = 16.sp))
         }
 
         if (isLoading) {

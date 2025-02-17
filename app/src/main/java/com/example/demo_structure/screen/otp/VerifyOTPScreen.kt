@@ -1,13 +1,10 @@
 package com.example.demo_structure.screen.otp
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,10 +30,12 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -47,6 +46,7 @@ import com.example.demo_structure.core.component.AppBarIcon
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppTopBar
 import com.example.demo_structure.core.component.AppPreviewWrapper
+import com.example.demo_structure.core.component.AppText
 import com.example.demo_structure.core.component.CountdownTextView
 import com.example.demo_structure.core.component.otp.OTPTextField
 import com.example.demo_structure.core.component.otp.OtpTextFieldDefaults
@@ -60,7 +60,7 @@ private fun OTPScreenPreview() {
     var screenState by remember { mutableStateOf(OTPScreenState()) }
     AppPreviewWrapper { modifier ->
         OTPScreenContent(
-            modifier= Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             viewModel = null,
             email = "demo@gmail.com",
             type = "",
@@ -143,7 +143,7 @@ fun VerifyOTPScreen(
                     AppBarIcon(
                         contentDescription = null,
                         modifier = Modifier.size(24.dp),
-                        imageResource = R.drawable.ic_back_arrow,
+                        imageResource = R.drawable.ic_back_black,
                         clickable = {
                             onBack.invoke()
                         }
@@ -152,7 +152,9 @@ fun VerifyOTPScreen(
         }
     ) {
         OTPScreenContent(
-            modifier = Modifier.padding(it).fillMaxSize(),
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize(),
             viewModel = viewModel,
             email = email,
             type = origin,
@@ -186,24 +188,27 @@ private fun OTPScreenContent(
             tag = "tag_name",
             style = SpanStyle(
                 color = Color.Black,
-                fontSize = 24.sp
+                fontSize = 20.sp
             ),
             textLinkStyles = SpanStyle(
                 color = colorResource(R.color.violets_are_blue),
-                fontSize = 24.sp
+                fontSize = 20.sp
             )
         )
 
         BasicText(
             text = annotatedString,
-            Modifier.constrainAs(emailTextview) {
+            maxLines = 2,
+            modifier = Modifier.constrainAs(emailTextview) {
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
-            }
+                width = Dimension.fillToConstraints
+            },
+            overflow = TextOverflow.Ellipsis
         )
 
-        Text(
+        AppText(
             modifier = Modifier
                 .constrainAs(textViewDescription) {
                     top.linkTo(emailTextview.bottom)
@@ -211,6 +216,8 @@ private fun OTPScreenContent(
                     end.linkTo(parent.end)
                 }
                 .padding(top = 8.dp),
+            style = ProductXTheme.typography.Regular.Body.Large,
+            color = colorResource(R.color.cod_gray),
             text = "Hãy kiểm tra hộp thư Chính hoặc Spam trong mail của bạn nhé"
         )
 
@@ -241,7 +248,7 @@ private fun OTPScreenContent(
             numDigits = maxLength, // Number of digits in OTP
             isMasked = false, // Mask digits for security
             digitContainerStyle = OtpTextFieldDefaults.outlinedContainer(size = 24.dp), // Choose style (outlined or underlined)
-            textStyle = ProductXTheme.typography.SemiBold.Title.Large, // Configure text style
+            textStyle = ProductXTheme.typography.SemiBold.Heading.Small, // Configure text style
             isError = screenState.isError // Indicate whether the OTP field is in an error state
         )
 
@@ -350,7 +357,7 @@ private fun ResendOtpText(
             .fillMaxWidth()
             .padding(top = 20.dp),
         text = resendString,
-        style = TextStyle(textAlign = TextAlign.Center)
+        style = TextStyle(textAlign = TextAlign.Center, fontSize = 16.sp)
     )
 }
 
@@ -398,7 +405,7 @@ fun HandleOtpState(
     LaunchedEffect(key1 = otpState) {
         when (val state = otpState) {
             is UIState.Loading -> onStateChange(otpScreenState.copy(isLoading = true))
-            is UIState.Success ->{
+            is UIState.Success -> {
                 onStateChange(
                     otpScreenState.copy(
                         sendOtpSuccess = state.data.isSuccess,
