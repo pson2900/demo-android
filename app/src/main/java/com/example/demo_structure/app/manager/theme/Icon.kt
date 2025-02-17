@@ -61,6 +61,7 @@ object AppIcons {
     val referenceIcon = R.drawable.ic_reference
     val hobbyIcon = R.drawable.ic_hobby
 
+    val avatarLogo = R.drawable.company_logo
 
 }
 

@@ -3,6 +3,9 @@ package com.example.demo_structure.core.component.otp
 import android.content.Context
 import androidx.annotation.IntRange
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +17,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -28,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
@@ -48,7 +54,7 @@ import kotlinx.coroutines.delay
 fun OTPInputPreview() {
     PassCodeTextField(modifier = Modifier, context = LocalContext.current, onValueChange = {
 
-    }, 6 )
+    }, 6)
 }
 
 @Composable
@@ -90,7 +96,12 @@ fun PassCodeTextField(
         Box(
             modifier = Modifier.width(224.dp)
         ) {
-            CompositionLocalProvider() {
+            val textSelectionColors = TextSelectionColors(
+                handleColor = Color.Transparent,
+                backgroundColor = Color.Transparent
+            )
+
+            CompositionLocalProvider(LocalTextSelectionColors provides textSelectionColors) {
                 BasicTextField(
                     value = text,
                     onValueChange = { newValue ->
@@ -114,14 +125,16 @@ fun PassCodeTextField(
                     ),
                     visualTransformation = PasswordVisualTransformation(),
                     textStyle = TextStyle(
-                        color = Transparent,
+                        color = Color.Transparent,
                     ),
-                    cursorBrush = SolidColor(Transparent),
+                    cursorBrush = SolidColor(Color.Transparent),
                     modifier = Modifier
                         .clip(CircleShape)
-                        .fillMaxWidth()
                         .background(Transparent)
-
+                        .fillMaxWidth(),
+                    decorationBox = { innerTextField ->
+                        innerTextField()
+                    }
                 )
             }
             Row(

@@ -1,5 +1,7 @@
 package com.example.data.remote.response
 
+import com.example.domain.ifNotEmpty
+import com.example.domain.ifNotNull
 import com.example.domain.model.Attachment
 import com.example.domain.model.Basic
 import com.example.domain.model.Certification
@@ -26,40 +28,65 @@ import com.example.domain.model.Skills
  * Email: son.pham@navigosgroup.com
  */
 data class MyProfileResponse(
-    val attachment: List<AttachmentResponse> = emptyList(), // cv dinh kem
+    val attachment: List<AttachmentResponse>? = emptyList(), // cv dinh kem
     val basic: BasicResponse?,// thong tin lien he
-    val certification: List<CertificationResponse> = emptyList(), // chung chi
-    val characteristic: List<CharacteristicResponse> = emptyList(),// tinh cach
+    val certification: List<CertificationResponse>? = emptyList(), // chung chi
+    val characteristic: List<CharacteristicResponse>? = emptyList(),// tinh cach
     val completionIndicator: Int?,
-    val education: List<EducationResponse> = emptyList(), // trinh do hoc van
-    val experience: List<ExperienceResponse> = emptyList(), // kinh nghiem lam viec
-    val externalDoc: List<ExternalDocResponse> = emptyList(), // link du an ca nhan
-    val extraCurricular: List<ExtraCurricularResponse> = emptyList(),  // hd ngoai khoa
-    val hobby: List<HobbyResponse> = emptyList(), // so thich
-    val language: List<LanguageResponse> = emptyList(), // ngoai ngu
+    val education: List<EducationResponse>? = emptyList(), // trinh do hoc van
+    val experience: List<ExperienceResponse>? = emptyList(), // kinh nghiem lam viec
+    val externalDoc: List<ExternalDocResponse>? = emptyList(), // link du an ca nhan
+    val extraCurricular: List<ExtraCurricularResponse>? = emptyList(),  // hd ngoai khoa
+    val hobby: List<HobbyResponse>? = emptyList(), // so thich
+    val language: List<LanguageResponse>? = emptyList(), // ngoai ngu
     val preference: PreferenceResponse?, // tieu chi cong viec
-    val reference: List<ReferenceResponse> = emptyList(), // nguoi than chieu
-    val skill: List<SkillsResponse> = emptyList(),
+    val reference: List<ReferenceResponse>? = emptyList(), // nguoi than chieu
+    val skill: List<SkillsResponse>? = emptyList(),
     val summary: String?
 ) {
     fun toDomain(): MyProfile {
         val profiles = mutableListOf<Profile>()
-        profiles.add(Profile.BasicProfile(basic?.toDomain()))
-        profiles.add(Profile.AttachmentProfile(attachment.map { it.toDomain() }))
-        profiles.add(Profile.CertificationProfile(certification.map { it.toDomain() }))
-        profiles.add(Profile.CharacteristicProfile(characteristic.map { it.toDomain() }))
-        profiles.add(Profile.EducationProfile(education.map { it.toDomain() }))
-        profiles.add(Profile.ExperienceProfile(experience.map { it.toDomain() }))
-        profiles.add(Profile.ExternalDocProfile(externalDoc.map { it.toDomain() }))
-        profiles.add(Profile.ExtraCurricularProfile(extraCurricular.map { it.toDomain() }))
-        profiles.add(Profile.HobbyProfile(hobby.map { it.toDomain() }))
-        profiles.add(Profile.LanguageProfile(language.map { it.toDomain() }))
-        profiles.add(Profile.PreferenceProfile(preference?.toDomain()))
-        profiles.add(Profile.ReferenceProfile(reference.map { it.toDomain() }))
+        basic.ifNotNull {
+            profiles.add(Profile.BasicProfile(it.toDomain()))
+        }
+        attachment.ifNotEmpty {
+            profiles.add(Profile.AttachmentProfile(it.map { value -> value.toDomain() }))
+        }
+        certification.ifNotEmpty {
+            profiles.add(Profile.CertificationProfile(it.map { value -> value.toDomain() }))
+        }
+        characteristic.ifNotEmpty {
+            profiles.add(Profile.CharacteristicProfile(it.map { value -> value.toDomain() }))
+        }
+        education.ifNotEmpty {
+            profiles.add(Profile.EducationProfile(it.map { value -> value.toDomain() }))
+        }
+        experience.ifNotEmpty {
+            profiles.add(Profile.ExperienceProfile(it.map { value -> value.toDomain() }))
+        }
+        externalDoc.ifNotEmpty {
+            profiles.add(Profile.ExternalDocProfile(it.map { value -> value.toDomain() }))
+        }
+        extraCurricular.ifNotEmpty {
+            profiles.add(Profile.ExtraCurricularProfile(it.map { value -> value.toDomain() }))
+        }
+        hobby.ifNotEmpty {
+            profiles.add(Profile.HobbyProfile(it.map { value -> value.toDomain() }))
+        }
+        language.ifNotEmpty {
+            profiles.add(Profile.LanguageProfile(it.map { value -> value.toDomain() }))
+        }
+        preference.ifNotNull {
+            profiles.add(Profile.PreferenceProfile(it.toDomain()))
+        }
+        reference.ifNotEmpty {
+            profiles.add(Profile.ReferenceProfile(it.map { value -> value.toDomain() }))
+        }
+
 
         return MyProfile(
             completionIndicator = completionIndicator,
-            skill = skill.map { it.toDomain() },
+            skill = skill?.map { it.toDomain() } ?: emptyList(),
             summary = summary,
             profiles = profiles
         )

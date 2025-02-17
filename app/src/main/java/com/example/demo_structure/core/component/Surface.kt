@@ -3,7 +3,6 @@ package com.example.demo_structure.core.component
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -29,8 +28,8 @@ import kotlin.math.ln
 fun AppSurface(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(0.dp),
-    color: Color = ProductXTheme.colorScheme.background,
-    contentColor: Color = ProductXTheme.colorScheme.onBackground,
+    backgroundColor: Color,
+    contentColor: Color = ProductXTheme.colorScheme.onSurface,
     border: BorderStroke? = null,
     elevation: Dp = 0.dp,
     content: @Composable () -> Unit
@@ -42,7 +41,7 @@ fun AppSurface(
             .clip(shape)
             .then(if (border != null) modifier.border(border, shape) else Modifier)
             .background(
-                color = getBackgroundColorForElevation(color, elevation),
+                color = getBackgroundColorForElevation(backgroundColor, elevation),
                 shape = shape
             )
         ,
@@ -55,7 +54,9 @@ fun AppSurface(
 @Composable
 fun AppSurfacePreviews() {
     AppPreviewWrapper {
-        AppSurface {
+        AppSurface(
+            backgroundColor = ProductXTheme.colorScheme.background_1,
+        ) {
             Text(text = "AppSurface")
         }
     }

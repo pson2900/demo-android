@@ -1,5 +1,8 @@
 package com.example.demo_structure
 
+import com.example.data.remote.response.MyProfileResponse
+import com.google.gson.Gson
+
 
 /**
  * Created by Phạm Sơn at 10:12/11/1/25
@@ -23,6 +26,18 @@ val jobResult by lazy {
     )
 }
 
-val myProfileData by lazy {
+val myProfileData: MyProfileResponse by lazy {
+    val data = """
+        {
+    "characteristic": [
+      {
+        "id": 1,
+        "userId": 1,
+        "characteristic": "Detail-oriented"
+      }
+    ]
+  }
+    """.trimIndent()
 
+    Gson().fromJson(data, MyProfileResponse::class.java)
 }

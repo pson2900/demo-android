@@ -3,6 +3,7 @@ package com.example.demo_structure.core.navigation
 import android.content.Context
 import android.net.ConnectivityManager
 import android.util.Log
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue

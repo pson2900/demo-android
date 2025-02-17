@@ -15,7 +15,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TextFieldDefaults.colors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,9 +39,9 @@ import com.example.demo_structure.R
 
 @Preview(showBackground = true)
 @Composable
-private fun EmailTextFieldPreview() {
+private fun AppTextFieldPreview() {
     var email by remember { mutableStateOf("") }
-    EmailTextField(
+    AppTextField(
         modifier = Modifier.padding(16.dp),
         hint = "Enter email",
         value = email,
@@ -54,37 +53,43 @@ private fun EmailTextFieldPreview() {
 }
 
 @Composable
-fun EmailTextField(
+fun AppTextField(
     modifier: Modifier = Modifier,
     hint: String,
     value: String,
     onValueChange: (String) -> Unit,
-    onDone:()-> Unit,
+    onDone: () -> Unit,
     onClose: () -> Unit,
     isSuccess: Boolean = false,
     error: String? = null
 ) {
     var isFocused by remember { mutableStateOf(false) }
-    val paddingTop = 4.dp
 
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(modifier = modifier
+        .fillMaxWidth()) {
+        var labelColor =  when{
+            value.isEmpty() && !isFocused -> R.color.cod_gray
+            else ->  R.color.boulder
+        }
+
+        val labelPadding = if(value.isEmpty() && !isFocused) 0.dp else 4.dp
         TextField(
             value = value,
             onValueChange = onValueChange,
             label = {
                 Text(
-                    modifier = Modifier.padding(top = paddingTop),
+                    modifier = Modifier.padding(top = labelPadding),
                     style = TextStyle(
                         fontSize = 14.sp
                     ),
                     text = hint,
-                    color = Color.Gray
+                    color = colorResource(labelColor)
                 )
             },
             textStyle = TextStyle(fontSize = 16.sp),
             colors = TextFieldDefaults.colors(
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Gray,
+                focusedTextColor = colorResource(R.color.cod_gray),
+                unfocusedTextColor = colorResource(R.color.cod_gray),
                 disabledTextColor = Color.LightGray,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
@@ -102,9 +107,9 @@ fun EmailTextField(
                 .border(
                     width = if (isFocused) 2.dp else 1.dp,
                     color = when {
-                        !error.isNullOrEmpty() -> Color.Red
+                        !error.isNullOrEmpty() -> colorResource(R.color.alizarin_crimson)
                         isFocused -> colorResource(R.color.portage)
-                        else -> Color.Gray
+                        else -> colorResource(R.color.alto)
                     },
                     shape = RoundedCornerShape(12.dp)
                 )
@@ -125,7 +130,9 @@ fun EmailTextField(
                                 R.drawable.ic_close
                             ),
                             contentDescription = "Close",
-                            tint = if (isSuccess) Color.Green else Color.Gray
+                            tint = if (isSuccess) colorResource(R.color.mountain_meadow) else colorResource(
+                                R.color.boulder
+                            )
                         )
                     }
                 }
@@ -152,15 +159,15 @@ fun EmailTextField(
                     modifier = Modifier
                         .width(16.dp)
                         .height(16.dp),
-                    painter = painterResource(id = R.drawable.ic_error),
+                    painter = painterResource(id = R.drawable.ic_email_error),
                     contentDescription = "Error",
                     tint = Color.Red
                 )
                 Text(
                     text = error,
-                    color = Color.Red,
+                    color = colorResource(R.color.alizarin_crimson),
                     style = TextStyle(
-                        fontSize = 12.sp
+                        fontSize = 16.sp
                     ),
                     modifier = Modifier.padding(start = 4.dp)
                 )

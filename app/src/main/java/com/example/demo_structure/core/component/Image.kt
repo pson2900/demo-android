@@ -1,19 +1,3 @@
-/*
- * Copyright 2023 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.example.demo_structure.core.component
 
 import androidx.compose.foundation.Image
@@ -35,7 +19,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter.State.Error
 import coil3.compose.AsyncImagePainter.State.Loading
 import coil3.compose.rememberAsyncImagePainter
@@ -43,10 +26,13 @@ import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 
 /**
- * A wrapper around [AsyncImage] which determines the colorFilter based on the theme
+ * Created by Phạm Sơn at 10:04/13/2/25
+ * Copyright (c) 2025 Navigos Group. All rights reserved.
+ * Email: son.pham@navigosgroup.com
  */
+
 @Composable
-fun DynamicAsyncImage(
+fun AppImageUrl(
     imageUrl: String,
     contentDescription: String?,
     modifier: Modifier = Modifier,
@@ -83,5 +69,14 @@ fun DynamicAsyncImage(
             contentDescription = contentDescription,
             colorFilter = if (iconTint != Unspecified) ColorFilter.tint(iconTint) else null,
         )
+    }
+}
+
+
+@Composable
+@ThemePreviews
+fun AppImageUrlPreview(){
+    AppPreviewWrapper {
+        AppImageUrl(imageUrl = "", contentDescription = null)
     }
 }

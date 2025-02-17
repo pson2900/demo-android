@@ -32,6 +32,7 @@ class Margin(
 
 @Immutable
 class TonalElevation(
+    idle: Dp = 0.dp,
     smallScreen: Dp = 2.dp,
     mediumScreen: Dp = 3.dp,
     largeScreen: Dp = 4.dp

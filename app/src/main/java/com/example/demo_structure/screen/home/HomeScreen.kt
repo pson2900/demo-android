@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
@@ -59,7 +60,6 @@ import com.example.demo_structure.core.component.AppCard
 import com.example.demo_structure.core.component.AppLoadingWheel
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
-import com.example.demo_structure.core.component.AppSurface
 import com.example.demo_structure.core.component.AppTopBar
 import com.example.demo_structure.jobResult
 import com.example.demo_structure.screen.job_detail.nonSpatialExpressiveSpring
@@ -136,37 +136,34 @@ fun HomeContent(onItemSelected: (Int, String) -> Unit) {
     val itemAnimationSpecFade = nonSpatialExpressiveSpring<Float>()
     val itemPlacementSpec = spatialExpressiveSpring<IntOffset>()
     AppScaffold(
-        contentWindowInsets = WindowInsets.systemBars,
         snackBarHostState = rememberSnackbarHostState,
+        backgroundColor = ProductXTheme.colorScheme.background_2,
         topBar = {
             AppTopBar(title = { Text("Home") })
         }
     ) {
-        AppSurface(
-            modifier = Modifier
-                .padding(top = it.calculateTopPadding())
+        LazyColumn(
+            modifier = Modifier.padding(it).navigationBarsPadding().fillMaxSize(),
+            state = columState,
+            horizontalAlignment = Alignment.CenterHorizontally,
+
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 10.dp, bottom = it.calculateBottomPadding())
+//            contentPadding = it
         ) {
-            LazyColumn(
-                modifier = Modifier
-                    .background(color = hexToColor("#F1F5F9")),
-                state = columState,
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 10.dp)
-            ) {
-                itemsIndexed(jobResult) { index, item ->
-                    ItemResult(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .animateItem(
-                                fadeInSpec = itemAnimationSpecFade,
-                                fadeOutSpec = itemAnimationSpecFade,
-                                placementSpec = itemPlacementSpec
-                            ), jobDetail = item,
-                        onItemSelected = { jobId, str ->
-                            onItemSelected.invoke(jobId, str)
-                        }
-                    )
-                }
+            itemsIndexed(jobResult) { index, item ->
+                ItemResult(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .animateItem(
+                            fadeInSpec = itemAnimationSpecFade,
+                            fadeOutSpec = itemAnimationSpecFade,
+                            placementSpec = itemPlacementSpec
+                        ), jobDetail = item,
+                    onItemSelected = { jobId, str ->
+                        onItemSelected.invoke(jobId, str)
+                    }
+                )
             }
         }
     }

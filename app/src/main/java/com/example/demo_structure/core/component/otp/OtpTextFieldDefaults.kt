@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 
 object OtpTextFieldDefaults {
 
@@ -14,7 +15,7 @@ object OtpTextFieldDefaults {
     fun outlinedContainer(
         size: Dp = 54.dp,
         shape: Shape = RoundedCornerShape(16.dp),
-        containerColor: Color = MaterialTheme.colorScheme.background,
+        containerColor: Color = ProductXTheme.colorScheme.background_1,
         focusedBorderColor: Color = MaterialTheme.colorScheme.primary,
         unfocusedBorderColor: Color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
         focusedBorderWidth: Dp = 1.dp,

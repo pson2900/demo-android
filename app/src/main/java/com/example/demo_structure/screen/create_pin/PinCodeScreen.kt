@@ -2,10 +2,8 @@ package com.example.demo_structure.screen.create_pin
 
 import android.content.Context
 import android.content.res.Configuration
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,14 +18,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -47,7 +43,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.remote.UIState
 import com.example.demo_structure.R
-import com.example.demo_structure.app.manager.theme.ApplicationTheme
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppBarIcon
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
@@ -67,7 +63,7 @@ import org.koin.androidx.compose.koinViewModel
 private fun PinCodeScreenPreview() {
     AppPreviewWrapper { modifier ->
         PinCodeScreenContent(
-            modifier = modifier,
+            modifier = modifier.fillMaxSize(),
             label = "Tạo mã pin mới",
             passCode = "",
             otpError = "",
@@ -159,55 +155,54 @@ fun PinCodeScreen(
         )
     }
 
-    ApplicationTheme {
-        AppScaffold(
-            modifier = modifier,
-            snackBarHostState = rememberHostState
-        ) {
-            Column {
-                AppTopBar(modifier = Modifier.padding(start = 8.dp, end = 8.dp),
-                    title = {
-                        Text("")
-                    },
-                    navigationIcon = {
-                        AppBarIcon(
-                            contentDescription = null,
-                            modifier = Modifier.size(24.dp),
-                            imageResource = R.drawable.ic_back_arrow,
-                            clickable = {
-                                onBackPressed()
-                            }
-                        )
-                    })
-                PinCodeScreenContent(
-                    modifier = modifier,
-                    label = if (!isCompleteStep1) "Tạo mã pin mới" else "Nhập lại mã pin",
-                    passCode = viewModel.passCode,
-                    otpError = otpError,
-                    maxLength = maxLength,
-                    isLoading = isLoading,
-                    onPassCodeChange = {
-                        viewModel.passCode = it
-                        otpError = ""
-                    },
-                    onConfirmPassCodeChange = {
-                        viewModel.confirmPasscode = it
-                        otpError = ""
-                    },
-                    onNextStep = {
-                        isCompleteStep1 = true
-                    },
-                    onComplete = {
-                        arguments?.let {
-                            verifyPassCode(it, viewModel,
-                                onChangeError = {
-                                    otpError = it
-                                })
+    AppScaffold(
+        modifier = modifier,
+        topBar = {
+            AppTopBar(modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                title = {
+                    Text("")
+                },
+                navigationIcon = {
+                    AppBarIcon(
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                        imageResource = R.drawable.ic_back_arrow,
+                        clickable = {
+                            onBackPressed()
                         }
-                    }
-                )
+                    )
+                })
+        },
+        snackBarHostState = rememberHostState,
+        backgroundColor = ProductXTheme.colorScheme.background_1
+    ) {
+        PinCodeScreenContent(
+            modifier = Modifier.padding(it).fillMaxSize(),
+            label = if (!isCompleteStep1) "Tạo mã pin mới" else "Nhập lại mã pin",
+            passCode = viewModel.passCode,
+            otpError = otpError,
+            maxLength = maxLength,
+            isLoading = isLoading,
+            onPassCodeChange = {
+                viewModel.passCode = it
+                otpError = ""
+            },
+            onConfirmPassCodeChange = {
+                viewModel.confirmPasscode = it
+                otpError = ""
+            },
+            onNextStep = {
+                isCompleteStep1 = true
+            },
+            onComplete = {
+                arguments?.let {
+                    verifyPassCode(it, viewModel,
+                        onChangeError = {
+                            otpError = it
+                        })
+                }
             }
-        }
+        )
     }
 }
 
@@ -351,11 +346,7 @@ private fun PinCodeScreenContent(
         disabledContentColor = colorResource(id = R.color.tuna)
     )
     ConstraintLayout(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(top = 24.dp, start = 24.dp, end = 24.dp, bottom = 24.dp)
-            .navigationBarsPadding()
-            .imePadding()
+        modifier = modifier.padding(24.dp)
     ) {
         val (textViewLabel, pinCode, pinCode2, columnBottom, loading) = createRefs()
 

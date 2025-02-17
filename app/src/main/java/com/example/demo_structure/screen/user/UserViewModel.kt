@@ -1,6 +1,5 @@
 package com.example.demo_structure.screen.user
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import com.example.data.proto.DataStoreManager
@@ -17,13 +16,8 @@ import kotlinx.coroutines.flow.catch
  * Copyright (c) 2025 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-class UserViewModel(
-    val dataStoreManager: DataStoreManager,
-    private val myProfileUseCase: MyProfileUseCase,
-    stateHandle: SavedStateHandle
-) : BaseViewModel(stateHandle) {
-    private val _myProfileState: MutableStateFlow<UIState<MyProfile>> =
-        MutableStateFlow(UIState.Loading)
+class UserViewModel(val dataStoreManager: DataStoreManager, val myProfileUseCase: MyProfileUseCase, stateHandle: SavedStateHandle) : BaseViewModel(stateHandle) {
+    private val _myProfileState: MutableStateFlow<UIState<MyProfile>> = MutableStateFlow(UIState.Loading)
     val myProfileState: StateFlow<UIState<MyProfile>> = _myProfileState
 
     private val _featureItemState: MutableStateFlow<UIState<List<String>>> =

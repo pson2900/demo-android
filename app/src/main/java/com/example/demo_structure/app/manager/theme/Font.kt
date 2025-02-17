@@ -30,7 +30,7 @@ internal enum class FontDefinition(val font: Int, val weight: FontWeight, val st
     BoldItalic(R.font.nunito_bold_italic, FontWeight.W700, FontStyle.Italic),
 
     ExtraBold(R.font.nunito_extra_bold, FontWeight.W800, FontStyle.Normal),
-    ExtraBoldItalic(R.font.nunito_extra_bold_italic, FontWeight.W800, FontStyle.Italic),
+    ExtraBoldItalic(R.font.nunito_extra_bold_italic, FontWeight.W800, FontStyle.Italic)
 }
 
 
@@ -122,8 +122,26 @@ internal class BaseFont(private val font: FontDefinition) {
         Small(size = 12.sp, lineHeight = 16.sp),
         X_Small(size = 10.sp, lineHeight = 14.sp),
     }
-}
+//    SemiItalicTitle-Large
+//    SemiBOLDTitle-Large
+//    SemiEXTtraboldTitle-Large
+//    SemiITalicTitle-Large
 
+//    SemiBOLDTitle-Large
+//    SemiREGULARTitle-Large
+//    SemiBOLDTitle-Large
+//    SemiEXTRABOLDTitle-Large
+//    SemiEXTRAREgularTitle-Large
+//    SemiItalicTitle-Large
+
+//    SemiItalicTitle-Large
+//    SemiItalicTitle-Large
+//    SemiItalicDisplay-Large
+
+//  SemiItalic.Display.Large
+//  SemiItalic.Title.Large
+//  SemiItalic.Label.Large
+}
 val defaultTypography = Typography(
     displayLarge = BaseFont(FontDefinition.SemiBold).Title.Large,
     displayMedium = BaseFont(FontDefinition.SemiBold).Title.Medium,
@@ -131,7 +149,7 @@ val defaultTypography = Typography(
     headlineLarge = BaseFont(FontDefinition.SemiBold).Title.Large,
     headlineMedium = BaseFont(FontDefinition.SemiBold).Title.Medium,
     headlineSmall = BaseFont(FontDefinition.SemiBold).Title.Small,
-    titleLarge = BaseFont(FontDefinition.Bold).Title.Large,
+    titleLarge =   BaseFont(FontDefinition.Bold).Title.Large,
     titleMedium = BaseFont(FontDefinition.Bold).Title.Medium,
     titleSmall = BaseFont(FontDefinition.Bold).Title.Small,
     bodyLarge = BaseFont(FontDefinition.Regular).Title.Large,

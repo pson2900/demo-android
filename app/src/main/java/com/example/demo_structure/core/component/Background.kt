@@ -31,13 +31,13 @@ import com.example.demo_structure.app.manager.theme.ProductXTheme
 fun AppBackground(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
+    background: Color = Color.Unspecified,
+    elevation: Dp = Dp.Unspecified
 ) {
-    val color = ProductXTheme.colorScheme.background
-//    val tonalElevation = ProductXTheme.totalElevation
     AppSurface(
         modifier = modifier.fillMaxSize(),
-        color = if (color == Color.Unspecified) Color.Transparent else color,
-//        elevation = if (tonalElevation == Dp.Unspecified) 0.dp else tonalElevation,
+        backgroundColor = if (background == Color.Unspecified) ProductXTheme.colorScheme.background_1 else background,
+        elevation = if (elevation == Dp.Unspecified) 0.dp else elevation,
         content = content
     )
 }

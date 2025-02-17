@@ -6,20 +6,14 @@ package com.example.data.remote.network
  * Email: son.pham@navigosgroup.com
  */
 
-import android.content.Context
 import com.example.data.proto.DataStoreManager
-import com.example.data.remote.network.ApiService
-import com.example.domain.repository.AuthRepository
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.squareup.moshi.Moshi
-import kotlinx.coroutines.CoroutineScope
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
+
 
 class RetrofitClient(
     val dataStoreManager: DataStoreManager,
@@ -30,6 +24,7 @@ class RetrofitClient(
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
+
 
     private val okHttpClient: OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)

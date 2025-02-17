@@ -1,13 +1,11 @@
 package com.example.demo_structure.screen.community
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -15,7 +13,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,7 +38,7 @@ fun CommunityScreen(viewModel: CommunityViewModel, onTopicClick: (String) -> Uni
     AppScaffold(
         modifier = Modifier
             .fillMaxSize(),
-        contentWindowInsets = WindowInsets.systemBars,
+//        contentWindowInsets = WindowInsets.systemBars,
         snackbarHost = {
             SnackbarHost(
                 hostState = it,
@@ -49,37 +46,33 @@ fun CommunityScreen(viewModel: CommunityViewModel, onTopicClick: (String) -> Uni
                 snackbar = { snackbarData -> AppSnackBar(snackbarData) }
             )
         },
-
         snackBarHostState = snackbarHostState,
-        content = { padding ->
-            AppSurface {
-                Box(
-                    modifier = Modifier
-                        .background(Color.White)
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "CommunityScreen",
-                        modifier = Modifier.clickable {
-                            coroutineScope.launch {
-                                val result = snackbarHostState.showSnackbar(
-                                    message = "Message",
-                                    actionLabel = "Action",
-                                )
-                                when (result) {
-                                    SnackbarResult.ActionPerformed -> {
-                                        println("Action clicked")
-                                    }
-
-                                    SnackbarResult.Dismissed -> {
-                                        println("Dismissed")
-                                    }
-                                }
+        backgroundColor = Color.Transparent
+    ){
+        AppSurface(
+            modifier = Modifier.padding(it).fillMaxSize(),
+            backgroundColor = Color.White
+        ) {
+            Text(text = "CommunityScreen",
+                modifier = Modifier.clickable {
+                    coroutineScope.launch {
+                        val result = snackbarHostState.showSnackbar(
+                            message = "Message",
+                            actionLabel = "Action",
+                        )
+                        when (result) {
+                            SnackbarResult.ActionPerformed -> {
+                                println("Action clicked")
                             }
-                        })
-                }
-            }
-        })
+
+                            SnackbarResult.Dismissed -> {
+                                println("Dismissed")
+                            }
+                        }
+                    }
+                })
+        }
+    }
 }
 
 

@@ -32,10 +32,8 @@ interface ApiService {
     @POST("/secure/js/forget-password")
     suspend fun forgetPassword(@Body body: HashMap<String, String>): SendOtpResponse
 
-
     @POST("/secure/js/verify-otp")
     suspend fun verifyOtp(@Body body: HashMap<String, String>): BaseResponse<VerifyOtpResponse>
-
 
     @POST("/secure/js/register")
     suspend fun register(@Body body: HashMap<String, String>): RegisterResponse

@@ -1,6 +1,5 @@
 package com.example.demo_structure.screen.otp
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,8 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import com.example.demo_structure.core.component.AppTopBar
-
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.SpanStyle
@@ -45,10 +42,10 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.remote.UIState
 import com.example.demo_structure.R
-import com.example.demo_structure.app.manager.theme.ApplicationTheme
+import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppBarIcon
 import com.example.demo_structure.core.component.AppScaffold
-import com.example.demo_structure.app.manager.theme.ProductXTheme
+import com.example.demo_structure.core.component.AppTopBar
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.CountdownTextView
 import com.example.demo_structure.core.component.otp.OTPTextField
@@ -63,6 +60,7 @@ private fun OTPScreenPreview() {
     var screenState by remember { mutableStateOf(OTPScreenState()) }
     AppPreviewWrapper { modifier ->
         OTPScreenContent(
+            modifier= Modifier.fillMaxSize(),
             viewModel = null,
             email = "demo@gmail.com",
             type = "",
@@ -136,13 +134,10 @@ fun VerifyOTPScreen(
         })
 
     AppScaffold(
-        modifier = modifier,
-        snackBarHostState = rememberHostState,
-    ) {
-        Column {
-            AppTopBar(modifier = Modifier
-                .padding(start = 8.dp, end = 8.dp)
-                .background(Color.Transparent),
+        backgroundColor = ProductXTheme.colorScheme.background_1,
+        modifier = Modifier,
+        snackBarHostState = rememberHostState, topBar = {
+            AppTopBar(modifier = Modifier.padding(start = 8.dp, end = 8.dp),
                 title = { Text("") },
                 navigationIcon = {
                     AppBarIcon(
@@ -154,17 +149,18 @@ fun VerifyOTPScreen(
                         }
                     )
                 })
-            OTPScreenContent(
-                modifier = modifier,
-                viewModel = viewModel,
-                email = email,
-                type = origin,
-                screenState = screenState,
-                onStateChange = { newScreenState ->
-                    screenState = newScreenState
-                }
-            )
         }
+    ) {
+        OTPScreenContent(
+            modifier = Modifier.padding(it).fillMaxSize(),
+            viewModel = viewModel,
+            email = email,
+            type = origin,
+            screenState = screenState,
+            onStateChange = { newScreenState ->
+                screenState = newScreenState
+            }
+        )
     }
 }
 
@@ -181,11 +177,7 @@ private fun OTPScreenContent(
     var otp by remember { mutableStateOf("") }
     val focusRequester = remember { FocusRequester() }
     ConstraintLayout(
-        modifier = modifier
-            .padding(top = 24.dp, start = 24.dp, end = 24.dp, bottom = 24.dp)
-            .fillMaxSize()
-            .navigationBarsPadding()
-            .imePadding()
+        modifier = modifier.padding(24.dp)
     ) {
         val (emailTextview, textViewDescription, otpTextField, textViewError, textViewMessage, columnBottom, loading) = createRefs()
         val annotatedString = buildClickableText(
@@ -306,8 +298,7 @@ private fun ColumnBottom(
     viewModel: VerifyOTPViewModel?
 ) {
     Column(
-        modifier = modifier
-            .navigationBarsPadding(),
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom
     ) {
@@ -357,7 +348,7 @@ private fun ResendOtpText(
     BasicText(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 20.dp, bottom = 20.dp),
+            .padding(top = 20.dp),
         text = resendString,
         style = TextStyle(textAlign = TextAlign.Center)
     )
@@ -369,7 +360,7 @@ private fun CountdownResendOtpText(onCountdownFinished: () -> Unit) {
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(top = 20.dp, bottom = 20.dp),
+            .padding(top = 20.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -387,7 +378,7 @@ private fun CountdownResendOtpText(onCountdownFinished: () -> Unit) {
                 color = colorResource(R.color.boulder),
                 fontSize = 16.sp
             ),
-            minutesState = 1f,
+            minutesState = (59 / 60f),
             onCountdownFinished = {
                 onCountdownFinished.invoke()
             }

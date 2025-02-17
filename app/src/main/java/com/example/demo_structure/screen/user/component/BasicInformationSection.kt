@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,11 +43,11 @@ import com.example.domain.model.Profile
  */
 @Composable
 internal fun BasicInformationSection(list: List<BasicInformation>) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+    LazyColumn(modifier = Modifier.wrapContentHeight()) {
         item {
             AppText(
                 text = "Thông tin hồ sơ",
-                style = ProductXTheme.typography.SemiBold.Label.Large
+                style = ProductXTheme.typography.SemiBold.Title.X_Large
             )
         }
         item { Spacer(Modifier.height(12.dp)) }
@@ -127,8 +129,8 @@ internal fun BasicInformationItem(profile: Profile, onNavigateToProfile: (Profil
     Row(
         Modifier
             .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
-            .background(Color.White, shape = RoundedCornerShape(10.dp))
-            .clip(shape = RoundedCornerShape(10.dp))
+            .background(Color.White, shape = RoundedCornerShape(16.dp))
+            .clip(shape = RoundedCornerShape(16.dp))
             .height(72.dp)
             .testTag("basicInformationItem")
             .clickable {
@@ -139,11 +141,11 @@ internal fun BasicInformationItem(profile: Profile, onNavigateToProfile: (Profil
     ) {
         Box(
             Modifier
-                .padding(paddingValues = PaddingValues(8.dp))
-                .background(colorResource(R.color.cosmic_latte), shape = RoundedCornerShape(5.dp)),
+                .padding(paddingValues = PaddingValues(12.dp))
+                .background(colorResource(R.color.cosmic_latte), shape = RoundedCornerShape(8.dp)),
             contentAlignment = Alignment.Center
         ) {
-            icon.generate()
+            icon.generate(Modifier.size(48.dp).padding(7.dp))
         }
         AppText(
             text = title,
@@ -167,8 +169,8 @@ internal fun BasicInformationItem(profile: Profile, onNavigateToProfile: (Profil
         ) {
             AppIcons.arrowRightIcon.generate(
                 modifier = Modifier
-                    .padding(end = 8.dp)
-                    .size(16.dp)
+                    .padding(end = 12.dp)
+//                    .size(16.dp)
                     .align(Alignment.CenterEnd)
             )
         }

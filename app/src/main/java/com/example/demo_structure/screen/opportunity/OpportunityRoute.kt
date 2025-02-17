@@ -23,7 +23,8 @@ fun NavGraphBuilder.toOpportunityScreen(
                 }
             ),
             content = {
-                OpportunityScreen(viewModel = koinViewModel(), onTopicClick)
+
+                OpportunityScreen(viewModel = koinViewModel())
             }
         )
     }

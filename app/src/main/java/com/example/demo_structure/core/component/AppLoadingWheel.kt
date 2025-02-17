@@ -81,7 +81,7 @@ fun AppLoadingWheel(
 
     // Specifies the color animation for the base-to-progress line color change
     val baseLineColor = ProductXTheme.colorScheme.primary
-    val progressLineColor = ProductXTheme.colorScheme.onBackground
+    val progressLineColor = ProductXTheme.colorScheme.onPrimary
 
     val colorAnimValues = (0 until NUM_OF_LINES).map { index ->
         infiniteTransition.animateColor(
