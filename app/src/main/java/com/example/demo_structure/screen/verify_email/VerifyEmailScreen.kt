@@ -41,6 +41,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -55,6 +56,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.data.remote.UIState
 import com.example.demo_structure.R
+import com.example.demo_structure.app.autoTestTag
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
@@ -256,7 +258,7 @@ fun VerifyEmailContent(
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                }
+                }.testTag("imageLogo")
         )
         AppText(
             text = "Khám phá con đường sự nghiệp của riêng bạn",
@@ -278,7 +280,7 @@ fun VerifyEmailContent(
                     top.linkTo(textview.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                },
+                }.testTag("textFieldEmail"),
             hint = "Email của bạn",
             value = email,
             onValueChange = onEmailChange,
@@ -312,7 +314,8 @@ fun VerifyEmailContent(
                 Checkbox(
                     modifier = Modifier
                         .width(24.dp)
-                        .height(24.dp),
+                        .height(24.dp)
+                        .testTag("Checkbox"),
                     checked = isChecked,
                     onCheckedChange = onCheckboxChange,
                     colors = CheckboxDefaults.colors(
@@ -341,7 +344,8 @@ fun VerifyEmailContent(
                     text = annotatedString,
                     modifier = Modifier
                         .weight(1f)
-                        .padding(start = 8.dp),
+                        .padding(start = 8.dp)
+                        .testTag("textViewPrivacyPolicy"),
                     style = ProductXTheme.typography.Regular.Title.Medium,
                 )
             }
@@ -351,7 +355,8 @@ fun VerifyEmailContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(12.dp)
-                    .height(56.dp),
+                    .height(56.dp)
+                    .testTag("ButtonNext"),
                 shape = RoundedCornerShape(8.dp),
                 colors = buttonColors,
                 enabled = isEnableButton,

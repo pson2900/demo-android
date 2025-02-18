@@ -26,6 +26,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -201,7 +202,7 @@ private fun OTPScreenContent(
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                     width = Dimension.fillToConstraints
-                }.fillMaxWidth(),
+                }.fillMaxWidth() .testTag("TextViewEmail"),
             maxLines = 2,
             style = ProductXTheme.typography.Regular.Title.X_Large.copy(textAlign = TextAlign.Left),
             color = colorResource(R.color.violets_are_blue),
@@ -239,7 +240,8 @@ private fun OTPScreenContent(
                     end.linkTo(parent.end)
                 }
                 .padding(top = 32.dp)
-                .focusRequester(focusRequester),
+                .focusRequester(focusRequester)
+                .testTag("OTPTextField"),
             value = otp,
             onTextChanged = {
                 onStateChange(screenState.copy(errorMessage = ""))
@@ -281,6 +283,7 @@ private fun OTPScreenContent(
             type = type,
             onStateChange = onStateChange,
             onClearOtp = {
+                onStateChange(screenState.copy(errorMessage = ""))
                 otp = ""
             },
             viewModel = viewModel
@@ -361,7 +364,8 @@ private fun ResendOtpText(
     BasicText(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 20.dp),
+            .padding(top = 20.dp)
+            .testTag("textViewResendOtp"),
         text = resendString,
         style = TextStyle(textAlign = TextAlign.Center, fontSize = 16.sp)
     )
@@ -385,7 +389,8 @@ private fun CountdownResendOtpText(onCountdownFinished: () -> Unit) {
             )
         )
         CountdownTextView(
-            Modifier.wrapContentWidth(),
+            Modifier.wrapContentWidth()
+                .testTag("textView Countdown"),
             value = "Gửi lại",
             style = TextStyle(
                 color = colorResource(R.color.boulder),
@@ -463,7 +468,6 @@ fun HandleOtpState(
                 val errorMessage = if(state.data.isValid== false && state.data.secret.isNullOrEmpty()) state.data.message else ""
                 onStateChange(
                     otpScreenState.copy(
-                        isResend = false,
                         isLoading = false,
                         isValidOtp = state.data.isValid,
                         errorMessage = errorMessage,

@@ -24,12 +24,13 @@ class HeaderInterceptor(private val dataStoreManager: DataStoreManager) : Interc
             newRequest.addHeader(AUTHORIZATION, token)
         }
         newRequest.addHeader(CONTENT_TYPE, "application/json")
-
+        newRequest.addHeader(ACCEPT_LANGUAGE, "vi")
         return chain.proceed(newRequest.build())
     }
 
     companion object {
          const val CONTENT_TYPE = "Content-Type"
          const val AUTHORIZATION = "Authorization"
+         const val ACCEPT_LANGUAGE = "Accept-Language"
     }
 }

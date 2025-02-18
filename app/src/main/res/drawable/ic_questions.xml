@@ -1,0 +1,83 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="48dp"
+    android:height="49dp"
+    android:viewportWidth="48"
+    android:viewportHeight="49">
+  <group>
+    <clip-path
+        android:pathData="M0,0.892h48v48h-48z"/>
+    <path
+        android:pathData="M28.5,6.892H19.5C18.672,6.892 18,7.564 18,8.392V9.892H30V8.392C30,7.564 29.328,6.892 28.5,6.892Z">
+      <aapt:attr name="android:fillColor">
+        <gradient 
+            android:startX="24"
+            android:startY="9.871"
+            android:endX="24"
+            android:endY="7.2"
+            android:type="linear">
+          <item android:offset="0" android:color="#FFB33F20"/>
+          <item android:offset="0.129" android:color="#FFC74724"/>
+          <item android:offset="0.295" android:color="#FFD94F29"/>
+          <item android:offset="0.469" android:color="#FFE4532B"/>
+          <item android:offset="0.659" android:color="#FFE8552C"/>
+        </gradient>
+      </aapt:attr>
+    </path>
+    <path
+        android:pathData="M42,41.892H6C4.9,41.892 4,40.992 4,39.892V13.892C4,11.692 5.8,9.892 8,9.892H40C42.2,9.892 44,11.692 44,13.892V39.892C44,40.992 43.1,41.892 42,41.892Z">
+      <aapt:attr name="android:fillColor">
+        <gradient 
+            android:centerX="23.832"
+            android:centerY="6.884"
+            android:gradientRadius="45.74"
+            android:type="radial">
+          <item android:offset="0" android:color="#FF40150B"/>
+          <item android:offset="0.156" android:color="#FF622110"/>
+          <item android:offset="0.417" android:color="#FF953218"/>
+          <item android:offset="0.645" android:color="#FFBA3F1E"/>
+          <item android:offset="0.828" android:color="#FFD14722"/>
+          <item android:offset="0.944" android:color="#FFD94A23"/>
+        </gradient>
+      </aapt:attr>
+    </path>
+    <path
+        android:pathData="M42.297,26.147L24,28.892L5.703,26.147C4.724,26.001 4,25.16 4,24.17V13.892C4,11.692 5.8,9.892 8,9.892H40C42.2,9.892 44,11.692 44,13.892V24.17C44,25.16 43.276,26.001 42.297,26.147Z">
+      <aapt:attr name="android:fillColor">
+        <gradient 
+            android:startX="24"
+            android:startY="9.92"
+            android:endX="24"
+            android:endY="27.819"
+            android:type="linear">
+          <item android:offset="0" android:color="#FFFC7D5B"/>
+          <item android:offset="0.06" android:color="#FFF8734F"/>
+          <item android:offset="0.18" android:color="#FFF3653D"/>
+          <item android:offset="0.326" android:color="#FFF05B31"/>
+          <item android:offset="0.523" android:color="#FFEE552A"/>
+          <item android:offset="1" android:color="#FFED5328"/>
+        </gradient>
+      </aapt:attr>
+    </path>
+    <path
+        android:pathData="M25.5,21.892H22.5C22.224,21.892 22,22.116 22,22.392V25.392C22,25.668 22.224,25.892 22.5,25.892H25.5C25.776,25.892 26,25.668 26,25.392V22.392C26,22.116 25.776,21.892 25.5,21.892Z"
+        android:fillColor="#F6ECA5"/>
+    <path
+        android:pathData="M38,28.892L40.329,30.199L43,30.232L44.364,32.528L46.66,33.892L46.693,36.563L48,38.892L46.693,41.221L46.66,43.892L44.364,45.256L43,47.552L40.329,47.585L38,48.892L35.671,47.585L33,47.552L31.636,45.256L29.34,43.892L29.307,41.221L28,38.892L29.307,36.563L29.34,33.892L31.636,32.528L33,30.232L35.671,30.199L38,28.892Z"
+        android:fillColor="#FDB700"/>
+    <path
+        android:pathData="M38,45.892C41.866,45.892 45,42.758 45,38.892C45,35.026 41.866,31.892 38,31.892C34.134,31.892 31,35.026 31,38.892C31,42.758 34.134,45.892 38,45.892Z">
+      <aapt:attr name="android:fillColor">
+        <gradient 
+            android:startX="31"
+            android:startY="38.892"
+            android:endX="45"
+            android:endY="38.892"
+            android:type="linear">
+          <item android:offset="0" android:color="#FFFEDE00"/>
+          <item android:offset="1" android:color="#FFFFD000"/>
+        </gradient>
+      </aapt:attr>
+    </path>
+  </group>
+</vector>

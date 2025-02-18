@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -392,7 +393,7 @@ private fun PinCodeScreenContent(
                         top.linkTo(textViewLabel.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
-                    },
+                    } .testTag("TextFieldPassCode"),
                 context = context,
                 onValueChange = {
                     isEnableButton = it.length == maxLength && !isLoading
@@ -408,7 +409,7 @@ private fun PinCodeScreenContent(
                         top.linkTo(textViewLabel.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
-                    },
+                    }.testTag("TextFieldConfirmPassCode"),
                 context = context,
                 onValueChange = {
                     isEnableButton = it.length == maxLength && !isLoading
@@ -436,7 +437,8 @@ private fun PinCodeScreenContent(
                     end.linkTo(parent.end)
                 }
                 .fillMaxWidth()
-                .height(56.dp),
+                .height(56.dp)
+                .testTag("ButtonComplete"),
             shape = RoundedCornerShape(8.dp),
             colors = buttonColors,
             enabled = isEnableButton && !isLoading

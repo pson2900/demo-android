@@ -198,7 +198,7 @@ fun LoginContent(
                     top.linkTo(textView.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                },
+                }.testTag("TextFieldPassCode"),
             context = context,
             onValueChange = {
                 onChangeError("")
@@ -248,7 +248,7 @@ fun ColumnScope.ForgotPasswordText(onClick: () -> Unit) {
             .clickable {
                 onClick.invoke()
             }
-            .padding(20.dp), // Add padding for better touch target
+            .padding(20.dp).testTag("textViewForgotPassword"), // Add padding for better touch target
         style = TextStyle(
             color = colorResource(R.color.violets_are_blue),
             fontSize = 16.sp

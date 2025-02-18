@@ -66,8 +66,15 @@ android {
     }
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/LICENSE*"
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE-notice.md"
+            excludes += "META-INF/ASL2.0"
         }
+    }
+    dependenciesInfo {
+        includeInApk = true
+        includeInBundle = true
     }
 }
 
