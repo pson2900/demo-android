@@ -5,9 +5,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.app.manager.theme.ProductXTheme
+import com.example.demo_structure.R
 
 object OtpTextFieldDefaults {
 
@@ -16,11 +18,11 @@ object OtpTextFieldDefaults {
         size: Dp = 54.dp,
         shape: Shape = RoundedCornerShape(16.dp),
         containerColor: Color = ProductXTheme.colorScheme.background_1,
-        focusedBorderColor: Color = MaterialTheme.colorScheme.primary,
-        unfocusedBorderColor: Color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f),
+        focusedBorderColor: Color = colorResource(R.color.violets_are_blue),
+        unfocusedBorderColor: Color = colorResource(R.color.alto),
         focusedBorderWidth: Dp = 1.dp,
         unfocusedBorderWidth: Dp = 1.dp,
-        errorColor: Color = MaterialTheme.colorScheme.error,
+        errorColor: Color = colorResource(R.color.alizarin_crimson)
     ): DigitContainerStyle.Outlined {
         return DigitContainerStyle.Outlined(
             size = size,

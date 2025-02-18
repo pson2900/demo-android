@@ -50,6 +50,7 @@ import com.example.demo_structure.core.component.AppText
 import com.example.demo_structure.core.component.CountdownTextView
 import com.example.demo_structure.core.component.otp.OTPTextField
 import com.example.demo_structure.core.component.otp.OtpTextFieldDefaults
+import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.screen.create_pin.PinArguments
 import com.example.demo_structure.screen.home.LoadingState
 import com.example.demo_structure.util.extension.buildClickableText
@@ -75,7 +76,7 @@ private fun OTPScreenPreview() {
 data class OTPScreenState(
     val sendOtpSuccess: Boolean = false,
     val isResend: Boolean = false,
-    val isError: Boolean = false,
+    val errorMessage: String = "",
     val isLoading: Boolean = false,
     val isValidOtp: Boolean = false,
     val secret: String = "",
@@ -181,37 +182,37 @@ private fun OTPScreenContent(
     ConstraintLayout(
         modifier = modifier.padding(24.dp)
     ) {
-        val (emailTextview, textViewDescription, otpTextField, textViewError, textViewMessage, columnBottom, loading) = createRefs()
-        val annotatedString = buildClickableText(
-            text = "Mã xác nhận đã được gửi qua email $email",
-            clickableText = email,
-            tag = "tag_name",
-            style = SpanStyle(
-                color = Color.Black,
-                fontSize = 20.sp
-            ),
-            textLinkStyles = SpanStyle(
-                color = colorResource(R.color.violets_are_blue),
-                fontSize = 20.sp
-            )
-        )
-
-        BasicText(
-            text = annotatedString,
-            maxLines = 2,
-            modifier = Modifier.constrainAs(emailTextview) {
+        val (tvTitle, tvEmail,tvDescription, otpTextField, textViewError, textViewMessage, columnBottom, loading) = createRefs()
+        AppText(
+            text = "Mã xác nhận đã được gửi qua email",
+            modifier = Modifier.constrainAs(tvTitle) {
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
-                width = Dimension.fillToConstraints
-            },
-            overflow = TextOverflow.Ellipsis
+            }.fillMaxWidth(),
+            style = ProductXTheme.typography.Regular.Title.X_Large.copy(textAlign = TextAlign.Left),
+            color = colorResource(R.color.cod_gray),
         )
 
         AppText(
             modifier = Modifier
-                .constrainAs(textViewDescription) {
-                    top.linkTo(emailTextview.bottom)
+                .constrainAs(tvEmail) {
+                    top.linkTo(tvTitle.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    width = Dimension.fillToConstraints
+                }.fillMaxWidth(),
+            maxLines = 2,
+            style = ProductXTheme.typography.Regular.Title.X_Large.copy(textAlign = TextAlign.Left),
+            color = colorResource(R.color.violets_are_blue),
+            overflow = TextOverflow.Ellipsis,
+            text = "$email"
+        )
+
+        AppText(
+            modifier = Modifier
+                .constrainAs(tvDescription) {
+                    top.linkTo(tvEmail.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }
@@ -233,7 +234,7 @@ private fun OTPScreenContent(
             modifier = Modifier
                 .width(260.dp)
                 .constrainAs(otpTextField) {
-                    top.linkTo(textViewDescription.bottom)
+                    top.linkTo(tvDescription.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }
@@ -241,7 +242,7 @@ private fun OTPScreenContent(
                 .focusRequester(focusRequester),
             value = otp,
             onTextChanged = {
-                onStateChange(screenState.copy(isError = false))
+                onStateChange(screenState.copy(errorMessage = ""))
                 otp = it
                 verifyOtp(it)
             },
@@ -249,10 +250,10 @@ private fun OTPScreenContent(
             isMasked = false, // Mask digits for security
             digitContainerStyle = OtpTextFieldDefaults.outlinedContainer(size = 24.dp), // Choose style (outlined or underlined)
             textStyle = ProductXTheme.typography.SemiBold.Heading.Small, // Configure text style
-            isError = screenState.isError // Indicate whether the OTP field is in an error state
+            isError = screenState.errorMessage.isNotEmpty() // Indicate whether the OTP field is in an error state
         )
 
-        if (screenState.isError) {
+        if (screenState.errorMessage.isNotEmpty()) {
             Text(
                 modifier = Modifier
                     .constrainAs(textViewError) {
@@ -262,7 +263,7 @@ private fun OTPScreenContent(
                     }
                     .padding(top = 24.dp),
                 style = TextStyle(color = Color.Red, fontSize = 16.sp),
-                text = "Mã xác nhận chưa đúng. Nhập lại hoặc chọn gửi lại mã khác.",
+                text = screenState.errorMessage,
                 textAlign = TextAlign.Center
             )
         }
@@ -279,6 +280,9 @@ private fun OTPScreenContent(
             email = email,
             type = type,
             onStateChange = onStateChange,
+            onClearOtp = {
+                otp = ""
+            },
             viewModel = viewModel
         )
 
@@ -302,6 +306,7 @@ private fun ColumnBottom(
     email: String,
     type: String,
     onStateChange: (OTPScreenState) -> Unit,
+    onClearOtp: () -> Unit,
     viewModel: VerifyOTPViewModel?
 ) {
     Column(
@@ -313,6 +318,7 @@ private fun ColumnBottom(
             if (screenState.isResend) {
                 ResendOtpText(viewModel, email, type, onStateChange = {
                     onStateChange(screenState.copy(sendOtpSuccess = false))
+                    onClearOtp.invoke()
                 })
             } else {
                 CountdownResendOtpText {
@@ -453,16 +459,19 @@ fun HandleOtpState(
     LaunchedEffect(key1 = verifyOtpState) {
         when (val state = verifyOtpState) {
             is UIState.Loading -> onStateChange(otpScreenState.copy(isLoading = true))
-            is UIState.Success -> onStateChange(
-                otpScreenState.copy(
-                    isResend = false,
-                    isLoading = false,
-                    isValidOtp = state.data.isValid,
-                    isError = state.data.isValid == false,
-                    secret = state.data.secret
+            is UIState.Success ->{
+                val errorMessage = if(state.data.isValid== false && state.data.secret.isNullOrEmpty()) state.data.message else ""
+                onStateChange(
+                    otpScreenState.copy(
+                        isResend = false,
+                        isLoading = false,
+                        isValidOtp = state.data.isValid,
+                        errorMessage = errorMessage,
+                        secret = state.data.secret
+                    )
                 )
-            )
 
+            }
             is UIState.Error -> onStateChange(
                 otpScreenState.copy(
                     isLoading = false,

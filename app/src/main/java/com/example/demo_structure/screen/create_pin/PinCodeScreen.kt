@@ -41,6 +41,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.data.remote.UIState
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.ProductXTheme
@@ -52,10 +53,12 @@ import com.example.demo_structure.core.component.AppTopBar
 import com.example.demo_structure.core.component.otp.PassCodeTextField
 import com.example.demo_structure.screen.home.LoadingState
 import com.example.demo_structure.screen.otp.OTPType
+import com.example.demo_structure.util.extension.isJsonObjectRegex
 import com.example.domain.model.Authentication
 import com.example.domain.model.Register
 import com.example.domain.model.UserProfile
 import kotlinx.coroutines.delay
+import org.json.JSONObject
 import org.koin.androidx.compose.koinViewModel
 
 @Preview("Light Mode")
@@ -70,6 +73,7 @@ private fun PinCodeScreenPreview() {
             otpError = "",
             maxLength = 6,
             isLoading = false,
+            isCompleteStep1 = false,
             onPassCodeChange = {
 
             },
@@ -130,7 +134,9 @@ fun PinCodeScreen(
             state = registerState,
             isLoading = { isLoading = it },
             autoLogin = { viewModel.login() },
-            context = context
+            onChangeError = {
+                otpError = it
+            }
         )
     }
 
@@ -139,7 +145,9 @@ fun PinCodeScreen(
             state = updatePasswordState,
             isLoading = { isLoading = it },
             autoLogin = { viewModel.login() },
-            context = context
+            onChangeError = {
+                otpError = it
+            }
         )
     }
 
@@ -150,9 +158,11 @@ fun PinCodeScreen(
             saveAuth = {
                 viewModel.saveAuth(it)
                 viewModel.saveUserInfo(UserProfile())
-                       },
+            },
             onNavigateHomeScreen = onNavigateHomeScreen,
-            context = context
+            onChangeError = {
+                otpError = it
+            }
         )
     }
 
@@ -178,12 +188,15 @@ fun PinCodeScreen(
         backgroundColor = ProductXTheme.colorScheme.background_1
     ) {
         PinCodeScreenContent(
-            modifier = Modifier.padding(it).fillMaxSize(),
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize(),
             label = if (!isCompleteStep1) "Tạo mã pin mới" else "Nhập lại mã pin",
             passCode = viewModel.passCode,
             otpError = otpError,
             maxLength = maxLength,
             isLoading = isLoading,
+            isCompleteStep1 = isCompleteStep1,
             onPassCodeChange = {
                 viewModel.passCode = it
                 otpError = ""
@@ -236,7 +249,7 @@ private fun verifyPassCode(
     onChangeError: (String) -> Unit
 ) {
     if (viewModel.passCode != viewModel.confirmPasscode) {
-        onChangeError("sai pass code")
+        onChangeError("Mã nhập lại không đúng. Thử lại nhé!")
     } else {
         if (arguments.type == OTPType.REGISTER.type) {
             viewModel.register(arguments.secret ?: "")
@@ -250,7 +263,7 @@ private suspend fun handleRegisterState(
     state: UIState<Register>,
     isLoading: (Boolean) -> Unit,
     autoLogin: () -> Unit,
-    context: Context
+    onChangeError: (String) -> Unit
 ) {
     when (val registerState = state) {
         is UIState.Loading -> isLoading(true)
@@ -263,7 +276,7 @@ private suspend fun handleRegisterState(
         }
 
         is UIState.Error -> {
-            Toast.makeText(context, registerState.appException.message, Toast.LENGTH_SHORT).show()
+            onChangeError(handleError(state.appException.message))
             isLoading(false)
         }
 
@@ -275,7 +288,7 @@ private fun handleUpdatePasswordState(
     state: UIState<Register>,
     isLoading: (Boolean) -> Unit,
     autoLogin: () -> Unit,
-    context: Context
+    onChangeError: (String) -> Unit
 ) {
     when (val updatePasswordState = state) {
         is UIState.Loading -> isLoading(true)
@@ -287,8 +300,7 @@ private fun handleUpdatePasswordState(
         }
 
         is UIState.Error -> {
-            Toast.makeText(context, updatePasswordState.appException.message, Toast.LENGTH_SHORT)
-                .show()
+            onChangeError(handleError(state.appException.message))
             isLoading(false)
         }
 
@@ -301,7 +313,7 @@ private suspend fun handleLoginState(
     isLoading: (Boolean) -> Unit,
     saveAuth: (Authentication) -> Unit,
     onNavigateHomeScreen: () -> Unit,
-    context: Context
+    onChangeError: (String) -> Unit
 ) {
     when (val loginState = state) {
         is UIState.Loading -> isLoading(true)
@@ -313,14 +325,25 @@ private suspend fun handleLoginState(
         }
 
         is UIState.Error -> {
-            Toast.makeText(context, loginState.appException.message, Toast.LENGTH_SHORT).show()
+            onChangeError(handleError(state.appException.message))
             isLoading(false)
-            delay(200)
-            onNavigateHomeScreen()
         }
 
         else -> Unit
     }
+}
+
+
+fun handleError(error: String?): String{
+    error?.let {
+        if(isJsonObjectRegex(it)) {
+            val json = JSONObject(it)
+           return json.getString("message") ?: ""
+        }else{
+           return it
+        }
+    }
+    return ""
 }
 
 @Composable
@@ -333,13 +356,13 @@ private fun PinCodeScreenContent(
     isLoading: Boolean,
     onPassCodeChange: (String) -> Unit,
     onConfirmPassCodeChange: (String) -> Unit,
+    isCompleteStep1: Boolean,
     onNextStep: () -> Unit,
     onComplete: () -> Unit
 ) {
     val context = LocalContext.current
     var isEnableButton by remember { mutableStateOf(false) }
-    val buttonContent = if (passCode.length == maxLength) "Hoàn tất" else "Tiếp tục"
-    val isCompleteStep1 = passCode.length == maxLength
+    val buttonContent = if (isCompleteStep1) "Hoàn tất" else "Tiếp tục"
     val buttonColors = ButtonDefaults.buttonColors(
         containerColor = colorResource(id = R.color.royal_blue),
         contentColor = Color.White,
@@ -358,7 +381,8 @@ private fun PinCodeScreenContent(
                 end.linkTo(parent.end)
             }
             .padding(bottom = 8.dp),
-            style = ProductXTheme.typography.Regular.Heading.Small, color = colorResource(R.color.cod_gray),
+            style = ProductXTheme.typography.Regular.Heading.Small,
+            color = colorResource(R.color.cod_gray),
             text = label,
             textAlign = TextAlign.Center)
         if (!isCompleteStep1) {

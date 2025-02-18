@@ -1,6 +1,7 @@
 package com.example.data.remote
 
 import android.database.sqlite.SQLiteException
+import android.util.Log
 import com.google.gson.JsonParseException
 import com.google.gson.JsonSyntaxException
 import java.io.IOException
@@ -67,7 +68,7 @@ object ErrorMapper {
                 }
             }
             is retrofit2.HttpException -> {
-                val message = exception.message() ?: "An HTTP error occurred."
+                val message = exception.response()?.errorBody()?.string()?: "An HTTP error occurred."
                 when (exception.code()) {
                     401 -> AppException.UnauthorizedException(message)
                     404 -> AppException.NotFoundException(message)

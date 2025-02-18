@@ -7,6 +7,7 @@ import com.example.demo_structure.screen.home.HomeViewModel
 import com.example.demo_structure.screen.job_detail.JobDetailViewModel
 import com.example.demo_structure.screen.login.LoginViewModel
 import com.example.demo_structure.screen.main.MainViewModel
+import com.example.demo_structure.screen.onboarding.OnboardingViewModel
 import com.example.demo_structure.screen.opportunity.OpportunityViewModel
 import com.example.demo_structure.screen.otp.VerifyOTPViewModel
 import com.example.demo_structure.screen.user.UserViewModel
@@ -32,4 +33,6 @@ val presentationModule = module {
     viewModel { VerifyEmailViewModel(authUseCase = get(), savedStateHandle = get()) }
     viewModel { VerifyOTPViewModel(authUseCase = get(), savedStateHandle = get()) }
     viewModel { PinCodeViewModel(dataStoreManager = get(),authUseCase = get(), savedStateHandle = get()) }
+    viewModel { OnboardingViewModel(dataStoreManager = get(), savedStateHandle = get()) }
+
 }

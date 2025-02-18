@@ -1,4 +1,4 @@
 package com.example.domain.model
 
-data class VerifyOtp (val isValid: Boolean,val secret: String) {
+data class VerifyOtp (val isValid: Boolean,val secret: String,val message:String) {
 }

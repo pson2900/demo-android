@@ -1,6 +1,7 @@
 package com.example.demo_structure.screen.login
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.Image
@@ -53,8 +54,10 @@ import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppTopBar
 import com.example.demo_structure.core.component.otp.PassCodeTextField
+import com.example.demo_structure.util.extension.isJsonObjectRegex
 import com.example.domain.model.UserProfile
 import kotlinx.coroutines.delay
+import org.json.JSONObject
 
 /**
  * Created by Phạm Sơn at 15:17/3/1/25
@@ -95,7 +98,15 @@ internal fun LoginScreen(
             }
 
             is UIState.Error -> {
-                errorMessage = "Mã không đúng. Thử lại nhé!"
+                val error =  state.appException.message
+                error?.let {
+                    if(isJsonObjectRegex(it)) {
+                        val json = JSONObject(it)
+                        errorMessage = json.getString("message") ?: ""
+                    }else{
+                        errorMessage = it
+                    }
+                }
                 isLoading = false
             }
 
@@ -123,7 +134,9 @@ internal fun LoginScreen(
         backgroundColor = ProductXTheme.colorScheme.background_1,
     ) {
         LoginContent(
-            modifier = Modifier.padding(it).fillMaxSize(),
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize(),
             isLoading = isLoading,
             errorMessage = errorMessage,
             onChangeError = { errorMessage = "" },
@@ -235,7 +248,7 @@ fun ColumnScope.ForgotPasswordText(onClick: () -> Unit) {
             .clickable {
                 onClick.invoke()
             }
-            .padding(vertical = 16.dp), // Add padding for better touch target
+            .padding(20.dp), // Add padding for better touch target
         style = TextStyle(
             color = colorResource(R.color.violets_are_blue),
             fontSize = 16.sp

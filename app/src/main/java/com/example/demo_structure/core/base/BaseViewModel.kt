@@ -88,6 +88,7 @@ abstract class BaseViewModel(val savedStateHandle: SavedStateHandle) : ViewModel
                         }
                     }
                     .catch {
+                        it
                         if (it is CancellationException) {
                             Log.d(tag, "API call canceled for dataKey: $dataKey in outer try-catch")
                         } else {
