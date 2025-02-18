@@ -22,6 +22,7 @@ import com.example.demo_structure.screen.community.toCommunityScreen
 import com.example.demo_structure.screen.create_pin.toCreatePinCodeScreen
 import com.example.demo_structure.screen.education.toEducationScreen
 import com.example.demo_structure.screen.home.toHomeScreen
+import com.example.demo_structure.screen.job_detail.toJobDetail
 import com.example.demo_structure.screen.job_detail.toJobDetailScreen
 import com.example.demo_structure.screen.login.toLoginScreen
 import com.example.demo_structure.screen.main.toMainScreen
@@ -65,6 +66,7 @@ fun AppNavHost(
     appState: AppState
 ) {
     val navController = appState.navController
+
     NavHost(
         navController = navController,
         startDestination = Destinations.Main.ROUTE,
@@ -73,10 +75,15 @@ fun AppNavHost(
         exitTransition = { fadeOut(animationSpec = tween(500)) },
 
         builder = {
+//            CompositionLocalProvider(
+//                LocalNavAnimatedContentScope provides this,
+//            ){
+//
+//            }
             toMainScreen(appState = appState)
-            toJobDetailScreen(appState = appState) {
+            /*toJobDetailScreen(appState = appState) {
 
-            }
+            }*/
             toCreatePinCodeScreen(appState)
             toLoginScreen(appState) {
                 appState.upPress()
@@ -93,6 +100,9 @@ fun MainNavHost(
     onNavigateToJobDetail: (JobDetail) -> Unit,
     onNavigateToLogin: (String) -> Unit,
     onNavigateToVerifyEmail: () -> Unit,
+    onHideBottomNav: (Boolean) -> Unit,
+
+    animatedVisibilityScope: AnimatedContentScope,
 ) {
     val navController = appState.navController
     NavHost(
@@ -110,9 +120,18 @@ fun MainNavHost(
             onNavigateToVerifyEmail = onNavigateToVerifyEmail
         )
         toOpportunityScreen(
+            animatedVisibilityScope = animatedVisibilityScope,
             appState = appState,
-            onNavigateToJobDetail = onNavigateToJobDetail
+            onNavigateToJobDetail = {
+                onHideBottomNav.invoke(true)
+                navController.toJobDetail(Destinations.JobDetail.createRoute(it))
+            }
         )
+
+        toJobDetailScreen(appState = appState, onLogin= onNavigateToLogin, onBackClick =  {
+            appState.upPress()
+            onHideBottomNav.invoke(false)
+        })
         toCommunityScreen(
             onTopicClick = {
 

@@ -97,12 +97,9 @@ dependencies {
 
     // Mark: Testing
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-//    androidTestImplementation(libs.androidx.runner)
-//    androidTestImplementation(libs.androidx.rules)
-    androidTestImplementation("androidx.test.ext:junit:1.1.5") // Thay thế androidx.test:runner
-    androidTestImplementation("androidx.test:core-ktx:1.5.0") // Thay thế một phần của androidx.test:rules
-    androidTestImplementation("androidx.test.ext:junit-ktx:1.1.5") // Thay thế một phần của androidx.test:rules
+//    androidTestImplementation(libs.androidx.junit)
+//    androidTestImplementation(libs.android.test.core.ktx)
+//    androidTestImplementation(libs.android.test.junit.ktx)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.espresso.contrib)
     testImplementation(libs.mockk)

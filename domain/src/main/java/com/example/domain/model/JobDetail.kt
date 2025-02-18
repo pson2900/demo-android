@@ -12,7 +12,7 @@ import kotlinx.parcelize.Parcelize
 class JobDetail(
     val jobId: Int, val jobTitle: String, val companyTitle: String,
     val salary: String, val location: String, val companyLogo: Int,
-    val description: String
+    val description: String,
 ): Parcelable {
 
     override fun equals(other: Any?): Boolean {

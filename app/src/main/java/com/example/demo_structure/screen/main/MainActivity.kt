@@ -7,9 +7,10 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -19,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -153,9 +155,11 @@ fun MainContent(
     startDestination: DestinationItem,
     onNavigateToJobDetail: (JobDetail) -> Unit,
     onNavigateToLogin: (String) -> Unit,
-    onNavigateToVerifyEmail: () -> Unit
+    onNavigateToVerifyEmail: () -> Unit,
+    animatedVisibilityScope: AnimatedContentScope
 ) {
     val nestedNavigation = rememberAppState()
+    var isHide by remember { mutableStateOf(false) }
     Log.d("QQQ", "MainContent startDestination: ${startDestination.route}")
     AppScaffold(
         backgroundColor = Color.Transparent,
@@ -180,14 +184,18 @@ fun MainContent(
 //        snackBarHostState = scaffoldState.snackBarHostState,
         snackBarHostState = SnackbarHostState(),
         bottomBar = {
-            BottomNavigationBar(
-                modifier = modifier,
-            ) {
-                InitBottomMainScreen(currentRoute = startDestination, onClick = {
-                    nestedNavigation.navigateToBottomBarRoute(it.route)
-                }, changeItem = {
-                    it.route == nestedNavigation.navController.currentBackStackEntryAsState().value?.destination?.route
-                })
+            if (isHide){
+
+            } else {
+                BottomNavigationBar(
+                    modifier = modifier,
+                ) {
+                    InitBottomMainScreen(currentRoute = startDestination, onClick = {
+                        nestedNavigation.navigateToBottomBarRoute(it.route)
+                    }, changeItem = {
+                        it.route == nestedNavigation.navController.currentBackStackEntryAsState().value?.destination?.route
+                    })
+                }
             }
         },
 //        content = { padding ->
@@ -195,11 +203,15 @@ fun MainContent(
 //            .padding(bottom = it.calculateBottomPadding())
             Box(Modifier.fillMaxSize()){
                 MainNavHost(
+                    animatedVisibilityScope = animatedVisibilityScope,
                     appState = nestedNavigation,
                     startDestination = startDestination,
                     onNavigateToJobDetail = onNavigateToJobDetail,
                     onNavigateToLogin = onNavigateToLogin,
-                    onNavigateToVerifyEmail = onNavigateToVerifyEmail
+                    onNavigateToVerifyEmail = onNavigateToVerifyEmail,
+                    onHideBottomNav = {
+                        isHide = it
+                    }
                 )
             }
         }
@@ -210,13 +222,16 @@ fun MainContent(
 @Composable
 fun MainContentPreview() {
     AppPreviewWrapper {
-        MainContent(
-            it,
-            startDestination = Destinations.Main.Home,
-            onNavigateToJobDetail = { _ -> },
-            onNavigateToLogin = {},
-            onNavigateToVerifyEmail = { },
-        )
+        AnimatedVisibility(true) {
+           /* MainContent(
+                it,
+                startDestination = Destinations.Main.Home,
+                onNavigateToJobDetail = { _ -> },
+                onNavigateToLogin = {},
+                onNavigateToVerifyEmail = { },
+                this,
+            )*/
+        }
     }
 }
 

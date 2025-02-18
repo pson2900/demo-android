@@ -21,7 +21,7 @@ fun NavController.toJobDetail(route: String, navOptions: NavOptions = androidx.n
     navigate(route = route, navOptions = navOptions)
 
 
-fun NavGraphBuilder.toJobDetailScreen(appState: AppState, onBackClick: () -> Unit) {
+fun NavGraphBuilder.toJobDetailScreen(appState: AppState, onBackClick: () -> Unit, onLogin: (String) -> Unit) {
     composableWith(
         route = "${Destinations.JobDetail.route}/" +
                 "{${Destinations.JobDetail.JOB_DETAIL_ID}}",
@@ -29,7 +29,6 @@ fun NavGraphBuilder.toJobDetailScreen(appState: AppState, onBackClick: () -> Uni
             navArgument(Destinations.JobDetail.JOB_DETAIL_ID) {
                 type = NavType.StringType
             },
-
         ),
         content = { navBackStackEntry ->
             val arguments = requireNotNull(navBackStackEntry.arguments)
@@ -37,10 +36,13 @@ fun NavGraphBuilder.toJobDetailScreen(appState: AppState, onBackClick: () -> Uni
             val jobDetail = remember { Gson().fromJson(jobDetailJson, JobDetail::class.java) }
             jobDetail?.let {
                 JobDetailScreen1(
+                    animatedVisibilityScope = this,
                     job = it,
-                    onBackClick = {
+                    onBackClick = onBackClick,
+                    onLogin = onLogin
+                   /* onBackClick = {
                         appState.navigateToMain(navBackStackEntry, Destinations.Main.Opportunity)
-                    },
+                    },*/
                 )
             }
         }

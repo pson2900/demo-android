@@ -1,10 +1,11 @@
 package com.example.demo_structure.screen.opportunity
 
-import android.util.Log
-import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
@@ -12,22 +13,16 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.with
-import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,10 +35,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.rememberNavController
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -51,16 +49,14 @@ import androidx.paging.cachedIn
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.demo_structure.ITEMS
+import com.example.demo_structure.R
+import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppBox
 import com.example.demo_structure.core.component.AppPreviewWrapper
-import com.example.demo_structure.core.component.AppScaffold
-import com.example.demo_structure.core.component.AppSnackBar
 import com.example.demo_structure.core.component.ThemePreviews
 import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.jobList
-import com.example.demo_structure.screen.job_detail.JobDetailScreen1
-import com.example.demo_structure.screen.job_detail.MyScreen
 import com.example.demo_structure.screen.opportunity.component.FilterSection
 import com.example.demo_structure.screen.opportunity.component.JobItemSection
 import com.example.demo_structure.screen.opportunity.component.SearchBarSection
@@ -75,21 +71,75 @@ import kotlinx.coroutines.flow.Flow
  * Email: son.pham@navigosgroup.com
  */
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun OpportunityScreen(viewModel: OpportunityViewModel, onJobClick: (JobDetail) -> Unit) {
+fun OpportunityScreen(viewModel: OpportunityViewModel, onJobClick: (JobDetail) -> Unit, animationContentScope: AnimatedContentScope) {
     val state = viewModel.uiState.collectAsStateWithLifecycle()
     val lazyItem = viewModel.items.collectAsLazyPagingItems()
     val appState = rememberAppState()
-    OpportunityContent(
-        lazyItem = lazyItem,
-        onBackClick = appState::upPress,
-        onTextChange = viewModel::onTextChange,
-        onSearch = viewModel::onSearch,
-        onSearchWithCV = viewModel::onSearchWithCV,
-        onJobClick = onJobClick
-    )
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+    val navController = rememberNavController()
+    sharedTransitionScope?.apply {
+         OpportunityContent(
+                 animatedVisibilityScope = animationContentScope,
+                 lazyItem = lazyItem,
+                 onBackClick = appState::upPress,
+                 onTextChange = viewModel::onTextChange,
+                 onSearch = viewModel::onSearch,
+                 onSearchWithCV = viewModel::onSearchWithCV,
+                 onJobClick = onJobClick
+             )
+
+       /* NavHost(
+            navController = navController,
+            startDestination = "list"
+        ) {
+            composable("list") {
+                JobList(
+                    animatedVisibilityScope = this,
+                    lazyPagingItems = lazyItem,
+                    selectedJob = null,
+                    onJobClick = {
+                        val jobDetailJson = Uri.encode(Gson().toJson(it))
+                        navController.navigate("detail/${jobDetailJson}")
+                    },
+                    onBackClick = {
+
+                    })
+            }
+            composable(
+                route = "detail/{jobDetail}",
+                arguments = listOf(
+                    navArgument("jobDetail") {
+                        type = NavType.StringType
+                    },
+                )
+            ) { navBackStackEntry ->
+                val arguments = requireNotNull(navBackStackEntry.arguments)
+                val jobDetailJson = arguments.getString("jobDetail")
+                val jobDetail = remember { Gson().fromJson(jobDetailJson, JobDetail::class.java) }
+                jobDetail?.let { job ->
+                    JobDetailScreen1(
+                        animatedVisibilityScope = this,
+                        job = job,
+                        onBackClick = {
+                        })
+                }
+            }
+        }*/
+    }
+    /* OpportunityContent(
+         animatedVisibilityScope = animationContentScope,
+         lazyItem = lazyItem,
+         onBackClick = appState::upPress,
+         onTextChange = viewModel::onTextChange,
+         onSearch = viewModel::onSearch,
+         onSearchWithCV = viewModel::onSearchWithCV,
+         onJobClick = onJobClick
+     )*/
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun OpportunityContent(
     lazyItem: LazyPagingItems<JobDetail>,
@@ -99,14 +149,31 @@ fun OpportunityContent(
     onSearchWithCV: () -> Unit,
     onJobClick: (JobDetail) -> Unit,
     isFilter: Boolean = false,
-    isSuggestion: Boolean = false
+    isSuggestion: Boolean = false,
+    animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     var visibilityFilter by remember { mutableStateOf(isFilter) }
     var visibilitySuggestion by remember { mutableStateOf(isSuggestion) }
 
-    AppScaffold(
+    Column(Modifier.safeDrawingPadding()) {
+
+        SearchBarSection(
+            focusRequester, onTextChange, onSearch,
+            isFilter = { filter -> visibilityFilter = filter },
+            isSuggestion = { filter -> visibilitySuggestion = filter }
+        )
+        FilterJobSection(visibilityFilter)
+        JobResultSection(
+            animatedVisibilityScope = animatedVisibilityScope,
+            lazyItem = lazyItem,
+            onJobClick = onJobClick
+        )
+
+    }
+
+    /*AppScaffold(
         modifier = Modifier.fillMaxSize(),
         backgroundColor = ProductXTheme.colorScheme.background_2,
         snackbarHost = {
@@ -128,20 +195,24 @@ fun OpportunityContent(
                         }
                     }
             ) {
-                 Column(Modifier.background(Color.White)) {
-                     SearchBarSection(
-                         focusRequester, onTextChange, onSearch,
-                         isFilter = { isFilter -> visibilityFilter = isFilter },
-                         isSuggestion = { isSuggestion -> visibilitySuggestion = isSuggestion }
-                     )
-                     FilterJobSection(visibilityFilter)
-                     JobResultSection(lazyItem = lazyItem, onJobClick)
- //                    SuggestionJobSection(visibilitySuggestion)
-                 }
+                Column(Modifier.background(Color.White)) {
+                    SearchBarSection(
+                        focusRequester, onTextChange, onSearch,
+                        isFilter = { isFilter -> visibilityFilter = isFilter },
+                        isSuggestion = { isSuggestion -> visibilitySuggestion = isSuggestion }
+                    )
+                    FilterJobSection(visibilityFilter)
+                    JobResultSection(
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        lazyItem = lazyItem,
+                        onJobClick = onJobClick
+                    )
+                    //                    SuggestionJobSection(visibilitySuggestion)
+                }
             }
 
 
-        })
+        })*/
 }
 
 @Composable
@@ -177,47 +248,163 @@ fun JobRecommendSection() {
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
-fun JobResultSection(lazyItem: LazyPagingItems<JobDetail>, onJobClick: (JobDetail) -> Unit) {
+fun JobResultSection(lazyItem: LazyPagingItems<JobDetail>, onJobClick: (JobDetail) -> Unit, animatedVisibilityScope: AnimatedVisibilityScope) {
     val focusManager = LocalFocusManager.current
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+    val navController = rememberNavController()
+    sharedTransitionScope?.apply {
 
-    AppBox(
-        modifier = Modifier
-            .pointerInput(Unit) { // Add pointerInput to detect outside clicks
-                detectTapGestures {
-                    Log.d("QQQ", "outside")
-                    focusManager.clearFocus(true)
+        /*    NavHost(
+                navController = navController,
+                startDestination = "list"
+            ) {
+                composable("list") {
+                    JobList(
+                        animatedVisibilityScope = this,
+                        lazyPagingItems = lazyItem,
+                        selectedJob = null,
+                        onJobClick = {
+                            val jobDetailJson = Uri.encode(Gson().toJson(it))
+                            navController.navigate("detail/${jobDetailJson}")
+                        },
+                        onBackClick = {
+
+                        })
                 }
-            }
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center,
-        backgroundColor = ProductXTheme.colorScheme.background_2,
-    ) {
+                composable(
+                    route = "detail/{jobDetail}",
+                    arguments = listOf(
+                        navArgument("jobDetail") {
+                            type = NavType.StringType
+                        },
+                    )
+                ) { navBackStackEntry ->
+                    val arguments = requireNotNull(navBackStackEntry.arguments)
+                    val jobDetailJson = arguments.getString("jobDetail")
+                    val jobDetail = remember { Gson().fromJson(jobDetailJson, JobDetail::class.java) }
+                    jobDetail?.let { job ->
+                        JobDetailScreen1(
+                            animatedVisibilityScope = this,
+                            job = job,
+                            onBackClick = {
+                            })
+                    }
+                }
+            }*/
+
         JobList(
             lazyPagingItems = lazyItem,
             selectedJob = null,
-            onJobClick =onJobClick,
+            onJobClick = onJobClick,
             onBackClick = {
 
-            }
+            },
+            animatedVisibilityScope = animatedVisibilityScope
         )
+        /* AppBox(
+             modifier = Modifier
+                 .pointerInput(Unit) { // Add pointerInput to detect outside clicks
+                     detectTapGestures {
+                         Log.d("QQQ", "outside")
+                         focusManager.clearFocus(true)
+                     }
+                 }
+                 .fillMaxSize(),
+             contentAlignment = Alignment.Center,
+             backgroundColor = ProductXTheme.colorScheme.background_2,
+         ) {
+
+         }*/
 
     }
 }
-sealed class NavigationType {
-    object Detail : NavigationType()
-    object Listing : NavigationType()
-}
-@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
+
+
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun JobList(lazyPagingItems: LazyPagingItems<JobDetail>, selectedJob: JobDetail?, onJobClick: (JobDetail) -> Unit, onBackClick: () -> Unit) {
+fun JobDetailScreen1(animatedVisibilityScope: AnimatedVisibilityScope, job: JobDetail, onBackClick: () -> Unit) {
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+    sharedTransitionScope?.apply {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            Image(
+                modifier = Modifier
+                    .aspectRatio(16 / 9f)
+                    .sharedElement(
+                        state = rememberSharedContentState(key = "image/${job.companyLogo}"),
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        boundsTransform = { _, _ ->
+                            tween(durationMillis = 1000)
+                        }
+                    ),
+                painter = painterResource(id = R.drawable.company_logo), // Replace with your image resource ID
+                contentDescription = null,
+            )
+            Column {
+                Text(
+                    modifier = Modifier.sharedElement(
+                        state = rememberSharedContentState(key = "title/${job.jobTitle}"),
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        boundsTransform = { _, _ ->
+                            tween(durationMillis = 1000)
+                        }
+                    ),
+                    text = job.jobTitle,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    color = Color.Black // Adjust color
+                )
+                Text(
+                    modifier = Modifier.sharedElement(
+                        state = rememberSharedContentState(key = "description/${job.description}"),
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        boundsTransform = { _, _ ->
+                            tween(durationMillis = 1000)
+                        }
+                    ),
+                    text = job.description,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    color = Color.Black // Adjust color
+                )
+                Text(
+                    modifier = Modifier.sharedElement(
+                        state = rememberSharedContentState(key = "company/${job.companyTitle}"),
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        boundsTransform = { _, _ ->
+                            tween(durationMillis = 1000)
+                        }
+                    ),
+                    text = job.companyTitle,
+                    fontSize = 14.sp,
+                    color = Color.Gray // Adjust color
+                )
+            }
+
+        }
+    }
+
+}
+
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+fun JobList(
+    lazyPagingItems: LazyPagingItems<JobDetail>,
+    selectedJob: JobDetail?, onJobClick: (JobDetail) -> Unit, onBackClick: () -> Unit, animatedVisibilityScope: AnimatedVisibilityScope
+) {
 
     LazyColumn(
-        contentPadding = PaddingValues(16.dp)
+//        contentPadding = PaddingValues(16.dp)
     ) {
         items(jobList, key = { job -> job.jobId }) { job ->
-            JobItemSection (job = job, onClick = onJobClick)
+            JobItemSection(animatedVisibilityScope = animatedVisibilityScope, job = job, onClick = onJobClick)
         }
     }
 }
@@ -266,7 +453,7 @@ fun initJobList(lazyPagingItems: LazyPagingItems<JobDetail>, onJobClick: (JobDet
         ) { index ->
             val job = lazyPagingItems[index]
             job?.let {
-                JobItemSection(it, onJobClick)
+//                JobItemSection(it, onJobClick)
             }
 
         }
@@ -274,6 +461,7 @@ fun initJobList(lazyPagingItems: LazyPagingItems<JobDetail>, onJobClick: (JobDet
 }
 
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @ThemePreviews
 @Composable
 fun OpportunityScreenPreview() {
@@ -282,8 +470,18 @@ fun OpportunityScreenPreview() {
             config = PagingConfig(pageSize = 20, prefetchDistance = 2, enablePlaceholders = false),
             pagingSourceFactory = { JobPagingSource(ITEMS, 20) }
         ).flow.cachedIn(rememberCoroutineScope())
+        SharedTransitionScope {
+            /* OpportunityContent(
+                 lazyItem = items.collectAsLazyPagingItems(),
+                 onBackClick = {},
+                 onTextChange = {},
+                 onSearch = {},
+                 onSearchWithCV = {},
+                 onJobClick = {},
+                 animationContentScope = this
+             )*/
+        }
 
-        OpportunityContent(lazyItem = items.collectAsLazyPagingItems(), onBackClick = {}, onTextChange = {}, onSearch = {}, onSearchWithCV = {}, onJobClick = {})
 
     }
 }

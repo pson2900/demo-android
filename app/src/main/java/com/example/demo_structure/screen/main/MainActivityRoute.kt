@@ -44,6 +44,7 @@ fun NavGraphBuilder.toMainScreen(
         }
         Log.d("QQQ", "selectedTab: $selectedTab")
         MainContent(
+            animatedVisibilityScope = this,
             startDestination = selectedTab,
             onNavigateToJobDetail = { jobDetail ->
                 appState.navigateToJobDetail(jobDetail, from = backStackEntry)

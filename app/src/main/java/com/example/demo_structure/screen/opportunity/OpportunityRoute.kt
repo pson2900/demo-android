@@ -1,8 +1,6 @@
 package com.example.demo_structure.screen.opportunity
 
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.AnimatedContentScope
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -19,6 +17,7 @@ fun NavController.toOpportunity(navOptions: NavOptions) =
 fun NavGraphBuilder.toOpportunityScreen(
     appState: AppState,
     onNavigateToJobDetail: (JobDetail) -> Unit,
+    animatedVisibilityScope: AnimatedContentScope,
 ) {
     this.apply {
         composable(
@@ -30,7 +29,7 @@ fun NavGraphBuilder.toOpportunityScreen(
             ),
             content = { navBackStackEntry ->
 
-                OpportunityScreen(viewModel = koinViewModel(), onJobClick = {
+                OpportunityScreen(animationContentScope = this,viewModel = koinViewModel(), onJobClick = {
                     onNavigateToJobDetail(it)
                 })
             }

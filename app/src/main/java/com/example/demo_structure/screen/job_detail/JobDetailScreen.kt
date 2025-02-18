@@ -1,127 +1,159 @@
 package com.example.demo_structure.screen.job_detail
 
-import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.BoundsTransform
 import androidx.compose.animation.EnterExitState
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SizeTransform
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.with
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.demo_structure.R
+import com.example.demo_structure.app.manager.theme.AppIcons
+import com.example.demo_structure.app.manager.theme.Generate
 import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppBox
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
+import com.example.demo_structure.jobList
+import com.example.demo_structure.util.AnimatedVisibilitySlide
 import com.example.demo_structure.util.SharedElementKey
 import com.example.demo_structure.util.SharedElementType
+import com.example.demo_structure.util.durationChange
 import com.example.domain.model.JobDetail
 import org.koin.androidx.compose.koinViewModel
 
-/**
- * Created by Phạm Sơn at 23:48/8/1/25
- * Copyright (c) 2025 Navigos Group. All rights reserved.
- * Email: son.pham@navigosgroup.com
- */
-@OptIn(ExperimentalAnimationApi::class)
-@Composable
-fun MyScreen() {
-    var currentScreen by remember { mutableStateOf("ScreenA") }
 
-    AnimatedContent(
-        targetState = currentScreen,
-        transitionSpec = {
-            // Define your transition here.  This is a basic slide left/right transition.
-            if (targetState > initialState) {
-                slideInHorizontally(initialOffsetX = { width -> width }) + fadeIn() with
-                        slideOutHorizontally(targetOffsetX = { width -> -width }) + fadeOut()
-            } else {
-                slideInHorizontally(initialOffsetX = { width -> -width }) + fadeIn() with
-                        slideOutHorizontally(targetOffsetX = { width -> width }) + fadeOut()
-            }.using(
-                // Configure the animation duration.
-                SizeTransform(clip = false)
-            )
-        }
-    ) { screen ->
-        when (screen) {
-            "ScreenA" -> ScreenA { currentScreen = "ScreenB" }
-            "ScreenB" -> ScreenB { currentScreen = "ScreenA" }
-        }
-    }
-}
-
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun ScreenA(onNavigate: () -> Unit) {
-    Button(onClick = onNavigate) {
-        Text("Go to Screen B")
-    }
-}
-
-@Composable
-fun ScreenB(onNavigate: () -> Unit) {
-    Button(onClick = onNavigate) {
-        Text("Go to Screen A")
-    }
-}
-@Composable
-fun JobDetailScreen1(job: JobDetail, onBackClick    : () -> Unit) {
-    Surface(modifier = Modifier
-        .fillMaxSize()
-        .clip(RoundedCornerShape(12.dp))
-        //Use for zooming
-    ) {
+fun JobDetailScreen1(animatedVisibilityScope: AnimatedVisibilityScope, job: JobDetail, onBackClick: () -> Unit, onLogin: (String) -> Unit) {
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+    sharedTransitionScope?.apply {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .safeDrawingPadding()
+                .background(Color.White),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            IconButton(onClick = onBackClick) {
-                Icon(Icons.Filled.ArrowBack, "Back")
+            Row(
+                modifier = Modifier
+                    .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                AppIcons.arrowLeftIcon.Generate(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .padding(8.dp)
+                        .clickable {
+                            // Handle back navigation here
+                        },
+                    color = Color.Black
+                )
+
+
             }
-            Text(text = "Job Details for ${job.jobTitle}")
-            Text(text = "Company: ${job.companyTitle}")
-            Text(text = "Salary: ${job.salary}")
-            Text(text = "Location: ${job.location}")
-            Text(text = "Description: ${job.description}")
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        onLogin.invoke("pson2900@gmail.com")
+                    },
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Column {
+                    Text(
+                        modifier = Modifier.sharedElement(
+                            state = rememberSharedContentState(key = "title/${job.jobTitle}"),
+
+
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            boundsTransform = { _, _ ->
+                                tween(durationMillis = durationChange)
+                            }
+                        ),
+                        text = job.jobTitle,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        color = Color.Black // Adjust color
+                    )
+                    Text(
+                        modifier = Modifier.sharedElement(
+                            state = rememberSharedContentState(key = "description/${job.description}"),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            boundsTransform = { _, _ ->
+                                tween(durationMillis = durationChange)
+                            }
+                        ),
+                        text = job.description,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        color = Color.Black // Adjust color
+                    )
+                    Text(
+                        modifier = Modifier.sharedElement(
+                            state = rememberSharedContentState(key = "company/${job.companyTitle}"),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            boundsTransform = { _, _ ->
+                                tween(durationMillis = durationChange)
+                            }
+                        ),
+                        text = job.companyTitle,
+                        fontSize = 14.sp,
+                        color = Color.Gray // Adjust color
+                    )
+                }
+                Image(
+                    modifier = Modifier
+                        .size(50.dp)
+                        .sharedElement(
+                            state = rememberSharedContentState(key = "image/${job.companyLogo}"),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            boundsTransform = { _, _ ->
+                                tween(durationMillis = durationChange)
+                            }
+                        ),
+                    painter = painterResource(id = R.drawable.company_logo), // Replace with your image resource ID
+                    contentDescription = "Grab Logo",
+                )
+            }
         }
+
     }
 }
 
@@ -152,8 +184,8 @@ fun JobDetailScreen(
             backgroundColor = ProductXTheme.colorScheme.background_2,
             snackBarHostState = rememberHostState,
 //            content = { padding ->
-                content = {
-                AppBox (
+            content = {
+                AppBox(
                     Modifier
 //                        .padding(padding)
                         .clip(RoundedCornerShape(roundedCornerAnim))
@@ -161,7 +193,6 @@ fun JobDetailScreen(
                             rememberSharedContentState(
                                 key = SharedElementKey(
                                     jobId = jobId,
-                                    origin = "origin",
                                     type = SharedElementType.Bounds
                                 )
                             ),
@@ -206,12 +237,17 @@ fun <T> nonSpatialExpressiveSpring() = spring<T>(
     stiffness = 1600f
 )
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Preview
 @Composable
 fun JobDetailPreview() {
     AppPreviewWrapper {
-        Box(it) {
-            Text("JobDetailScreen")
-        }
+       SharedTransitionLayout {
+           AnimatedVisibility(true) {
+               JobDetailScreen1(this,
+                   jobList[0], {}, {})
+           }
+       }
+
     }
 }

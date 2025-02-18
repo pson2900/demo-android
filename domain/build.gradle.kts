@@ -45,9 +45,10 @@ dependencies {
     implementation(libs.kotlinx.datetime)
 
     // Mark: Testing
+    testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
-//    androidTestImplementation(libs.androidx.runner)
-//    androidTestImplementation(libs.androidx.rules)
+//    androidTestImplementation(libs.android.test.core.ktx)
+//    androidTestImplementation(libs.android.test.junit.ktx)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.espresso.contrib)
 }

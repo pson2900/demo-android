@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.IntSize
 
 data class SharedElementKey(
     val jobId: Int,
-    val origin: String,
     val type: SharedElementType
 )
 
@@ -42,6 +41,7 @@ enum class SharedElementType {
 
 object FilterSharedElementKey
 
+var durationChange = 500
 
 fun getEnterTransition(initialSize: IntSize, targetSize: IntSize): EnterTransition {
     var enterTransition: EnterTransition = fadeIn(animationSpec = tween(300))
