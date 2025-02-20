@@ -4,20 +4,15 @@ import android.content.res.Configuration
 import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
@@ -30,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
@@ -52,7 +46,10 @@ import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppTopBar
 import com.example.demo_structure.core.component.otp.PassCodeTextField
+import com.example.demo_structure.util.extension.isJsonObjectRegex
+import com.example.domain.model.UserProfile
 import kotlinx.coroutines.delay
+import org.json.JSONObject
 
 /**
  * Created by Phạm Sơn at 15:17/3/1/25
@@ -67,7 +64,6 @@ import kotlinx.coroutines.delay
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 @Composable
 internal fun LoginScreen(
-    modifier: Modifier = Modifier,
     viewModel: LoginViewModel = viewModel(),
     email: String,
     onNavigateForgotPasswordOtp: (String) -> Unit,
@@ -87,13 +83,22 @@ internal fun LoginScreen(
                 errorMessage = ""
                 isLoading = false
                 viewModel.saveAuth(state.data)
-               // Toast.makeText(context, "login success", Toast.LENGTH_SHORT).show()
+                viewModel.saveUserInfo(UserProfile(email = email, fullName = "Tung Be De"))
+                // Toast.makeText(context, "login success", Toast.LENGTH_SHORT).show()
                 delay(500)
                 onNavigateHomeScreen.invoke()
             }
 
             is UIState.Error -> {
-                errorMessage = "Mã không đúng. Thử lại nhé!"
+                val error =  state.appException.message
+                error?.let {
+                    if(isJsonObjectRegex(it)) {
+                        val json = JSONObject(it)
+                        errorMessage = json.getString("message") ?: ""
+                    }else{
+                        errorMessage = it
+                    }
+                }
                 isLoading = false
             }
 
@@ -102,7 +107,7 @@ internal fun LoginScreen(
     }
 
     AppScaffold(
-        modifier = modifier.background(Color.White),
+        modifier = Modifier,
         topBar = {
             AppTopBar(modifier = Modifier.padding(start = 8.dp, end = 8.dp),
                 title = { Text("") },
@@ -110,7 +115,7 @@ internal fun LoginScreen(
                     AppBarIcon(
                         contentDescription = null,
                         modifier = Modifier.size(24.dp),
-                        imageResource = R.drawable.ic_arrow_left,
+                        imageResource = R.drawable.ic_arrow,
                         clickable = {
                             onBack.invoke()
                         }
@@ -120,20 +125,19 @@ internal fun LoginScreen(
         snackBarHostState = rememberHostState,
         backgroundColor = ProductXTheme.colorScheme.background_1,
     ) {
-        Column(Modifier.padding(it).fillMaxSize()) {
-
-            LoginContent(
-                modifier = modifier,
-                isLoading = isLoading,
-                errorMessage = errorMessage,
-                onChangeError = { errorMessage = "" },
-                onLogin = {
-                    viewModel.login(email, it)
-                }, onForgotPassword = {
-                    onNavigateForgotPasswordOtp(email)
-                }
-            )
-        }
+        LoginContent(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize(),
+            isLoading = isLoading,
+            errorMessage = errorMessage,
+            onChangeError = { errorMessage = "" },
+            onLogin = {
+                viewModel.login(email, it)
+            }, onForgotPassword = {
+                onNavigateForgotPasswordOtp(email)
+            }
+        )
     }
 }
 
@@ -152,10 +156,6 @@ fun LoginContent(
 
     ConstraintLayout(
         modifier = modifier
-            .fillMaxHeight()
-            .statusBarsPadding()
-            .navigationBarsPadding()
-            .imePadding() // Add imePadding here
     ) {
         val (logo, textView, passCodeTextField, columnBottom, loadingView) = createRefs()
         Image(
@@ -240,7 +240,7 @@ fun ColumnScope.ForgotPasswordText(onClick: () -> Unit) {
             .clickable {
                 onClick.invoke()
             }
-            .padding(vertical = 16.dp), // Add padding for better touch target
+            .padding(20.dp), // Add padding for better touch target
         style = TextStyle(
             color = colorResource(R.color.violets_are_blue),
             fontSize = 16.sp
@@ -253,7 +253,8 @@ fun ColumnScope.ForgotPasswordText(onClick: () -> Unit) {
 @Composable
 fun LoginPreview() {
     AppPreviewWrapper { modifier ->
-        LoginContent(modifier, isLoading = true,
+        LoginContent(modifier
+            .fillMaxSize(), isLoading = true,
             errorMessage = "demo error",
             onChangeError = {},
             onLogin = {

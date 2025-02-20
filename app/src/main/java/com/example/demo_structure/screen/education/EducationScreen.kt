@@ -56,7 +56,6 @@ fun EducationScreen(viewModel: EducationViewModel, onNavigateToVerifyEmail: () -
             setLogin(false)
             viewModel.logout()
         }
-
     }
 }
 

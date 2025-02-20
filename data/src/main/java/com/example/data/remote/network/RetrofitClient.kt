@@ -14,27 +14,17 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class RetrofitClient {
-    constructor()
 
-    private lateinit var dataStoreManager: DataStoreManager
-    private var isInterceptor: Boolean? = false
-
-    constructor(
-        dataStoreManager: DataStoreManager,
-        isInterceptor: Boolean? = false
-    ) {
-        this.dataStoreManager = dataStoreManager
-        this.isInterceptor = isInterceptor
-    }
+class RetrofitClient(
+    val dataStoreManager: DataStoreManager,
+    val isInterceptor: Boolean? = false
+) {
 
     private val BASE_URL = "https://api.xstaging.navigosgroup.site/"
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
-//    private val headerInterceptor = HeaderInterceptor(dataStoreManager)
-//    private var authInterceptor = AuthInterceptor(dataStoreManager)
 
     private val okHttpClient: OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
@@ -42,8 +32,8 @@ class RetrofitClient {
         .writeTimeout(30, TimeUnit.SECONDS)
         .apply {
             if (isInterceptor == true) {
-//                addInterceptor(headerInterceptor)
-//                addInterceptor(authInterceptor)
+                addInterceptor(HeaderInterceptor(dataStoreManager))
+                addInterceptor(AuthInterceptor(dataStoreManager))
             }
             addInterceptor(loggingInterceptor)
         }

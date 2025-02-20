@@ -23,8 +23,10 @@ data class UserProfile(
     var lastCompany: String? = null,
     var newGraduate: Boolean? = false,
     var currentSalary: Int? = 0,
-    var currentIndustries: MutableList<Int>? = mutableListOf()
+    var currentIndustries: MutableList<Int>? = mutableListOf(),
+    var email: String?= null
 )  {
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

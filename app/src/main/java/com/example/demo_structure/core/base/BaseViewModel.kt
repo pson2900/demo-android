@@ -13,18 +13,25 @@ import androidx.compose.ui.util.trace
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.data.proto.DataStoreManager
 import com.example.data.remote.AppException
 import com.example.data.remote.ErrorMapper
 import com.example.data.remote.UIState
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppLoadingWheel
+import com.example.domain.model.Authentication
 import com.google.gson.Gson
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import okhttp3.internal.wait
 import kotlin.coroutines.cancellation.CancellationException
 
 /**
@@ -33,6 +40,7 @@ import kotlin.coroutines.cancellation.CancellationException
  * Email: son.pham@navigosgroup.com
  */
 abstract class BaseViewModel(val savedStateHandle: SavedStateHandle) : ViewModel() {
+
     inline fun <reified T> saveToSavedState(key: String, value: T) {
         savedStateHandle[key] = Gson().toJson(value)
     }
@@ -80,6 +88,7 @@ abstract class BaseViewModel(val savedStateHandle: SavedStateHandle) : ViewModel
                         }
                     }
                     .catch {
+                        it
                         if (it is CancellationException) {
                             Log.d(tag, "API call canceled for dataKey: $dataKey in outer try-catch")
                         } else {

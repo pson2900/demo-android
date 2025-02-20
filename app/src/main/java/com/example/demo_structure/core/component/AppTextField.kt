@@ -58,31 +58,38 @@ fun AppTextField(
     hint: String,
     value: String,
     onValueChange: (String) -> Unit,
-    onDone:()-> Unit,
+    onDone: () -> Unit,
     onClose: () -> Unit,
     isSuccess: Boolean = false,
     error: String? = null
 ) {
     var isFocused by remember { mutableStateOf(false) }
 
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(modifier = modifier
+        .fillMaxWidth()) {
+        var labelColor =  when{
+            value.isEmpty() && !isFocused -> R.color.cod_gray
+            else ->  R.color.boulder
+        }
+
+        val labelPadding = if(value.isEmpty() && !isFocused) 0.dp else 4.dp
         TextField(
             value = value,
             onValueChange = onValueChange,
             label = {
                 Text(
-                    modifier = Modifier.padding(top =  4.dp),
+                    modifier = Modifier.padding(top = labelPadding),
                     style = TextStyle(
                         fontSize = 14.sp
                     ),
                     text = hint,
-                    color = Color.Gray
+                    color = colorResource(labelColor)
                 )
             },
             textStyle = TextStyle(fontSize = 16.sp),
             colors = TextFieldDefaults.colors(
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Gray,
+                focusedTextColor = colorResource(R.color.cod_gray),
+                unfocusedTextColor = colorResource(R.color.cod_gray),
                 disabledTextColor = Color.LightGray,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
@@ -100,9 +107,9 @@ fun AppTextField(
                 .border(
                     width = if (isFocused) 2.dp else 1.dp,
                     color = when {
-                        !error.isNullOrEmpty() -> Color.Red
+                        !error.isNullOrEmpty() -> colorResource(R.color.alizarin_crimson)
                         isFocused -> colorResource(R.color.portage)
-                        else -> Color.Gray
+                        else -> colorResource(R.color.alto)
                     },
                     shape = RoundedCornerShape(12.dp)
                 )
@@ -123,7 +130,9 @@ fun AppTextField(
                                 R.drawable.ic_close
                             ),
                             contentDescription = "Close",
-                            tint = if (isSuccess) Color.Green else Color.Gray
+                            tint = if (isSuccess) colorResource(R.color.mountain_meadow) else colorResource(
+                                R.color.boulder
+                            )
                         )
                     }
                 }
@@ -150,15 +159,15 @@ fun AppTextField(
                     modifier = Modifier
                         .width(16.dp)
                         .height(16.dp),
-                    painter = painterResource(id = R.drawable.ic_error),
+                    painter = painterResource(id = R.drawable.ic_email_error),
                     contentDescription = "Error",
                     tint = Color.Red
                 )
                 Text(
                     text = error,
-                    color = Color.Red,
+                    color = colorResource(R.color.alizarin_crimson),
                     style = TextStyle(
-                        fontSize = 12.sp
+                        fontSize = 16.sp
                     ),
                     modifier = Modifier.padding(start = 4.dp)
                 )

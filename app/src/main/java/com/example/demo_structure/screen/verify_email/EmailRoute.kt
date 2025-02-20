@@ -9,6 +9,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.Destinations
+import com.example.demo_structure.screen.create_pin.PinArguments
+import com.example.demo_structure.screen.otp.OTPType
 import org.koin.androidx.compose.koinViewModel
 
 

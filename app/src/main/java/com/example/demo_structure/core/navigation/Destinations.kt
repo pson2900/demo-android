@@ -112,4 +112,6 @@ sealed class Destinations(val route: String) {
             return "create_pin/$pinJson"
         }
     }
+
+    object Onboarding : Destinations(route = "onboarding")
 }

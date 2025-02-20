@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ContentAlpha
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Icon
@@ -142,7 +141,7 @@ fun JobImage(image: Painter?) {
         .clip(CircleShape)
 
     Surface(
-        color = Color(0xff4fbe7c).copy(alpha = ContentAlpha.medium), //Set green backgroud to the view
+        color = Color(0xff4fbe7c).copy(alpha = 0.74f), //Set green backgroud to the view
         modifier = Modifier.size(36.dp).padding(16.dp), // Adjust for desired size
         shape = RoundedCornerShape(30),
 

@@ -43,7 +43,7 @@ fun CountdownTextView(modifier: Modifier,
         onCountdownFinished()
     }
 
-    Text(modifier = modifier, style = style, text = "$value (${formatTime(remainingTime)})")
+    Text(modifier = modifier, style = style, text = "$value (${formatTime(remainingTime)}s)")
 }
 
 //fun formatTime(totalSeconds: Int): String {

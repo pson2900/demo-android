@@ -1,8 +1,7 @@
 package com.example.demo_structure.app.manager.theme
 
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.Image
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -98,7 +97,7 @@ object AppIcons {
     val referenceIcon = R.drawable.ic_reference
     val hobbyIcon = R.drawable.ic_hobby
 
-    val arrowLeft = R.drawable.ic_arrow_left
+    val arrowLeft = R.drawable.ic_arrow
     val searchIcon = R.drawable.ic_search
     val avatarLogo = R.drawable.company_logo
     val share = R.drawable.ic_share

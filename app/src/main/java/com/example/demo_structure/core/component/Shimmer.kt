@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.demo_structure.app.manager.theme.hexToColor
 
 /**
  * Created by Phạm Sơn at 17:24/20/2/25
@@ -88,12 +89,12 @@ fun Modifier.shimmerEffect(): Modifier = composed {
 
     val brush = Brush.linearGradient(
         colors = listOf(
-            Color.LightGray.copy(alpha = 0.9f),
-            Color.LightGray.copy(alpha = 0.2f),
-            Color.LightGray.copy(alpha = 0.9f)
+            hexToColor("#E2E8F0"),
+            hexToColor("#CDD6E2"),
+            hexToColor("#E2E8F0"),
         ),
-        start = Offset(200f, 200f),
-        end = Offset(translateAnim.value, translateAnim.value)
+        start = Offset(0f, 0f),
+        end = Offset(translateAnim.value, 0f)
     )
 
     background(brush = brush)

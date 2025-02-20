@@ -1,4 +1,6 @@
 package com.example.domain.model
 
-data class SendOtp(val isSuccess: Boolean) {
+import android.os.Message
+
+data class SendOtp(val isSuccess: Boolean, val message: String) {
 }

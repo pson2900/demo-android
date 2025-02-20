@@ -18,5 +18,5 @@ val domainModule = module {
     factory<HomeUseCase> { HomeUseCase(get()) }
     factory<MyProfileUseCase> { MyProfileUseCase(get<MyProfileRepository>()) }
     factory<VersionUseCase> { VersionUseCase(get()) }
-    factory<AuthUseCase> { AuthUseCase(get()) }
+    factory<AuthUseCase>{ AuthUseCase(get()) }
 }

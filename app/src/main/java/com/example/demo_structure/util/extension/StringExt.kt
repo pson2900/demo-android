@@ -39,3 +39,8 @@ fun String.truncate(maxLength: Int = 25): String {
         this
     }
 }
+
+fun isJsonObjectRegex(text: String): Boolean {
+    val jsonRegex = Regex("""^\{.*\}$""")
+    return jsonRegex.matches(text.trim())
+}

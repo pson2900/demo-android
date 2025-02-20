@@ -184,8 +184,8 @@ dependencies {
 
     // Accompanist Navigation Material (cho ContainerTransform với Navigation)
     implementation(libs.accompanist.navigation.material)
-
-
-
-
+    //Gson
+    implementation("com.google.code.gson:gson:2.12.1")
+    //
+    implementation("com.posthog:posthog-android:3.11.2")
 }

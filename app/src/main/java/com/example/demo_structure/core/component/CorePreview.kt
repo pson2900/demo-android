@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.ContentAlpha
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
@@ -25,7 +24,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
@@ -87,7 +85,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -182,11 +179,11 @@ fun ThemedSearchBar() {
         },
         colors = SearchBarDefaults.colors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
-/*            contentColor = MaterialTheme.colorScheme.onSurface,
-            placeholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            leadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            trailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            navigationIconColor = MaterialTheme.colorScheme.onSurfaceVariant */
+            /*            contentColor = MaterialTheme.colorScheme.onSurface,
+                        placeholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        leadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        trailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        navigationIconColor = MaterialTheme.colorScheme.onSurfaceVariant */
         )
     ) {
         // Nội dung hiển thị khi SearchBar ở trạng thái "active" (ví dụ: gợi ý tìm kiếm)
@@ -274,7 +271,7 @@ fun ComponentShowcase() {
                             containerColor = MaterialTheme.colorScheme.primary,
                             contentColor = MaterialTheme.colorScheme.onPrimary,
                             disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                            disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled)
+                            disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0f)
                         ),
                         enabled = true
                     ) {
@@ -284,16 +281,17 @@ fun ComponentShowcase() {
                         onClick = { },
                         colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled)
+                            disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0f)
                         ),
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
                     ) {
                         Text("Outlined Button")
                     }
-                    TextButton(onClick = {  },
+                    TextButton(
+                        onClick = { },
                         colors = ButtonDefaults.textButtonColors(
                             contentColor = MaterialTheme.colorScheme.primary,
-                            disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled)
+                            disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0f)
                         )
                     ) {
                         Text("Text Button")
@@ -310,19 +308,19 @@ fun ComponentShowcase() {
                         colors = TextFieldDefaults.colors(
                             focusedTextColor = MaterialTheme.colorScheme.onSurface,
                             unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            disabledTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled),
+                            disabledTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0f),
                             focusedContainerColor = MaterialTheme.colorScheme.surface,
                             unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                            disabledContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = ContentAlpha.disabled),
+                            disabledContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0f),
                             cursorColor = MaterialTheme.colorScheme.primary,
                             errorIndicatorColor = MaterialTheme.colorScheme.error,
                             errorTextColor = MaterialTheme.colorScheme.onErrorContainer,
                             errorContainerColor = MaterialTheme.colorScheme.errorContainer,
                             disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            disabledIndicatorColor = MaterialTheme.colorScheme.outline.copy(alpha = ContentAlpha.disabled),
+                            disabledIndicatorColor = MaterialTheme.colorScheme.outline.copy(alpha = 0f),
                             focusedLabelColor = MaterialTheme.colorScheme.primary,
                             unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = ContentAlpha.disabled)
+                            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0f)
                         ),
                         leadingIcon = {
                             Icon(
@@ -342,17 +340,17 @@ fun ComponentShowcase() {
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedTextColor = MaterialTheme.colorScheme.onSurface,
                             unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            disabledTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled),
+                            disabledTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0f),
                             focusedBorderColor = MaterialTheme.colorScheme.primary,
                             unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                            disabledBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = ContentAlpha.disabled),
+                            disabledBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0f),
                             cursorColor = MaterialTheme.colorScheme.primary,
                             disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
                             errorTextColor = MaterialTheme.colorScheme.onErrorContainer,
                             errorContainerColor = MaterialTheme.colorScheme.errorContainer,
                             focusedLabelColor = MaterialTheme.colorScheme.primary,
                             unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = ContentAlpha.disabled),
+                            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0f),
                         ),
                         leadingIcon = {
                             Icon(
@@ -392,7 +390,7 @@ fun ComponentShowcase() {
                                 checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
                                 uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
                                 uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
-                                disabledCheckedThumbColor = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled),
+                                disabledCheckedThumbColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0f),
                                 disabledCheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
                                 disabledUncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
                                 disabledUncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
@@ -413,8 +411,8 @@ fun ComponentShowcase() {
                                 checkedColor = MaterialTheme.colorScheme.primary,
                                 uncheckedColor = MaterialTheme.colorScheme.onSurfaceVariant,
                                 checkmarkColor = MaterialTheme.colorScheme.onPrimary,
-                                disabledCheckedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled),
-                                disabledUncheckedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled)
+                                disabledCheckedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0f),
+                                disabledUncheckedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0f)
                             )
                         )
                     }
@@ -430,8 +428,8 @@ fun ComponentShowcase() {
                             colors = RadioButtonDefaults.colors(
                                 selectedColor = MaterialTheme.colorScheme.primary,
                                 unselectedColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                disabledSelectedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled),
-                                disabledUnselectedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.disabled)
+                                disabledSelectedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0f),
+                                disabledUnselectedColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0f)
                             )
                         )
                     }
@@ -496,9 +494,9 @@ fun ComponentShowcase() {
                             trailingIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant
 
                         ),
-                       /* border = AssistChipDefaults.assistChipBorder(
-                            borderColor = MaterialTheme.colorScheme.outline
-                        ),*/
+                        /* border = AssistChipDefaults.assistChipBorder(
+                             borderColor = MaterialTheme.colorScheme.outline
+                         ),*/
                         trailingIcon = {
                             Icon(
                                 imageVector = Icons.Filled.Close,
@@ -536,9 +534,9 @@ fun ComponentShowcase() {
                             labelColor = MaterialTheme.colorScheme.onSurface,
                             iconContentColor = MaterialTheme.colorScheme.onSurface
                         ),
-                       /* border = SuggestionChipDefaults.suggestionChipBorder(
-                            borderColor = MaterialTheme.colorScheme.outline
-                        ),*/
+                        /* border = SuggestionChipDefaults.suggestionChipBorder(
+                             borderColor = MaterialTheme.colorScheme.outline
+                         ),*/
                         icon = {
                             Icon(
                                 imageVector = Icons.Filled.Star,
@@ -560,10 +558,10 @@ fun ComponentShowcase() {
                             selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
 //                            selectedLeadingIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                         ),
-                      /*  border = FilterChipDefaults.filterChipBorder(
-                            borderColor = MaterialTheme.colorScheme.outline,
-                            selectedBorderColor = MaterialTheme.colorScheme.primary,
-                        ),*/
+                        /*  border = FilterChipDefaults.filterChipBorder(
+                              borderColor = MaterialTheme.colorScheme.outline,
+                              selectedBorderColor = MaterialTheme.colorScheme.primary,
+                          ),*/
                         leadingIcon = {
                             if (isSelected) {
                                 Icon(
@@ -587,14 +585,14 @@ fun ComponentShowcase() {
                             trailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
 //                            elevation = null,
                             disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = ContentAlpha.disabled),
-                            disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = ContentAlpha.disabled)
+                            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0f),
+                            disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0f)
                         ),
-                       /* border = InputChipDefaults.inputChipBorder(
-                            borderColor = MaterialTheme.colorScheme.outline,
-                            disabledBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = ContentAlpha.disabled),
-                            borderWidth = 1.dp,
-                        ),*/
+                        /* border = InputChipDefaults.inputChipBorder(
+                             borderColor = MaterialTheme.colorScheme.outline,
+                             disabledBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = ContentAlpha.disabled),
+                             borderWidth = 1.dp,
+                         ),*/
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Filled.Close,
@@ -646,16 +644,20 @@ fun ComponentShowcase() {
                 title = { Text("Alert Dialog", color = MaterialTheme.colorScheme.onSurface) },
                 text = { Text("This is an example alert dialog.", color = MaterialTheme.colorScheme.onSurface) },
                 confirmButton = {
-                    TextButton(onClick = { showDialog = false }, colors = ButtonDefaults.textButtonColors(
-                        contentColor = MaterialTheme.colorScheme.primary,
-                    )) {
+                    TextButton(
+                        onClick = { showDialog = false }, colors = ButtonDefaults.textButtonColors(
+                            contentColor = MaterialTheme.colorScheme.primary,
+                        )
+                    ) {
                         Text("Confirm")
                     }
                 },
                 dismissButton = {
-                    TextButton(onClick = { showDialog = false }, colors = ButtonDefaults.textButtonColors(
-                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                    )) {
+                    TextButton(
+                        onClick = { showDialog = false }, colors = ButtonDefaults.textButtonColors(
+                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    ) {
                         Text("Dismiss")
                     }
                 },

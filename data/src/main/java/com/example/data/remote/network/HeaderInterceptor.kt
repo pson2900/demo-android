@@ -12,10 +12,8 @@ class HeaderInterceptor(private val dataStoreManager: DataStoreManager) : Interc
         val token: String = runBlocking {
             try {
                 val token = dataStoreManager.getAuth().first()?.getBearerToken() ?: ""
-                Log.e("Sang", "getting auth token: $token")
                 token
             } catch (e: Exception) {
-                Log.e("Sang", "Error getting auth token: ${e.message}")
                 ""
             }
         }

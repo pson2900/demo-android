@@ -10,13 +10,20 @@ import com.example.domain.model.Authentication
 import com.example.domain.model.UserProfile
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 class DataStoreManager(private val context: Context) {
     private val USER_INFO_KEY = stringPreferencesKey("user_info")
     private val AUTH_KEY = stringPreferencesKey("navigos_auth_key")
 
+    fun isLogin(): Boolean = runBlocking {
+        val auth = getAuth().firstOrNull()
+        auth != null
+    }
 
     private val Context.preferencesDataStore: DataStore<Preferences> by preferencesDataStore(
         name = "user_preferences"

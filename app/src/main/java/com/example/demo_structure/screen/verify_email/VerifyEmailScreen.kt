@@ -63,6 +63,7 @@ import com.example.demo_structure.core.component.AppTextField
 import com.example.demo_structure.screen.home.LoadingState
 import com.example.demo_structure.screen.otp.OTPType
 import com.example.demo_structure.util.extension.buildClickableText
+import com.example.demo_structure.util.extension.findActivity
 import com.example.demo_structure.util.extension.hideKeyboardAndClearFocus
 
 
@@ -89,7 +90,7 @@ private fun VerifyEmailPreview() {
 @Composable
 fun VerifyEmailScreen(
     modifier: Modifier = Modifier,
-    viewModel: VerifyEmailViewModel = viewModel(),
+    viewModel: VerifyEmailViewModel,
     onNavigateToVerifyOtp: (String, String) -> Unit,
     onNavigateToLogin: (String) -> Unit
 ) {
@@ -113,13 +114,9 @@ fun VerifyEmailScreen(
     val intent =
         remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://www.vietnamworks.com/quy-dinh-bao-mat?utm_source_navi=footer")) }
 
-    fun isValidEmail(email: String): Boolean {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
 
     fun verifyEmail() {
-        emailError =
-            if (email.isEmpty() || !isValidEmail(email)) "Vui lòng nhập địa chỉ email hợp lệ" else ""
+        emailError = if (email.isEmpty() || !viewModel.authUseCase.isValidEmail(email)) "Vui lòng nhập địa chỉ email hợp lệ" else ""
         if (emailError.isEmpty()) {
             viewModel.verifyEmail(email)
         }
@@ -128,7 +125,7 @@ fun VerifyEmailScreen(
     fun onEmailChange(newEmail: String) {
         email = newEmail
         emailError = ""
-        isSuccess = newEmail.isNotEmpty() && isValidEmail(newEmail)
+        isSuccess = newEmail.isNotEmpty() && viewModel.authUseCase.isValidEmail(newEmail)
     }
 
     fun onCheckboxChange(newChecked: Boolean) {
@@ -144,7 +141,7 @@ fun VerifyEmailScreen(
     }
 
     BackHandler(enabled = true) {
-        //block back verify email
+        context.findActivity()?.finish()
     }
 
     DisposableEffect(lifecycleOwner) {
