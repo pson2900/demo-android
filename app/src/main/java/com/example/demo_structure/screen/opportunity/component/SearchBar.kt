@@ -1,6 +1,5 @@
 package com.example.demo_structure.screen.opportunity.component
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +17,8 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
@@ -36,11 +37,13 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.app.manager.theme.AppIcons
-import com.example.demo_structure.app.manager.theme.Generate
+import com.example.demo_structure.app.manager.theme.GenerateImage
 import com.example.demo_structure.app.manager.theme.ProductXTheme
 import com.example.demo_structure.core.component.AppBoxForce
 import com.example.demo_structure.core.component.AppPreviewWrapper
@@ -52,8 +55,7 @@ import com.example.demo_structure.core.component.AppScaffold
  * Email: son.pham@navigosgroup.com
  */
 @Composable
-fun SearchBarSection(focusRequester: FocusRequester, onTextChange: (String) -> Unit, onSearch: () -> Unit, onFocusContainer: (Boolean) -> Unit, isSuggestion: (Boolean) -> Unit) {
-
+fun SearchBarSection(focusRequester: FocusRequester, onTextChange: (String) -> Unit, onSearch: (String) -> Unit, onFocusContainer: (Boolean) -> Unit) {
     Column(
         modifier = Modifier
             .background(Color.White),
@@ -62,12 +64,12 @@ fun SearchBarSection(focusRequester: FocusRequester, onTextChange: (String) -> U
     ) {
         Row(
             modifier = Modifier
-                .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
+                .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 12.dp)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            AppIcons.arrowLeft.Generate(
+            AppIcons.arrowLeft.GenerateImage(
                 modifier = Modifier
                     .size(32.dp)
                     .padding(8.dp)
@@ -78,38 +80,29 @@ fun SearchBarSection(focusRequester: FocusRequester, onTextChange: (String) -> U
             )
 
             AppBoxForce(
-                backgroundColor = Color.White
-            ) { isFocus, isFocusContainer ->
-                SearchBar(
-                    focusRequester = focusRequester,
-                    onTextChange = {
-                        onTextChange.invoke(it)
-                        Log.d("QQQ", "Text change: $it")
-                        if (it.isEmpty()) {
-//                            isFilter.invoke(false)
-//                            isSuggestion.invoke(true)
-                        } else {
-//                            isFilter.invoke(true)
-//                            isSuggestion.invoke(false)
-                        }
-                    },
-                    isFocus = isFocus,
-                    isFocusContainer = isFocusContainer
-                )
-                onFocusContainer.invoke(isFocus)
-            }
-
+                backgroundColor = Color.White,
+                content = { isFocusTextField, isFocusContainer ->
+                    SearchBar(
+                        focusRequester = focusRequester,
+                        onTextChange = {
+                            onTextChange.invoke(it)
+                        },
+                        isFocus = isFocusTextField,
+                        isFocusContainer = isFocusContainer,
+                        onSearch = onSearch
+                    )
+                    onFocusContainer.invoke(isFocusTextField)
+                })
         }
     }
 }
 
 @Composable
-fun SearchBar(focusRequester: FocusRequester, onTextChange: (String) -> Unit, isFocus: Boolean, isFocusContainer: (Boolean) -> Unit) {
+fun SearchBar(focusRequester: FocusRequester, isFocus: Boolean, onTextChange: (String) -> Unit, onSearch: (String) -> Unit, isFocusContainer: (Boolean) -> Unit) {
     var getText by remember { mutableStateOf(TextFieldValue("")) }
     LaunchedEffect(isFocus) {
         if (isFocus) {
             focusRequester.requestFocus()
-
         }
     }
 
@@ -159,8 +152,18 @@ fun SearchBar(focusRequester: FocusRequester, onTextChange: (String) -> Unit, is
                     ) {
                         innerTextField()
                     }
+                },
+                keyboardActions = KeyboardActions(
+                    onSearch = {
+                        onSearch(getText.text)
+                    }
+                ),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Search,
+                )
 
-                })
+            )
         }
 
         Box(
@@ -181,7 +184,6 @@ fun SearchBar(focusRequester: FocusRequester, onTextChange: (String) -> Unit, is
             )
         }
     }
-
 }
 
 @Composable
@@ -201,8 +203,7 @@ fun SearchBarSectionPreview() {
                 focusRequester = FocusRequester(),
                 onTextChange = {},
                 onSearch = {},
-                onFocusContainer = {},
-                isSuggestion = {}
+                onFocusContainer = {}
             )
         }
     }

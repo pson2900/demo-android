@@ -1,11 +1,14 @@
 package com.example.demo_structure.app.manager.theme
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.Image
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.vectorResource
@@ -42,6 +45,29 @@ fun ToImage(
 
 }
 
+@Composable
+fun ToIcon(
+    modifier: Modifier = Modifier,
+    imageResource: Int,
+    color: Color? = null,
+) {
+    if (color != null) {
+        return Icon(
+            modifier = modifier.testTag("ToImage:$imageResource"),
+            imageVector = ImageVector.vectorResource(imageResource),
+            contentDescription = imageResource.toString(),
+            tint = color
+        )
+    } else {
+
+        Icon(
+            modifier = modifier.testTag("ToImage:$imageResource"),
+            painter = rememberVectorPainter(ImageVector.vectorResource(imageResource)),
+            contentDescription = imageResource.toString(),
+        )
+    }
+
+}
 
 object AppIcons {
     // Navigation Icons
@@ -79,6 +105,8 @@ object AppIcons {
     val bookMark = R.drawable.ic_bookmark
     val location = R.drawable.ic_location
     val salary = R.drawable.ic_salary
+    val expand = R.drawable.ic_expand
+    val sort = R.drawable.ic_sort
 
     val bookMark_gray = R.drawable.ic_bookmark_gray
     val JobDetailLocation = R.drawable.ic_location_gray
@@ -93,6 +121,11 @@ object AppIcons {
 }
 
 @Composable
-fun Int.Generate(modifier: Modifier = Modifier, color: Color? = null) {
+fun Int.GenerateImage(modifier: Modifier = Modifier, color: Color? = null) {
     ToImage(modifier = modifier, imageResource = this, color = color)
+}
+
+@Composable
+fun Int.GenerateIcon(modifier: Modifier = Modifier, color: Color? = null) {
+    ToIcon(modifier = modifier, imageResource = this, color = color)
 }

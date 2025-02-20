@@ -1,5 +1,6 @@
 package com.example.demo_structure.screen.opportunity
 
+import android.util.Log
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
@@ -21,6 +22,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -46,6 +48,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.trace
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.Pager
@@ -65,9 +68,9 @@ import com.example.demo_structure.core.navigation.rememberAppState
 import com.example.demo_structure.jobList
 import com.example.demo_structure.screen.opportunity.component.FilterSection
 import com.example.demo_structure.screen.opportunity.component.JobItemSection
+import com.example.demo_structure.screen.opportunity.component.RecentSearchSection
 import com.example.demo_structure.screen.opportunity.component.SearchBarSection
-import com.example.demo_structure.screen.opportunity.component.SuggestionSection
-import com.example.demo_structure.util.AnimatedVisibilitySlide
+import com.example.demo_structure.util.AnimatedVisibilityContent
 import com.example.domain.model.JobDetail
 import kotlinx.coroutines.flow.Flow
 
@@ -95,75 +98,54 @@ fun OpportunityScreen(viewModel: OpportunityViewModel, onJobClick: (JobDetail) -
             onSearchWithCV = viewModel::onSearchWithCV,
             onJobClick = onJobClick
         )
-
-        /* NavHost(
-             navController = navController,
-             startDestination = "list"
-         ) {
-             composable("list") {
-                 JobList(
-                     animatedVisibilityScope = this,
-                     lazyPagingItems = lazyItem,
-                     selectedJob = null,
-                     onJobClick = {
-                         val jobDetailJson = Uri.encode(Gson().toJson(it))
-                         navController.navigate("detail/${jobDetailJson}")
-                     },
-                     onBackClick = {
-
-                     })
-             }
-             composable(
-                 route = "detail/{jobDetail}",
-                 arguments = listOf(
-                     navArgument("jobDetail") {
-                         type = NavType.StringType
-                     },
-                 )
-             ) { navBackStackEntry ->
-                 val arguments = requireNotNull(navBackStackEntry.arguments)
-                 val jobDetailJson = arguments.getString("jobDetail")
-                 val jobDetail = remember { Gson().fromJson(jobDetailJson, JobDetail::class.java) }
-                 jobDetail?.let { job ->
-                     JobDetailScreen1(
-                         animatedVisibilityScope = this,
-                         job = job,
-                         onBackClick = {
-                         })
-                 }
-             }
-         }*/
     }
-    /* OpportunityContent(
-         animatedVisibilityScope = animationContentScope,
-         lazyItem = lazyItem,
-         onBackClick = appState::upPress,
-         onTextChange = viewModel::onTextChange,
-         onSearch = viewModel::onSearch,
-         onSearchWithCV = viewModel::onSearchWithCV,
-         onJobClick = onJobClick
-     )*/
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun OpportunityContent(
     lazyItem: LazyPagingItems<JobDetail>,
     onBackClick: () -> Unit,
     onTextChange: (String) -> Unit,
-    onSearch: () -> Unit,
+    onSearch: (String) -> Unit,
     onSearchWithCV: () -> Unit,
     onJobClick: (JobDetail) -> Unit,
     isFilter: Boolean = false,
-    isSuggestion: Boolean = false,
-    animatedVisibilityScope: AnimatedVisibilityScope
+    isFocus: Boolean = false,
+    animatedVisibilityScope: AnimatedVisibilityScope,
 ) {
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
-    var visibilityFilter by remember { mutableStateOf(isFilter) }
-    var visibilitySuggestion by remember { mutableStateOf(isSuggestion) }
+    val (getDetailState, setDetailState) = remember { mutableStateOf<DetailScreenState>(DetailScreenState.Default) }
+    val searchResults by remember { mutableStateOf(lazyItem) }
+    var currentText by remember { mutableStateOf("") }
+    var isFocusContainer by remember { mutableStateOf(false) }
 
-    LaunchedEffect(visibilityFilter) { }
+    LaunchedEffect(
+        currentText, getDetailState, isFocusContainer
+    ) {
+
+        when (isFocusContainer) {
+            true -> {
+                if (currentText.isEmpty()) {
+                    setDetailState(DetailScreenState.Recent)
+                } else {
+                    setDetailState(DetailScreenState.Suggestion)
+                }
+            }
+
+            false -> {
+                setDetailState(DetailScreenState.SearchResult)
+            }
+        }
+//        Log.d("QQQ", "isShowRecentSearch: $isShowRecentSearch")
+//        Log.d("QQQ", "isShowSearchResult: $isShowSearchResult")
+//        Log.d("QQQ", "isShowSuggestion: $isShowSuggestion")
+        Log.d("QQQ", "currentText: $currentText")
+        Log.d("QQQ", "detailState: $getDetailState")
+        Log.d("QQQ", "isFocusContainer: $isFocusContainer")
+    }
+
     Column(
         Modifier
             .safeDrawingPadding()
@@ -172,44 +154,55 @@ fun OpportunityContent(
                 false
             },
     ) {
-
-        SearchBarSection(
-            focusRequester = focusRequester,
-            onTextChange = {
-                onTextChange.invoke(it)
-            },
-            onSearch = onSearch,
-            onFocusContainer = { filter -> visibilitySuggestion = filter },
-            isSuggestion = { filter -> visibilityFilter = filter }
-        )
-        AnimatedVisibilitySlide(visibilityFilter) {
-            FilterSection()
-        }
-        JobResultSection(
-            animatedVisibilityScope = animatedVisibilityScope,
-            lazyItem = lazyItem,
-            onJobClick = onJobClick
-        )
-
-    }
-}
-
-
-@Composable
-fun SuggestionJobSection(visibilitySuggestion: Boolean) {
-    AnimatedVisibility(visibilitySuggestion) {
-        SuggestionSection(
-            list = listOf(
-                "Product Designer", "Product Designer 1", "Product Designer 2",
-                "Product Designer 3", "Product Designer 4", "Product Designer 5", "Product Designer 6"
+        trace("SearchBarSection") {
+            SearchBarSection(
+                focusRequester = focusRequester,
+                onTextChange = {
+                    currentText = it
+                    onTextChange.invoke(it)
+                },
+                onSearch = onSearch,
+                onFocusContainer = { isFocus ->
+                    isFocusContainer = isFocus
+                }
             )
-        )
+        }
+
+        trace("SuggestionSection") {
+            AnimatedVisibilityContent(getDetailState is DetailScreenState.Recent) {
+                RecentSearchSection(
+                    list = listOf(
+                        "Product Designer", "Product Designer 1", "Product Designer 2",
+                        "Product Designer 3", "Product Designer 4", "Product Designer 5", "Product Designer 6"
+                    )
+                )
+            }
+        }
+        trace("SearchResultSection") {
+            AnimatedVisibilityContent(getDetailState is DetailScreenState.SearchResult) {
+                Column {
+                    FilterSection()
+                    Spacer(Modifier.height(16.dp))
+                    JobResultSection(
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        lazyItem = searchResults,
+                        onJobClick = onJobClick
+                    )
+                }
+            }
+        }
+
+        trace("RecentSearchSection") {
+            AnimatedVisibilityContent(getDetailState is DetailScreenState.Suggestion) {
+                SuggestionSection()
+            }
+        }
     }
 }
 
 
 @Composable
-fun JobRecommendSection() {
+fun SuggestionSection() {
     AppBox(
         modifier = Modifier
 

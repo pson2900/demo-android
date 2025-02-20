@@ -1,6 +1,9 @@
 package com.example.demo_structure
 
 import com.example.data.remote.response.MyProfileResponse
+import com.example.demo_structure.app.manager.theme.AppIcons
+import com.example.domain.model.Filter
+import com.example.domain.model.FilterType
 import com.example.domain.model.JobDetail
 import com.google.gson.Gson
 
@@ -42,4 +45,16 @@ val myProfileData: MyProfileResponse by lazy {
     """.trimIndent()
 
     Gson().fromJson(data, MyProfileResponse::class.java)
+}
+
+val filterItems: MutableList<Filter> by lazy {
+    val items = mutableListOf<Filter>()
+    items.add(Filter(type = FilterType.Sort, icon =  AppIcons.sort))
+    items.add(Filter(type = FilterType.Job, icon =  AppIcons.expand))
+    items.add(Filter(type = FilterType.Salary, icon =  AppIcons.expand))
+    items.add(Filter(type = FilterType.Location, icon =  AppIcons.expand))
+    items.add(Filter(type = FilterType.WorkType, icon =  AppIcons.expand))
+    items.add(Filter(type = FilterType.JobType, icon =  AppIcons.expand))
+
+    items
 }

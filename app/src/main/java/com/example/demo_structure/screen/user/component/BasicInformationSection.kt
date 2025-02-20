@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.AppIcons
 import com.example.demo_structure.app.manager.theme.ProductXTheme
-import com.example.demo_structure.app.manager.theme.Generate
+import com.example.demo_structure.app.manager.theme.GenerateImage
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppText
 import com.example.domain.model.BasicInformation
@@ -144,7 +144,7 @@ internal fun BasicInformationItem(profile: Profile, onNavigateToProfile: (Profil
                 .background(colorResource(R.color.cosmic_latte), shape = RoundedCornerShape(8.dp)),
             contentAlignment = Alignment.Center
         ) {
-            icon.Generate(Modifier.size(48.dp).padding(7.dp))
+            icon.GenerateImage(Modifier.size(48.dp).padding(7.dp))
         }
         AppText(
             text = title,
@@ -166,7 +166,7 @@ internal fun BasicInformationItem(profile: Profile, onNavigateToProfile: (Profil
                     onNavigateToProfile.invoke(profile)
                 }
         ) {
-            AppIcons.arrowRightIcon.Generate(
+            AppIcons.arrowRightIcon.GenerateImage(
                 modifier = Modifier
                     .padding(end = 12.dp)
 //                    .size(16.dp)

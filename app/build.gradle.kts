@@ -153,7 +153,7 @@ dependencies {
 
     implementation(libs.androidx.material3.window.size) // Material3 Window Size Class
     implementation(libs.androidx.lifecycle.viewmodel.compose) // ViewModel for Compose
-    implementation(libs.androidx.material)
+//    implementation(libs.androidx.material)
     // Mark: Other dependencies
     implementation(libs.androidx.adaptive) // Adaptive UI for Compose
     implementation(libs.androidx.adaptive.layout)

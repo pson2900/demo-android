@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.app.manager.theme.AppIcons
-import com.example.demo_structure.app.manager.theme.Generate
+import com.example.demo_structure.app.manager.theme.GenerateImage
 
 /**
  * Created by Phạm Sơn at 17:36/14/2/25
@@ -29,7 +29,7 @@ import com.example.demo_structure.app.manager.theme.Generate
  * Email: son.pham@navigosgroup.com
  */
 @Composable
-fun SuggestionSection(list: List<String>) {
+fun RecentSearchSection(list: List<String>) {
     LazyColumn(contentPadding = PaddingValues(start = 16.dp, end = 16.dp)) {
         itemsIndexed(list) { index, item ->
             SuggestionItemSection(item, index != list.lastIndex)
@@ -42,16 +42,16 @@ internal fun SuggestionItemSection(string: String, isNotLast: Boolean) {
     Column(
         Modifier.clickable { }
     ) {
-//        Box(Modifier.height(16.dp))
-        Row(Modifier.padding(top = 16.dp, bottom = 16.dp),
-            verticalAlignment = Alignment.CenterVertically) {
-            AppIcons.searchIcon.Generate(Modifier.size(24.dp))
+        Row(
+            Modifier.padding(top = 16.dp, bottom = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            AppIcons.searchIcon.GenerateImage(Modifier.size(24.dp))
             Box(Modifier.width(8.dp))
             Text(string, modifier = Modifier.weight(1f))
         }
 
-        if (isNotLast){
-//            Box(Modifier.height(16.dp))
+        if (isNotLast) {
             Box(
                 modifier = Modifier
                     .height(1.dp)
@@ -66,7 +66,7 @@ internal fun SuggestionItemSection(string: String, isNotLast: Boolean) {
 @Composable
 @Preview
 fun SuggestionSectionPreview() {
-    SuggestionSection(
+    RecentSearchSection(
         list = listOf(
             "Product Designer", "Product Designer 1", "Product Designer 2",
             "Product Designer 3", "Product Designer 4", "Product Designer 5", "Product Designer 6"

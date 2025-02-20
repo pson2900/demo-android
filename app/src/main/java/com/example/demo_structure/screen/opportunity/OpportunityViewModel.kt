@@ -1,5 +1,12 @@
 package com.example.demo_structure.screen.opportunity
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.trace
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +15,9 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.demo_structure.ITEMS
+import com.example.demo_structure.screen.opportunity.component.FilterSection
+import com.example.demo_structure.screen.opportunity.component.RecentSearchSection
+import com.example.demo_structure.util.AnimatedVisibilityContent
 import com.example.domain.model.JobDetail
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -44,12 +54,55 @@ class OpportunityViewModel(savedStateHandle: SavedStateHandle) : ViewModel() {
         }
     }
 
-    fun onSearch(){
+    fun onSearch(text: String){
 
     }
 
     fun onSearchWithCV(){
 
+    }
+
+    @Composable
+    fun generateDetailScreen(detailState: DetailScreenState) {
+       /* val isShowSearchResult = remember { derivedStateOf { detailState is DetailScreenState.SearchResult } }
+        when(detailState){
+            is DetailScreenState.Suggestion -> {
+                trace("SuggestionSection") {
+                    AnimatedVisibilityContent(isShowSuggestion.value) {
+                        RecentSearchSection(
+                            list = listOf(
+                                "Product Designer", "Product Designer 1", "Product Designer 2",
+                                "Product Designer 3", "Product Designer 4", "Product Designer 5", "Product Designer 6"
+                            )
+                        )
+                    }
+                }
+            }
+            is DetailScreenState.SearchResult -> {
+                trace("SearchResultSection") {
+                    AnimatedVisibilityContent(isShowSearchResult.value) {
+                        Column {
+                            FilterSection()
+                            Spacer(Modifier.height(16.dp))
+                            JobResultSection(
+                                animatedVisibilityScope = animatedVisibilityScope,
+                                lazyItem = searchResults,
+                                onJobClick = onJobClick
+                            )
+                        }
+                    }
+                }
+
+            }
+            is DetailScreenState.Recent -> {
+                trace("RecentSearchSection") {
+                    AnimatedVisibilityContent(isShowRecentSearch.value) {
+                        SuggestionSection()
+                    }
+                }
+            }
+            else -> {}
+        }*/
     }
 }
 

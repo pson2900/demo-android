@@ -36,7 +36,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.AppIcons
 import com.example.demo_structure.app.manager.theme.ProductXTheme
-import com.example.demo_structure.app.manager.theme.Generate
+import com.example.demo_structure.app.manager.theme.GenerateImage
 import com.example.demo_structure.app.manager.theme.hexToColor
 import com.example.demo_structure.core.component.AppCard
 import com.example.demo_structure.core.component.AppPreviewWrapper
@@ -126,7 +126,7 @@ fun HeaderSection(title: String, avatar: String) {
                                     .weight(1.5f),
                                 contentAlignment = Alignment.Center
                             ) {
-                                AppIcons.advancementIcon.Generate(modifier = Modifier)
+                                AppIcons.advancementIcon.GenerateImage(modifier = Modifier)
                             }
 
                             Spacer(Modifier.width(12.dp))
@@ -144,7 +144,7 @@ fun HeaderSection(title: String, avatar: String) {
                                     style = ProductXTheme.typography.SemiBold.Body.Large, color = Color.Black
                                 )
                             }
-                            AppIcons.arrowRightIcon.Generate(modifier = Modifier.weight(1f))
+                            AppIcons.arrowRightIcon.GenerateImage(modifier = Modifier.weight(1f))
                         }
                     }
                 })

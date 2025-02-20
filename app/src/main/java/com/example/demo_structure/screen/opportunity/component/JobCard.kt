@@ -6,7 +6,6 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.AppIcons
-import com.example.demo_structure.app.manager.theme.Generate
+import com.example.demo_structure.app.manager.theme.GenerateImage
 import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
 import com.example.demo_structure.core.component.AppBox
 import com.example.demo_structure.core.component.AppText
@@ -161,7 +160,7 @@ fun JobItemSection(animatedVisibilityScope: AnimatedVisibilityScope, job: JobDet
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    AppIcons.JobDetailDola.Generate()
+                    AppIcons.JobDetailDola.GenerateImage()
                     Text(text = job.salary, color = Color.Black)
                 }
 
@@ -184,7 +183,7 @@ fun JobItemSection(animatedVisibilityScope: AnimatedVisibilityScope, job: JobDet
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
-                        AppIcons.JobDetailLocation.Generate()
+                        AppIcons.JobDetailLocation.GenerateImage()
                         Text(text = job.location, color = Color.Black)
                     }
 

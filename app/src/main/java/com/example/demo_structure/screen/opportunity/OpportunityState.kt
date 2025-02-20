@@ -7,18 +7,24 @@ package com.example.demo_structure.screen.opportunity
  * Email: son.pham@navigosgroup.com
  */
 sealed interface OpportunityState {
-    /**
-     * The feed is still loading.
-     */
     data object Loading: OpportunityState
-
-    /**
-     * The feed is still error.
-     */
     data class Error(val errorCode: Int, val errorMessage: String): OpportunityState
-
-    /**
-     * The feed is loaded with the given list of news resources.
-     */
     data object Success : OpportunityState
+}
+
+sealed class DetailScreenState {
+    object Default : DetailScreenState()
+    object SearchResult : DetailScreenState()
+    object Suggestion : DetailScreenState()
+    object Recent : DetailScreenState()
+}
+
+interface DetailScreenActions {
+    val onTextChange : (String) -> Unit
+    val onSearch: (String) -> Unit
+    val onSearchWithCV: () -> Unit
+
+    fun getTitle()
+    fun onClick()
+
 }

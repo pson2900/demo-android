@@ -579,8 +579,8 @@ fun ComponentShowcase() {
 
                     InputChip(
                         selected = false,
-                        onClick = {},
-                        label = { Text(inputChipText) },
+                        onClick = { },
+                        label = { Text("InputChip") },
                         colors = InputChipDefaults.inputChipColors(
                             containerColor = MaterialTheme.colorScheme.surfaceVariant,
                             labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -595,6 +595,13 @@ fun ComponentShowcase() {
                             disabledBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = ContentAlpha.disabled),
                             borderWidth = 1.dp,
                         ),*/
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Filled.Close,
+                                contentDescription = "Cancel",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        },
                         trailingIcon = {
                             Icon(
                                 imageVector = Icons.Filled.Close,
@@ -660,281 +667,6 @@ fun ComponentShowcase() {
         }
     }
 }
-/*
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ComponentShowcase() {
-    var textValue by remember { mutableStateOf("") }
-    var sliderPosition by remember { mutableStateOf(0f) }
-    var switchState by remember { mutableStateOf(true) }
-    var checkboxState by remember { mutableStateOf(true) }
-    var radioState by remember { mutableStateOf(true) }
-    var selectedTabIndex by remember { mutableStateOf(0) }
-    var showDialog by remember { mutableStateOf(false) }
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Component Showcase") },
-                colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { *//*TODO*//* },
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            ) {
-                Icon(Icons.Filled.Add, contentDescription = "Add")
-            }
-        },
-        bottomBar = {
-            NavigationBar(containerColor = MaterialTheme.colorScheme.surfaceVariant) {
-                NavigationBarItem(
-                    selected = true,
-                    onClick = { *//*TODO*//* },
-                    icon = { Icon(Icons.Filled.Favorite, contentDescription = "Favorite") },
-                    label = { Text("Favorite") }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = { *//*TODO*//* },
-                    icon = { Icon(Icons.Filled.Settings, contentDescription = "Settings") },
-                    label = { Text("Settings") }
-                )
-            }
-        }
-    ) { paddingValues ->
-        Surface(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            LazyColumn(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                item {
-                    Text("Buttons", style = MaterialTheme.typography.headlineSmall)
-                    ElevatedButton(
-                        onClick = { },
-                        colors = ButtonDefaults.elevatedButtonColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            contentColor = MaterialTheme.colorScheme.onPrimary
-                        )
-                    ) {
-                        Text("Elevated Button")
-                    }
-                    OutlinedButton(
-                        onClick = { },
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = MaterialTheme.colorScheme.primary
-                        ),
-                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
-                    ) {
-                        Text("Outlined Button")
-                    }
-                }
-
-                item {
-                    Text("TextField", style = MaterialTheme.typography.headlineSmall)
-                    TextField(
-                        value = textValue,
-                        onValueChange = { textValue = it },
-                        label = { Text("Enter text") },
-                        colors = TextFieldDefaults.colors(
-                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            focusedContainerColor = MaterialTheme.colorScheme.surface,
-                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                            cursorColor = MaterialTheme.colorScheme.primary,
-                            errorIndicatorColor = MaterialTheme.colorScheme.error
-                        )
-                    )
-                }
-
-                item {
-                    Text("Slider", style = MaterialTheme.typography.headlineSmall)
-                    Slider(
-                        value = sliderPosition,
-                        onValueChange = { sliderPosition = it },
-                        colors = SliderDefaults.colors(
-                            thumbColor = MaterialTheme.colorScheme.primary,
-                            activeTrackColor = MaterialTheme.colorScheme.primary,
-                            inactiveTrackColor = MaterialTheme.colorScheme.surfaceVariant,
-                            activeTickColor = MaterialTheme.colorScheme.onPrimary,
-                            inactiveTickColor = MaterialTheme.colorScheme.surface
-                        )
-                    )
-                }
-
-                item {
-                    Text("Switch", style = MaterialTheme.typography.headlineSmall)
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("Switch State:")
-                        Switch(
-                            checked = switchState,
-                            onCheckedChange = { switchState = it },
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = MaterialTheme.colorScheme.primary,
-                                checkedTrackColor = MaterialTheme.colorScheme.primary,
-                                uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
-                            )
-                        )
-                    }
-                }
-
-                item {
-                    Text("Checkbox", style = MaterialTheme.typography.headlineSmall)
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("Checkbox State:")
-                        Checkbox(
-                            checked = checkboxState,
-                            onCheckedChange = { checkboxState = it },
-                            colors = CheckboxDefaults.colors(
-                                checkedColor = MaterialTheme.colorScheme.primary,
-                                uncheckedColor = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        )
-                    }
-                }
-
-                item {
-                    Text("RadioButton", style = MaterialTheme.typography.headlineSmall)
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("Radio Button State:")
-                        RadioButton(
-                            selected = radioState,
-                            onClick = { radioState = !radioState },
-                            colors = RadioButtonDefaults.colors(
-                                selectedColor = MaterialTheme.colorScheme.primary,
-                                unselectedColor = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        )
-                    }
-                }
-                item {
-                    Divider(color = MaterialTheme.colorScheme.outline, thickness = 1.dp)
-                }
-                item {
-                    OutlinedTextField(
-                        value = textValue,
-                        onValueChange = { textValue = it },
-                        label = { Text("Enter text") },
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-                            cursorColor = MaterialTheme.colorScheme.primary,
-                        )
-                    )
-                }
-
-                item {
-                    Text("Tabs", style = MaterialTheme.typography.headlineSmall)
-                    TabRow(
-                        selectedTabIndex = selectedTabIndex,
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        indicator = { tabPositions ->
-                            TabRowDefaults.Indicator(
-                                modifier = Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                    ) {
-                        Tab(selected = selectedTabIndex == 0, onClick = { selectedTabIndex = 0 }, text = { Text("Tab 1") })
-                        Tab(selected = selectedTabIndex == 1, onClick = { selectedTabIndex = 1 }, text = { Text("Tab 2") })
-                    }
-                }
-
-                item {
-                    Text("Card", style = MaterialTheme.typography.headlineSmall)
-                    Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                        ),
-                        elevation = CardDefaults.cardElevation(
-                            defaultElevation = 6.dp
-                        ),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text("Card Title", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            Text("Card Content", color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        }
-                    }
-                }
-
-                item {
-                    Text("Chip", style = MaterialTheme.typography.headlineSmall)
-                    AssistChip(
-                        onClick = { },
-                        label = { Text("Assist Chip") },
-                        colors = AssistChipDefaults.assistChipColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                            labelColor = MaterialTheme.colorScheme.onSurfaceVariant
-                        ),
-                        *//* border = AssistChipDefaults.assistChipBorder(
-                             borderColor = MaterialTheme.colorScheme.outline
-                         )*//*
-                    )
-                }
-
-                item {
-                    Text("Snackbar", style = MaterialTheme.typography.headlineSmall)
-                    Button(
-                        onClick = { showDialog = true }, colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            contentColor = MaterialTheme.colorScheme.onPrimary
-                        )
-                    ) {
-                        Text("Show Snackbar")
-                    }
-                }
-
-                item {
-                    Text("Progress Indicator", style = MaterialTheme.typography.headlineSmall)
-                    LinearProgressIndicator(
-                        progress = 0.5f,
-                        color = MaterialTheme.colorScheme.primary,
-                        trackColor = MaterialTheme.colorScheme.surfaceVariant
-                    )
-                    CircularProgressIndicator(
-                        color = MaterialTheme.colorScheme.primary,
-                        trackColor = MaterialTheme.colorScheme.surfaceVariant
-                    )
-                }
-            }
-        }
-
-        if (showDialog) {
-            AlertDialog(
-                onDismissRequest = { showDialog = false },
-                title = { Text("Alert Dialog") },
-                text = { Text("This is an example alert dialog.") },
-                confirmButton = {
-                    TextButton(onClick = { showDialog = false }) {
-                        Text("Confirm", color = MaterialTheme.colorScheme.primary)
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = { showDialog = false }) {
-                        Text("Dismiss", color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    }
-                },
-                containerColor = MaterialTheme.colorScheme.surface
-            )
-        }
-    }
-}*/
 
 @Preview(showBackground = true)
 //@ThemePreviews
@@ -948,24 +680,3 @@ fun DefaultColorSchemePreview() {
 }
 
 
-/*
-@Preview(showBackground = true)
-@Composable
-fun DarkDefaultColorSchemePreview() {
-    MaterialTheme(
-        colorScheme = DarkDefaultColorScheme
-    ) {
-        ComponentShowcase()
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LightDefaultColorSchemePreview() {
-    MaterialTheme(
-        colorScheme = LightDefaultColorScheme
-    ) {
-        ComponentShowcase()
-    }
-}
-*/

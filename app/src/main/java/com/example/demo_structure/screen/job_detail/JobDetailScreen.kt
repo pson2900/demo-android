@@ -51,7 +51,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.core.view.WindowCompat
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.AppIcons
-import com.example.demo_structure.app.manager.theme.Generate
+import com.example.demo_structure.app.manager.theme.GenerateImage
 import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
 import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
 import com.example.demo_structure.app.manager.theme.ProductXTheme
@@ -194,7 +194,7 @@ fun TopActions(modifier: Modifier, onBackClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        AppIcons.arrowLeft.Generate(
+        AppIcons.arrowLeft.GenerateImage(
             modifier = Modifier
                 .background(color = Color.Black.copy(alpha = 0.2f), shape = CircleShape)
                 .clip(shape = CircleShape)
@@ -206,7 +206,7 @@ fun TopActions(modifier: Modifier, onBackClick: () -> Unit) {
             color = Color.White
         )
         Spacer(modifier = Modifier.weight(1f))
-        AppIcons.bookMark.Generate(
+        AppIcons.bookMark.GenerateImage(
             modifier = Modifier
                 .background(color = Color.Black.copy(alpha = 0.2f), shape = CircleShape)
                 .clip(shape = CircleShape)
@@ -217,7 +217,7 @@ fun TopActions(modifier: Modifier, onBackClick: () -> Unit) {
                 .padding(8.dp),
             color = Color.White
         )
-        AppIcons.share.Generate(
+        AppIcons.share.GenerateImage(
             modifier = Modifier
                 .background(color = Color.Black.copy(alpha = 0.2f), shape = CircleShape)
                 .clip(shape = CircleShape)
@@ -247,7 +247,7 @@ fun JobSuitableContent(modifier: Modifier) {
                     .weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                AppIcons.JobDetailPercent.Generate()
+                AppIcons.JobDetailPercent.GenerateImage()
                 Text(text = "Độ phù hợp với công việc")
                 Text(text = "50% - Trung bình")
             }
@@ -259,7 +259,7 @@ fun JobSuitableContent(modifier: Modifier) {
                     .weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                AppIcons.JobDetailRank.Generate()
+                AppIcons.JobDetailRank.GenerateImage()
                 Text(text = "Độ phù hợp với công việc")
                 Text(text = "50% - Trung bình")
             }
@@ -424,7 +424,7 @@ fun JobDetailContent(
                         ),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    AppIcons.salary.Generate()
+                    AppIcons.salary.GenerateImage()
                     AppText(text = job.salary)
                 }
                 Row(
@@ -439,7 +439,7 @@ fun JobDetailContent(
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    AppIcons.caseBusiness.Generate()
+                    AppIcons.caseBusiness.GenerateImage()
                     AppText(text = "Thực tập 4 - 6 tháng")
                 }
                 Row(
@@ -454,7 +454,7 @@ fun JobDetailContent(
                         ),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    AppIcons.location.Generate()
+                    AppIcons.location.GenerateImage()
                     AppText(text = "Quận 7, Hồ Chí Minh")
                 }
 
