@@ -3,6 +3,7 @@ package com.example.demo_structure.core.component
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,6 +33,7 @@ fun AppSurface(
     contentColor: Color = ProductXTheme.colorScheme.onSurface,
     border: BorderStroke? = null,
     elevation: Dp = 0.dp,
+    onClickAction: (() -> Unit)? = null,
     content: @Composable () -> Unit
 ) {
     Surface(
@@ -39,11 +41,12 @@ fun AppSurface(
             .shadow(elevation = elevation, shape = shape, clip = false)
             .zIndex(elevation.value)
             .clip(shape)
-            .then(if (border != null) modifier.border(border, shape) else Modifier)
             .background(
                 color = getBackgroundColorForElevation(backgroundColor, elevation),
                 shape = shape
             )
+            .then(if (border != null) modifier.border(border, shape) else Modifier)
+            .then(if (onClickAction != null) modifier.clickable(onClick = onClickAction) else Modifier)
         ,
         contentColor = contentColor,
         content = content

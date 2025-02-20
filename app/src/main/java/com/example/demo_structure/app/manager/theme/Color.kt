@@ -62,7 +62,8 @@ fun hexToColor(hex: String): Color {
 
 fun ColorScheme.toColorTheme(
     background_1 : Color,
-    background_2: Color
+    background_2: Color,
+    darkTheme: Boolean
 ): ColorTheme {
     return ColorTheme(
         primary = primary,
@@ -106,6 +107,7 @@ fun ColorScheme.toColorTheme(
         background_1 = background_1,
         background_2 = background_2,
 
+        darkTheme = darkTheme
     )
 }
 
@@ -205,5 +207,6 @@ data class ColorTheme(
     val surfaceContainerHighest: Color,
     val surfaceContainerLow: Color,
     val surfaceContainerLowest: Color,
+    val darkTheme: Boolean
 )
 

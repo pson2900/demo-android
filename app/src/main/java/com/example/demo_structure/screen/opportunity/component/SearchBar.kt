@@ -52,7 +52,7 @@ import com.example.demo_structure.core.component.AppScaffold
  * Email: son.pham@navigosgroup.com
  */
 @Composable
-fun SearchBarSection(focusRequester: FocusRequester, onTextChange: (String) -> Unit, onSearch: () -> Unit, isFilter:  (Boolean) -> Unit, isSuggestion:  (Boolean) -> Unit) {
+fun SearchBarSection(focusRequester: FocusRequester, onTextChange: (String) -> Unit, onSearch: () -> Unit, onFocusContainer: (Boolean) -> Unit, isSuggestion: (Boolean) -> Unit) {
 
     Column(
         modifier = Modifier
@@ -67,7 +67,7 @@ fun SearchBarSection(focusRequester: FocusRequester, onTextChange: (String) -> U
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            AppIcons.arrowLeftIcon.Generate(
+            AppIcons.arrowLeft.Generate(
                 modifier = Modifier
                     .size(32.dp)
                     .padding(8.dp)
@@ -78,20 +78,25 @@ fun SearchBarSection(focusRequester: FocusRequester, onTextChange: (String) -> U
             )
 
             AppBoxForce(
-                focusRequester = focusRequester,
                 backgroundColor = Color.White
-            ) { focusRequester, isFocus, textFieldFocus ->
-                SearchBar(focusRequester, onTextChange = {
-                    onTextChange.invoke(it)
-                    Log.d("QQQ", "Text change: $it")
-                    if (it.isEmpty()) {
-                        isFilter.invoke (false)
-                        isSuggestion.invoke(true)
-                    } else {
-                        isFilter.invoke(true)
-                        isSuggestion.invoke(false)
-                    }
-                }, isFocus, textFieldFocus)
+            ) { isFocus, isFocusContainer ->
+                SearchBar(
+                    focusRequester = focusRequester,
+                    onTextChange = {
+                        onTextChange.invoke(it)
+                        Log.d("QQQ", "Text change: $it")
+                        if (it.isEmpty()) {
+//                            isFilter.invoke(false)
+//                            isSuggestion.invoke(true)
+                        } else {
+//                            isFilter.invoke(true)
+//                            isSuggestion.invoke(false)
+                        }
+                    },
+                    isFocus = isFocus,
+                    isFocusContainer = isFocusContainer
+                )
+                onFocusContainer.invoke(isFocus)
             }
 
         }
@@ -99,16 +104,19 @@ fun SearchBarSection(focusRequester: FocusRequester, onTextChange: (String) -> U
 }
 
 @Composable
-fun SearchBar(focusRequester: FocusRequester, onTextChange: (String) -> Unit, isFocus: Boolean, textFieldFocus: (Boolean) -> Unit) {
+fun SearchBar(focusRequester: FocusRequester, onTextChange: (String) -> Unit, isFocus: Boolean, isFocusContainer: (Boolean) -> Unit) {
     var getText by remember { mutableStateOf(TextFieldValue("")) }
     LaunchedEffect(isFocus) {
         if (isFocus) {
             focusRequester.requestFocus()
+
         }
     }
+
     LaunchedEffect(getText) {
         onTextChange.invoke(getText.text)
     }
+
     Row(
         modifier = Modifier
             .padding(8.dp)
@@ -137,13 +145,12 @@ fun SearchBar(focusRequester: FocusRequester, onTextChange: (String) -> Unit, is
                 textStyle = ProductXTheme.typography.Regular.Label.Medium,
                 modifier = Modifier
                     .focusRequester(focusRequester)
+
                     .onFocusChanged { focusState ->
-                        textFieldFocus(focusState.isFocused)
-                        if (focusState.isFocused) {
-                            getText = getText.copy(
-                                selection = TextRange(getText.text.length)
-                            )
-                        }
+                        isFocusContainer(focusState.isFocused)
+                        getText = getText.copy(
+                            selection = TextRange(getText.text.length)
+                        )
                     },
                 decorationBox = @Composable { innerTextField ->
                     Box(
@@ -194,7 +201,7 @@ fun SearchBarSectionPreview() {
                 focusRequester = FocusRequester(),
                 onTextChange = {},
                 onSearch = {},
-                isFilter = {},
+                onFocusContainer = {},
                 isSuggestion = {}
             )
         }

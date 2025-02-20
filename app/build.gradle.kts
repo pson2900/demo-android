@@ -66,9 +66,17 @@ android {
     }
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/LICENSE*"
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE-notice.md"
+            excludes += "META-INF/ASL2.0"
         }
     }
+    dependenciesInfo {
+        includeInApk = true
+        includeInBundle = true
+    }
+
 }
 
 dependencies {
@@ -97,6 +105,8 @@ dependencies {
 
     // Mark: Testing
     testImplementation(libs.junit)
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 //    androidTestImplementation(libs.androidx.junit)
 //    androidTestImplementation(libs.android.test.core.ktx)
 //    androidTestImplementation(libs.android.test.junit.ktx)

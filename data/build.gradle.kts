@@ -38,7 +38,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.com.google.material)
     // Mark: Testing
-    testImplementation(libs.junit)
+//    testImplementation(libs.junit)
 //    androidTestImplementation(libs.androidx.junit)
 //    androidTestImplementation(libs.android.test.core.ktx)
 //    androidTestImplementation(libs.android.test.junit.ktx)

@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.Destinations
+import com.example.demo_structure.core.navigation.composableWith
 import com.example.domain.model.JobDetail
 import org.koin.androidx.compose.koinViewModel
 
@@ -20,7 +21,7 @@ fun NavGraphBuilder.toOpportunityScreen(
     animatedVisibilityScope: AnimatedContentScope,
 ) {
     this.apply {
-        composable(
+        composableWith(
             route = Destinations.Main.Opportunity.route,
             deepLinks = listOf(
                 navDeepLink {

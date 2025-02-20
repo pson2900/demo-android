@@ -3,11 +3,12 @@ package com.example.demo_structure.screen.opportunity
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.EnterExitState
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -16,8 +17,11 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -32,9 +36,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -80,53 +86,53 @@ fun OpportunityScreen(viewModel: OpportunityViewModel, onJobClick: (JobDetail) -
     val sharedTransitionScope = LocalSharedTransitionScope.current
     val navController = rememberNavController()
     sharedTransitionScope?.apply {
-         OpportunityContent(
-                 animatedVisibilityScope = animationContentScope,
-                 lazyItem = lazyItem,
-                 onBackClick = appState::upPress,
-                 onTextChange = viewModel::onTextChange,
-                 onSearch = viewModel::onSearch,
-                 onSearchWithCV = viewModel::onSearchWithCV,
-                 onJobClick = onJobClick
-             )
+        OpportunityContent(
+            animatedVisibilityScope = animationContentScope,
+            lazyItem = lazyItem,
+            onBackClick = appState::upPress,
+            onTextChange = viewModel::onTextChange,
+            onSearch = viewModel::onSearch,
+            onSearchWithCV = viewModel::onSearchWithCV,
+            onJobClick = onJobClick
+        )
 
-       /* NavHost(
-            navController = navController,
-            startDestination = "list"
-        ) {
-            composable("list") {
-                JobList(
-                    animatedVisibilityScope = this,
-                    lazyPagingItems = lazyItem,
-                    selectedJob = null,
-                    onJobClick = {
-                        val jobDetailJson = Uri.encode(Gson().toJson(it))
-                        navController.navigate("detail/${jobDetailJson}")
-                    },
-                    onBackClick = {
+        /* NavHost(
+             navController = navController,
+             startDestination = "list"
+         ) {
+             composable("list") {
+                 JobList(
+                     animatedVisibilityScope = this,
+                     lazyPagingItems = lazyItem,
+                     selectedJob = null,
+                     onJobClick = {
+                         val jobDetailJson = Uri.encode(Gson().toJson(it))
+                         navController.navigate("detail/${jobDetailJson}")
+                     },
+                     onBackClick = {
 
-                    })
-            }
-            composable(
-                route = "detail/{jobDetail}",
-                arguments = listOf(
-                    navArgument("jobDetail") {
-                        type = NavType.StringType
-                    },
-                )
-            ) { navBackStackEntry ->
-                val arguments = requireNotNull(navBackStackEntry.arguments)
-                val jobDetailJson = arguments.getString("jobDetail")
-                val jobDetail = remember { Gson().fromJson(jobDetailJson, JobDetail::class.java) }
-                jobDetail?.let { job ->
-                    JobDetailScreen1(
-                        animatedVisibilityScope = this,
-                        job = job,
-                        onBackClick = {
-                        })
-                }
-            }
-        }*/
+                     })
+             }
+             composable(
+                 route = "detail/{jobDetail}",
+                 arguments = listOf(
+                     navArgument("jobDetail") {
+                         type = NavType.StringType
+                     },
+                 )
+             ) { navBackStackEntry ->
+                 val arguments = requireNotNull(navBackStackEntry.arguments)
+                 val jobDetailJson = arguments.getString("jobDetail")
+                 val jobDetail = remember { Gson().fromJson(jobDetailJson, JobDetail::class.java) }
+                 jobDetail?.let { job ->
+                     JobDetailScreen1(
+                         animatedVisibilityScope = this,
+                         job = job,
+                         onBackClick = {
+                         })
+                 }
+             }
+         }*/
     }
     /* OpportunityContent(
          animatedVisibilityScope = animationContentScope,
@@ -139,7 +145,7 @@ fun OpportunityScreen(viewModel: OpportunityViewModel, onJobClick: (JobDetail) -
      )*/
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun OpportunityContent(
     lazyItem: LazyPagingItems<JobDetail>,
@@ -157,14 +163,28 @@ fun OpportunityContent(
     var visibilityFilter by remember { mutableStateOf(isFilter) }
     var visibilitySuggestion by remember { mutableStateOf(isSuggestion) }
 
-    Column(Modifier.safeDrawingPadding()) {
+    LaunchedEffect(visibilityFilter) { }
+    Column(
+        Modifier
+            .safeDrawingPadding()
+            .pointerInteropFilter {
+                focusManager.clearFocus()
+                false
+            },
+    ) {
 
         SearchBarSection(
-            focusRequester, onTextChange, onSearch,
-            isFilter = { filter -> visibilityFilter = filter },
-            isSuggestion = { filter -> visibilitySuggestion = filter }
+            focusRequester = focusRequester,
+            onTextChange = {
+                onTextChange.invoke(it)
+            },
+            onSearch = onSearch,
+            onFocusContainer = { filter -> visibilitySuggestion = filter },
+            isSuggestion = { filter -> visibilityFilter = filter }
         )
-        FilterJobSection(visibilityFilter)
+        AnimatedVisibilitySlide(visibilityFilter) {
+            FilterSection()
+        }
         JobResultSection(
             animatedVisibilityScope = animatedVisibilityScope,
             lazyItem = lazyItem,
@@ -172,55 +192,8 @@ fun OpportunityContent(
         )
 
     }
-
-    /*AppScaffold(
-        modifier = Modifier.fillMaxSize(),
-        backgroundColor = ProductXTheme.colorScheme.background_2,
-        snackbarHost = {
-            SnackbarHost(
-                hostState = it,
-                modifier = Modifier.navigationBarsPadding(),
-                snackbar = { snackbarData -> AppSnackBar(snackbarData) }
-            )
-        },
-        content = {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it)
-                    .pointerInput(Unit) { // Add pointerInput to detect outside clicks
-                        detectTapGestures {
-                            Log.d("QQQ", "outside")
-                            focusManager.clearFocus(true)
-                        }
-                    }
-            ) {
-                Column(Modifier.background(Color.White)) {
-                    SearchBarSection(
-                        focusRequester, onTextChange, onSearch,
-                        isFilter = { isFilter -> visibilityFilter = isFilter },
-                        isSuggestion = { isSuggestion -> visibilitySuggestion = isSuggestion }
-                    )
-                    FilterJobSection(visibilityFilter)
-                    JobResultSection(
-                        animatedVisibilityScope = animatedVisibilityScope,
-                        lazyItem = lazyItem,
-                        onJobClick = onJobClick
-                    )
-                    //                    SuggestionJobSection(visibilitySuggestion)
-                }
-            }
-
-
-        })*/
 }
 
-@Composable
-fun FilterJobSection(visibilityFilter: Boolean) {
-    AnimatedVisibilitySlide(visibilityFilter) {
-        FilterSection()
-    }
-}
 
 @Composable
 fun SuggestionJobSection(visibilitySuggestion: Boolean) {
@@ -248,76 +221,44 @@ fun JobRecommendSection() {
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class, ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun JobResultSection(lazyItem: LazyPagingItems<JobDetail>, onJobClick: (JobDetail) -> Unit, animatedVisibilityScope: AnimatedVisibilityScope) {
     val focusManager = LocalFocusManager.current
     val sharedTransitionScope = LocalSharedTransitionScope.current
-    val navController = rememberNavController()
+
+    val roundedCornerAnim by animatedVisibilityScope.transition
+        .animateDp(label = "rounded corner") { enterExit: EnterExitState ->
+            when (enterExit) {
+                EnterExitState.PreEnter -> 20.dp
+                EnterExitState.Visible -> 0.dp
+                EnterExitState.PostExit -> 20.dp
+            }
+        }
     sharedTransitionScope?.apply {
-
-        /*    NavHost(
-                navController = navController,
-                startDestination = "list"
+        AppBox(
+            backgroundColor = Color.Black.copy(0.1f)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
             ) {
-                composable("list") {
-                    JobList(
-                        animatedVisibilityScope = this,
-                        lazyPagingItems = lazyItem,
-                        selectedJob = null,
-                        onJobClick = {
-                            val jobDetailJson = Uri.encode(Gson().toJson(it))
-                            navController.navigate("detail/${jobDetailJson}")
-                        },
-                        onBackClick = {
-
-                        })
+                Row {
+                    Text("Có 8 kết quả")
+                    Spacer(Modifier.weight(1f))
+                    Text("Phù hợp cao đến thấp")
                 }
-                composable(
-                    route = "detail/{jobDetail}",
-                    arguments = listOf(
-                        navArgument("jobDetail") {
-                            type = NavType.StringType
-                        },
-                    )
-                ) { navBackStackEntry ->
-                    val arguments = requireNotNull(navBackStackEntry.arguments)
-                    val jobDetailJson = arguments.getString("jobDetail")
-                    val jobDetail = remember { Gson().fromJson(jobDetailJson, JobDetail::class.java) }
-                    jobDetail?.let { job ->
-                        JobDetailScreen1(
-                            animatedVisibilityScope = this,
-                            job = job,
-                            onBackClick = {
-                            })
-                    }
-                }
-            }*/
+                JobList(
+                    lazyPagingItems = lazyItem,
+                    selectedJob = null,
+                    onJobClick = onJobClick,
+                    onBackClick = {
 
-        JobList(
-            lazyPagingItems = lazyItem,
-            selectedJob = null,
-            onJobClick = onJobClick,
-            onBackClick = {
-
-            },
-            animatedVisibilityScope = animatedVisibilityScope
-        )
-        /* AppBox(
-             modifier = Modifier
-                 .pointerInput(Unit) { // Add pointerInput to detect outside clicks
-                     detectTapGestures {
-                         Log.d("QQQ", "outside")
-                         focusManager.clearFocus(true)
-                     }
-                 }
-                 .fillMaxSize(),
-             contentAlignment = Alignment.Center,
-             backgroundColor = ProductXTheme.colorScheme.background_2,
-         ) {
-
-         }*/
-
+                    },
+                    animatedVisibilityScope = animatedVisibilityScope
+                )
+            }
+        }
     }
 }
 
@@ -401,8 +342,9 @@ fun JobList(
 ) {
 
     LazyColumn(
-//        contentPadding = PaddingValues(16.dp)
-    ) {
+        modifier = Modifier,
+
+        ) {
         items(jobList, key = { job -> job.jobId }) { job ->
             JobItemSection(animatedVisibilityScope = animatedVisibilityScope, job = job, onClick = onJobClick)
         }
@@ -427,7 +369,7 @@ fun SwipeToDismiss(
 }
 
 @Composable
-fun initJobList(lazyPagingItems: LazyPagingItems<JobDetail>, onJobClick: (JobDetail) -> Unit) {
+fun InitJobList(lazyPagingItems: LazyPagingItems<JobDetail>, onJobClick: (JobDetail) -> Unit) {
     val lazyListState = rememberLazyListState()
 
     LaunchedEffect(lazyListState) {

@@ -3,7 +3,6 @@ package com.example.demo_structure.app.manager.theme
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -30,7 +29,7 @@ fun ToImage(
             imageVector = ImageVector.vectorResource(imageResource),
             contentDescription = imageResource.toString(),
             contentScale = contentScale,
-            colorFilter = ColorFilter.tint(color = color, BlendMode.SrcIn),
+            colorFilter = ColorFilter.tint(color = color),
         )
     } else {
         Image(
@@ -73,9 +72,20 @@ object AppIcons {
     val referenceIcon = R.drawable.ic_reference
     val hobbyIcon = R.drawable.ic_hobby
 
-    val arrowLeftIcon = R.drawable.ic_arrow_left
+    val arrowLeft = R.drawable.ic_arrow_left
     val searchIcon = R.drawable.ic_search
     val avatarLogo = R.drawable.company_logo
+    val share = R.drawable.ic_share
+    val bookMark = R.drawable.ic_bookmark
+    val location = R.drawable.ic_location
+    val salary = R.drawable.ic_salary
+
+    val bookMark_gray = R.drawable.ic_bookmark_gray
+    val JobDetailLocation = R.drawable.ic_location_gray
+    val JobDetailDola = R.drawable.ic_dollar
+    val JobDetailRank = R.drawable.ic_job_detail_rank
+    val JobDetailPercent = R.drawable.ic_job_detail_percent
+    val caseBusiness = R.drawable.ic_brief_case_business
     val OpportunityHeart = R.drawable.ic_my_profile_opprotunities_heart
     val OpportunityCrow = R.drawable.ic_my_profile_opprotunities_crow
     val OpportunityBag = R.drawable.ic_my_profile_opprotunities_bag

@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import com.example.demo_structure.core.navigation.AppState
 import com.example.demo_structure.core.navigation.Destinations
+import com.example.demo_structure.core.navigation.composableWith
 
 fun NavController.toMain(route: String, navOptions: NavOptions = androidx.navigation.navOptions {}) =
     navigate(route = route, navOptions = navOptions)
@@ -18,7 +19,7 @@ fun NavGraphBuilder.toMainScreen(
     appState: AppState,
 ) {
     Log.d("QQQ", "toMainScreen")
-    composable(
+    composableWith(
         route = Destinations.Main.ROUTE + "?tab={tab}",
         arguments = listOf(
             navArgument(Destinations.Main.TAB) {

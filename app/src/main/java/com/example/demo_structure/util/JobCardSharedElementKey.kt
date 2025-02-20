@@ -26,22 +26,46 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.ui.unit.IntSize
 
-data class SharedElementKey(
+data class JobCardSharedElementKey(
     val jobId: Int,
-    val type: SharedElementType
-)
+    val jobTitle: String,
+    val companyTitle: String,
+    val imageCompany: Int,
+    val jobDescription: String,
+    val salary: String,
+    val location: String,
+    val timeWork: String = "4 - 6 Tháng"
+){
+    companion object{
+        fun JobCardSharedElementKey.getShareKey(type: SharedElementType): String {
+            return when(type){
+                SharedElementType.Bounds -> "bounds/${jobId}"
+                SharedElementType.Image -> "image/${imageCompany}"
+                SharedElementType.Title -> "title/${jobTitle}"
+                SharedElementType.Description -> "description/${jobDescription}"
+                SharedElementType.Company -> "company/${companyTitle}"
+                SharedElementType.Salary -> "salary/${salary}"
+                SharedElementType.Location -> "location/${location}"
+                SharedElementType.TimeWork -> "timeWork/${timeWork}"
+            }
+        }
+    }
+}
 
 enum class SharedElementType {
     Bounds,
     Image,
     Title,
-    Tagline,
-    Background
+    Description,
+    Company,
+    Salary,
+    Location,
+    TimeWork
 }
 
 object FilterSharedElementKey
 
-var durationChange = 500
+var durationChange = 600
 
 fun getEnterTransition(initialSize: IntSize, targetSize: IntSize): EnterTransition {
     var enterTransition: EnterTransition = fadeIn(animationSpec = tween(300))

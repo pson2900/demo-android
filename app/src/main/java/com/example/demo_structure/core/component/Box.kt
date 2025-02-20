@@ -44,17 +44,19 @@ fun AppBox(
     shape: Shape = RectangleShape,
     border: BorderStroke? = null,
     contentAlignment: Alignment = Alignment.CenterStart,
+    onClick: (() -> Unit)? = null,
     content: @Composable BoxScope.() -> Unit
 ) {
     Box(
         modifier = modifier
             .shadow(elevation = 0.dp, shape = shape)
-            .clip(shape)
-            .then(if (border != null) modifier.border(border, shape) else Modifier)
             .background(
                 color = backgroundColor,
                 shape = shape
-            ),
+            )
+            .clip(shape)
+            .then(if (border != null) modifier.border(border, shape) else Modifier)
+            .then(if (onClick != null) modifier.clickable { onClick.invoke() } else Modifier),
         contentAlignment = contentAlignment,
         propagateMinConstraints = false,
         content = content
@@ -64,10 +66,9 @@ fun AppBox(
 @Composable
 fun AppBoxForce(
     modifier: Modifier = Modifier,
-    focusRequester: FocusRequester,
     backgroundColor: Color,
     contentAlignment: Alignment = Alignment.CenterStart,
-    content: @Composable BoxScope.(FocusRequester, Boolean, (Boolean) -> Unit) -> Unit
+    content: @Composable BoxScope.(Boolean, (Boolean) -> Unit) -> Unit
 ) {
 
     val (isFocus, setFocus) = remember { mutableStateOf(false) }
@@ -96,7 +97,7 @@ fun AppBoxForce(
         propagateMinConstraints = false,
         content = {
             Box(Modifier) {
-                content(focusRequester, isFocus) { isTextFocus ->
+                content(isFocus) { isTextFocus ->
                     setFocus(isTextFocus)
                 }
             }
@@ -109,7 +110,7 @@ fun AppBoxForce(
 @Preview
 fun AppBoxPreview() {
     AppPreviewWrapper {
-        AppBoxForce(focusRequester = FocusRequester(), backgroundColor = Color.White) { focusRequest, isFocus, textFieldFocus ->
+        AppBoxForce(backgroundColor = Color.White) { isFocus, textFieldFocus ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -124,9 +125,9 @@ fun AppBoxPreview() {
                     }
                 )
 
-              /*  SearchBar(focusRequest, isFocus) {
+                /*  SearchBar(focusRequest, isFocus) {
 
-                }*/
+                  }*/
             }
         }
     }

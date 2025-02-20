@@ -24,7 +24,7 @@ fun FilterSection(){
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 8.dp)
+            .padding(start = 16.dp, end = 16.dp)
     ) {
         AppChip(selected = true, onSelectedChange = {}) {
             Text("Remote")

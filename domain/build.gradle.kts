@@ -46,7 +46,7 @@ dependencies {
 
     // Mark: Testing
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
+//    androidTestImplementation(libs.androidx.junit)
 //    androidTestImplementation(libs.android.test.core.ktx)
 //    androidTestImplementation(libs.android.test.junit.ktx)
     androidTestImplementation(libs.androidx.espresso.core)

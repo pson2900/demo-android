@@ -39,8 +39,6 @@ import com.example.domain.ifNotNull
 import com.example.domain.model.Basic
 import com.example.domain.model.MyProfile
 import com.example.domain.model.Profile
-import com.google.gson.Gson
-import com.google.gson.JsonObject
 
 /**
  * Displays the user's bookmarked articles. Includes support for loading and empty states.
@@ -79,25 +77,23 @@ internal fun UserScreen(
                 snackbar = { snackbarData -> AppSnackBar(snackbarData) }
             )
         }
-//    ) { paddingValue ->
     ) {
         Box(
-            modifier = Modifier.padding(it).fillMaxSize(),
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize(),
             contentAlignment = androidx.compose.ui.Alignment.Center
         ) {
             DisplayUiStateContent(
                 uiState = myProfileState,
-                onSuccessContent = {
+                onSuccessContent = { myProfile ->
                     MyProfileContent(
-                        myProfile = myProfileData.toDomain(),
+                        myProfile = myProfile,
                         onNavigateToProfile = onNavigateToProfile,
                     )
                 })
         }
     }
-
-
-
 }
 
 
@@ -142,7 +138,7 @@ internal fun LazyListScope.myProfileBody(
     }
 
     myProfile.profiles.ifNotEmpty {
-        Log.d("QQQ","Size: ${it.size}")
+        Log.d("QQQ", "Size: ${it.size}")
         item {
             AppText(
                 text = "Thông tin hồ sơ", color = Color.Black,

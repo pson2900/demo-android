@@ -6,6 +6,7 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,14 +17,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Place
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -31,9 +30,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.demo_structure.R
-import com.example.demo_structure.app.manager.theme.LocalNavAnimatedVisibilityScope
+import com.example.demo_structure.app.manager.theme.AppIcons
+import com.example.demo_structure.app.manager.theme.Generate
 import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
+import com.example.demo_structure.core.component.AppBox
+import com.example.demo_structure.core.component.AppText
 import com.example.demo_structure.jobList
+import com.example.demo_structure.util.JobCardSharedElementKey
+import com.example.demo_structure.util.JobCardSharedElementKey.Companion.getShareKey
+import com.example.demo_structure.util.SharedElementType
 import com.example.demo_structure.util.durationChange
 import com.example.domain.model.JobDetail
 
@@ -48,18 +53,40 @@ fun JobItemSection(animatedVisibilityScope: AnimatedVisibilityScope, job: JobDet
 
     val sharedTransitionScope = LocalSharedTransitionScope.current
         ?: throw IllegalStateException("No Scope found")
-    sharedTransitionScope?.apply {
-        Surface(
+    val jobCardSharedElementKey = JobCardSharedElementKey(
+        jobId = job.jobId,
+        jobTitle = job.jobTitle,
+        companyTitle = job.companyTitle,
+        imageCompany = job.companyLogo,
+        jobDescription = job.description,
+        salary = job.salary,
+        location = job.location,
+    )
+    sharedTransitionScope.apply {
+        AppBox (
+
+            backgroundColor = Color.White,
             shape = RoundedCornerShape(20.dp),
-            color = Color.White, // Assuming white background for the item
             modifier = Modifier
+                .padding(vertical = 12.dp)
                 .fillMaxWidth()
-                .padding(8.dp) // Add padding around the item
+                .clip(RoundedCornerShape(20.dp))
+//                .background(Color.White, RoundedCornerShape(20.dp))
+                .clickable(onClick = { onClick(job) }),
+
+
         ) {
             Column(
                 modifier = Modifier
+                   /*  .sharedElement(
+                        state = rememberSharedContentState(key = jobCardSharedElementKey.getShareKey(SharedElementType.Bounds)),
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        boundsTransform = { _, _ ->
+                            tween(durationMillis = durationChange)
+                        }
+                    )*/
                     .padding(16.dp)
-                    .clickable(onClick = { onClick(job) }),
+
             ) {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -69,7 +96,7 @@ fun JobItemSection(animatedVisibilityScope: AnimatedVisibilityScope, job: JobDet
                     Column {
                         Text(
                             modifier = Modifier.sharedElement(
-                                state = rememberSharedContentState(key = "title/${job.jobTitle}"),
+                                state = rememberSharedContentState(key = jobCardSharedElementKey.getShareKey(SharedElementType.Title)),
                                 animatedVisibilityScope = animatedVisibilityScope,
                                 boundsTransform = { _, _ ->
                                     tween(durationMillis = durationChange)
@@ -82,7 +109,7 @@ fun JobItemSection(animatedVisibilityScope: AnimatedVisibilityScope, job: JobDet
                         )
                         Text(
                             modifier = Modifier.sharedElement(
-                                state = rememberSharedContentState(key = "description/${job.description}"),
+                                state = rememberSharedContentState(key = jobCardSharedElementKey.getShareKey(SharedElementType.Description)),
                                 animatedVisibilityScope = animatedVisibilityScope,
                                 boundsTransform = { _, _ ->
                                     tween(durationMillis = durationChange)
@@ -95,7 +122,7 @@ fun JobItemSection(animatedVisibilityScope: AnimatedVisibilityScope, job: JobDet
                         )
                         Text(
                             modifier = Modifier.sharedElement(
-                                state = rememberSharedContentState(key = "company/${job.companyTitle}"),
+                                state = rememberSharedContentState(key = jobCardSharedElementKey.getShareKey(SharedElementType.Company)),
                                 animatedVisibilityScope = animatedVisibilityScope,
                                 boundsTransform = { _, _ ->
                                     tween(durationMillis = durationChange)
@@ -110,7 +137,7 @@ fun JobItemSection(animatedVisibilityScope: AnimatedVisibilityScope, job: JobDet
                         modifier = Modifier
                             .size(50.dp)
                             .sharedElement(
-                                state = rememberSharedContentState(key = "image/${job.companyLogo}"),
+                                state = rememberSharedContentState(key = jobCardSharedElementKey.getShareKey(SharedElementType.Image)),
                                 animatedVisibilityScope = animatedVisibilityScope,
                                 boundsTransform = { _, _ ->
                                     tween(durationMillis = durationChange)
@@ -124,30 +151,62 @@ fun JobItemSection(animatedVisibilityScope: AnimatedVisibilityScope, job: JobDet
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Row(
+                    modifier = Modifier.sharedElement(
+                        state = rememberSharedContentState(key = jobCardSharedElementKey.getShareKey(SharedElementType.Salary)),
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        boundsTransform = { _, _ ->
+                            tween(durationMillis = durationChange)
+                        }
+                    ),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text(text = "$", color = Color.Gray) // Adjust color
-                    Text(text = job.salary, color = Color.Gray) // Adjust color
+                    AppIcons.JobDetailDola.Generate()
+                    Text(text = job.salary, color = Color.Black)
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Row(
+                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Icon(
-                        Icons.Filled.Place,
-                        contentDescription = "Location",
-                        tint = Color.Gray // Adjust color
-                    )
-                    Text(text = job.location, color = Color.Gray) // Adjust color
+                    Row(
+                        modifier = Modifier
+                            .sharedElement(
+                                state = rememberSharedContentState(key = jobCardSharedElementKey.getShareKey(SharedElementType.Location)),
+                                animatedVisibilityScope = animatedVisibilityScope,
+                                boundsTransform = { _, _ ->
+                                    tween(durationMillis = durationChange)
+                                }
+                            ),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        AppIcons.JobDetailLocation.Generate()
+                        Text(text = job.location, color = Color.Black)
+                    }
+
+                    Row(
+                        modifier = Modifier
+                        /* .sharedElement(
+                             state = rememberSharedContentState(key = jobCardSharedElementKey.getShareKey(SharedElementType.TimeWork)),
+                             animatedVisibilityScope = animatedVisibilityScope,
+                             boundsTransform = { _, _ ->
+                                 tween(durationMillis = durationChange)
+                             }
+                         )*/,
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        AppText(text = job.timeWork, color = Color.Gray)
+                    }
+
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Row 4: Like & Crown
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically

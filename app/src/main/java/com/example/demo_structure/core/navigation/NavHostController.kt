@@ -100,7 +100,7 @@ fun MainNavHost(
     onNavigateToJobDetail: (JobDetail) -> Unit,
     onNavigateToLogin: (String) -> Unit,
     onNavigateToVerifyEmail: () -> Unit,
-    onHideBottomNav: (Boolean) -> Unit,
+    onShowBottomNav: (Boolean) -> Unit,
 
     animatedVisibilityScope: AnimatedContentScope,
 ) {
@@ -123,14 +123,14 @@ fun MainNavHost(
             animatedVisibilityScope = animatedVisibilityScope,
             appState = appState,
             onNavigateToJobDetail = {
-                onHideBottomNav.invoke(true)
+                onShowBottomNav.invoke(false)
                 navController.toJobDetail(Destinations.JobDetail.createRoute(it))
             }
         )
 
-        toJobDetailScreen(appState = appState, onLogin= onNavigateToLogin, onBackClick =  {
+        toJobDetailScreen(appState = appState, onLogin = onNavigateToLogin, onBackClick = {
             appState.upPress()
-            onHideBottomNav.invoke(false)
+            onShowBottomNav.invoke(true)
         })
         toCommunityScreen(
             onTopicClick = {
