@@ -22,7 +22,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "demo_structure"
+rootProject.name = "upzi"
 include(":app")
 include(":data")
 include(":domain")

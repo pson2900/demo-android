@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">demo_structure</string>
+    <string name="app_name">Upzi</string>
     <string name="title_home">Home Page</string>
     <string name="title_dashboard">Dashboard Page</string>
     <string name="title_notifications">Notifications Page</string>

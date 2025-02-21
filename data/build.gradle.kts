@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.data"
+    namespace = "com.upzi.data"
     defaultConfig {
         minSdk = rootProject.extra["defaultMinSdkVersion"] as Int
         buildToolsVersion = rootProject.extra["defaultBuildToolsVersion"] as String

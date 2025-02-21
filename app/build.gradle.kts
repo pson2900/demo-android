@@ -10,10 +10,10 @@ plugins {
 
 android {
 
-    namespace = "com.example.demo_structure"
+    namespace = "com.upzi.upzi"
 
     defaultConfig {
-        applicationId = "com.example.demo_structure"
+        applicationId = "com.upzi.upzi"
         minSdk = rootProject.extra["defaultMinSdkVersion"] as Int
         buildToolsVersion = rootProject.extra["defaultBuildToolsVersion"] as String
         compileSdkVersion = rootProject.extra["defaultCompileSdkVersion"] as String
