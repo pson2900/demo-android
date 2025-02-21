@@ -25,6 +25,7 @@ import com.example.demo_structure.screen.home.toHomeScreen
 import com.example.demo_structure.screen.job_detail.toJobDetailScreen
 import com.example.demo_structure.screen.login.toLoginScreen
 import com.example.demo_structure.screen.main.toMainScreen
+import com.example.demo_structure.screen.onboarding.toOnboardingScreen
 import com.example.demo_structure.screen.opportunity.toOpportunityScreen
 import com.example.demo_structure.screen.otp.toVerifyOtpScreen
 import com.example.demo_structure.screen.user.toMyProfileScreen
@@ -89,6 +90,7 @@ fun AppNavHost(
             }
             toVerifyEmailScreen(appState = appState)
             toVerifyOtpScreen(appState)
+            toOnboardingScreen(appState)
         })
 }
 
@@ -99,6 +101,7 @@ fun MainNavHost(
     onNavigateToJobDetail: (Int, String) -> Unit,
     onNavigateToLogin: (String) -> Unit,
     onNavigateToVerifyEmail: () -> Unit,
+    onNavigateToOnBoarding: () -> Unit
 ) {
     val navController = appState.navController
     NavHost(
@@ -114,7 +117,8 @@ fun MainNavHost(
         )
         toEducationScreen(
             onTopicClick = {},
-            onNavigateToVerifyEmail = onNavigateToVerifyEmail
+            onNavigateToVerifyEmail = onNavigateToVerifyEmail,
+            onNavigateToOnBoarding =onNavigateToOnBoarding
         )
         toOpportunityScreen(
             onTopicClick = {

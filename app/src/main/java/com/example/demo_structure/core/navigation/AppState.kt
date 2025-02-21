@@ -25,6 +25,7 @@ import com.example.demo_structure.screen.create_pin.toCreatePinCode
 import com.example.demo_structure.screen.job_detail.toJobDetail
 import com.example.demo_structure.screen.login.toLogin
 import com.example.demo_structure.screen.main.toMain
+import com.example.demo_structure.screen.onboarding.toOnboarding
 import com.example.demo_structure.screen.otp.toVerifyOtp
 import com.example.demo_structure.screen.verify_email.toVerifyEmail
 import com.example.demo_structure.util.monitor.NetworkMonitor
@@ -209,6 +210,16 @@ class AppState(
                 navController.toCreatePinCode(
                     Destinations.CreatePin.createRoute(pinJson = pinJson)
                 )
+            }
+        }
+    }
+
+    fun navigateToOnBoarding(from: NavBackStackEntry) {
+        // In order to discard duplicated navigation events, we check the Lifecycle
+        val route = "${Destinations.Onboarding.route}"
+        trace("Navigation : $route") {
+            if (from.lifecycleIsResumed()) {
+                navController.toOnboarding()
             }
         }
     }

@@ -21,7 +21,9 @@ fun NavGraphBuilder.toOnboardingScreen(appState: AppState) {
                 }
             ),
             content = { navBackStackEntry ->
+                OnboardingScreen {
 
+                }
             }
         )
     }

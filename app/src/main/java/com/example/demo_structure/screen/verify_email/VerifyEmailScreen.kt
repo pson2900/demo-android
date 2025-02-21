@@ -62,11 +62,13 @@ import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppText
 import com.example.demo_structure.core.component.AppTextField
+import com.example.demo_structure.core.component.WebViewWithClient
 import com.example.demo_structure.screen.home.LoadingState
 import com.example.demo_structure.screen.otp.OTPType
 import com.example.demo_structure.util.extension.buildClickableText
 import com.example.demo_structure.util.extension.findActivity
 import com.example.demo_structure.util.extension.hideKeyboardAndClearFocus
+import com.example.domain.model.VerifyEmail
 
 
 @Preview("Light Mode")
@@ -84,7 +86,10 @@ private fun VerifyEmailPreview() {
             onEmailChange = {},
             onCheckboxChange = {},
             onButtonClick = {},
-            onLinkClick = {}
+            onLinkClick = {
+
+            },
+            onVerifyEmail = {}
         )
     }
 }
@@ -106,22 +111,25 @@ fun VerifyEmailScreen(
     var emailError by remember { mutableStateOf("") }
     var isSuccess by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
-    val isEnableButton = email.isNotEmpty() && isChecked && !isLoading
+    val isEnableButton = email.isNotEmpty() && isChecked && emailError.isEmpty() && !isLoading
 
     val lifecycleOwner = LocalLifecycleOwner.current
 
     LaunchedEffect(viewModel) {
 
     }
+
     val intent =
-        remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://www.vietnamworks.com/quy-dinh-bao-mat?utm_source_navi=footer")) }
-
-
-    fun verifyEmail() {
-        emailError = if (email.isEmpty() || !viewModel.authUseCase.isValidEmail(email)) "Vui lòng nhập địa chỉ email hợp lệ" else ""
-        if (emailError.isEmpty()) {
-            viewModel.verifyEmail(email)
+        remember {
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://www.vietnamworks.com/quy-dinh-bao-mat?utm_source_navi=footer")
+            )
         }
+
+
+    fun getError(): String {
+        return if (email.isNotEmpty() && !viewModel.authUseCase.isValidEmail(email)) "Vui lòng nhập địa chỉ email hợp lệ\n(ví dụ: username@domain.com)" else ""
     }
 
     fun onEmailChange(newEmail: String) {
@@ -135,7 +143,9 @@ fun VerifyEmailScreen(
     }
 
     fun onButtonClick() {
-        verifyEmail()
+        if (emailError.isEmpty() && email.isNotEmpty()) {
+            viewModel.verifyEmail(email)
+        }
     }
 
     fun onLinkClick() {
@@ -202,7 +212,10 @@ fun VerifyEmailScreen(
             onEmailChange = ::onEmailChange,
             onCheckboxChange = ::onCheckboxChange,
             onButtonClick = ::onButtonClick,
-            onLinkClick = ::onLinkClick
+            onLinkClick = ::onLinkClick,
+            onVerifyEmail = {
+                emailError = getError()
+            }
         )
     }
 }
@@ -219,7 +232,8 @@ fun VerifyEmailContent(
     onEmailChange: (String) -> Unit,
     onCheckboxChange: (Boolean) -> Unit,
     onButtonClick: () -> Unit,
-    onLinkClick: () -> Unit
+    onLinkClick: () -> Unit,
+    onVerifyEmail: () -> Unit,
 ) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -258,7 +272,8 @@ fun VerifyEmailContent(
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                }.testTag("imageLogo")
+                }
+                .testTag("imageLogo")
         )
         AppText(
             text = "Khám phá con đường sự nghiệp của riêng bạn",
@@ -280,15 +295,20 @@ fun VerifyEmailContent(
                     top.linkTo(textview.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
-                }.testTag("textFieldEmail"),
+                }
+                .testTag("textFieldEmail"),
             hint = "Email của bạn",
-            value = email,
+            textValue = email,
             onValueChange = onEmailChange,
             onDone = {
                 hideKeyboardAndClearFocus(context, focusManager, keyboardController)
             },
+            onFocusChanged = {
+                if (!it) {
+                    onVerifyEmail.invoke()
+                }
+            },
             error = emailError,
-            onClose = { onEmailChange("") },
             isSuccess = isSuccess
         )
 

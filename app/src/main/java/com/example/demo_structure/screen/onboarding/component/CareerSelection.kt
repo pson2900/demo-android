@@ -164,7 +164,7 @@ fun CareerOption(
             Image(
                 painter = icon,
                 contentDescription = title,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(48.dp)
             )
             Spacer(modifier = Modifier.width(12.dp))
             Column {

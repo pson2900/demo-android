@@ -33,5 +33,4 @@ fun NavGraphBuilder.toMyProfileScreen(onNavigateToLogin: (String) -> Unit) {
             }
         )
     }
-
 }

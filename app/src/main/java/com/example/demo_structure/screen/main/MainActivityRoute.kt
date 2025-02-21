@@ -53,6 +53,8 @@ fun NavGraphBuilder.toMainScreen(
             },
             onNavigateToVerifyEmail = {
                 appState.navigateToEmail(from = backStackEntry)
+            }, onNavigateToOnBoarding = {
+                appState.navigateToOnBoarding(from = backStackEntry)
             }
         )
     }

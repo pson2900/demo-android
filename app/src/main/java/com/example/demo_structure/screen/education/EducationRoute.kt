@@ -13,6 +13,7 @@ fun NavController.toEducation(navOptions: NavOptions) =
 
 fun NavGraphBuilder.toEducationScreen(
     onNavigateToVerifyEmail: () -> Unit,
+    onNavigateToOnBoarding: () -> Unit,
     onTopicClick: (String) -> Unit,
 ) {
 
@@ -28,6 +29,7 @@ fun NavGraphBuilder.toEducationScreen(
                 EducationScreen(
                     viewModel = koinViewModel(),
                     onNavigateToVerifyEmail = onNavigateToVerifyEmail,
+                    onNavigateToOnBoarding = onNavigateToOnBoarding,
                     onTopicClick = onTopicClick
                 )
             }

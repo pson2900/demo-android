@@ -76,6 +76,7 @@ internal fun LoginScreen(
     email: String,
     onNavigateForgotPasswordOtp: (String) -> Unit,
     onNavigateHomeScreen: () -> Unit,
+    onNavigateOnBoarding: () -> Unit,
     onBack: () -> Unit
 ) {
 
@@ -94,7 +95,7 @@ internal fun LoginScreen(
                 viewModel.saveUserInfo(UserProfile(email = email, fullName = "Tung Be De"))
                 // Toast.makeText(context, "login success", Toast.LENGTH_SHORT).show()
                 delay(500)
-                onNavigateHomeScreen.invoke()
+                onNavigateOnBoarding.invoke()
             }
 
             is UIState.Error -> {

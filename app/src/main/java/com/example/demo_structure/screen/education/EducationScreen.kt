@@ -39,7 +39,10 @@ import kotlinx.datetime.TimeZone
  */
 
 @Composable
-fun EducationScreen(viewModel: EducationViewModel, onNavigateToVerifyEmail: () -> Unit, onTopicClick: (String) -> Unit) {
+fun EducationScreen(viewModel: EducationViewModel,
+                    onNavigateToVerifyEmail: () -> Unit,
+                    onNavigateToOnBoarding: () -> Unit,
+                    onTopicClick: (String) -> Unit) {
 
     val authUiState by viewModel.authUiState.collectAsStateWithLifecycle()
     var (isLogin, setLogin) = remember { mutableStateOf(false) }
@@ -49,19 +52,25 @@ fun EducationScreen(viewModel: EducationViewModel, onNavigateToVerifyEmail: () -
     val time = appState.currentTimeZone.collectAsStateWithLifecycle()
     val currentTime by appState.currentTime.collectAsState(initial = "")
 
-    EducationContent(time.value, currentTime.toString(), isLogin) { result ->
-        if (!isLogin) {
-            onNavigateToVerifyEmail.invoke()
-        } else {
-            setLogin(false)
-            viewModel.logout()
-        }
-    }
+    EducationContent(time.value, currentTime.toString(), isLogin,
+        onNavigateToOnBoarding = onNavigateToOnBoarding
+        , onNavigateLogin = { result ->
+            if (!isLogin) {
+                onNavigateToVerifyEmail.invoke()
+            } else {
+                setLogin(false)
+                viewModel.logout()
+            }
+        })
 }
 
 
 @Composable
-fun EducationContent(time: TimeZone, currentTime: String, isLogin: Boolean, onNavigateLogin: (Boolean) -> Unit) {
+fun EducationContent(time: TimeZone,
+                     currentTime: String,
+                     isLogin: Boolean,
+                     onNavigateLogin: (Boolean) -> Unit,
+                     onNavigateToOnBoarding: () -> Unit,) {
     val modifier: Modifier = Modifier.fillMaxSize()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -81,7 +90,9 @@ fun EducationContent(time: TimeZone, currentTime: String, isLogin: Boolean, onNa
 //        content = { padding ->
         content = {
             AppBox(
-                modifier = Modifier.padding(it).fillMaxSize()
+                modifier = Modifier
+                    .padding(it)
+                    .fillMaxSize()
                     .clickable {
                         coroutineScope.launch {
                             val result = snackbarHostState.showSnackbar(
@@ -107,8 +118,9 @@ fun EducationContent(time: TimeZone, currentTime: String, isLogin: Boolean, onNa
                     val textContent = if (!isLogin) "Login" else "Logout"
                     Text("EducationScreen: ${time}\ncurrentTime: $currentTime")
                     Button(onClick = {
-                        onNavigateLogin.invoke(isLogin)
+//                        onNavigateLogin.invoke(isLogin)
                         // onNavigateToVerifyEmail.invoke()
+                        onNavigateToOnBoarding.invoke()
 
                     }) {
                         Text(modifier = Modifier, text = textContent)
@@ -124,7 +136,12 @@ fun EducationContent(time: TimeZone, currentTime: String, isLogin: Boolean, onNa
 @Composable
 fun SearchResultScreenPreview() {
     AppPreviewWrapper {
-        EducationContent(time = TimeZone.currentSystemDefault(), currentTime = "hehe", isLogin = false) {
+        EducationContent(time = TimeZone.currentSystemDefault(),
+            currentTime = "hehe",
+            isLogin = false,
+            onNavigateLogin = {
+
+            }) {
 
         }
     }

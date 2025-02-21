@@ -152,7 +152,8 @@ fun MainContent(
     startDestination: DestinationItem,
     onNavigateToJobDetail: (Int, String) -> Unit,
     onNavigateToLogin: (String) -> Unit,
-    onNavigateToVerifyEmail: () -> Unit
+    onNavigateToVerifyEmail: () -> Unit,
+    onNavigateToOnBoarding: () -> Unit
 ) {
     val nestedNavigation = rememberAppState()
     Log.d("QQQ", "MainContent startDestination: ${startDestination.route}")
@@ -198,7 +199,8 @@ fun MainContent(
                     startDestination = startDestination,
                     onNavigateToJobDetail = onNavigateToJobDetail,
                     onNavigateToLogin = onNavigateToLogin,
-                    onNavigateToVerifyEmail = onNavigateToVerifyEmail
+                    onNavigateToVerifyEmail = onNavigateToVerifyEmail,
+                    onNavigateToOnBoarding = onNavigateToOnBoarding
                 )
             }
         }
@@ -215,6 +217,7 @@ fun MainContentPreview() {
             onNavigateToJobDetail = { _, _ -> },
             onNavigateToLogin = {},
             onNavigateToVerifyEmail = { },
+            onNavigateToOnBoarding = {}
         )
     }
 }
