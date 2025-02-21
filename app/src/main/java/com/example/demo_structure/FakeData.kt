@@ -1,6 +1,10 @@
 package com.example.demo_structure
 
 import com.example.data.remote.response.MyProfileResponse
+import com.example.demo_structure.app.manager.theme.AppIcons
+import com.example.domain.model.Filter
+import com.example.domain.model.FilterType
+import com.example.domain.model.JobDetail
 import com.google.gson.Gson
 
 
@@ -9,21 +13,22 @@ import com.google.gson.Gson
  * Copyright (c) 2025 Navigos Group. All rights reserved.
  * Email: son.pham@navigosgroup.com
  */
-class JobDetail(val jobId: Int, var jobTitle: String, var company: String, logo: Int, val salary: String)
 class SearchJob(val jobId: Int, var jobTitle: String, var company: String, logo: Int, val salary: String)
-val jobResult by lazy {
-    listOf(
-        JobDetail(jobId = 1, jobTitle = "Android Developer", company = "Tech Corp", logo = R.drawable.company_logo, salary = "1500 - 2500 USD"),
-        JobDetail(jobId = 2, jobTitle = "Backend Engineer", company = "Cloud Solutions", logo = R.drawable.company_logo, salary = "2000 - 3000 USD"),
-        JobDetail(jobId = 3, jobTitle = "Data Scientist", company = "DataWorld", logo = R.drawable.company_logo, salary = "3000 - 5000 USD"),
-        JobDetail(jobId = 4, jobTitle = "Frontend Developer", company = "UI Labs", logo = R.drawable.company_logo, salary = "1800 - 2700 USD"),
-        JobDetail(jobId = 5, jobTitle = "Project Manager", company = "Agile Minds", logo = R.drawable.company_logo, salary = "4000 - 6000 USD"),
-        JobDetail(jobId = 6, jobTitle = "DevOps Engineer", company = "InfraCore", logo = R.drawable.company_logo, salary = "2500 - 3500 USD"),
-        JobDetail(jobId = 7, jobTitle = "Product Designer", company = "Creative Studio", logo = R.drawable.company_logo, salary = "1700 - 2400 USD"),
-        JobDetail(jobId = 8, jobTitle = "Quality Assurance", company = "Quality First", logo = R.drawable.company_logo, salary = "1200 - 2000 USD"),
-        JobDetail(jobId = 9, jobTitle = "Database Administrator", company = "DB Experts", logo = R.drawable.company_logo, salary = "2200 - 3200 USD"),
-        JobDetail(jobId = 10, jobTitle = "Cybersecurity Analyst", company = "SecureNet", logo = R.drawable.company_logo, salary = "2800 - 4000 USD")
-    )
+
+val jobList = listOf(
+    JobDetail(1, "Software Engineer", "Google", "$120k", "Mountain View", android.R.drawable.ic_menu_call, "Description 1"),
+    JobDetail(2, "UI/UX Designer", "Facebook", "$110k", "Menlo Park", android.R.drawable.ic_menu_camera, "Description 2"),
+    JobDetail(3, "Product Manager", "Amazon", "$130k", "Seattle", android.R.drawable.ic_menu_compass, "Description 3"),
+    JobDetail(4, "Data Scientist", "Netflix", "$140k", "Los Gatos", android.R.drawable.ic_menu_directions, "Description 4"),
+    JobDetail(5, "Mobile Developer", "Spotify", "$100k", "Stockholm", android.R.drawable.ic_menu_gallery, "Description 5"),
+    JobDetail(6, "Security Engineer", "Apple", "$150k", "Cupertino", android.R.drawable.ic_menu_mylocation, "Description 6"),
+    JobDetail(7, "Cloud Architect", "Microsoft", "$160k", "Redmond", android.R.drawable.ic_menu_send, "Description 7"),
+    JobDetail(8, "AI Researcher", "OpenAI", "$170k", "San Francisco", android.R.drawable.ic_menu_share, "Description 8")
+)
+
+const val ITEM_COUNT = 10000
+val ITEMS = (1..ITEM_COUNT).map {
+    JobDetail(it, "Software Engineer $it", "Google $it", "$120k", "Mountain View", android.R.drawable.ic_menu_call, "Description $it")
 }
 
 val myProfileData: MyProfileResponse by lazy {
@@ -40,4 +45,16 @@ val myProfileData: MyProfileResponse by lazy {
     """.trimIndent()
 
     Gson().fromJson(data, MyProfileResponse::class.java)
+}
+
+val filterItems: MutableList<Filter> by lazy {
+    val items = mutableListOf<Filter>()
+    items.add(Filter(type = FilterType.Sort, icon =  AppIcons.sort))
+    items.add(Filter(type = FilterType.Job, icon =  AppIcons.expand))
+    items.add(Filter(type = FilterType.Salary, icon =  AppIcons.expand))
+    items.add(Filter(type = FilterType.Location, icon =  AppIcons.expand))
+    items.add(Filter(type = FilterType.WorkType, icon =  AppIcons.expand))
+    items.add(Filter(type = FilterType.JobType, icon =  AppIcons.expand))
+
+    items
 }

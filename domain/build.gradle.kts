@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -44,9 +45,10 @@ dependencies {
     implementation(libs.kotlinx.datetime)
 
     // Mark: Testing
-    androidTestImplementation(libs.androidx.junit)
-//    androidTestImplementation(libs.androidx.runner)
-//    androidTestImplementation(libs.androidx.rules)
+    testImplementation(libs.junit)
+//    androidTestImplementation(libs.androidx.junit)
+//    androidTestImplementation(libs.android.test.core.ktx)
+//    androidTestImplementation(libs.android.test.junit.ktx)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.espresso.contrib)
 }

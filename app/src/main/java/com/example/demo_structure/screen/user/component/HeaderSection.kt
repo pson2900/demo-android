@@ -32,16 +32,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.AppIcons
 import com.example.demo_structure.app.manager.theme.ProductXTheme
-import com.example.demo_structure.app.manager.theme.generate
+import com.example.demo_structure.app.manager.theme.GenerateImage
 import com.example.demo_structure.app.manager.theme.hexToColor
 import com.example.demo_structure.core.component.AppCard
 import com.example.demo_structure.core.component.AppPreviewWrapper
-import com.example.demo_structure.core.component.AppSurface
 import com.example.demo_structure.core.component.AppText
 
 @Composable
@@ -128,7 +126,7 @@ fun HeaderSection(title: String, avatar: String) {
                                     .weight(1.5f),
                                 contentAlignment = Alignment.Center
                             ) {
-                                AppIcons.advancementIcon.generate(modifier = Modifier)
+                                AppIcons.advancementIcon.GenerateImage(modifier = Modifier)
                             }
 
                             Spacer(Modifier.width(12.dp))
@@ -146,7 +144,7 @@ fun HeaderSection(title: String, avatar: String) {
                                     style = ProductXTheme.typography.SemiBold.Body.Large, color = Color.Black
                                 )
                             }
-                            AppIcons.arrowRightIcon.generate(modifier = Modifier.weight(1f))
+                            AppIcons.arrowRightIcon.GenerateImage(modifier = Modifier.weight(1f))
                         }
                     }
                 })

@@ -1,15 +1,10 @@
 package com.example.demo_structure.screen.create_pin
 
-import android.content.Context
 import android.content.res.Configuration
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,7 +37,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.data.remote.UIState
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.ProductXTheme
@@ -178,7 +172,7 @@ fun PinCodeScreen(
                     AppBarIcon(
                         contentDescription = null,
                         modifier = Modifier.size(24.dp),
-                        imageResource = R.drawable.ic_back_black,
+                        imageResource = R.drawable.ic_arrow,
                         clickable = {
                             onBackPressed()
                         }

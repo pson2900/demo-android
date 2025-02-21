@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -30,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.example.demo_structure.R
 import com.example.demo_structure.app.manager.theme.AppIcons
 import com.example.demo_structure.app.manager.theme.ProductXTheme
-import com.example.demo_structure.app.manager.theme.generate
+import com.example.demo_structure.app.manager.theme.GenerateImage
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppText
 import com.example.domain.model.BasicInformation
@@ -145,7 +144,7 @@ internal fun BasicInformationItem(profile: Profile, onNavigateToProfile: (Profil
                 .background(colorResource(R.color.cosmic_latte), shape = RoundedCornerShape(8.dp)),
             contentAlignment = Alignment.Center
         ) {
-            icon.generate(Modifier.size(48.dp).padding(7.dp))
+            icon.GenerateImage(Modifier.size(48.dp).padding(7.dp))
         }
         AppText(
             text = title,
@@ -167,7 +166,7 @@ internal fun BasicInformationItem(profile: Profile, onNavigateToProfile: (Profil
                     onNavigateToProfile.invoke(profile)
                 }
         ) {
-            AppIcons.arrowRightIcon.generate(
+            AppIcons.arrowRightIcon.GenerateImage(
                 modifier = Modifier
                     .padding(end = 12.dp)
 //                    .size(16.dp)

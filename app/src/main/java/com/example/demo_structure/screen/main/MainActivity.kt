@@ -7,9 +7,15 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -19,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,17 +42,20 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.demo_structure.app.InitializeApp
+import com.example.demo_structure.app.manager.theme.LocalSharedTransitionScope
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.core.component.AppScaffold
 import com.example.demo_structure.core.component.AppSnackBar
 import com.example.demo_structure.core.component.BottomNavigationBar
 import com.example.demo_structure.core.component.InitBottomMainScreen
 import com.example.demo_structure.core.navigation.DestinationItem
-import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.core.navigation.MainNavHost
 import com.example.demo_structure.core.navigation.rememberAppState
+import com.example.demo_structure.screen.job_detail.nonSpatialExpressiveSpring
+import com.example.demo_structure.screen.job_detail.spatialExpressiveSpring
 import com.example.demo_structure.util.extension.isSystemInDarkTheme
 import com.example.demo_structure.util.monitor.NetworkMonitor
+import com.example.domain.model.JobDetail
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
@@ -145,80 +155,102 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun MainContent(
     modifier: Modifier = Modifier,
     startDestination: DestinationItem,
-    onNavigateToJobDetail: (Int, String) -> Unit,
+    onNavigateToJobDetail: (JobDetail) -> Unit,
     onNavigateToLogin: (String) -> Unit,
     onNavigateToVerifyEmail: () -> Unit,
-    onNavigateToOnBoarding: () -> Unit
+    onNavigateToOnBoarding: () -> Unit,
+    animatedVisibilityScope: AnimatedContentScope
 ) {
     val nestedNavigation = rememberAppState()
+    var isShowBottomBar by remember { mutableStateOf(true) }
     Log.d("QQQ", "MainContent startDestination: ${startDestination.route}")
-    AppScaffold(
-        backgroundColor = Color.Transparent,
-        modifier = modifier
-//            .statusBarsPadding()
-            .semantics {
-                testTagsAsResourceId = true
-            },
-//        contentWindowInsets = ScaffoldDefaults
-//            .contentWindowInsets
-//            .exclude(WindowInsets.navigationBars)
-//            .exclude(WindowInsets.statusBars)
-//            .exclude(WindowInsets.systemBars)
-//            .exclude(WindowInsets.ime),
-        snackbarHost = {
-            SnackbarHost(
-                hostState = it,
-                modifier = Modifier.systemBarsPadding(),
-                snackbar = { snackbarData -> AppSnackBar(snackbarData) }
-            )
-        },
-//        snackBarHostState = scaffoldState.snackBarHostState,
-        snackBarHostState = SnackbarHostState(),
-        bottomBar = {
-            BottomNavigationBar(
-                modifier = modifier,
-            ) {
-                InitBottomMainScreen(currentRoute = startDestination, onClick = {
-                    nestedNavigation.navigateToBottomBarRoute(it.route)
-                }, changeItem = {
-                    it.route == nestedNavigation.navController.currentBackStackEntryAsState().value?.destination?.route
-                })
-            }
-        },
-//        content = { padding ->
-        content = {
-//            .padding(bottom = it.calculateBottomPadding())
-            Box(Modifier.fillMaxSize()){
-                MainNavHost(
-                    appState = nestedNavigation,
-                    startDestination = startDestination,
-                    onNavigateToJobDetail = onNavigateToJobDetail,
-                    onNavigateToLogin = onNavigateToLogin,
-                    onNavigateToVerifyEmail = onNavigateToVerifyEmail,
-                    onNavigateToOnBoarding = onNavigateToOnBoarding
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+    sharedTransitionScope?.apply {
+        AppScaffold(
+            backgroundColor = Color.Transparent,
+            modifier = modifier
+                .semantics {
+                    testTagsAsResourceId = true
+                },
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = it,
+                    modifier = Modifier.systemBarsPadding(),
+                    snackbar = { snackbarData -> AppSnackBar(snackbarData) }
                 )
+            },
+            snackBarHostState = SnackbarHostState(),
+            bottomBar = {
+                if (isShowBottomBar) {
+                    animatedVisibilityScope.apply {
+                        BottomNavigationBar(
+                            modifier = Modifier
+                                .renderInSharedTransitionScopeOverlay(
+                                    zIndexInOverlay = 1f,
+                                )
+                                .animateEnterExit(
+                                    enter = fadeIn(nonSpatialExpressiveSpring()) + slideInVertically(
+                                        spatialExpressiveSpring()
+                                    ) {
+                                        it
+                                    },
+                                    exit = fadeOut(nonSpatialExpressiveSpring()) + slideOutVertically(
+                                        spatialExpressiveSpring()
+                                    ) {
+                                        it
+                                    }
+                                ),
+                        ) {
+                            InitBottomMainScreen(currentRoute = startDestination, onClick = {
+                                nestedNavigation.navigateToBottomBarRoute(it.route)
+                            }, changeItem = {
+                                it.route == nestedNavigation.navController.currentBackStackEntryAsState().value?.destination?.route
+                            })
+                        }
+                    }
+
+                }
+            },
+            content = {
+                Box(Modifier.fillMaxSize()) {
+                    MainNavHost(
+                        animatedVisibilityScope = animatedVisibilityScope,
+                        appState = nestedNavigation,
+                        startDestination = startDestination,
+                        onNavigateToJobDetail = onNavigateToJobDetail,
+                        onNavigateToLogin = onNavigateToLogin,
+                        onNavigateToVerifyEmail = onNavigateToVerifyEmail,
+                        onNavigateToOnBoarding = onNavigateToOnBoarding,
+                        onShowBottomNav = {
+                            isShowBottomBar = it
+                        }
+                    )
+                }
             }
-        }
-    )
+        )
+    }
+
 }
 
 @Preview
 @Composable
 fun MainContentPreview() {
     AppPreviewWrapper {
-        MainContent(
-            it,
-            startDestination = Destinations.Main.Home,
-            onNavigateToJobDetail = { _, _ -> },
-            onNavigateToLogin = {},
-            onNavigateToVerifyEmail = { },
-            onNavigateToOnBoarding = {}
-        )
+        AnimatedVisibility(true) {
+            /* MainContent(
+                 it,
+                 startDestination = Destinations.Main.Home,
+                 onNavigateToJobDetail = { _ -> },
+                 onNavigateToLogin = {},
+                 onNavigateToVerifyEmail = { },
+                 this,
+             )*/
+        }
     }
 }
 

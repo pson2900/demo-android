@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.app.manager.theme.ProductXTheme
-import com.example.demo_structure.app.manager.theme.generate
+import com.example.demo_structure.app.manager.theme.GenerateImage
 import com.example.demo_structure.core.navigation.DestinationItem
 import com.example.demo_structure.core.navigation.Destinations
 
@@ -80,8 +80,8 @@ fun RowScope.InitBottomMainScreen(currentRoute: DestinationItem, onClick: (Desti
 
             },
             icon = {
-                if (changeItem(item)) item.selectedIcon.generate()
-                else item.unselectedIcon.generate()
+                if (changeItem(item)) item.selectedIcon.GenerateImage()
+                else item.unselectedIcon.GenerateImage()
             },
             alwaysShowLabel = true, // Consider showing labels only on selected items for better UX
             colors = NavigationBarItemDefaults.colors(

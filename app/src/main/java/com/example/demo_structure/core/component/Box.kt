@@ -10,25 +10,25 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.app.manager.theme.ProductXTheme
+import com.example.demo_structure.app.manager.theme.hexToColor
 import com.example.demo_structure.screen.opportunity.component.SearchBar
 
 /**
@@ -44,17 +44,19 @@ fun AppBox(
     shape: Shape = RectangleShape,
     border: BorderStroke? = null,
     contentAlignment: Alignment = Alignment.CenterStart,
+    onClick: (() -> Unit)? = null,
     content: @Composable BoxScope.() -> Unit
 ) {
     Box(
         modifier = modifier
             .shadow(elevation = 0.dp, shape = shape)
-            .clip(shape)
-            .then(if (border != null) modifier.border(border, shape) else Modifier)
             .background(
                 color = backgroundColor,
                 shape = shape
-            ),
+            )
+            .clip(shape)
+            .then(if (border != null) modifier.border(border, shape) else Modifier)
+            .then(if (onClick != null) modifier.clickable { onClick.invoke() } else Modifier),
         contentAlignment = contentAlignment,
         propagateMinConstraints = false,
         content = content
@@ -68,16 +70,17 @@ fun AppBoxForce(
     contentAlignment: Alignment = Alignment.CenterStart,
     content: @Composable BoxScope.(Boolean, (Boolean) -> Unit) -> Unit
 ) {
-    val (isForce, setForce) = remember { mutableStateOf(true) }
+
+    val (isFocus, setFocus) = remember { mutableStateOf(false) }
     val colorSelect = ProductXTheme.colorScheme.primary
-    val colorUnSelect = ProductXTheme.colorScheme.outline
+    val colorUnSelect = hexToColor("#64748B")
     val interactionSource = remember { MutableInteractionSource() }
     val shape = RoundedCornerShape(5.dp)
     Box(
         modifier = modifier
             .shadow(elevation = 0.dp, shape = shape)
             .clip(shape)
-            .border(BorderStroke(1.dp, if (isForce) colorSelect else colorUnSelect), shape)
+            .border(BorderStroke(1.dp, if (isFocus) colorSelect else colorUnSelect), shape)
             .background(
                 color = backgroundColor,
                 shape = shape
@@ -87,14 +90,15 @@ fun AppBoxForce(
                 interactionSource = interactionSource,
                 indication = null
             ) {
-                setForce(!isForce)
+                setFocus(!isFocus)
             },
+
         contentAlignment = contentAlignment,
         propagateMinConstraints = false,
         content = {
-            Box(Modifier.padding(8.dp)) {
-                content(isForce){isTextFocus ->
-                    setForce(isTextFocus)
+            Box(Modifier) {
+                content(isFocus) { isTextFocus ->
+                    setFocus(isTextFocus)
                 }
             }
         }
@@ -106,10 +110,6 @@ fun AppBoxForce(
 @Preview
 fun AppBoxPreview() {
     AppPreviewWrapper {
-        /* AppBox(backgroundColor = Color.White) {
-             Text("OnClick Item")
-         }*/
-
         AppBoxForce(backgroundColor = Color.White) { isFocus, textFieldFocus ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -125,9 +125,9 @@ fun AppBoxPreview() {
                     }
                 )
 
-                SearchBar(true, {
+                /*  SearchBar(focusRequest, isFocus) {
 
-                })
+                  }*/
             }
         }
     }

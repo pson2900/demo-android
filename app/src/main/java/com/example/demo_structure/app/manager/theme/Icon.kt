@@ -1,10 +1,13 @@
 package com.example.demo_structure.app.manager.theme
 
 import androidx.compose.foundation.Image
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.vectorResource
@@ -19,18 +22,51 @@ import com.example.demo_structure.R
 fun ToImage(
     modifier: Modifier = Modifier,
     imageResource: Int,
-    color: Color = Color.Transparent,
+    color: Color? = null,
     contentScale: ContentScale = ContentScale.Fit
 ) {
-    Image(
-        modifier = modifier.testTag("ToImage:$imageResource"),
-        imageVector = ImageVector.vectorResource(imageResource),
-        contentDescription = imageResource.toString(),
-        contentScale = contentScale,
-//        colorFilter = ColorFilter.tint(color = color, BlendMode.SrcIn),
-    )
+    if (color != null) {
+        Image(
+            modifier = modifier.testTag("ToImage:$imageResource"),
+            imageVector = ImageVector.vectorResource(imageResource),
+            contentDescription = imageResource.toString(),
+            contentScale = contentScale,
+            colorFilter = ColorFilter.tint(color = color),
+        )
+    } else {
+        Image(
+            modifier = modifier.testTag("ToImage:$imageResource"),
+            imageVector = ImageVector.vectorResource(imageResource),
+            contentDescription = imageResource.toString(),
+            contentScale = contentScale,
+        )
+    }
+
 }
 
+@Composable
+fun ToIcon(
+    modifier: Modifier = Modifier,
+    imageResource: Int,
+    color: Color? = null,
+) {
+    if (color != null) {
+        return Icon(
+            modifier = modifier.testTag("ToImage:$imageResource"),
+            imageVector = ImageVector.vectorResource(imageResource),
+            contentDescription = imageResource.toString(),
+            tint = color
+        )
+    } else {
+
+        Icon(
+            modifier = modifier.testTag("ToImage:$imageResource"),
+            painter = rememberVectorPainter(ImageVector.vectorResource(imageResource)),
+            contentDescription = imageResource.toString(),
+        )
+    }
+
+}
 
 object AppIcons {
     // Navigation Icons
@@ -61,11 +97,34 @@ object AppIcons {
     val referenceIcon = R.drawable.ic_reference
     val hobbyIcon = R.drawable.ic_hobby
 
+    val arrowLeft = R.drawable.ic_arrow
+    val searchIcon = R.drawable.ic_search
     val avatarLogo = R.drawable.company_logo
+    val share = R.drawable.ic_share
+    val bookMark = R.drawable.ic_bookmark
+    val location = R.drawable.ic_location
+    val salary = R.drawable.ic_salary
+    val expand = R.drawable.ic_expand
+    val sort = R.drawable.ic_sort
+
+    val bookMark_gray = R.drawable.ic_bookmark_gray
+    val JobDetailLocation = R.drawable.ic_location_gray
+    val JobDetailDola = R.drawable.ic_dollar
+    val JobDetailRank = R.drawable.ic_job_detail_rank
+    val JobDetailPercent = R.drawable.ic_job_detail_percent
+    val caseBusiness = R.drawable.ic_brief_case_business
+    val OpportunityHeart = R.drawable.ic_my_profile_opprotunities_heart
+    val OpportunityCrow = R.drawable.ic_my_profile_opprotunities_crow
+    val OpportunityBag = R.drawable.ic_my_profile_opprotunities_bag
 
 }
 
 @Composable
-fun Int.generate(modifier: Modifier = Modifier) {
-    ToImage(modifier= modifier ,imageResource = this)
+fun Int.GenerateImage(modifier: Modifier = Modifier, color: Color? = null) {
+    ToImage(modifier = modifier, imageResource = this, color = color)
+}
+
+@Composable
+fun Int.GenerateIcon(modifier: Modifier = Modifier, color: Color? = null) {
+    ToIcon(modifier = modifier, imageResource = this, color = color)
 }

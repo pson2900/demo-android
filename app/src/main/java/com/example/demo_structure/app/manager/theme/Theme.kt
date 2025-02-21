@@ -209,7 +209,7 @@ fun ApplicationTheme(
 
     CompositionLocalProvider(
         LocalAppTypography provides AppTypography(),
-        LocalColorTheme provides colorScheme.toColorTheme(background_1, background_2),
+        LocalColorTheme provides colorScheme.toColorTheme(background_1, background_2, darkTheme),
         LocalPadding provides Padding(),
         LocalMargin provides Margin(),
         LocalCorner provides Corner(),

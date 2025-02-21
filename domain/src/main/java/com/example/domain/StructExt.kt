@@ -21,3 +21,12 @@ inline fun <T> T?.ifNotNull(defaultValue: (T) -> Unit){
 inline fun <T> T?.ifNull(defaultValue: () -> Unit){
     if (this == null) defaultValue() else this
 }
+
+inline fun <reified T : Any, R> ifNotNull(vararg args: T?, block: (Array<out T>) -> R) {
+    if (args.all { it != null }) {
+        block(args.filterNotNull().toTypedArray())
+    } else {
+        block(emptyArray())
+    }
+}
+

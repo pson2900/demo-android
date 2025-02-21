@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.demo_structure.core.component.AppPreviewWrapper
 import com.example.demo_structure.R
+import com.example.demo_structure.app.manager.theme.AppIcons
 
 @Preview("Light Mode")
 @Preview("Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES)
@@ -50,7 +51,7 @@ fun OnboardingAppbar(
         IconButton(onClick = onBackClick) {
             Icon(
                 modifier = Modifier.size(24.dp),
-                painter = painterResource(id = R.drawable.ic_back_black),
+                painter = painterResource(id = AppIcons.arrowLeft),
                 contentDescription = "Back"
             )
         }

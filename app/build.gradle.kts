@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.compose.compiler)
     id("kotlinx-serialization")
-
+    id("kotlin-parcelize")
 }
 
 
@@ -83,52 +83,39 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
 
-    // Mark: AndroidX Core
     implementation(libs.androidx.core.ktx)
-
-    // Mark: AndroidX Workers
     implementation(libs.androidx.work.runtime.ktx)
-
-    // Mark: AndroidX Lifecycle
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose.ktx)
 
-    // Mark: AndroidX Room
+    // Mark: AndroidX
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
-
-    // Mark: AndroidX Navigation
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.paging.runtime.ktx)
     implementation(libs.androidx.navigation.ktx)
-
-    // Mark: AndroidX Activity Compose
     implementation(libs.androidx.activity.compose)
-
-    // Mark: AndroidX Core Splashscreen
     implementation(libs.androidx.core.splash)
-
-    // Mark: AndroidX Appcompat
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.appcompat.resources)
-
-    // Mark: AndroidX Constraint Layout
     implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.androidx.monitor)
 
     // Mark: Testing
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-//    androidTestImplementation(libs.androidx.runner)
-//    androidTestImplementation(libs.androidx.rules)
-    androidTestImplementation("androidx.test.ext:junit:1.1.5") // Thay thế androidx.test:runner
-    androidTestImplementation("androidx.test:core-ktx:1.5.0") // Thay thế một phần của androidx.test:rules
-    androidTestImplementation("androidx.test.ext:junit-ktx:1.1.5") // Thay thế một phần của androidx.test:rules
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
+//    androidTestImplementation(libs.androidx.junit)
+//    androidTestImplementation(libs.android.test.core.ktx)
+//    androidTestImplementation(libs.android.test.junit.ktx)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.espresso.contrib)
     testImplementation(libs.mockk)
     androidTestImplementation(libs.mockk.android)
 
     // Mark: Google Material Components
+    implementation(libs.com.google.gson)
     implementation(libs.com.google.material) // Material Components for UI elements
 
     // Mark: Dependency Injection - Koin
@@ -165,7 +152,7 @@ dependencies {
 
     implementation(libs.androidx.material3.window.size) // Material3 Window Size Class
     implementation(libs.androidx.lifecycle.viewmodel.compose) // ViewModel for Compose
-    implementation(libs.androidx.material)
+//    implementation(libs.androidx.material)
     // Mark: Other dependencies
     implementation(libs.androidx.adaptive) // Adaptive UI for Compose
     implementation(libs.androidx.adaptive.layout)
@@ -191,9 +178,13 @@ dependencies {
     implementation(libs.androidx.adaptive.navigation.suite) // Adaptive Navigation Suite for Compose
     //GlideImage jetpack
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
+    // Compose Animation Core (cần thiết cho ContainerTransform)
+    implementation(libs.androidx.animation.core)
+
+    // Accompanist Navigation Material (cho ContainerTransform với Navigation)
+    implementation(libs.accompanist.navigation.material)
     //Gson
     implementation("com.google.code.gson:gson:2.12.1")
     //
     implementation("com.posthog:posthog-android:3.11.2")
-
 }

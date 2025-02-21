@@ -22,6 +22,7 @@ import com.example.demo_structure.screen.community.toCommunityScreen
 import com.example.demo_structure.screen.create_pin.toCreatePinCodeScreen
 import com.example.demo_structure.screen.education.toEducationScreen
 import com.example.demo_structure.screen.home.toHomeScreen
+import com.example.demo_structure.screen.job_detail.toJobDetail
 import com.example.demo_structure.screen.job_detail.toJobDetailScreen
 import com.example.demo_structure.screen.login.toLoginScreen
 import com.example.demo_structure.screen.main.toMainScreen
@@ -30,6 +31,7 @@ import com.example.demo_structure.screen.opportunity.toOpportunityScreen
 import com.example.demo_structure.screen.otp.toVerifyOtpScreen
 import com.example.demo_structure.screen.user.toMyProfileScreen
 import com.example.demo_structure.screen.verify_email.toVerifyEmailScreen
+import com.example.domain.model.JobDetail
 
 /**
  * Created by Phạm Sơn at 14:59/3/1/25
@@ -73,17 +75,24 @@ fun AppNavHost(
     appState: AppState
 ) {
     val navController = appState.navController
+
     NavHost(
         navController = navController,
         startDestination = Destinations.Main.ROUTE,
         modifier = modifier,
         enterTransition = { fadeIn(animationSpec = tween(500)) },
         exitTransition = { fadeOut(animationSpec = tween(500)) },
-        builder = {
-            toMainScreen(appState = appState)
-            toJobDetailScreen(appState = appState) {
 
-            }
+        builder = {
+//            CompositionLocalProvider(
+//                LocalNavAnimatedContentScope provides this,
+//            ){
+//
+//            }
+            toMainScreen(appState = appState)
+            /*toJobDetailScreen(appState = appState) {
+
+            }*/
             toCreatePinCodeScreen(appState)
             toLoginScreen(appState) {
                 appState.upPress()
@@ -98,10 +107,12 @@ fun AppNavHost(
 fun MainNavHost(
     appState: AppState,
     startDestination: DestinationItem,
-    onNavigateToJobDetail: (Int, String) -> Unit,
+    onNavigateToJobDetail: (JobDetail) -> Unit,
     onNavigateToLogin: (String) -> Unit,
     onNavigateToVerifyEmail: () -> Unit,
-    onNavigateToOnBoarding: () -> Unit
+    onNavigateToOnBoarding: () -> Unit,
+    onShowBottomNav: (Boolean) -> Unit,
+    animatedVisibilityScope: AnimatedContentScope,
 ) {
     val navController = appState.navController
     NavHost(
@@ -121,10 +132,18 @@ fun MainNavHost(
             onNavigateToOnBoarding =onNavigateToOnBoarding
         )
         toOpportunityScreen(
-            onTopicClick = {
-
-            },
+            animatedVisibilityScope = animatedVisibilityScope,
+            appState = appState,
+            onNavigateToJobDetail = {
+                onShowBottomNav.invoke(false)
+                navController.toJobDetail(Destinations.JobDetail.createRoute(it))
+            }
         )
+
+        toJobDetailScreen(appState = appState, onLogin = onNavigateToLogin, onBackClick = {
+            appState.upPress()
+            onShowBottomNav.invoke(true)
+        })
         toCommunityScreen(
             onTopicClick = {
 

@@ -1,7 +1,10 @@
 package com.example.demo_structure.core.navigation
 
+import android.net.Uri
 import android.util.Log
 import com.example.demo_structure.app.manager.theme.AppIcons
+import com.example.domain.model.JobDetail
+import com.google.gson.Gson
 
 /**
  * Created by Phạm Sơn at 10:10/23/1/25
@@ -78,8 +81,12 @@ sealed class Destinations(val route: String) {
     object JobDetail : Destinations(route = "detail") {
         const val JOB_DETAIL_ID = "jobId"
         const val ORIGIN = "origin"
-        fun createRoute(jobId: String, origin: String): String {
-            return "detail/$jobId?origin=${origin}"
+        fun createRoute(jobId: String): String {
+            return "detail/$jobId"
+        }
+        fun createRoute(jobDetail: com.example.domain.model.JobDetail): String {
+            val jobDetailJson = Uri.encode(Gson().toJson(jobDetail))
+            return "detail/$jobDetailJson"
         }
     }
 

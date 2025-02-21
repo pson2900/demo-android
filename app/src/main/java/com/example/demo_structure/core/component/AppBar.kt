@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -150,13 +150,13 @@ fun TopSearchAppBar(
 @Composable
 fun AppBarPreviewDark() {
     AppPreviewWrapper {
-        Column {
+        /*Column {
             AppTopBar(title = { Text("Preview!") },
                 navigationIcon = {
                     AppBarIcon(
                         contentDescription = null,
                         modifier = Modifier.size(24.dp),
-                        imageResource = R.drawable.ic_back_arrow,
+                        imageResource = R.drawable.ic_arrow_left,
                         clickable = {
 
                         }
@@ -167,7 +167,10 @@ fun AppBarPreviewDark() {
                 actions = {},
                 content = "Hello World Dark"
             )
+
         }
+        */
+        
 
     }
 }

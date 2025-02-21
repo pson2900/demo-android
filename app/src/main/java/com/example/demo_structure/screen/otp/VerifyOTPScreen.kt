@@ -51,7 +51,6 @@ import com.example.demo_structure.core.component.AppText
 import com.example.demo_structure.core.component.CountdownTextView
 import com.example.demo_structure.core.component.otp.OTPTextField
 import com.example.demo_structure.core.component.otp.OtpTextFieldDefaults
-import com.example.demo_structure.core.navigation.Destinations
 import com.example.demo_structure.screen.create_pin.PinArguments
 import com.example.demo_structure.screen.home.LoadingState
 import com.example.demo_structure.util.extension.buildClickableText
@@ -145,7 +144,7 @@ fun VerifyOTPScreen(
                     AppBarIcon(
                         contentDescription = null,
                         modifier = Modifier.size(24.dp),
-                        imageResource = R.drawable.ic_back_black,
+                        imageResource = R.drawable.ic_arrow,
                         clickable = {
                             onBack.invoke()
                         }

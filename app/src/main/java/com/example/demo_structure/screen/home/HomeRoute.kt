@@ -7,13 +7,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import androidx.navigation.navOptions
 import com.example.demo_structure.core.navigation.Destinations
+import com.example.domain.model.JobDetail
 import org.koin.androidx.compose.koinViewModel
 
 fun NavController.toHome(navOptions: NavOptions = navOptions {}) =
     navigate(route = Destinations.Main.Home.route, navOptions)
 
 fun NavGraphBuilder.toHomeScreen(
-    onNavigateToJobDetail: (Int, String) -> Unit,
+    onNavigateToJobDetail: (JobDetail) -> Unit,
     onNavigateToVerifyEmail: () -> Unit
 ) {
     this.apply {
@@ -28,7 +29,7 @@ fun NavGraphBuilder.toHomeScreen(
                 HomeScreen(
                     viewModel = koinViewModel(),
                     onNavigateToJobDetail = onNavigateToJobDetail,
-                    onNavigateToVerifyEmail =onNavigateToVerifyEmail
+                    onNavigateToVerifyEmail = onNavigateToVerifyEmail
                 )
             }
         )

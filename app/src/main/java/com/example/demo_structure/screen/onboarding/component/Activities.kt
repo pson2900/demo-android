@@ -12,9 +12,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.OutlinedButton
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,7 +47,7 @@ private fun ActivitiesPreview() {
 
 @Composable
 fun Activities(modifier: Modifier = Modifier) {
-    var showBottomSheet by remember { mutableStateOf(true) }
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     Box(modifier = modifier){
         LazyColumn(
@@ -138,13 +138,15 @@ fun Activities(modifier: Modifier = Modifier) {
 
 
     }
-    BaseBottomSheet(isShowBottomSheet = showBottomSheet, sheetContent = {
+    BaseBottomSheet(
+        openBottomSheet = showBottomSheet,
+        sheetContent = {
         ExtracurricularActivities(modifier = Modifier.padding(16.dp), {
             showBottomSheet = false
         })
     }, onDismissRequest = {
         showBottomSheet = false
-    })
+    }, dragHandle = null)
 }
 
 

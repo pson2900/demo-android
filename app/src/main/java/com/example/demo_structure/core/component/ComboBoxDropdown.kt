@@ -1,21 +1,18 @@
 package com.example.demo_structure.core.component
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -63,13 +60,15 @@ fun ComboBoxDropdown(
                 Icon(Icons.Filled.ArrowDropDown, contentDescription = "Dropdown icon")
             },
             shape = RoundedCornerShape(12.dp),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color.Transparent,
-                unfocusedBorderColor = Color.Transparent,
-                cursorColor = Color.Transparent,
-                textColor = colorResource(R.color.cod_gray),
-                backgroundColor = Color.Transparent
-            )
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent, // Transparent background for outlined fields
+                unfocusedContainerColor = Color.Transparent,
+                focusedIndicatorColor =  Color.Transparent,
+                unfocusedIndicatorColor =  Color.Transparent,
+                cursorColor =  colorResource(R.color.cod_gray),
+                focusedLabelColor = Color.Transparent,
+                unfocusedLabelColor =Color.Transparent
+            ),
         )
 
         ExposedDropdownMenu(

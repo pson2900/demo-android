@@ -1,5 +1,6 @@
 package com.example.demo_structure.app.manager.theme
 
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -18,6 +19,7 @@ import com.example.demo_structure.util.monitor.DeviceWindowAdaptive
  * Email: son.pham@navigosgroup.com
  */
 val LocalNavAnimatedVisibilityScope = compositionLocalOf<AnimatedVisibilityScope?> { null }
+val LocalNavAnimatedContentScope = compositionLocalOf<AnimatedContentScope?> { null }
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 val LocalSharedTransitionScope = compositionLocalOf<SharedTransitionScope?> { null }
@@ -44,7 +46,7 @@ val LocalCardTheme = staticCompositionLocalOf {
  * A composition local for [BackgroundTheme].
  */
 val LocalColorTheme = staticCompositionLocalOf {
-    defaultColorScheme.toColorTheme(background_1 = hexToColor("#FFFFFF"), background_2 = hexToColor("#F1F5F9"))
+    defaultColorScheme.toColorTheme(background_1 = hexToColor("#FFFFFF"), background_2 = hexToColor("#F1F5F9"), false)
 }
 
 val LocalPadding = staticCompositionLocalOf {

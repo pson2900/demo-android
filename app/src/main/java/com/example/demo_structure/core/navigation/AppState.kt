@@ -2,6 +2,7 @@ package com.example.demo_structure.core.navigation
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.util.Log
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -30,6 +31,7 @@ import com.example.demo_structure.screen.otp.toVerifyOtp
 import com.example.demo_structure.screen.verify_email.toVerifyEmail
 import com.example.demo_structure.util.monitor.NetworkMonitor
 import com.example.demo_structure.util.monitor.TimeZoneMonitor
+import com.example.domain.model.JobDetail
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -37,6 +39,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.datetime.TimeZone
 import org.koin.compose.koinInject
+import java.net.URLEncoder
 
 /**
  * Created by Phạm Sơn at 10:55/10/1/25
@@ -131,17 +134,25 @@ class AppState(
         }
     }
 
-    fun navigateToJobDetail(jobId: Int, origin: String, from: NavBackStackEntry) {
+    fun navigateToJobDetail(jobId: Int, from: NavBackStackEntry) {
         // In order to discard duplicated navigation events, we check the Lifecycle
-        val route = "${Destinations.JobDetail.route}/$jobId?origin=$origin"
+        val route = "${Destinations.JobDetail.route}/$jobId"
         trace("Navigation : ${route}") {
             if (from.lifecycleIsResumed()) {
                 navController.toJobDetail(
                     Destinations.JobDetail.createRoute(
                         jobId.toString(),
-                        origin
                     )
                 )
+            }
+        }
+    }
+
+    fun navigateToJobDetail(jobDetail: JobDetail, from: NavBackStackEntry) {
+        val route = "${Destinations.JobDetail.route}/${jobDetail.jobId}"
+        trace("Navigation : $route") {
+            if (from.lifecycleIsResumed()) {
+                navController.toJobDetail(Destinations.JobDetail.createRoute(jobDetail))
             }
         }
     }
